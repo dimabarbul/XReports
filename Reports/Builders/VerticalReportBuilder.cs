@@ -22,6 +22,13 @@ namespace Reports.Builders
             this.Columns.Add(new ValueProviderReportColumn<TSourceEntity>(title, provider));
         }
 
+        public void SetColumnValueFormatOptions(string title, object options)
+        {
+            this.Columns
+                .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                .SetValueFormatOptions(options);
+        }
+
         public ReportTable Build(IEnumerable<TSourceEntity> source)
         {
             ReportTable table = new ReportTable();

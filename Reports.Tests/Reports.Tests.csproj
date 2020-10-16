@@ -18,6 +18,9 @@
       <Compile Update="VerticalReportTest.Basic.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="VerticalReportTest.TypedCells.cs">
+        <DependentUpon>VerticalReportTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

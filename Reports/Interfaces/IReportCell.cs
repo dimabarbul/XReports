@@ -1,7 +1,11 @@
+using System;
+
 namespace Reports.Interfaces
 {
     public interface IReportCell
     {
-        public string DisplayValue { get; }
+        string DisplayValue { get; }
+        Type ValueType { get; }
+        void SetValueFormatOptions(object formatOptions);
     }
 }
