@@ -11,7 +11,7 @@ namespace Reports.Models.Columns
         public Func<TSourceEntity, IReportCell> CellSelector {
             get
             {
-                return entity => new StaticTextReportCell(this.ValueSelector(entity).ToString());
+                return entity => new TextReportCell(this.ValueSelector(entity).ToString());
             }
         }
 

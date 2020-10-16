@@ -2,11 +2,11 @@ using Reports.Interfaces;
 
 namespace Reports.Models.Cells
 {
-    public class StaticTextReportCell : IReportCell
+    public class TextReportCell : IReportCell
     {
         public string DisplayValue { get; }
 
-        public StaticTextReportCell(string text)
+        public TextReportCell(string text)
         {
             this.DisplayValue = text;
         }

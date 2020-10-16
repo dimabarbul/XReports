@@ -14,10 +14,12 @@ namespace Reports.Builders
 
         public void AddColumn<TColumnType>(string title, Func<TSourceEntity, TColumnType> valueSelector)
         {
-            this.Columns.Add(new EntityPropertyReportColumn<TSourceEntity, TColumnType>(
-                title,
-                valueSelector
-            ));
+            this.Columns.Add(new EntityPropertyReportColumn<TSourceEntity, TColumnType>(title, valueSelector));
+        }
+
+        public void AddColumn(string title, IValueProvider provider)
+        {
+            this.Columns.Add(new ValueProviderReportColumn<TSourceEntity>(title, provider));
         }
 
         public ReportTable Build(IEnumerable<TSourceEntity> source)
