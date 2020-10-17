@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Reports.Builders;
 using Reports.Models;
-using Reports.ValueFormatOptions;
+using Reports.ValueFormatters;
 using Xunit;
 
 namespace Reports.Tests
@@ -34,10 +34,7 @@ namespace Reports.Tests
         {
             VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
             reportBuilder.AddColumn("Score", d => d);
-            reportBuilder.SetColumnValueFormatOptions("Score", new DecimalFormatOptions()
-            {
-                DecimalPlaces = 2,
-            });
+            reportBuilder.SetColumnValueFormatter("Score", new DecimalValueFormatter(2));
 
             ReportTable table = reportBuilder.Build(new[]
             {
@@ -59,10 +56,7 @@ namespace Reports.Tests
         {
             VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
             reportBuilder.AddColumn("Score", d => d);
-            reportBuilder.SetColumnValueFormatOptions("Score", new DecimalFormatOptions()
-            {
-                DecimalPlaces = 0,
-            });
+            reportBuilder.SetColumnValueFormatter("Score", new DecimalValueFormatter(0));
 
             ReportTable table = reportBuilder.Build(new[]
             {

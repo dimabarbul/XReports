@@ -1,26 +1,23 @@
 using System;
-using Reports.Factories;
 using Reports.Interfaces;
 
 namespace Reports.Models.Columns
 {
-    public class ValueProviderReportColumn<TSourceEntity> : ReportColumn<TSourceEntity>
+    public class ValueProviderReportColumn<TSourceEntity, TValue> : ReportColumn<TSourceEntity, TValue>
     {
-        public override string Title { get; }
-
         public override Func<TSourceEntity, IReportCell> CellSelector
         {
             get
             {
-                return entity => this.DecorateCell(ReportCellFactory.Create(this.provider.GetValue()));
+                return entity => this.CreateCell(this.provider.GetValue());
             }
         }
 
-        private readonly IValueProvider provider;
+        private readonly IValueProvider<TValue> provider;
 
-        public ValueProviderReportColumn(string title, IValueProvider provider)
+        public ValueProviderReportColumn(string title, IValueProvider<TValue> provider)
+            : base(title)
         {
-            this.Title = title;
             this.provider = provider;
         }
     }

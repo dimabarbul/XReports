@@ -6,6 +6,5 @@ namespace Reports.Interfaces
     {
         string DisplayValue { get; }
         Type ValueType { get; }
-        void SetValueFormatOptions(object formatOptions);
     }
 }

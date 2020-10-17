@@ -1,12 +1,7 @@
 namespace Reports.Interfaces
 {
-    public interface IValueProvider<TSourceEntity>
+    public interface IValueProvider<TValue>
     {
-        string GetValue(TSourceEntity entity);
-    }
-
-    public interface IValueProvider
-    {
-        string GetValue();
+        TValue GetValue();
     }
 }

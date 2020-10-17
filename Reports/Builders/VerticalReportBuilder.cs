@@ -17,16 +17,17 @@ namespace Reports.Builders
             this.Columns.Add(new EntityPropertyReportColumn<TSourceEntity, TColumnType>(title, valueSelector));
         }
 
-        public void AddColumn(string title, IValueProvider provider)
+        public void AddColumn<TValue>(string title, IValueProvider<TValue> provider)
         {
-            this.Columns.Add(new ValueProviderReportColumn<TSourceEntity>(title, provider));
+            this.Columns.Add(new ValueProviderReportColumn<TSourceEntity, TValue>(title, provider));
         }
 
-        public void SetColumnValueFormatOptions(string title, object options)
+        public void SetColumnValueFormatter<TColumnType>(string title, IValueFormatter<TColumnType> formatter)
         {
             this.Columns
+                .OfType<IReportColumn<TSourceEntity, TColumnType>>()
                 .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                .SetValueFormatOptions(options);
+                .SetValueFormatter(formatter);
         }
 
         public ReportTable Build(IEnumerable<TSourceEntity> source)

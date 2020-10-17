@@ -2,7 +2,7 @@ using Reports.Interfaces;
 
 namespace Reports.ValueProviders
 {
-    public class SequentialNumberValueProvider : IValueProvider
+    public class SequentialNumberValueProvider : IValueProvider<int>
     {
         private int currentNumber;
 
@@ -11,9 +11,9 @@ namespace Reports.ValueProviders
             this.currentNumber = startNumber;
         }
 
-        public string GetValue()
+        public int GetValue()
         {
-            return (this.currentNumber++).ToString();
+            return this.currentNumber++;
         }
     }
 }

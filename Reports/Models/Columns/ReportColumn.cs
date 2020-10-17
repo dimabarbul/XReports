@@ -1,28 +1,38 @@
 using System;
+using Reports.Factories;
 using Reports.Interfaces;
+using Reports.Models.Cells;
 
 namespace Reports.Models.Columns
 {
-    public abstract class ReportColumn<TSourceEntity> : IReportColumn<TSourceEntity>
+    public abstract class ReportColumn<TSourceEntity, TValue> : IReportColumn<TSourceEntity, TValue>
     {
-        protected object ValueFormatOptions;
+        public string Title { get; }
 
-        public void SetValueFormatOptions(object options)
+        private IValueFormatter<TValue> formatter;
+
+        protected ReportColumn(string title)
         {
-            this.ValueFormatOptions = options;
+            this.Title = title;
         }
 
-        protected IReportCell DecorateCell(IReportCell cell)
+        public void SetValueFormatter(IValueFormatter<TValue> valueFormatter)
         {
-            if (this.ValueFormatOptions != null)
+            this.formatter = valueFormatter;
+        }
+
+        protected IReportCell CreateCell(TValue value)
+        {
+            IReportCell cell = ReportCellFactory.Create<TValue>(value);
+
+            if (this.formatter != null)
             {
-                cell.SetValueFormatOptions(this.ValueFormatOptions);
+                (cell as ReportCell<TValue>)?.SetFormatter(this.formatter);
             }
 
             return cell;
         }
 
-        public abstract string Title { get; }
         public abstract Func<TSourceEntity, IReportCell> CellSelector { get; }
     }
 }
