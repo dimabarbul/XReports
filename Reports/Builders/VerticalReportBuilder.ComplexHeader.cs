@@ -87,29 +87,36 @@ namespace Reports.Builders
             {
                 for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
                 {
-                    if (header[rowIndex, columnIndex].Title == null && !header[rowIndex, columnIndex].IsSpanned)
+                    if (header[rowIndex, columnIndex].Title != null || header[rowIndex, columnIndex].IsSpanned)
                     {
-                        int? filledRowIndex = this.GetNextFilledRowIndex(header, rowIndex, columnIndex);
-                        if (filledRowIndex == null)
-                        {
-                            continue;
-                        }
-
-                        header[rowIndex, columnIndex] = header[(int) filledRowIndex, columnIndex];
-                        header[(int) filledRowIndex, columnIndex].MarkSpanned();
-
-                        for (int i = rowIndex + 1; i <= filledRowIndex; i++)
-                        {
-                            header[i, columnIndex].MarkSpanned();
-                        }
+                        continue;
                     }
+
+                    this.MoveTitleUpForEmptyCell(header, rowIndex, columnIndex);
                 }
+            }
+        }
+
+        private void MoveTitleUpForEmptyCell(SpannableHeader[,] header, int rowIndex, int columnIndex)
+        {
+            int? filledRowIndex = this.GetNextFilledRowIndex(header, rowIndex, columnIndex);
+            if (filledRowIndex == null)
+            {
+                return;
+            }
+
+            header[rowIndex, columnIndex] = header[(int) filledRowIndex, columnIndex];
+
+            for (int i = rowIndex + 1; i <= filledRowIndex; i++)
+            {
+                header[i, columnIndex].MarkSpanned();
             }
         }
 
         private int? GetNextFilledRowIndex(SpannableHeader[,] header, int rowIndex, int columnIndex)
         {
-            for (int currentRowIndex = rowIndex + 1; currentRowIndex < header.GetLength(0); currentRowIndex++)
+            int rowsCount = header.GetLength(0);
+            for (int currentRowIndex = rowIndex + 1; currentRowIndex < rowsCount; currentRowIndex++)
             {
                 if (header[currentRowIndex, columnIndex].Title != null && !header[currentRowIndex, columnIndex].IsSpanned)
                 {
@@ -118,6 +125,55 @@ namespace Reports.Builders
             }
 
             return null;
+        }
+
+        private void FillTableCellsFromHeaderCells(ReportTable table, SpannableHeader[,] header)
+        {
+            int rowsCount = header.GetLength(0);
+            int columnsCount = header.GetLength(1);
+            IReportCell[] row = new IReportCell[columnsCount];
+
+            for (int rowIndex = 0; rowIndex < rowsCount; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
+                {
+                    row[columnIndex] = null;
+                    if (header[rowIndex, columnIndex].IsSpanned || header[rowIndex, columnIndex].IsUsed)
+                    {
+                        continue;
+                    }
+
+                    row[columnIndex] = this.CreateHeaderCell(header, rowIndex, columnIndex);
+                }
+
+                table.Cells.Add(row.ToList());
+            }
+        }
+
+        private HeaderReportCell CreateHeaderCell(SpannableHeader[,] header, int rowIndex, int columnIndex)
+        {
+            int rowSpan = this.CalculateRowSpan(header, rowIndex, columnIndex);
+            int columnSpan = this.CalculateColumnSpan(header, rowIndex, columnIndex);
+            if (rowSpan > 1)
+            {
+                columnSpan = 1;
+            }
+
+            for (int i = 1; i < rowSpan; i++)
+            {
+                header[rowIndex + i, columnIndex].MarkUsed();
+            }
+
+            for (int i = 1; i < columnSpan; i++)
+            {
+                header[rowIndex, columnIndex + i].MarkUsed();
+            }
+
+            return new HeaderReportCell(header[rowIndex, columnIndex].Title)
+            {
+                RowSpan = rowSpan,
+                ColumnSpan = columnSpan
+            };
         }
 
         private int CalculateRowSpan(SpannableHeader[,] header, int rowIndex, int columnIndex)
@@ -152,71 +208,16 @@ namespace Reports.Builders
             return columnSpan;
         }
 
-        private void FillTableCellsFromHeaderCells(ReportTable table, SpannableHeader[,] header)
-        {
-            int rowsCount = header.GetLength(0);
-            int columnsCount = header.GetLength(1);
-            IReportCell[] row = new IReportCell[columnsCount];
-
-            for (var rowIndex = 0; rowIndex < rowsCount; rowIndex++)
-            {
-                for (var columnIndex = 0; columnIndex < columnsCount; columnIndex++)
-                {
-                    row[columnIndex] = null;
-                    if (header[rowIndex, columnIndex].IsSpanned || header[rowIndex, columnIndex].IsUsed)
-                    {
-                        continue;
-                    }
-
-                    int rowSpan = this.CalculateRowSpan(header, rowIndex, columnIndex);
-                    int columnSpan = this.CalculateColumnSpan(header, rowIndex, columnIndex);
-                    if (rowSpan > 1)
-                    {
-                        columnSpan = 1;
-                    }
-
-                    for (int i = 1; i < rowSpan; i++)
-                    {
-                        header[rowIndex + i, columnIndex].MarkUsed();
-                    }
-                    for (int i = 1; i < columnSpan; i++)
-                    {
-                        header[rowIndex, columnIndex + i].MarkUsed();
-                    }
-
-                    HeaderReportCell cell = new HeaderReportCell(header[rowIndex, columnIndex].Title)
-                    {
-                        RowSpan = rowSpan,
-                        ColumnSpan = columnSpan
-                    };
-
-                    row[columnIndex] = cell;
-                }
-
-                table.Cells.Add(row.ToList());
-            }
-        }
-
         private struct SpannableHeader
         {
-            private string title;
+            public string Title { get; set; }
+            public bool IsSpanned { get; private set; }
             public bool IsUsed { get; private set; }
 
             public void MarkSpanned()
             {
-                this.title = null;
+                this.Title = null;
                 this.IsSpanned = true;
-            }
-
-            public bool IsSpanned { get; private set; }
-
-            public string Title
-            {
-                get => this.title;
-                set {
-                    this.IsSpanned = value == null;
-                    this.title = value;
-                }
             }
 
             public void MarkUsed()
