@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Reports.Interfaces;
 
 namespace Reports.Models.Cells
@@ -9,8 +11,12 @@ namespace Reports.Models.Cells
         public int ColumnSpan { get; set; } = 1;
         public int RowSpan { get; set; } = 1;
 
+        public IEnumerable<IReportCellProperty> Properties => this.properties;
+
         protected readonly TValue Value;
         protected IValueFormatter<TValue> Formatter;
+
+        private readonly List<IReportCellProperty> properties = new List<IReportCellProperty>();
 
         public ReportCell(TValue value)
         {
@@ -23,8 +29,24 @@ namespace Reports.Models.Cells
         }
 
         public virtual string DisplayValue =>
-            this.Formatter != null ?
-                this.Formatter.Format(this.Value) :
-                this.Value?.ToString() ?? string.Empty;
+            this.Formatter != null
+                ? this.Formatter.Format(this.Value)
+                : this.Value?.ToString() ?? string.Empty;
+
+
+        public bool HasProperty<TProperty>() where TProperty : IReportCellProperty
+        {
+            return this.Properties.OfType<TProperty>().Any();
+        }
+
+        public TProperty GetProperty<TProperty>() where TProperty : IReportCellProperty
+        {
+            return this.Properties.OfType<TProperty>().FirstOrDefault();
+        }
+
+        public void AddProperty<TProperty>(TProperty property) where TProperty : IReportCellProperty
+        {
+            this.properties.Add(property);
+        }
     }
 }

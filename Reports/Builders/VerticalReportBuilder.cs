@@ -34,6 +34,13 @@ namespace Reports.Builders
                 .SetValueFormatter(formatter);
         }
 
+        public void AddColumnProcessor(string title, IReportCellProcessor processor)
+        {
+            this.columns
+                .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                .Processors.Add(processor);
+        }
+
         public ReportTable Build(IEnumerable<TSourceEntity> source)
         {
             ReportTable table = new ReportTable();

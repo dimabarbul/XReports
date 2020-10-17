@@ -24,6 +24,9 @@
       <Compile Update="VerticalReportTest.ComplexHeader.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="VerticalReportTest.Properties.cs">
+        <DependentUpon>VerticalReportTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

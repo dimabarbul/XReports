@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Reports.Interfaces;
 using Reports.Models.Cells;
 
@@ -7,6 +8,7 @@ namespace Reports.Models.Columns
     public abstract class ReportColumn<TSourceEntity, TValue> : IReportColumn<TSourceEntity, TValue>
     {
         public string Title { get; }
+        public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();
 
         private IValueFormatter<TValue> formatter;
 
@@ -27,6 +29,11 @@ namespace Reports.Models.Columns
             if (this.formatter != null)
             {
                 cell.SetFormatter(this.formatter);
+            }
+
+            foreach (IReportCellProcessor processor in this.Processors)
+            {
+                processor.Process(cell);
             }
 
             return cell;

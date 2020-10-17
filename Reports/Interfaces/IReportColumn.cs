@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Reports.Interfaces
 {
@@ -11,5 +12,6 @@ namespace Reports.Interfaces
     {
         string Title { get; }
         Func<TSourceEntity, IReportCell> CellSelector { get; }
+        ICollection<IReportCellProcessor> Processors { get; }
     }
 }
