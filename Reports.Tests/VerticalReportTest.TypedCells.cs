@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using Reports.Builders;
+using Reports.Interfaces;
 using Reports.Models;
 using Reports.ValueFormatters;
 using Reports.ValueProviders;
@@ -22,13 +23,17 @@ namespace Reports.Tests
                 6,
             });
 
-            table.Cells.Should().HaveCount(3);
-            table.Cells[0][0].DisplayValue.Should().Be("#");
-            table.Cells[0][0].ValueType.Should().Be(typeof(string));
-            table.Cells[1][0].DisplayValue.Should().Be("3");
-            table.Cells[1][0].ValueType.Should().Be(typeof(int));
-            table.Cells[2][0].DisplayValue.Should().Be("6");
-            table.Cells[2][0].ValueType.Should().Be(typeof(int));
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].DisplayValue.Should().Be("#");
+            headerCells[0][0].ValueType.Should().Be(typeof(string));
+
+            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            cells.Should().HaveCount(2);
+            cells[0][0].DisplayValue.Should().Be("3");
+            cells[0][0].ValueType.Should().Be(typeof(int));
+            cells[1][0].DisplayValue.Should().Be("6");
+            cells[1][0].ValueType.Should().Be(typeof(int));
         }
 
         [Fact]
@@ -44,13 +49,17 @@ namespace Reports.Tests
                 6.5m,
             });
 
-            table.Cells.Should().HaveCount(3);
-            table.Cells[0][0].DisplayValue.Should().Be("Score");
-            table.Cells[0][0].ValueType.Should().Be(typeof(string));
-            table.Cells[1][0].DisplayValue.Should().Be("3.00");
-            table.Cells[1][0].ValueType.Should().Be(typeof(decimal));
-            table.Cells[2][0].DisplayValue.Should().Be("6.50");
-            table.Cells[2][0].ValueType.Should().Be(typeof(decimal));
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].DisplayValue.Should().Be("Score");
+            headerCells[0][0].ValueType.Should().Be(typeof(string));
+
+            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            cells.Should().HaveCount(2);
+            cells[0][0].DisplayValue.Should().Be("3.00");
+            cells[0][0].ValueType.Should().Be(typeof(decimal));
+            cells[1][0].DisplayValue.Should().Be("6.50");
+            cells[1][0].ValueType.Should().Be(typeof(decimal));
         }
 
         [Fact]
@@ -66,13 +75,17 @@ namespace Reports.Tests
                 6.5m,
             });
 
-            table.Cells.Should().HaveCount(3);
-            table.Cells[0][0].DisplayValue.Should().Be("Score");
-            table.Cells[0][0].ValueType.Should().Be(typeof(string));
-            table.Cells[1][0].DisplayValue.Should().Be("3");
-            table.Cells[1][0].ValueType.Should().Be(typeof(decimal));
-            table.Cells[2][0].DisplayValue.Should().Be("7");
-            table.Cells[2][0].ValueType.Should().Be(typeof(decimal));
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].DisplayValue.Should().Be("Score");
+            headerCells[0][0].ValueType.Should().Be(typeof(string));
+
+            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            cells.Should().HaveCount(2);
+            cells[0][0].DisplayValue.Should().Be("3");
+            cells[0][0].ValueType.Should().Be(typeof(decimal));
+            cells[1][0].DisplayValue.Should().Be("7");
+            cells[1][0].ValueType.Should().Be(typeof(decimal));
         }
 
         [Fact]
@@ -89,15 +102,19 @@ namespace Reports.Tests
                 new DateTime(2020, 10, 24, 20, 25, 00),
             });
 
-            table.Cells.Should().HaveCount(2);
-            table.Cells[0][0].DisplayValue.Should().Be("The Date");
-            table.Cells[0][0].ValueType.Should().Be(typeof(string));
-            table.Cells[0][1].DisplayValue.Should().Be("Next Day");
-            table.Cells[0][1].ValueType.Should().Be(typeof(string));
-            table.Cells[1][0].DisplayValue.Should().Be("10/24/2020");
-            table.Cells[1][0].ValueType.Should().Be(typeof(DateTime));
-            table.Cells[1][1].DisplayValue.Should().Be("10/25/2020");
-            table.Cells[1][1].ValueType.Should().Be(typeof(DateTime));
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].DisplayValue.Should().Be("The Date");
+            headerCells[0][0].ValueType.Should().Be(typeof(string));
+            headerCells[0][1].DisplayValue.Should().Be("Next Day");
+            headerCells[0][1].ValueType.Should().Be(typeof(string));
+
+            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            cells.Should().HaveCount(1);
+            cells[0][0].DisplayValue.Should().Be("10/24/2020");
+            cells[0][0].ValueType.Should().Be(typeof(DateTime));
+            cells[0][1].DisplayValue.Should().Be("10/25/2020");
+            cells[0][1].ValueType.Should().Be(typeof(DateTime));
         }
     }
 }

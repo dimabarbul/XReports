@@ -4,6 +4,6 @@ namespace Reports.Html.Models
 {
     public class HtmlReportTableBody
     {
-        public List<List<HtmlReportTableBodyCell>> Cells { get; set; } = new List<List<HtmlReportTableBodyCell>>();
+        public ICollection<IEnumerable<HtmlReportTableBodyCell>> Cells { get; set; } = new List<IEnumerable<HtmlReportTableBodyCell>>();
     }
 }

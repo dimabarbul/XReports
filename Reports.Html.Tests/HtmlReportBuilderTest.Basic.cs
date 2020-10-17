@@ -13,30 +13,32 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_TextValue_CorrectCells()
         {
-            ReportTable table = new ReportTable();
-            table.Cells = new List<List<IReportCell>>()
+            ReportTable table = new ReportTable
             {
-                new List<IReportCell>()
+                HeaderCells = new List<IEnumerable<IReportCell>>()
                 {
-                    new HeaderReportCell("Value"),
+                    new IReportCell[] { new HeaderReportCell("Value"), },
                 },
-                new List<IReportCell>()
+                Cells = new List<IEnumerable<IReportCell>>()
                 {
-                    new ReportCell<string>("Test"),
-                }
+                    new IReportCell[] { new ReportCell<string>("Test"), }
+                },
             };
 
             HtmlReportBuilder builder = new HtmlReportBuilder();
             HtmlReportTable htmlReportTable = builder.Build(table);
 
-            htmlReportTable.Header.Cells.Should().HaveCount(1);
-            htmlReportTable.Header.Cells[0][0].Text.Should().Be("Value");
-            htmlReportTable.Header.Cells[0][0].ColSpan.Should().Be(1);
-            htmlReportTable.Header.Cells[0][0].RowSpan.Should().Be(1);
-            htmlReportTable.Body.Cells.Should().HaveCount(1);
-            htmlReportTable.Body.Cells[0][0].Text.Should().Be("Test");
-            htmlReportTable.Body.Cells[0][0].ColSpan.Should().Be(1);
-            htmlReportTable.Body.Cells[0][0].RowSpan.Should().Be(1);
+            HtmlReportTableHeaderCell[][] headerCells = this.GetHeaderCellsAsArray(htmlReportTable);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].Text.Should().Be("Value");
+            headerCells[0][0].ColSpan.Should().Be(1);
+            headerCells[0][0].RowSpan.Should().Be(1);
+
+            HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
+            cells.Should().HaveCount(1);
+            cells[0][0].Text.Should().Be("Test");
+            cells[0][0].ColSpan.Should().Be(1);
+            cells[0][0].RowSpan.Should().Be(1);
         }
     }
 }

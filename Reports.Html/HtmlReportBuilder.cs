@@ -12,37 +12,42 @@ namespace Reports.Html
         {
             HtmlReportTable htmlReportTable = new HtmlReportTable();
 
-            foreach (List<IReportCell> row in table.Cells)
-            {
-                if (row[0].IsHeader)
-                {
-                    htmlReportTable.Header.Cells.Add(
-                        row
-                            .Select(cell => new HtmlReportTableHeaderCell()
-                            {
-                                Text = cell.DisplayValue,
-                                ColSpan = cell.ColumnSpan,
-                                RowSpan = cell.RowSpan,
-                            })
-                            .ToList()
-                    );
-                }
-                else
-                {
-                    htmlReportTable.Body.Cells.Add(
-                        row
-                            .Select(cell => new HtmlReportTableBodyCell()
-                            {
-                                Text = cell.DisplayValue,
-                                ColSpan = cell.ColumnSpan,
-                                RowSpan = cell.RowSpan,
-                            })
-                            .ToList()
-                    );
-                }
-            }
+            this.BuildHeader(table, htmlReportTable);
+            this.BuildBody(table, htmlReportTable);
 
             return htmlReportTable;
+        }
+
+        private void BuildHeader(ReportTable table, HtmlReportTable htmlReportTable)
+        {
+            foreach (IEnumerable<IReportCell> row in table.HeaderCells)
+            {
+                htmlReportTable.Header.Cells.Add(
+                    row
+                        .Select(cell => new HtmlReportTableHeaderCell()
+                        {
+                            Text = cell.DisplayValue,
+                            ColSpan = cell.ColumnSpan,
+                            RowSpan = cell.RowSpan,
+                        })
+                );
+            }
+        }
+
+        private void BuildBody(ReportTable table, HtmlReportTable htmlReportTable)
+        {
+            foreach (IEnumerable<IReportCell> row in table.Cells)
+            {
+                htmlReportTable.Body.Cells.Add(
+                    row
+                        .Select(cell => new HtmlReportTableBodyCell()
+                        {
+                            Text = cell.DisplayValue,
+                            ColSpan = cell.ColumnSpan,
+                            RowSpan = cell.RowSpan,
+                        })
+                );
+            }
         }
     }
 }

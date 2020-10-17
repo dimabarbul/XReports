@@ -146,7 +146,7 @@ namespace Reports.Builders
                     row[columnIndex] = this.CreateHeaderCell(header, rowIndex, columnIndex);
                 }
 
-                table.Cells.Add(row.ToList());
+                table.HeaderCells.Add(row.ToList());
             }
         }
 
