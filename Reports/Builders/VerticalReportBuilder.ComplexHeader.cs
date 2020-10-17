@@ -150,7 +150,7 @@ namespace Reports.Builders
             }
         }
 
-        private HeaderReportCell CreateHeaderCell(SpannableHeader[,] header, int rowIndex, int columnIndex)
+        private ReportCell<string> CreateHeaderCell(SpannableHeader[,] header, int rowIndex, int columnIndex)
         {
             int rowSpan = this.CalculateRowSpan(header, rowIndex, columnIndex);
             int columnSpan = this.CalculateColumnSpan(header, rowIndex, columnIndex);
@@ -169,7 +169,7 @@ namespace Reports.Builders
                 header[rowIndex, columnIndex + i].MarkUsed();
             }
 
-            return new HeaderReportCell(header[rowIndex, columnIndex].Title)
+            return new ReportCell<string>(header[rowIndex, columnIndex].Title)
             {
                 RowSpan = rowSpan,
                 ColumnSpan = columnSpan

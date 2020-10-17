@@ -8,7 +8,6 @@ namespace Reports.Models.Cells
         public Type ValueType => typeof(TValue);
         public int ColumnSpan { get; set; } = 1;
         public int RowSpan { get; set; } = 1;
-        public virtual bool IsHeader => false;
 
         protected readonly TValue Value;
         protected IValueFormatter<TValue> Formatter;

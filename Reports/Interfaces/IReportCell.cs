@@ -8,6 +8,5 @@ namespace Reports.Interfaces
         Type ValueType { get; }
         int ColumnSpan { get; }
         int RowSpan { get; }
-        bool IsHeader { get; }
     }
 }

@@ -17,7 +17,7 @@ namespace Reports.Html.Tests
             {
                 HeaderCells = new List<IEnumerable<IReportCell>>()
                 {
-                    new IReportCell[] { new HeaderReportCell("Value"), },
+                    new IReportCell[] { new ReportCell<string>("Value"), },
                 },
                 Cells = new List<IEnumerable<IReportCell>>()
                 {
