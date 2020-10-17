@@ -6,6 +6,8 @@ namespace Reports.Models.Cells
     public class ReportCell<TValue> : IReportCell
     {
         public Type ValueType => typeof(TValue);
+        public int ColumnSpan { get; set; } = 1;
+        public int RowSpan { get; set; } = 1;
 
         protected readonly TValue Value;
         protected IValueFormatter<TValue> Formatter;

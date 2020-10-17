@@ -1,3 +1,4 @@
+using System.Globalization;
 using Reports.Interfaces;
 
 namespace Reports.ValueFormatters
@@ -13,7 +14,7 @@ namespace Reports.ValueFormatters
 
         public string Format(decimal value)
         {
-            return value.ToString($"N{this.decimalPlaces}");
+            return value.ToString($"F{this.decimalPlaces}", CultureInfo.InvariantCulture);
         }
     }
 }

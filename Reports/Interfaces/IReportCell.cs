@@ -6,5 +6,7 @@ namespace Reports.Interfaces
     {
         string DisplayValue { get; }
         Type ValueType { get; }
+        int ColumnSpan { get; }
+        int RowSpan { get; }
     }
 }
