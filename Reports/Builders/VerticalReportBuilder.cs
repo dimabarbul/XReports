@@ -22,6 +22,11 @@ namespace Reports.Builders
             this.Columns.Add(new ValueProviderReportColumn<TSourceEntity, TValue>(title, provider));
         }
 
+        public void AddColumn<TValue>(string title, IComputedValueProvider<TSourceEntity, TValue> provider)
+        {
+            this.Columns.Add(new ComputedValueProviderReportColumn<TSourceEntity,TValue>(title, provider));
+        }
+
         public void SetColumnValueFormatter<TColumnType>(string title, IValueFormatter<TColumnType> formatter)
         {
             this.Columns

@@ -1,5 +1,4 @@
 using System;
-using Reports.Factories;
 using Reports.Interfaces;
 using Reports.Models.Cells;
 
@@ -23,11 +22,11 @@ namespace Reports.Models.Columns
 
         protected IReportCell CreateCell(TValue value)
         {
-            IReportCell cell = ReportCellFactory.Create<TValue>(value);
+            ReportCell<TValue> cell = new ReportCell<TValue>(value);
 
             if (this.formatter != null)
             {
-                (cell as ReportCell<TValue>)?.SetFormatter(this.formatter);
+                cell.SetFormatter(this.formatter);
             }
 
             return cell;

@@ -3,14 +3,14 @@ using Reports.Interfaces;
 
 namespace Reports.Models.Cells
 {
-    public abstract class ReportCell<TValue> : IReportCell
+    public class ReportCell<TValue> : IReportCell
     {
         public Type ValueType => typeof(TValue);
 
-        protected TValue Value;
+        protected readonly TValue Value;
         protected IValueFormatter<TValue> Formatter;
 
-        public void SetValue(TValue value)
+        public ReportCell(TValue value)
         {
             this.Value = value;
         }
