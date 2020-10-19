@@ -16,11 +16,17 @@ namespace Reports.Models.Cells
         protected readonly TValue Value;
         protected IValueFormatter<TValue> Formatter;
 
-        private readonly List<IReportCellProperty> properties = new List<IReportCellProperty>();
+        private readonly List<IReportCellProperty> properties;
 
         public ReportCell(TValue value)
+            :this(value, new List<IReportCellProperty>())
+        {
+        }
+
+        public ReportCell(TValue value, IEnumerable<IReportCellProperty> reportCellProperties)
         {
             this.Value = value;
+            this.properties = reportCellProperties.ToList();
         }
 
         public void SetFormatter(IValueFormatter<TValue> formatter)

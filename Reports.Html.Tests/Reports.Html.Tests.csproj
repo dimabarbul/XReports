@@ -22,6 +22,9 @@
       <Compile Update="HtmlReportBuilderTest.Basic.cs">
         <DependentUpon>HtmlReportBuilderTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="HtmlReportBuilderTest.StandardPropertyProcessor.cs">
+        <DependentUpon>HtmlReportBuilderTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

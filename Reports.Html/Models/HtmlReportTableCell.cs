@@ -5,5 +5,6 @@ namespace Reports.Html.Models
         public string Text { get; set; }
         public int RowSpan { get; set; }
         public int ColSpan { get; set; }
+        public string Html { get; set; }
     }
 }
