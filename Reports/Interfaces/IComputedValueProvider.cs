@@ -1,6 +1,6 @@
 namespace Reports.Interfaces
 {
-    public interface IComputedValueProvider<TSourceEntity, TValue>
+    public interface IComputedValueProvider<in TSourceEntity, out TValue>
     {
         TValue GetValue(TSourceEntity entity);
     }

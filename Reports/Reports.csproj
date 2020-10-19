@@ -4,4 +4,10 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
+        <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 namespace Reports.Interfaces
 {
-    public interface IValueProvider<TValue>
+    public interface IValueProvider<out TValue>
     {
         TValue GetValue();
     }
