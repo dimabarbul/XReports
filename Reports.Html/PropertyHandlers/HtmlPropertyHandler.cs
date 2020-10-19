@@ -1,11 +1,12 @@
 using System;
+using Reports.Html.Enums;
 using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Interfaces;
 
 namespace Reports.Html.PropertyHandlers
 {
-    public abstract class HtmlPropertyHandle<TPropertyType> : IHtmlPropertyHandler
+    public abstract class HtmlPropertyHandler<TPropertyType> : IHtmlPropertyHandler
         where TPropertyType : IReportCellProperty
     {
         public void Handle(IReportCellProperty property, HtmlReportTableCell cell)
@@ -19,5 +20,6 @@ namespace Reports.Html.PropertyHandlers
         }
 
         protected abstract void HandleProperty(TPropertyType property, HtmlReportTableCell cell);
+        public abstract HtmlPropertyHandlerPriority Priority { get; }
     }
 }
