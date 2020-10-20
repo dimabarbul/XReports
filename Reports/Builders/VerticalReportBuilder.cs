@@ -36,9 +36,12 @@ namespace Reports.Builders
 
         public void AddColumnProcessor(string title, IReportCellProcessor processor)
         {
-            this.columns
-                .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                .Processors.Add(processor);
+            this.GetColumn(title).Processors.Add(processor);
+        }
+
+        public void AddColumnProperty(string title, IReportCellProperty property)
+        {
+            this.GetColumn(title).Properties.Add(property);
         }
 
         public ReportTable Build(IEnumerable<TSourceEntity> source)
@@ -61,6 +64,12 @@ namespace Reports.Builders
                     )
                 );
             }
+        }
+
+        private IReportColumn<TSourceEntity> GetColumn(string title)
+        {
+            return this.columns
+                .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
         }
     }
 

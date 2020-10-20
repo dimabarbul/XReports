@@ -13,5 +13,6 @@ namespace Reports.Interfaces
         string Title { get; }
         Func<TSourceEntity, IReportCell> CellSelector { get; }
         ICollection<IReportCellProcessor> Processors { get; }
+        ICollection<IReportCellProperty> Properties { get; }
     }
 }

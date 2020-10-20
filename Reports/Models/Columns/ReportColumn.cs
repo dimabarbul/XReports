@@ -9,6 +9,7 @@ namespace Reports.Models.Columns
     {
         public string Title { get; }
         public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();
+        public ICollection<IReportCellProperty> Properties { get; } = new List<IReportCellProperty>();
 
         private IValueFormatter<TValue> formatter;
 
@@ -26,17 +27,35 @@ namespace Reports.Models.Columns
         {
             ReportCell<TValue> cell = new ReportCell<TValue>(value);
 
+            this.FormatCell(cell);
+            this.AddProperties(cell);
+            this.RunProcessors(cell);
+
+            return cell;
+        }
+
+        private void FormatCell(ReportCell<TValue> cell)
+        {
             if (this.formatter != null)
             {
                 cell.SetFormatter(this.formatter);
             }
+        }
 
+        private void AddProperties(ReportCell<TValue> cell)
+        {
+            foreach (IReportCellProperty property in this.Properties)
+            {
+                cell.AddProperty(property);
+            }
+        }
+
+        private void RunProcessors(ReportCell<TValue> cell)
+        {
             foreach (IReportCellProcessor processor in this.Processors)
             {
                 processor.Process(cell);
             }
-
-            return cell;
         }
 
         public abstract Func<TSourceEntity, IReportCell> CellSelector { get; }
