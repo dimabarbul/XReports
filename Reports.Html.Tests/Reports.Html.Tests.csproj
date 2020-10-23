@@ -19,11 +19,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="HtmlReportBuilderTest.Basic.cs">
-        <DependentUpon>HtmlReportBuilderTest.cs</DependentUpon>
+      <Compile Update="HtmlReportConverterTest.Basic.cs">
+        <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
-      <Compile Update="HtmlReportBuilderTest.StandardPropertyProcessor.cs">
-        <DependentUpon>HtmlReportBuilderTest.cs</DependentUpon>
+      <Compile Update="HtmlReportConverterTest.StandardPropertyProcessor.cs">
+        <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
     </ItemGroup>
 

@@ -7,21 +7,21 @@ using Reports.Models;
 
 namespace Reports.Html
 {
-    public class HtmlReportBuilder
+    public class HtmlReportConverter
     {
         private IHtmlPropertyProcessor propertyProcessor;
 
-        public HtmlReportTable Build(ReportTable table)
+        public HtmlReportTable Convert(ReportTable table)
         {
             HtmlReportTable htmlReportTable = new HtmlReportTable();
 
-            this.BuildHeader(table, htmlReportTable);
-            this.BuildBody(table, htmlReportTable);
+            this.ConvertHeader(table, htmlReportTable);
+            this.ConvertBody(table, htmlReportTable);
 
             return htmlReportTable;
         }
 
-        private void BuildHeader(ReportTable table, HtmlReportTable htmlReportTable)
+        private void ConvertHeader(ReportTable table, HtmlReportTable htmlReportTable)
         {
             foreach (IEnumerable<IReportCell> row in table.HeaderCells)
             {
@@ -43,7 +43,7 @@ namespace Reports.Html
             return htmlCell;
         }
 
-        private void BuildBody(ReportTable table, HtmlReportTable htmlReportTable)
+        private void ConvertBody(ReportTable table, HtmlReportTable htmlReportTable)
         {
             foreach (IEnumerable<IReportCell> row in table.Cells)
             {

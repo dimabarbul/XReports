@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Reports.Html.Tests
 {
-    public partial class HtmlReportBuilderTest
+    public partial class HtmlReportConverterTest
     {
         [Fact]
         public void Build_BoldProperty_StrongTag()
@@ -32,9 +32,9 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportBuilder builder = new HtmlReportBuilder();
-            builder.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
-            HtmlReportTable htmlReportTable = builder.Build(table);
+            HtmlReportConverter converter = new HtmlReportConverter();
+            converter.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
+            HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
@@ -62,9 +62,9 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportBuilder builder = new HtmlReportBuilder();
-            builder.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
-            HtmlReportTable htmlReportTable = builder.Build(table);
+            HtmlReportConverter converter = new HtmlReportConverter();
+            converter.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
+            HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);

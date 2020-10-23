@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Reports.Html.Tests
 {
-    public partial class HtmlReportBuilderTest
+    public partial class HtmlReportConverterTest
     {
         [Fact]
         public void Build_TextValue_CorrectCells()
@@ -25,8 +25,8 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportBuilder builder = new HtmlReportBuilder();
-            HtmlReportTable htmlReportTable = builder.Build(table);
+            HtmlReportConverter converter = new HtmlReportConverter();
+            HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableHeaderCell[][] headerCells = this.GetHeaderCellsAsArray(htmlReportTable);
             headerCells.Should().HaveCount(1);

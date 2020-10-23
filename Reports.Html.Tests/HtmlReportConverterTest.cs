@@ -3,7 +3,7 @@ using Reports.Html.Models;
 
 namespace Reports.Html.Tests
 {
-    public partial class HtmlReportBuilderTest
+    public partial class HtmlReportConverterTest
     {
         private HtmlReportTableHeaderCell[][] GetHeaderCellsAsArray(HtmlReportTable table)
         {
