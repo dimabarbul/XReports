@@ -15,7 +15,7 @@ public class SurveyListItemDto
     [MyReportColumn(1, "Survey ID")]
     public int SurveyId { get; set; }
 
-    [MyReportColumn(2, "Survey Start Date", Format = Constants.DateFormats.DefaultDateFormat]
+    [MyReportColumn(2, "Survey Start Date", Format = Constants.DateFormats.DefaultDateFormat)]
     public DateTime SurveyDate { get; set; }
 
     [MyReportColumn(3, "Type", Translatable = true)]
