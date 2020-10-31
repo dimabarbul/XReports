@@ -1,7 +1,7 @@
 using System;
 using Reports.Builders;
 using Reports.Interfaces;
-using Reports.Models.Columns;
+using Reports.ReportCellsProviders;
 
 namespace Reports.Extensions
 {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Reports.Interfaces;
-using Reports.Models.Cells;
+using Reports.Models;
 
-namespace Reports.Models.Columns
+namespace Reports.ReportCellsProviders
 {
-    public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
+    internal abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
     {
         public string Title { get; }
         public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();

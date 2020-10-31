@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 
-namespace Reports.Models.Cells
+namespace Reports.Models
 {
     public class ReportCell<TValue> : IReportCell
     {

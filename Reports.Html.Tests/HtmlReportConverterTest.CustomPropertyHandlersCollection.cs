@@ -6,7 +6,7 @@ using Reports.Html.Models;
 using Reports.Html.PropertyHandlers;
 using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
-using Reports.Models.Cells;
+using Reports.Models;
 using Reports.Models.Properties;
 using Xunit;
 

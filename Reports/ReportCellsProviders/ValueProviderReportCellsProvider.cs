@@ -1,9 +1,9 @@
 using System;
 using Reports.Interfaces;
 
-namespace Reports.Models.Columns
+namespace Reports.ReportCellsProviders
 {
-    public class ValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
+    internal class ValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {
         public override Func<TSourceEntity, IReportCell> CellSelector
         {
