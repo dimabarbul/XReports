@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Reports.Builders;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.Models.Properties;
 using Xunit;
 
@@ -16,12 +15,12 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddColumnProcessor("Value", new CustomPropertyProcessor());
 
-            ReportTable table = reportBuilder.Build(new []
+            IReportTable table = reportBuilder.Build(new []
             {
                 "Test",
             });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
@@ -35,16 +34,16 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddColumnProperty("Value", new BoldProperty());
 
-            ReportTable table = reportBuilder.Build(new []
+            IReportTable table = reportBuilder.Build(new []
             {
                 "Test",
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
             headerCells[0][0].Properties.Should().BeEmpty();
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And

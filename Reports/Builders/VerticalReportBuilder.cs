@@ -44,7 +44,7 @@ namespace Reports.Builders
             this.GetColumn(title).Properties.Add(property);
         }
 
-        public ReportTable Build(IEnumerable<TSourceEntity> source)
+        public IReportTable Build(IEnumerable<TSourceEntity> source)
         {
             ReportTable table = new ReportTable();
 
@@ -56,13 +56,15 @@ namespace Reports.Builders
 
         private void BuildBody(ReportTable table, IEnumerable<TSourceEntity> source)
         {
+            table.Rows = this.GetRows(source);
+        }
+
+        private IEnumerable<IEnumerable<IReportCell>> GetRows(IEnumerable<TSourceEntity> source)
+        {
             foreach (TSourceEntity entity in source)
             {
-                table.Cells.Add(new List<IReportCell>(
-                        this.columns
-                            .Select(c => c.CellSelector(entity))
-                    )
-                );
+                yield return this.columns
+                    .Select(c => c.CellSelector(entity));
             }
         }
 

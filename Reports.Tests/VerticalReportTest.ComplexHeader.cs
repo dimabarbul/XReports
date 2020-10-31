@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Reports.Builders;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.ValueFormatters;
 using Reports.ValueProviders;
 using Xunit;
@@ -17,14 +16,14 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Value", i => i);
             reportBuilder.AddComplexHeader(0, "Statistics", "Value");
 
-            ReportTable table = reportBuilder.Build(new[] { 1 });
+            IReportTable table = reportBuilder.Build(new[] { 1 });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("Statistics");
             headerCells[1][0].DisplayValue.Should().Be("Value");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].DisplayValue.Should().Be("1");
         }
@@ -37,13 +36,13 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "Name", "Age");
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 27),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("Personal Info");
             headerCells[0][0].ColumnSpan.Should().Be(2);
@@ -52,7 +51,7 @@ namespace Reports.Tests
             headerCells[1][0].ColumnSpan.Should().Be(1);
             headerCells[1][1].DisplayValue.Should().Be("Age");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("John Doe");
             cells[0][0].ColumnSpan.Should().Be(1);
@@ -71,13 +70,13 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Gender", x => x.Gender);
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 2);
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John Doe", 30, "Male"),
                 ("Jane Doe", 27, "Female"),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("Personal Info");
             headerCells[0][0].ColumnSpan.Should().Be(3);
@@ -87,7 +86,7 @@ namespace Reports.Tests
             headerCells[1][1].DisplayValue.Should().Be("Age");
             headerCells[1][2].DisplayValue.Should().Be("Gender");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("John Doe");
             cells[0][1].DisplayValue.Should().Be("30");
@@ -110,12 +109,12 @@ namespace Reports.Tests
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 1);
             reportBuilder.AddComplexHeader(0, "Job Info", 2, 3);
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John Doe", 30, "Developer", 1000m),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("Personal Info");
             headerCells[0][0].ColumnSpan.Should().Be(2);
@@ -128,7 +127,7 @@ namespace Reports.Tests
             headerCells[1][2].DisplayValue.Should().Be("Job");
             headerCells[1][3].DisplayValue.Should().Be("Salary");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].DisplayValue.Should().Be("John Doe");
             cells[0][1].DisplayValue.Should().Be("30");
@@ -146,13 +145,13 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Employee", 1, 2);
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 30),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("#");
             headerCells[0][0].RowSpan.Should().Be(2);
@@ -165,7 +164,7 @@ namespace Reports.Tests
             headerCells[1][1].DisplayValue.Should().Be("Name");
             headerCells[1][2].DisplayValue.Should().Be("Age");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("1");
             cells[0][1].DisplayValue.Should().Be("John Doe");
@@ -187,13 +186,13 @@ namespace Reports.Tests
             reportBuilder.AddComplexHeader(0, "Employee", "First Name", "Age");
             reportBuilder.AddComplexHeader(1, "Personal Info", "First Name", "Last Name");
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(3);
             headerCells[0][0].DisplayValue.Should().Be("#");
             headerCells[0][0].RowSpan.Should().Be(3);
@@ -222,7 +221,7 @@ namespace Reports.Tests
             headerCells[2][2].RowSpan.Should().Be(1);
             headerCells[2][3].Should().BeNull();
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("1");
             cells[0][1].DisplayValue.Should().Be("John");
@@ -245,13 +244,13 @@ namespace Reports.Tests
             reportBuilder.AddComplexHeader(0, "Personal Info", "First Name", "Last Name");
             reportBuilder.AddComplexHeader(0, "Extra", "Age");
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
             headerCells[0][0].DisplayValue.Should().Be("Personal Info");
             headerCells[0][0].ColumnSpan.Should().Be(2);
@@ -269,7 +268,7 @@ namespace Reports.Tests
             headerCells[1][2].ColumnSpan.Should().Be(1);
             headerCells[1][2].RowSpan.Should().Be(1);
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("John");
             cells[0][1].DisplayValue.Should().Be("Doe");

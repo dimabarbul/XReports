@@ -4,7 +4,6 @@ using FluentAssertions;
 using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.Models.Cells;
 using Xunit;
 
@@ -15,17 +14,16 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_TextValue_CorrectCells()
         {
-            ReportTable table = new ReportTable
-            {
-                HeaderCells = new List<IEnumerable<IReportCell>>()
+            IReportTable table = new ReportTable(
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] { new ReportCell<string>("Value"), },
                 },
-                Cells = new List<IEnumerable<IReportCell>>()
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] { new ReportCell<string>("Test"), }
-                },
-            };
+                }
+            );
 
             HtmlReportConverter converter = new HtmlReportConverter(Enumerable.Empty<IHtmlPropertyHandler>());
             HtmlReportTable htmlReportTable = converter.Convert(table);

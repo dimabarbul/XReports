@@ -6,7 +6,7 @@ namespace Reports.Tests
 {
     public partial class VerticalReportTest
     {
-        private IReportCell[][] GetCellsAsArray(ICollection<IEnumerable<IReportCell>> cells)
+        private IReportCell[][] GetCellsAsArray(IEnumerable<IEnumerable<IReportCell>> cells)
         {
             return cells.Select(row => row.ToArray()).ToArray();
         }

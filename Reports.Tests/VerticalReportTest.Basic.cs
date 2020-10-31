@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Reports.Builders;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.ValueProviders;
 using Xunit;
 
@@ -16,18 +15,18 @@ namespace Reports.Tests
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 ("John", "Doe"),
                 ("Jane", "Do"),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
             headerCells[0][0].DisplayValue.Should().Be("First name");
             headerCells[0][1].DisplayValue.Should().Be("Last name");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("John");
             cells[0][1].DisplayValue.Should().Be("Doe");
@@ -42,18 +41,18 @@ namespace Reports.Tests
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("Name", s => s);
 
-            ReportTable table = reportBuilder.Build(new[]
+            IReportTable table = reportBuilder.Build(new[]
             {
                 "John Doe",
                 "Jane Doe",
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderCells);
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
             headerCells[0][0].DisplayValue.Should().Be("#");
             headerCells[0][1].DisplayValue.Should().Be("Name");
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Cells);
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].DisplayValue.Should().Be("1");
             cells[0][1].DisplayValue.Should().Be("John Doe");

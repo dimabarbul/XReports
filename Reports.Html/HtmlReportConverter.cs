@@ -16,7 +16,7 @@ namespace Reports.Html
             this.propertyHandlers = propertyHandlers;
         }
 
-        public HtmlReportTable Convert(ReportTable table)
+        public HtmlReportTable Convert(IReportTable table)
         {
             HtmlReportTable htmlReportTable = new HtmlReportTable();
 
@@ -26,9 +26,9 @@ namespace Reports.Html
             return htmlReportTable;
         }
 
-        private void ConvertHeader(ReportTable table, HtmlReportTable htmlReportTable)
+        private void ConvertHeader(IReportTable table, HtmlReportTable htmlReportTable)
         {
-            foreach (IEnumerable<IReportCell> row in table.HeaderCells)
+            foreach (IEnumerable<IReportCell> row in table.HeaderRows)
             {
                 htmlReportTable.Header.Cells.Add(row.Select(this.CreateHeaderHtmlCell));
             }
@@ -48,9 +48,9 @@ namespace Reports.Html
             return htmlCell;
         }
 
-        private void ConvertBody(ReportTable table, HtmlReportTable htmlReportTable)
+        private void ConvertBody(IReportTable table, HtmlReportTable htmlReportTable)
         {
-            foreach (IEnumerable<IReportCell> row in table.Cells)
+            foreach (IEnumerable<IReportCell> row in table.Rows)
             {
                 htmlReportTable.Body.Cells.Add(row.Select(CreateBodyHtmlCell));
             }

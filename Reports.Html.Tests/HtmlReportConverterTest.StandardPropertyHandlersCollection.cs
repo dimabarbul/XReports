@@ -4,7 +4,6 @@ using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.Models.Cells;
 using Reports.Models.Properties;
 using Xunit;
@@ -16,19 +15,18 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_BoldProperty_StrongTag()
         {
-            ReportTable table = new ReportTable
-            {
-                HeaderCells = new List<IEnumerable<IReportCell>>()
+            ReportTable table = new ReportTable(
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] { new ReportCell<string>("Value"), },
                 },
-                Cells = new List<IEnumerable<IReportCell>>()
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] {
                         new ReportCell<string>("Test", new [] { new BoldProperty() }),
                     }
-                },
-            };
+                }
+            );
 
             HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
             HtmlReportTable htmlReportTable = converter.Convert(table);
@@ -41,13 +39,12 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_BoldAndMaxLengthProperty_CorrectOrder()
         {
-            ReportTable table = new ReportTable
-            {
-                HeaderCells = new List<IEnumerable<IReportCell>>()
+            ReportTable table = new ReportTable(
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] { new ReportCell<string>("Value"), },
                 },
-                Cells = new List<IEnumerable<IReportCell>>()
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] {
                         new ReportCell<string>("Test", new IReportCellProperty[]
@@ -56,8 +53,8 @@ namespace Reports.Html.Tests
                             new MaxLengthProperty(2),
                         }),
                     }
-                },
-            };
+                }
+            );
 
             HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
             HtmlReportTable htmlReportTable = converter.Convert(table);

@@ -38,7 +38,7 @@ namespace Reports.Builders
 
             this.MoveSpanHeaderTitleUp(header);
 
-            this.FillTableCellsFromHeaderCells(table, header);
+            table.HeaderRows = this.GetHeaderCells(header);
         }
 
         private SpannableHeader[,] BuildHeaderCells()
@@ -127,7 +127,7 @@ namespace Reports.Builders
             return null;
         }
 
-        private void FillTableCellsFromHeaderCells(ReportTable table, SpannableHeader[,] header)
+        private IEnumerable<IEnumerable<IReportCell>> GetHeaderCells(SpannableHeader[,] header)
         {
             int rowsCount = header.GetLength(0);
             int columnsCount = header.GetLength(1);
@@ -146,7 +146,7 @@ namespace Reports.Builders
                     row[columnIndex] = this.CreateHeaderCell(header, rowIndex, columnIndex);
                 }
 
-                table.HeaderCells.Add(row.ToList());
+                yield return row;
             }
         }
 

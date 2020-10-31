@@ -6,7 +6,6 @@ using Reports.Html.Models;
 using Reports.Html.PropertyHandlers;
 using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
-using Reports.Models;
 using Reports.Models.Cells;
 using Reports.Models.Properties;
 using Xunit;
@@ -18,19 +17,18 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_SeveralHandlers_BothApplied()
         {
-            ReportTable table = new ReportTable
-            {
-                HeaderCells = new List<IEnumerable<IReportCell>>()
+            ReportTable table = new ReportTable(
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] { new ReportCell<string>("Value"), },
                 },
-                Cells = new List<IEnumerable<IReportCell>>()
+                new List<IEnumerable<IReportCell>>()
                 {
                     new IReportCell[] {
                         new ReportCell<string>("Test", new [] { new BoldProperty() }),
                     }
-                },
-            };
+                }
+            );
 
             HtmlReportConverter converter = new HtmlReportConverter(GetCustomPropertyHandlers());
             HtmlReportTable htmlReportTable = converter.Convert(table);
