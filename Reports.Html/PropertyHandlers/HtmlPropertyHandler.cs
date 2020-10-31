@@ -13,7 +13,7 @@ namespace Reports.Html.PropertyHandlers
         {
             if (!(property is TPropertyType))
             {
-                throw new ArgumentOutOfRangeException();
+                return;
             }
 
             this.HandleProperty((TPropertyType) property, cell);

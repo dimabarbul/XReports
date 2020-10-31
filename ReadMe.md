@@ -53,11 +53,22 @@ public class SurveyListReportBuilder : EntityVerticalReportBuilder<SurveyListIte
 
 public class ReportController : Controller
 {
+    private readonly Func<string, IEnumerable<IHtmlPropertyHandler>> htmlPropertyHandlersFactory;
+    private readonly Func<string, IEnumerable<IExcelPropertyHandler>> excelPropertyHandlersFactory;
+
+    public ReportController(Func<string, IEnumerable<IHtmlPropertyHandler>> htmlPropertyHandlersFactory, Func<string, IEnumerable<IExcelPropertyHandler>> excelPropertyHandlersFactory)
+    {
+        this.htmlPropertyHandlersFactory = htmlPropertyHandlersFactory;
+        this.excelPropertyHandlersFactory = excelPropertyHandlersFactory;
+    }
+
     public async Task<IActionResult> GetSurveyListAsync(SurveyListFilter filter)
     {
         ReportTable reportTable = await this.reportService.BuildReportAsync(filter);
 
-        DataTablesReportWriter reportWriter = new DataTablesReportWriter(new BootstrapHtmlReportConverter().Convert(reportTable));
+        HtmlReportConverter reportConverter = new HtmlReportConverter(this.htmlPropertyHandlersFactory(HtmlPropertyHandlerType.Bootstrap));
+        HtmlReportTable htmlReportTable = reportConverter.Convert(reportTable);
+        DataTablesReportWriter reportWriter = new DataTablesReportWriter(htmlReportTable);
 
         return Json(new
         {
@@ -70,7 +81,9 @@ public class ReportController : Controller
     {
         ReportTable reportTable = await this.reportService.BuildReportAsync(filter);
 
-        StringReportWriter reportWriter = new StringReportWriter(new BootstrapHtmlReportConverter().Convert(reportTable));
+        HtmlReportConverter reportConverter = new HtmlReportConverter(this.htmlPropertyHandlersFactory(HtmlPropertyHandlerType.Bootstrap));
+        HtmlReportTable htmlReportTable = reportConverter.Convert(reportTable);
+        StringReportWriter reportWriter = new StringReportWriter(htmlReportTable);
 
         return View(new
         {
@@ -80,14 +93,28 @@ public class ReportController : Controller
 
     public async Task<IActionResult> ExportToExcelAsync(SurveyListFilter filter)
     {
-        ReportTable reportTable = this.reportService.BuildReportAsync(filter);
+        ReportTable reportTable = await this.reportService.BuildReportAsync(filter);
 
-        ExcelReportWriter reportWriter = new ExcelReportWriter(new StandardExcelReportConverter().Convert(reportTable));
+        ExcelReportConverter reportConverter = new ExcelReportConverter(this.excelPropertyHandlersFactory(ExcelPropertyHandlerType.Standard));
+        ExcelReportTable excelReportTable = reportConverter.Convert(reportTable);
+        ExcelReportWriter reportWriter = new ExcelReportWriter(excelReportTable);
 
         return new FileStreamResult(reportWriter.WriteToStream(), MimeType.Application.Xlsx)
         {
             FileDownloadName = "SurveyList.xlsx",
         };
+    }
+
+    public async Task<IActionResult> SendToEmailAsync(SurveyListFilter filter)
+    {
+        ReportTable reportTable = await this.reportService.BuildReportAsync(filter);
+        string email = this.GetCurrentUserEmail();
+
+        HtmlReportConverter reportConverter = new HtmlReportConverter(this.htmlPropertyHandlersFactory(HtmlPropertyHandlerType.Standard));
+        HtmlReportTable htmlReportTable = reportConverter.Convert(reportTable);
+        StringReportWriter reportWriter = new StringReportWriter(htmlReportTable);
+
+        await this.emailService.SendHtmlAsync(email, subject: "Survey List Report", body: reportWriter.Write());
     }
 }
 ```

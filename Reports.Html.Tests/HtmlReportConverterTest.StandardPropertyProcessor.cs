@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Html.PropertyHandlers.StandardHtml;
-using Reports.Html.PropertyProcessors;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.Models.Cells;
@@ -32,8 +30,7 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportConverter converter = new HtmlReportConverter();
-            converter.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
+            HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
             HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
@@ -62,8 +59,7 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportConverter converter = new HtmlReportConverter();
-            converter.SetPropertyProcessor(new StandardHtmlPropertyProcessor(GetPropertyHandlerFactory()));
+            HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
             HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
@@ -71,20 +67,12 @@ namespace Reports.Html.Tests
             cells[0][0].Html.Should().Be("<strong>T…</strong>");
         }
 
-        private static Func<Type, IHtmlPropertyHandler> GetPropertyHandlerFactory()
+        private static IEnumerable<IHtmlPropertyHandler> GetPropertyHandlers()
         {
-            return propertyType =>
+            return new IHtmlPropertyHandler[]
             {
-                if (typeof(BoldProperty).IsAssignableFrom(propertyType))
-                {
-                    return new StandardHtmlBoldPropertyHandler();
-                }
-                if (typeof(MaxLengthProperty).IsAssignableFrom(propertyType))
-                {
-                    return new StandardHtmlMaxLengthPropertyHandler();
-                }
-
-                return null;
+                new StandardHtmlBoldPropertyHandler(),
+                new StandardHtmlMaxLengthPropertyHandler(),
             };
         }
     }

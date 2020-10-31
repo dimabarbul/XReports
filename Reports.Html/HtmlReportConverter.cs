@@ -9,7 +9,12 @@ namespace Reports.Html
 {
     public class HtmlReportConverter
     {
-        private IHtmlPropertyProcessor propertyProcessor;
+        private readonly IEnumerable<IHtmlPropertyHandler> propertyHandlers;
+
+        public HtmlReportConverter(IEnumerable<IHtmlPropertyHandler> propertyHandlers)
+        {
+            this.propertyHandlers = propertyHandlers;
+        }
 
         public HtmlReportTable Convert(ReportTable table)
         {
@@ -38,7 +43,7 @@ namespace Reports.Html
                 RowSpan = cell.RowSpan,
             };
 
-            this.propertyProcessor?.ProcessProperties(cell, htmlCell);
+            this.ProcessProperties(cell, htmlCell);
 
             return htmlCell;
         }
@@ -60,14 +65,22 @@ namespace Reports.Html
                 RowSpan = cell.RowSpan,
             };
 
-            this.propertyProcessor?.ProcessProperties(cell, htmlCell);
+            this.ProcessProperties(cell, htmlCell);
 
             return htmlCell;
         }
 
-        public void SetPropertyProcessor(IHtmlPropertyProcessor htmlPropertyProcessor)
+        private void ProcessProperties(IReportCell cell, HtmlReportTableCell htmlCell)
         {
-            this.propertyProcessor = htmlPropertyProcessor;
+            IReportCellProperty[] reportCellProperties = cell.Properties.ToArray();
+            foreach (IHtmlPropertyHandler handler in this.propertyHandlers
+                .OrderBy(h => h.Priority))
+            {
+                foreach (IReportCellProperty property in reportCellProperties)
+                {
+                    handler.Handle(property, htmlCell);
+                }
+            }
         }
     }
 }

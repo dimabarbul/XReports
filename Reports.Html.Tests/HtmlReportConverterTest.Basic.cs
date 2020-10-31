@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
+using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
@@ -25,7 +27,7 @@ namespace Reports.Html.Tests
                 },
             };
 
-            HtmlReportConverter converter = new HtmlReportConverter();
+            HtmlReportConverter converter = new HtmlReportConverter(Enumerable.Empty<IHtmlPropertyHandler>());
             HtmlReportTable htmlReportTable = converter.Convert(table);
 
             HtmlReportTableHeaderCell[][] headerCells = this.GetHeaderCellsAsArray(htmlReportTable);
