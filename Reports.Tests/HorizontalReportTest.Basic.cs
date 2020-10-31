@@ -23,7 +23,7 @@ namespace Reports.Tests
             });
 
             IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(0);
+            headerCells.Should().BeEmpty();
 
             IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
@@ -49,7 +49,7 @@ namespace Reports.Tests
             });
 
             IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(0);
+            headerCells.Should().BeEmpty();
 
             IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
