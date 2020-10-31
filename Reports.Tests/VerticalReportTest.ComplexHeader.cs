@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Reports.Builders;
+using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.ValueFormatters;
 using Reports.ValueProviders;
@@ -104,8 +105,8 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Job", x => x.Job);
-            reportBuilder.AddColumn("Salary", x => x.Salary);
-            reportBuilder.SetColumnValueFormatter("Salary", new DecimalValueFormatter(0));
+            reportBuilder.AddColumn("Salary", x => x.Salary)
+                .SetValueFormatter(new DecimalValueFormatter(0));
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 1);
             reportBuilder.AddComplexHeader(0, "Job Info", 2, 3);
 

@@ -3,29 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.Models.Cells;
 
 namespace Reports.Builders
 {
-    public partial class VerticalReportBuilder<TSourceEntity>
+    public partial class HorizontalReportBuilder<TSourceEntity>
     {
-        private readonly List<IReportCellsProvider<TSourceEntity>> columns = new List<IReportCellsProvider<TSourceEntity>>();
+        private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
 
-        public IReportCellsProvider<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
+        public IReportCellsProvider<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
-            this.columns.Add(provider);
+            this.rows.Add(provider);
 
             return provider;
         }
 
-        public IReportCellsProvider<TSourceEntity> GetColumn(string title)
+        public IReportCellsProvider<TSourceEntity> GetRow(string title)
         {
-            return this.columns
+            return this.rows
                 .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IReportCellsProvider<TSourceEntity, TValue> GetTypedColumn<TValue>(string title)
+        public IReportCellsProvider<TSourceEntity, TValue> GetTypedRow<TValue>(string title)
         {
-            return this.columns
+            return this.rows
                 .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
                 as IReportCellsProvider<TSourceEntity, TValue>;
         }
@@ -34,7 +35,7 @@ namespace Reports.Builders
         {
             ReportTable table = new ReportTable();
 
-            this.BuildHeader(table);
+            table.HeaderRows = Enumerable.Empty<IEnumerable<IReportCell>>();
             this.BuildBody(table, source);
 
             return table;
@@ -47,10 +48,15 @@ namespace Reports.Builders
 
         private IEnumerable<IEnumerable<IReportCell>> GetRows(IEnumerable<TSourceEntity> source)
         {
-            return source
-                .Select(entity => this.columns
-                    .Select(c => c.CellSelector(entity))
+            return this.rows
+                .Select(row => Enumerable.Repeat(this.CreateTitleCell(row), 1)
+                    .Concat(source.Select(e => row.CellSelector(e)))
                 );
+        }
+
+        private IReportCell CreateTitleCell(IReportCellsProvider<TSourceEntity> row)
+        {
+            return new ReportCell<string>(row.Title);
         }
     }
 }

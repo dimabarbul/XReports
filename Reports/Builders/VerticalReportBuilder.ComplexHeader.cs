@@ -226,4 +226,12 @@ namespace Reports.Builders
             }
         }
     }
+
+    internal class ComplexHeader
+    {
+        public int RowIndex { get; set; }
+        public string Title { get; set; }
+        public int StartIndex { get; set; }
+        public int EndIndex { get; set; }
+    }
 }

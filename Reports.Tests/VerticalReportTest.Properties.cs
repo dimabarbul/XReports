@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Reports.Builders;
+using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models.Properties;
 using Xunit;
@@ -12,8 +13,8 @@ namespace Reports.Tests
         public void Build_WithCustomProperty_CorrectProperties()
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
-            reportBuilder.AddColumn("Value", s => s);
-            reportBuilder.AddColumnProcessor("Value", new CustomPropertyProcessor());
+            reportBuilder.AddColumn("Value", s => s)
+                .AddProcessor(new CustomPropertyProcessor());
 
             IReportTable table = reportBuilder.Build(new []
             {
@@ -24,15 +25,15 @@ namespace Reports.Tests
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
-                .ContainSingle(p => p is CustomProperty && (p as CustomProperty).Assigned);
+                .ContainSingle(p => p is CustomProperty && ((CustomProperty) p).Assigned);
         }
 
         [Fact]
         public void Build_CustomPropertyWithoutProcessor_CorrectProperties()
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
-            reportBuilder.AddColumn("Value", s => s);
-            reportBuilder.AddColumnProperty("Value", new BoldProperty());
+            reportBuilder.AddColumn("Value", s => s)
+                .AddProperty(new BoldProperty());
 
             IReportTable table = reportBuilder.Build(new []
             {

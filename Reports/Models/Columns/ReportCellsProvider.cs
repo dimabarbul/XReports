@@ -5,7 +5,7 @@ using Reports.Models.Cells;
 
 namespace Reports.Models.Columns
 {
-    public abstract class ReportColumn<TSourceEntity, TValue> : IReportColumn<TSourceEntity, TValue>
+    public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
     {
         public string Title { get; }
         public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();
@@ -13,7 +13,7 @@ namespace Reports.Models.Columns
 
         private IValueFormatter<TValue> formatter;
 
-        protected ReportColumn(string title)
+        protected ReportCellsProvider(string title)
         {
             this.Title = title;
         }
@@ -21,6 +21,16 @@ namespace Reports.Models.Columns
         public void SetValueFormatter(IValueFormatter<TValue> valueFormatter)
         {
             this.formatter = valueFormatter;
+        }
+
+        public void AddProcessor(IReportCellProcessor processor)
+        {
+            this.Processors.Add(processor);
+        }
+
+        public void AddProperty(IReportCellProperty property)
+        {
+            this.Properties.Add(property);
         }
 
         protected IReportCell CreateCell(TValue value)

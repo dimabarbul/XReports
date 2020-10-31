@@ -3,7 +3,7 @@ using Reports.Interfaces;
 
 namespace Reports.Models.Columns
 {
-    public class ComputedValueProviderReportColumn<TSourceEntity, TValue> : ReportColumn<TSourceEntity, TValue>
+    public class ComputedValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {
         public override Func<TSourceEntity, IReportCell> CellSelector
         {
@@ -15,7 +15,7 @@ namespace Reports.Models.Columns
 
         private readonly IComputedValueProvider<TSourceEntity, TValue> provider;
 
-        public ComputedValueProviderReportColumn(string title, IComputedValueProvider<TSourceEntity, TValue> provider)
+        public ComputedValueProviderReportCellsProvider(string title, IComputedValueProvider<TSourceEntity, TValue> provider)
             : base(title)
         {
             this.provider = provider;

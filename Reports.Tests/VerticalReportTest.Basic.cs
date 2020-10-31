@@ -2,6 +2,7 @@ using FluentAssertions;
 using Reports.Builders;
 using Reports.Interfaces;
 using Reports.ValueProviders;
+using Reports.Extensions;
 using Xunit;
 
 namespace Reports.Tests

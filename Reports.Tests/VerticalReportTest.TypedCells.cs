@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using Reports.Builders;
+using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.ValueFormatters;
 using Reports.ValueProviders;
@@ -39,8 +40,8 @@ namespace Reports.Tests
         public void Build_DecimalColumnWithoutRounding_CorrectDisplayValue()
         {
             VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
-            reportBuilder.AddColumn("Score", d => d);
-            reportBuilder.SetColumnValueFormatter("Score", new DecimalValueFormatter(2));
+            reportBuilder.AddColumn("Score", d => d)
+                .SetValueFormatter(new DecimalValueFormatter(2));
 
             IReportTable table = reportBuilder.Build(new[]
             {
@@ -65,8 +66,8 @@ namespace Reports.Tests
         public void Build_DecimalColumnWithRounding_CorrectDisplayValue()
         {
             VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
-            reportBuilder.AddColumn("Score", d => d);
-            reportBuilder.SetColumnValueFormatter("Score", new DecimalValueFormatter(0));
+            reportBuilder.AddColumn("Score", d => d)
+                .SetValueFormatter(new DecimalValueFormatter(0));
 
             IReportTable table = reportBuilder.Build(new[]
             {
@@ -91,10 +92,10 @@ namespace Reports.Tests
         public void Build_DateTimeColumnWithFormat_CorrectDisplayValue()
         {
             VerticalReportBuilder<DateTime> reportBuilder = new VerticalReportBuilder<DateTime>();
-            reportBuilder.AddColumn("The Date", d => d);
-            reportBuilder.SetColumnValueFormatter("The Date", new DateTimeValueFormatter("MM/dd/yyyy"));
-            reportBuilder.AddColumn("Next Day", new CallbackComputedValueProvider<DateTime, DateTime>(d => d.AddDays(1)));
-            reportBuilder.SetColumnValueFormatter("Next Day", new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddColumn("The Date", d => d)
+                .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddColumn("Next Day", new CallbackComputedValueProvider<DateTime, DateTime>(d => d.AddDays(1)))
+                .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
             IReportTable table = reportBuilder.Build(new[]
             {
