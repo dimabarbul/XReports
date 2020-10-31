@@ -22,7 +22,10 @@
       <Compile Update="HtmlReportConverterTest.Basic.cs">
         <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
-      <Compile Update="HtmlReportConverterTest.StandardPropertyProcessor.cs">
+      <Compile Update="HtmlReportConverterTest.StandardPropertyHandlersCollection.cs">
+        <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="HtmlReportConverterTest.CustomPropertyHandlersCollection.cs">
         <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
     </ItemGroup>
