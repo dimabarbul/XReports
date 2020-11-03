@@ -27,6 +27,15 @@
       <Compile Update="VerticalReportTest.Properties.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="HorizontalReportTest.Basic.cs">
+        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="HorizontalReportTest.Properties.cs">
+        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="HorizontalReportTest.TypedCells.cs">
+        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
