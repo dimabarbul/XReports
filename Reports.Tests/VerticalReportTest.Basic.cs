@@ -10,6 +10,24 @@ namespace Reports.Tests
     public partial class VerticalReportTest
     {
         [Fact]
+        public void Build_NoRows_HasHeader()
+        {
+            VerticalReportBuilder<(string FirstName, string LastName)> reportBuilder = new VerticalReportBuilder<(string FirstName, string LastName)>();
+            reportBuilder.AddColumn("First name", x => x.FirstName);
+            reportBuilder.AddColumn("Last name", x => x.LastName);
+
+            IReportTable table = reportBuilder.Build(new (string, string)[] { });
+
+            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
+            headerCells.Should().HaveCount(1);
+            headerCells[0][0].DisplayValue.Should().Be("First name");
+            headerCells[0][1].DisplayValue.Should().Be("Last name");
+
+            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            cells.Should().BeEmpty();
+        }
+
+        [Fact]
         public void Build_TwoRows_CorrectCells()
         {
             VerticalReportBuilder<(string FirstName, string LastName)> reportBuilder = new VerticalReportBuilder<(string FirstName, string LastName)>();

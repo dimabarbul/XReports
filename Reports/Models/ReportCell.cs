@@ -17,6 +17,7 @@ namespace Reports.Models
         protected IValueFormatter<TValue> Formatter;
 
         private readonly List<IReportCellProperty> properties;
+        private string overwrittenValue;
 
         public ReportCell(TValue value)
             :this(value, new List<IReportCellProperty>())
@@ -34,10 +35,17 @@ namespace Reports.Models
             this.Formatter = formatter;
         }
 
-        public virtual string DisplayValue =>
-            this.Formatter != null
-                ? this.Formatter.Format(this.Value)
-                : this.Value?.ToString() ?? string.Empty;
+        public virtual string DisplayValue
+        {
+            get =>
+                !string.IsNullOrEmpty(this.overwrittenValue)
+                    ? this.overwrittenValue
+                    : (this.Formatter != null
+                        ? this.Formatter.Format(this.Value)
+                        : this.Value?.ToString() ?? string.Empty);
+
+            set => this.overwrittenValue = value;
+        }
 
 
         public bool HasProperty<TProperty>() where TProperty : IReportCellProperty

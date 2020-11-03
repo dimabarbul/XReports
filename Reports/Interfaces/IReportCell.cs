@@ -5,7 +5,7 @@ namespace Reports.Interfaces
 {
     public interface IReportCell
     {
-        string DisplayValue { get; }
+        string DisplayValue { get; set; }
         Type ValueType { get; }
         int ColumnSpan { get; }
         int RowSpan { get; }

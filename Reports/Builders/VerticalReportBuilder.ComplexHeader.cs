@@ -168,11 +168,15 @@ namespace Reports.Builders
                 header[rowIndex, columnIndex + i].MarkUsed();
             }
 
-            return new ReportCell<string>(header[rowIndex, columnIndex].Title)
+            ReportCell<string> headerCell = new ReportCell<string>(header[rowIndex, columnIndex].Title)
             {
                 RowSpan = rowSpan,
                 ColumnSpan = columnSpan
             };
+
+            this.headerCellProcessor?.Process(headerCell);
+
+            return headerCell;
         }
 
         private int CalculateRowSpan(SpannableHeader[,] header, int rowIndex, int columnIndex)

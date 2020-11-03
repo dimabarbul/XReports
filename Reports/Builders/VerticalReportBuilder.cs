@@ -9,6 +9,7 @@ namespace Reports.Builders
     public partial class VerticalReportBuilder<TSourceEntity>
     {
         private readonly List<IReportCellsProvider<TSourceEntity>> columns = new List<IReportCellsProvider<TSourceEntity>>();
+        private IReportCellProcessor headerCellProcessor;
 
         public IReportCellsProvider<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
         {
@@ -29,6 +30,11 @@ namespace Reports.Builders
                 .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
                 as IReportCellsProvider<TSourceEntity, TValue>
                 ?? throw new ArgumentException($"Column {title} is of another type: expected {typeof(IReportCellsProvider<TSourceEntity, TValue>)}");
+        }
+
+        public void SetHeaderCellProcessor(IReportCellProcessor processor)
+        {
+            this.headerCellProcessor = processor;
         }
 
         public IReportTable Build(IEnumerable<TSourceEntity> source)

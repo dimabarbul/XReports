@@ -36,6 +36,9 @@
       <Compile Update="HorizontalReportTest.TypedCells.cs">
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="VerticalReportTest.HeaderCellProcessor.cs">
+        <DependentUpon>VerticalReportTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
