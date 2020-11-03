@@ -8,8 +8,4 @@
       <ProjectReference Include="..\Reports\Reports.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="PropertyProcessors" />
-    </ItemGroup>
-
 </Project>
