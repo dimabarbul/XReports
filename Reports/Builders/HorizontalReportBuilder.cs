@@ -27,7 +27,8 @@ namespace Reports.Builders
         {
             return this.rows
                 .First(c => c.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                as IReportCellsProvider<TSourceEntity, TValue>;
+                as IReportCellsProvider<TSourceEntity, TValue>
+                ?? throw new ArgumentException($"Column {title} is of another type: expected {typeof(IReportCellsProvider<TSourceEntity, TValue>)}");
         }
 
         public IReportTable Build(IEnumerable<TSourceEntity> source)
