@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.ReportCellProcessors;
 
 namespace Reports.Builders
 {
@@ -29,6 +30,11 @@ namespace Reports.Builders
                 StartIndex = fromColumn,
                 EndIndex = toColumn ?? fromColumn,
             });
+        }
+
+        public void AddHeaderProperty(string title, IReportCellProperty property)
+        {
+            this.headerCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
         }
 
         private void BuildHeader(ReportTable table)
@@ -174,7 +180,10 @@ namespace Reports.Builders
                 ColumnSpan = columnSpan
             };
 
-            this.headerCellProcessor?.Process(headerCell);
+            foreach (IReportCellProcessor processor in this.headerCellProcessors)
+            {
+                processor.Process(headerCell);
+            }
 
             return headerCell;
         }

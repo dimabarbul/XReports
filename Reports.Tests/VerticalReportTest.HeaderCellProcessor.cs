@@ -13,7 +13,7 @@ namespace Reports.Tests
         {
             VerticalReportBuilder<int> reportBuilder = new VerticalReportBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
-            reportBuilder.SetHeaderCellProcessor(new CustomHeaderCellProcessor());
+            reportBuilder.AddHeaderCellProcessor(new CustomHeaderCellProcessor());
 
             IReportTable table = reportBuilder.Build(new int[] { });
 
