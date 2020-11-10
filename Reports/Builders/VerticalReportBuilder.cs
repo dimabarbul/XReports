@@ -37,9 +37,9 @@ namespace Reports.Builders
             this.headerCellProcessors.Add(processor);
         }
 
-        public IReportTable Build(IEnumerable<TSourceEntity> source)
+        public IReportTable<ReportCell> Build(IEnumerable<TSourceEntity> source)
         {
-            ReportTable table = new ReportTable();
+            ReportTable<ReportCell> table = new ReportTable<ReportCell>();
 
             this.BuildHeader(table);
             this.BuildBody(table, source);
@@ -47,12 +47,12 @@ namespace Reports.Builders
             return table;
         }
 
-        private void BuildBody(ReportTable table, IEnumerable<TSourceEntity> source)
+        private void BuildBody(ReportTable<ReportCell> table, IEnumerable<TSourceEntity> source)
         {
             table.Rows = this.GetRows(source);
         }
 
-        private IEnumerable<IEnumerable<IReportCell>> GetRows(IEnumerable<TSourceEntity> source)
+        private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
         {
             return source
                 .Select(entity => this.columns

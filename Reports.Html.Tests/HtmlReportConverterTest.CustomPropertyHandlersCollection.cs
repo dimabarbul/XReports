@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Reports.Html.Enums;
-using Reports.Html.Interfaces;
 using Reports.Html.Models;
-using Reports.Html.PropertyHandlers;
 using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.Models.Properties;
+using Reports.PropertyHandlers;
 using Xunit;
 
 namespace Reports.Html.Tests
@@ -17,44 +16,45 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_SeveralHandlers_BothApplied()
         {
-            ReportTable table = new ReportTable(
-                new List<IEnumerable<IReportCell>>()
+            ReportTable<ReportCell> table = new ReportTable<ReportCell>()
+            {
+                HeaderRows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] { new ReportCell<string>("Value"), },
+                    new ReportCell[] { new ReportCell<string>("Value"), },
                 },
-                new List<IEnumerable<IReportCell>>()
+                Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] {
-                        new ReportCell<string>("Test", new [] { new BoldProperty() }),
+                    new ReportCell[] {
+                        this.CreateReportCell("Test", new BoldProperty()),
                     }
                 }
-            );
+            };
 
-            HtmlReportConverter converter = new HtmlReportConverter(GetCustomPropertyHandlers());
-            HtmlReportTable htmlReportTable = converter.Convert(table);
+            ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(GetCustomPropertyHandlers());
+            IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(table);
 
-            HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
+            HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
             cells[0][0].Html.Should().Be("<strong>TEST</strong>");
         }
 
-        private static IEnumerable<IHtmlPropertyHandler> GetCustomPropertyHandlers()
+        private static IEnumerable<IPropertyHandler<HtmlReportCell>> GetCustomPropertyHandlers()
         {
-            return new IHtmlPropertyHandler[]
+            return new IPropertyHandler<HtmlReportCell>[]
             {
                 new BoldToUpperHandler(),
                 new StandardHtmlBoldPropertyHandler(),
             };
         }
 
-        private class BoldToUpperHandler : HtmlPropertyHandler<BoldProperty>
+        private class BoldToUpperHandler : PropertyHandler<BoldProperty, HtmlReportCell>
         {
-            protected override void HandleProperty(BoldProperty property, HtmlReportTableCell cell)
+            protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
-                cell.Text = cell.Text.ToUpperInvariant();
+                cell.Html = cell.Html.ToUpperInvariant();
             }
 
-            public override HtmlPropertyHandlerPriority Priority => HtmlPropertyHandlerPriority.Text;
+            public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
         }
     }
 }

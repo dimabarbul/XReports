@@ -3,9 +3,9 @@ using Reports.Interfaces;
 
 namespace Reports.Models
 {
-    internal class ReportTable : IReportTable
+    public class ReportTable<TReportCell> : IReportTable<TReportCell>
     {
-        public IEnumerable<IEnumerable<IReportCell>> HeaderRows { get; set; }
-        public IEnumerable<IEnumerable<IReportCell>> Rows { get; set; }
+        public IEnumerable<IEnumerable<TReportCell>> HeaderRows { get; set; }
+        public IEnumerable<IEnumerable<TReportCell>> Rows { get; set; }
     }
 }

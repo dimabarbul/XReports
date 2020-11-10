@@ -37,7 +37,7 @@ namespace Reports.Builders
             this.headerCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
         }
 
-        private void BuildHeader(ReportTable table)
+        private void BuildHeader(ReportTable<ReportCell> table)
         {
             SpannableHeader[,] header = this.BuildHeaderCells();
 
@@ -132,11 +132,11 @@ namespace Reports.Builders
             return null;
         }
 
-        private IEnumerable<IEnumerable<IReportCell>> GetHeaderCells(SpannableHeader[,] header)
+        private IEnumerable<IEnumerable<ReportCell>> GetHeaderCells(SpannableHeader[,] header)
         {
             int rowsCount = header.GetLength(0);
             int columnsCount = header.GetLength(1);
-            IReportCell[] row = new IReportCell[columnsCount];
+            ReportCell[] row = new ReportCell[columnsCount];
 
             for (int rowIndex = 0; rowIndex < rowsCount; rowIndex++)
             {

@@ -1,7 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
+using Reports.Models;
 using Xunit;
 
 namespace Reports.Tests
@@ -15,19 +18,19 @@ namespace Reports.Tests
             reportBuilder.AddColumn("#", i => i);
             reportBuilder.AddHeaderCellProcessor(new CustomHeaderCellProcessor());
 
-            IReportTable table = reportBuilder.Build(new int[] { });
+            IReportTable<ReportCell> table = reportBuilder.Build(Enumerable.Empty<int>());
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
-            headerCells[0][0].DisplayValue.Should().Be("<em>#</em>");
+            headerCells[0][0].GetValue<string>().Should().Be("-- # --");
             headerCells[0][0].ValueType.Should().Be(typeof(string));
         }
 
         public class CustomHeaderCellProcessor : IReportCellProcessor
         {
-            public void Process(IReportCell cell)
+            public void Process(ReportCell cell)
             {
-                cell.DisplayValue = $"<em>{cell.DisplayValue}</em>";
+                cell.InternalValue = $"-- {cell.InternalValue} --";
             }
         }
     }

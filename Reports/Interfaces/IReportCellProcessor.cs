@@ -1,7 +1,9 @@
+using Reports.Models;
+
 namespace Reports.Interfaces
 {
     public interface IReportCellProcessor
     {
-        void Process(IReportCell cell);
+        void Process(ReportCell cell);
     }
 }

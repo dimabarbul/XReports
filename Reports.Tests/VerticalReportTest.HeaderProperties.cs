@@ -2,6 +2,7 @@ using FluentAssertions;
 using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
+using Reports.Models;
 using Xunit;
 
 namespace Reports.Tests
@@ -15,12 +16,12 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddHeaderProperty("Value", new CustomHeaderProperty());
 
-            IReportTable table = reportBuilder.Build(new []
+            IReportTable<ReportCell> table = reportBuilder.Build(new []
             {
                 "Test",
             });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
@@ -35,9 +36,9 @@ namespace Reports.Tests
             reportBuilder.AddComplexHeader(0, "Complex", "Value");
             reportBuilder.AddHeaderProperty("Complex", new CustomHeaderProperty());
 
-            IReportTable table = reportBuilder.Build(new string[] { });
+            IReportTable<ReportCell> table = reportBuilder.Build(new string[] { });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
             cells.Should().HaveCount(2);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
@@ -52,9 +53,9 @@ namespace Reports.Tests
             reportBuilder.AddComplexHeader(0, "Complex", "Value");
             reportBuilder.AddHeaderCellProcessor(new CustomHeaderPropertyProcessor());
 
-            IReportTable table = reportBuilder.Build(new string[] { });
+            IReportTable<ReportCell> table = reportBuilder.Build(new string[] { });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
             cells.Should().HaveCount(2);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
@@ -67,9 +68,9 @@ namespace Reports.Tests
 
         private class CustomHeaderPropertyProcessor : IReportCellProcessor
         {
-            public void Process(IReportCell cell)
+            public void Process(ReportCell cell)
             {
-                if (cell.DisplayValue == "Complex")
+                if (cell.InternalValue == "Complex")
                 {
                     cell.AddProperty(new CustomHeaderProperty());
                 }

@@ -1,16 +1,17 @@
 using Reports.Html.Enums;
 using Reports.Html.Models;
 using Reports.Models.Properties;
+using Reports.PropertyHandlers;
 
 namespace Reports.Html.PropertyHandlers.StandardHtml
 {
-    public class StandardHtmlBoldPropertyHandler : HtmlPropertyHandler<BoldProperty>
+    public class StandardHtmlBoldPropertyHandler : PropertyHandler<BoldProperty, HtmlReportCell>
     {
-        public override HtmlPropertyHandlerPriority Priority => HtmlPropertyHandlerPriority.Html;
+        public override int Priority => (int) HtmlPropertyHandlerPriority.Html;
 
-        protected override void HandleProperty(BoldProperty property, HtmlReportTableCell cell)
+        protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
         {
-            cell.Html = $"<strong>{cell.Html ?? cell.Text}</strong>";
+            cell.Html = $"<strong>{cell.Html}</strong>";
         }
     }
 }

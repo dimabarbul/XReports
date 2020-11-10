@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Tests
 {
     public partial class VerticalReportTest
     {
-        private IReportCell[][] GetCellsAsArray(IEnumerable<IEnumerable<IReportCell>> cells)
+        private ReportCell[][] GetCellsAsArray(IEnumerable<IEnumerable<ReportCell>> cells)
         {
             return cells.Select(row => row.ToArray()).ToArray();
         }

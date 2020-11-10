@@ -5,48 +5,26 @@ using Reports.Interfaces;
 
 namespace Reports.Models
 {
-    public class ReportCell<TValue> : IReportCell
+    public abstract class BaseReportCell
     {
-        public Type ValueType => typeof(TValue);
         public int ColumnSpan { get; set; } = 1;
         public int RowSpan { get; set; } = 1;
+        public Type ValueType { get; set; } = typeof(string);
 
-        public IEnumerable<IReportCellProperty> Properties => this.properties;
+        public virtual dynamic InternalValue { get; set; }
 
-        protected readonly TValue Value;
-        protected IValueFormatter<TValue> Formatter;
-
-        private readonly List<IReportCellProperty> properties;
-        private string overwrittenValue;
-
-        public ReportCell(TValue value)
-            :this(value, new List<IReportCellProperty>())
+        public virtual void Copy(BaseReportCell reportCell)
         {
+            this.ColumnSpan = reportCell.ColumnSpan;
+            this.RowSpan = reportCell.RowSpan;
+            this.ValueType = reportCell.ValueType;
+            this.InternalValue = reportCell.InternalValue;
         }
+    }
 
-        public ReportCell(TValue value, IEnumerable<IReportCellProperty> reportCellProperties)
-        {
-            this.Value = value;
-            this.properties = reportCellProperties.ToList();
-        }
-
-        public void SetFormatter(IValueFormatter<TValue> formatter)
-        {
-            this.Formatter = formatter;
-        }
-
-        public virtual string DisplayValue
-        {
-            get =>
-                !string.IsNullOrEmpty(this.overwrittenValue)
-                    ? this.overwrittenValue
-                    : (this.Formatter != null
-                        ? this.Formatter.Format(this.Value)
-                        : this.Value?.ToString() ?? string.Empty);
-
-            set => this.overwrittenValue = value;
-        }
-
+    public abstract class ReportCell : BaseReportCell
+    {
+        public List<IReportCellProperty> Properties { get; } = new List<IReportCellProperty>();
 
         public bool HasProperty<TProperty>() where TProperty : IReportCellProperty
         {
@@ -60,7 +38,34 @@ namespace Reports.Models
 
         public void AddProperty<TProperty>(TProperty property) where TProperty : IReportCellProperty
         {
-            this.properties.Add(property);
+            this.Properties.Add(property);
+        }
+
+        public TValue GetValue<TValue>()
+        {
+            if (this.ValueType != typeof(TValue))
+            {
+                throw new InvalidCastException($"Value type is {this.ValueType} but requested {typeof(TValue)}");
+            }
+
+            return (TValue) this.InternalValue;
+        }
+    }
+
+    public class ReportCell<TValue> : ReportCell
+    {
+        private TValue value;
+
+        public ReportCell(TValue value)
+        {
+            this.value = value;
+            this.ValueType = typeof(TValue);
+        }
+
+        public override dynamic InternalValue
+        {
+            get => this.value;
+            set => this.value = value;
         }
     }
 }

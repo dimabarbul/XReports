@@ -1,5 +1,6 @@
 using System;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.ReportCellProcessors
 {
@@ -14,9 +15,9 @@ namespace Reports.ReportCellProcessors
             this.property = property;
         }
 
-        public void Process(IReportCell cell)
+        public void Process(ReportCell cell)
         {
-            if (cell.DisplayValue.Equals(this.title, StringComparison.OrdinalIgnoreCase))
+            if (cell.InternalValue.Equals(this.title, StringComparison.OrdinalIgnoreCase))
             {
                 cell.AddProperty(this.property);
             }

@@ -1,26 +1,27 @@
 using Reports.Html.Enums;
 using Reports.Html.Models;
 using Reports.Models.Properties;
+using Reports.PropertyHandlers;
 
 namespace Reports.Html.PropertyHandlers.StandardHtml
 {
-    public class StandardHtmlMaxLengthPropertyHandler : HtmlPropertyHandler<MaxLengthProperty>
+    public class StandardHtmlMaxLengthPropertyHandler : PropertyHandler<MaxLengthProperty, HtmlReportCell>
     {
-        public override HtmlPropertyHandlerPriority Priority => HtmlPropertyHandlerPriority.Text;
+        public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 
-        protected override void HandleProperty(MaxLengthProperty property, HtmlReportTableCell cell)
+        protected override void HandleProperty(MaxLengthProperty property, HtmlReportCell cell)
         {
-            if (string.IsNullOrEmpty(cell.Text))
+            if (string.IsNullOrEmpty(cell.Html))
             {
                 return;
             }
 
-            if (cell.Text.Length <= property.MaxLength)
+            if (cell.Html.Length <= property.MaxLength)
             {
                 return;
             }
 
-            cell.Text = cell.Text.Substring(0, property.MaxLength - 1) + "…";
+            cell.Html = cell.Html.Substring(0, property.MaxLength - 1) + "…";
         }
     }
 }

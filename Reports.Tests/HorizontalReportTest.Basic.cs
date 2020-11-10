@@ -2,6 +2,7 @@ using FluentAssertions;
 using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
+using Reports.Models;
 using Reports.ValueProviders;
 using Xunit;
 
@@ -16,23 +17,23 @@ namespace Reports.Tests
             reportBuilder.AddRow("First name", x => x.FirstName);
             reportBuilder.AddRow("Last name", x => x.LastName);
 
-            IReportTable table = reportBuilder.Build(new[]
+            IReportTable<ReportCell> table = reportBuilder.Build(new[]
             {
                 ("John", "Doe"),
                 ("Jane", "Do"),
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().BeEmpty();
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
-            cells[0][0].DisplayValue.Should().Be("First name");
-            cells[0][1].DisplayValue.Should().Be("John");
-            cells[0][2].DisplayValue.Should().Be("Jane");
-            cells[1][0].DisplayValue.Should().Be("Last name");
-            cells[1][1].DisplayValue.Should().Be("Doe");
-            cells[1][2].DisplayValue.Should().Be("Do");
+            cells[0][0].GetValue<string>().Should().Be("First name");
+            cells[0][1].GetValue<string>().Should().Be("John");
+            cells[0][2].GetValue<string>().Should().Be("Jane");
+            cells[1][0].GetValue<string>().Should().Be("Last name");
+            cells[1][1].GetValue<string>().Should().Be("Doe");
+            cells[1][2].GetValue<string>().Should().Be("Do");
         }
 
         [Fact]
@@ -42,23 +43,23 @@ namespace Reports.Tests
             reportBuilder.AddRow("#", new SequentialNumberValueProvider());
             reportBuilder.AddRow("Name", s => s);
 
-            IReportTable table = reportBuilder.Build(new[]
+            IReportTable<ReportCell> table = reportBuilder.Build(new[]
             {
                 "John Doe",
                 "Jane Doe",
             });
 
-            IReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
+            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().BeEmpty();
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
-            cells[0][0].DisplayValue.Should().Be("#");
-            cells[0][1].DisplayValue.Should().Be("1");
-            cells[0][2].DisplayValue.Should().Be("2");
-            cells[1][0].DisplayValue.Should().Be("Name");
-            cells[1][1].DisplayValue.Should().Be("John Doe");
-            cells[1][2].DisplayValue.Should().Be("Jane Doe");
+            cells[0][0].GetValue<string>().Should().Be("#");
+            cells[0][1].GetValue<int>().Should().Be(1);
+            cells[0][2].GetValue<int>().Should().Be(2);
+            cells[1][0].GetValue<string>().Should().Be("Name");
+            cells[1][1].GetValue<string>().Should().Be("John Doe");
+            cells[1][2].GetValue<string>().Should().Be("Jane Doe");
         }
     }
 }

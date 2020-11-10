@@ -2,6 +2,7 @@ using FluentAssertions;
 using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
+using Reports.Models;
 using Reports.Models.Properties;
 using Xunit;
 
@@ -16,12 +17,12 @@ namespace Reports.Tests
             reportBuilder.AddRow("Value", s => s)
                 .AddProcessor(new CustomPropertyProcessor());
 
-            IReportTable table = reportBuilder.Build(new []
+            IReportTable<ReportCell> table = reportBuilder.Build(new []
             {
                 "Test",
             });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should().BeEmpty();
             cells[0][1].Properties.Should()
@@ -36,12 +37,12 @@ namespace Reports.Tests
             reportBuilder.AddRow("Value", s => s)
                 .AddProperty(new BoldProperty());
 
-            IReportTable table = reportBuilder.Build(new []
+            IReportTable<ReportCell> table = reportBuilder.Build(new []
             {
                 "Test",
             });
 
-            IReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should().BeEmpty();
             cells[0][1].Properties.Should()
@@ -51,7 +52,7 @@ namespace Reports.Tests
 
         private class CustomPropertyProcessor : IReportCellProcessor
         {
-            public void Process(IReportCell cell)
+            public void Process(ReportCell cell)
             {
                 cell.AddProperty(new CustomProperty(true));
             }

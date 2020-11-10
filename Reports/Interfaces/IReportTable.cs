@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Reports.Interfaces
 {
-    public interface IReportTable
+    public interface IReportTable<TReportCell>
     {
-        public IEnumerable<IEnumerable<IReportCell>> HeaderRows { get; }
-        public IEnumerable<IEnumerable<IReportCell>> Rows { get; }
+        public IEnumerable<IEnumerable<TReportCell>> HeaderRows { get; }
+        public IEnumerable<IEnumerable<TReportCell>> Rows { get; }
     }
 }

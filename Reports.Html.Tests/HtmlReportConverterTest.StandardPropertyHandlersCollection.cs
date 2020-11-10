@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Reports.Html.Interfaces;
 using Reports.Html.Models;
 using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
@@ -15,23 +14,24 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_BoldProperty_StrongTag()
         {
-            ReportTable table = new ReportTable(
-                new List<IEnumerable<IReportCell>>()
+            IReportTable<ReportCell> table = new ReportTable<ReportCell>()
+            {
+                HeaderRows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] { new ReportCell<string>("Value"), },
+                    new ReportCell[] { this.CreateReportCell("Value"), },
                 },
-                new List<IEnumerable<IReportCell>>()
+                Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] {
-                        new ReportCell<string>("Test", new [] { new BoldProperty() }),
+                    new ReportCell[] {
+                        this.CreateReportCell("Test", new BoldProperty()),
                     }
                 }
-            );
+            };
 
-            HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
-            HtmlReportTable htmlReportTable = converter.Convert(table);
+            ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(GetPropertyHandlers());
+            IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(table);
 
-            HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
+            HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
             cells[0][0].Html.Should().Be("<strong>Test</strong>");
         }
@@ -39,34 +39,32 @@ namespace Reports.Html.Tests
         [Fact]
         public void Build_BoldAndMaxLengthProperty_CorrectOrder()
         {
-            ReportTable table = new ReportTable(
-                new List<IEnumerable<IReportCell>>()
+            IReportTable<ReportCell> table = new ReportTable<ReportCell>()
+            {
+                HeaderRows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] { new ReportCell<string>("Value"), },
+                    new ReportCell[] { new ReportCell<string>("Value"), },
                 },
-                new List<IEnumerable<IReportCell>>()
+                Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new IReportCell[] {
-                        new ReportCell<string>("Test", new IReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                            new MaxLengthProperty(2),
-                        }),
+                    new ReportCell[]
+                    {
+                        this.CreateReportCell("Test", new BoldProperty(), new MaxLengthProperty(2)),
                     }
                 }
-            );
+            };
 
-            HtmlReportConverter converter = new HtmlReportConverter(GetPropertyHandlers());
-            HtmlReportTable htmlReportTable = converter.Convert(table);
+            ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(GetPropertyHandlers());
+            IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(table);
 
-            HtmlReportTableBodyCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
+            HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
             cells[0][0].Html.Should().Be("<strong>T…</strong>");
         }
 
-        private static IEnumerable<IHtmlPropertyHandler> GetPropertyHandlers()
+        private static IEnumerable<IPropertyHandler<HtmlReportCell>> GetPropertyHandlers()
         {
-            return new IHtmlPropertyHandler[]
+            return new IPropertyHandler<HtmlReportCell>[]
             {
                 new StandardHtmlBoldPropertyHandler(),
                 new StandardHtmlMaxLengthPropertyHandler(),

@@ -1,32 +1,32 @@
-using System.Collections.Generic;
 using System.Linq;
 using Reports.Html.Models;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Html.Tests
 {
     public partial class HtmlReportConverterTest
     {
-        private HtmlReportTableHeaderCell[][] GetHeaderCellsAsArray(HtmlReportTable table)
+        private HtmlReportCell[][] GetHeaderCellsAsArray(IReportTable<HtmlReportCell> table)
         {
-            return table.Header.Cells.Select(row => row.ToArray()).ToArray();
+            return table.HeaderRows.Select(row => row.ToArray()).ToArray();
         }
 
-        private HtmlReportTableBodyCell[][] GetBodyCellsAsArray(HtmlReportTable table)
+        private HtmlReportCell[][] GetBodyCellsAsArray(IReportTable<HtmlReportCell> table)
         {
-            return table.Body.Cells.Select(row => row.ToArray()).ToArray();
+            return table.Rows.Select(row => row.ToArray()).ToArray();
         }
 
-        private class ReportTable : IReportTable
+        private ReportCell CreateReportCell<TValue>(TValue title, params IReportCellProperty[] properties)
         {
-            public IEnumerable<IEnumerable<IReportCell>> HeaderRows { get; }
-            public IEnumerable<IEnumerable<IReportCell>> Rows { get; }
+            ReportCell<TValue> cell = new ReportCell<TValue>(title);
 
-            public ReportTable(IEnumerable<IEnumerable<IReportCell>> headerRows, IEnumerable<IEnumerable<IReportCell>> rows)
+            foreach (IReportCellProperty property in properties)
             {
-                this.HeaderRows = headerRows;
-                this.Rows = rows;
+                cell.AddProperty(property);
             }
+
+            return cell;
         }
     }
 }

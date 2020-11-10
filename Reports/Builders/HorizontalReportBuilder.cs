@@ -6,7 +6,7 @@ using Reports.Models;
 
 namespace Reports.Builders
 {
-    public partial class HorizontalReportBuilder<TSourceEntity>
+    public class HorizontalReportBuilder<TSourceEntity>
     {
         private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
 
@@ -31,22 +31,17 @@ namespace Reports.Builders
                 ?? throw new ArgumentException($"Column {title} is of another type: expected {typeof(IReportCellsProvider<TSourceEntity, TValue>)}");
         }
 
-        public IReportTable Build(IEnumerable<TSourceEntity> source)
+        public IReportTable<ReportCell> Build(IEnumerable<TSourceEntity> source)
         {
-            ReportTable table = new ReportTable();
+            ReportTable<ReportCell> table = new ReportTable<ReportCell>();
 
-            table.HeaderRows = Enumerable.Empty<IEnumerable<IReportCell>>();
-            this.BuildBody(table, source);
+            table.HeaderRows = Enumerable.Empty<IEnumerable<ReportCell>>();
+            table.Rows = this.GetRows(source);
 
             return table;
         }
 
-        private void BuildBody(ReportTable table, IEnumerable<TSourceEntity> source)
-        {
-            table.Rows = this.GetRows(source);
-        }
-
-        private IEnumerable<IEnumerable<IReportCell>> GetRows(IEnumerable<TSourceEntity> source)
+        private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
         {
             return this.rows
                 .Select(row => Enumerable.Repeat(this.CreateTitleCell(row), 1)
@@ -54,7 +49,7 @@ namespace Reports.Builders
                 );
         }
 
-        private IReportCell CreateTitleCell(IReportCellsProvider<TSourceEntity> row)
+        private ReportCell CreateTitleCell(IReportCellsProvider<TSourceEntity> row)
         {
             return new ReportCell<string>(row.Title);
         }

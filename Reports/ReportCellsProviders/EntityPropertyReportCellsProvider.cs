@@ -1,11 +1,11 @@
 using System;
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.ReportCellsProviders
 {
     internal class EntityPropertyReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {
-        public override Func<TSourceEntity, IReportCell> CellSelector {
+        public override Func<TSourceEntity, ReportCell> CellSelector {
             get
             {
                 return entity => this.CreateCell(this.valueSelector(entity));
