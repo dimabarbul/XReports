@@ -5,7 +5,7 @@ using Reports.Interfaces;
 using Reports.Models;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
@@ -29,7 +29,7 @@ namespace Reports.Tests
         }
 
         [Fact]
-        public void Build_WithCustomPropertyForComplexHeaderUsingAddProperty_CorrectProperties()
+        public void Build_WithCustomPropertyForComplexHeaderUsingAddHeaderProperty_CorrectProperties()
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
             reportBuilder.AddColumn("Value", s => s);

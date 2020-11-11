@@ -7,15 +7,17 @@ using Reports.Models;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_IntegerColumn_CorrectDisplayValue()
+        public void Build_DifferentTypes_CorrectInternalValue()
         {
             VerticalReportBuilder<int> reportBuilder = new VerticalReportBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
+            reportBuilder.AddColumn("Today", i => DateTime.Today);
+            reportBuilder.AddColumn("ToString()", i => i.ToString());
 
             IReportTable<ReportCell> table = reportBuilder.Build(new[]
             {
@@ -27,13 +29,25 @@ namespace Reports.Tests
             headerCells.Should().HaveCount(1);
             headerCells[0][0].ValueType.Should().Be(typeof(string));
             headerCells[0][0].GetValue<string>().Should().Be("#");
+            headerCells[0][1].ValueType.Should().Be(typeof(string));
+            headerCells[0][1].GetValue<string>().Should().Be("Today");
+            headerCells[0][2].ValueType.Should().Be(typeof(string));
+            headerCells[0][2].GetValue<string>().Should().Be("ToString()");
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
             cells[0][0].ValueType.Should().Be(typeof(int));
             cells[0][0].GetValue<int>().Should().Be(3);
+            cells[0][1].ValueType.Should().Be(typeof(DateTime));
+            cells[0][1].GetValue<DateTime>().Should().Be(DateTime.Today);
+            cells[0][2].ValueType.Should().Be(typeof(string));
+            cells[0][2].GetValue<string>().Should().Be("3");
             cells[1][0].ValueType.Should().Be(typeof(int));
             cells[1][0].GetValue<int>().Should().Be(6);
+            cells[1][1].ValueType.Should().Be(typeof(DateTime));
+            cells[1][1].GetValue<DateTime>().Should().Be(DateTime.Today);
+            cells[1][2].ValueType.Should().Be(typeof(string));
+            cells[1][2].GetValue<string>().Should().Be("6");
         }
 
         [Fact(Skip = "Formatting is to be moved to converting")]

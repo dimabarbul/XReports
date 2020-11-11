@@ -6,12 +6,12 @@ using Reports.Models;
 using Reports.Models.Properties;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_WithCustomProperty_CorrectProperties()
+        public void Build_CustomPropertyUsingProcessor_CorrectProperties()
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
@@ -30,7 +30,7 @@ namespace Reports.Tests
         }
 
         [Fact]
-        public void Build_CustomPropertyWithoutProcessor_CorrectProperties()
+        public void Build_CustomPropertyUsingAddProperty_CorrectProperties()
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)

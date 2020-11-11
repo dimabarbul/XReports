@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Reports.Builders;
@@ -7,7 +6,7 @@ using Reports.Interfaces;
 using Reports.Models;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
@@ -23,7 +22,6 @@ namespace Reports.Tests
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
             headerCells[0][0].GetValue<string>().Should().Be("-- # --");
-            headerCells[0][0].ValueType.Should().Be(typeof(string));
         }
 
         public class CustomHeaderCellProcessor : IReportCellProcessor

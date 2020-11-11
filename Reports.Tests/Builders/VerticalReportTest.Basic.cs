@@ -1,12 +1,12 @@
 using FluentAssertions;
 using Reports.Builders;
-using Reports.Interfaces;
-using Reports.ValueProviders;
 using Reports.Extensions;
+using Reports.Interfaces;
 using Reports.Models;
+using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
@@ -52,32 +52,6 @@ namespace Reports.Tests
             cells[0][1].GetValue<string>().Should().Be("Doe");
             cells[1][0].GetValue<string>().Should().Be("Jane");
             cells[1][1].GetValue<string>().Should().Be("Do");
-        }
-
-        [Fact]
-        public void Build_SequentialNumberValueProvider_CorrectValues()
-        {
-            VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
-            reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
-            reportBuilder.AddColumn("Name", s => s);
-
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
-            {
-                "John Doe",
-                "Jane Doe",
-            });
-
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("#");
-            headerCells[0][1].GetValue<string>().Should().Be("Name");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<int>().Should().Be(1);
-            cells[0][1].GetValue<string>().Should().Be("John Doe");
-            cells[1][0].GetValue<int>().Should().Be(2);
-            cells[1][1].GetValue<string>().Should().Be("Jane Doe");
         }
 
         [Fact]

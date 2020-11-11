@@ -6,7 +6,7 @@ using Reports.Models;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class VerticalReportTest
     {
@@ -106,7 +106,6 @@ namespace Reports.Tests
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Job", x => x.Job);
             reportBuilder.AddColumn("Salary", x => x.Salary);
-                // .SetValueFormatter(new DecimalValueFormatter(0));
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 1);
             reportBuilder.AddComplexHeader(0, "Job Info", 2, 3);
 
@@ -178,6 +177,16 @@ namespace Reports.Tests
         [Fact]
         public void Build_ThreeHeaderRows_CorrectCells()
         {
+            /*
+             ------------------------------------
+             | # |           Employee           |
+             |   |      Personal Info     | Age |
+             |   | First Name | Last Name |     |
+             ------------------------------------
+             | 1 | John       | Doe       | 30  |
+             | 2 | Jane       | Doe       | 30  |
+             ------------------------------------
+             */
             VerticalReportBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
                 new VerticalReportBuilder<(string FirstName, string LastName, int Age)>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());

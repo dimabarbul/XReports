@@ -7,7 +7,7 @@ using Reports.Models;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests
+namespace Reports.Tests.Builders
 {
     public partial class HorizontalReportTest
     {
