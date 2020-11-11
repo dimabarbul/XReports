@@ -5,9 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
-        <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
-      </Compile>
+      <ProjectReference Include="..\Reports\Reports.csproj" />
     </ItemGroup>
 
 </Project>

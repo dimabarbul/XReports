@@ -39,20 +39,19 @@ namespace Reports
         private TResultReportCell ConvertCell(ReportCell cell)
         {
             TResultReportCell convertedCell = new TResultReportCell();
-            convertedCell.Copy(cell);
+            convertedCell.CopyFrom(cell);
 
-            this.ProcessProperties(cell, convertedCell);
+            this.ProcessProperties(cell.Properties, convertedCell);
 
             return convertedCell;
         }
 
-        private void ProcessProperties(ReportCell cell, TResultReportCell convertedCell)
+        private void ProcessProperties(List<IReportCellProperty> cellProperties, TResultReportCell convertedCell)
         {
-            IReportCellProperty[] reportCellProperties = cell.Properties.ToArray();
             foreach (IPropertyHandler<TResultReportCell> handler in this.propertyHandlers
                 .OrderBy(h => h.Priority))
             {
-                foreach (IReportCellProperty property in reportCellProperties)
+                foreach (IReportCellProperty property in cellProperties)
                 {
                     handler.Handle(property, convertedCell);
                 }

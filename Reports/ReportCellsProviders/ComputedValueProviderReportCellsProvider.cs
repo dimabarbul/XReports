@@ -4,7 +4,7 @@ using Reports.Models;
 
 namespace Reports.ReportCellsProviders
 {
-    internal class ComputedValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
+    public class ComputedValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {
         public override Func<TSourceEntity, ReportCell> CellSelector
         {

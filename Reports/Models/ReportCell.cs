@@ -13,7 +13,7 @@ namespace Reports.Models
 
         public virtual dynamic InternalValue { get; set; }
 
-        public virtual void Copy(BaseReportCell reportCell)
+        public virtual void CopyFrom(BaseReportCell reportCell)
         {
             this.ColumnSpan = reportCell.ColumnSpan;
             this.RowSpan = reportCell.RowSpan;

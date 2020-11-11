@@ -2,7 +2,7 @@ using Reports.Interfaces;
 
 namespace Reports.PropertyHandlers
 {
-    public abstract class PropertyHandler<TPropertyType, TReportCell> : IPropertyHandler<TReportCell>
+    public abstract class SingleTypePropertyHandler<TPropertyType, TReportCell> : IPropertyHandler<TReportCell>
         where TPropertyType : IReportCellProperty
     {
         public virtual int Priority => 0;

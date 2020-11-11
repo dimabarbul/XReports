@@ -1,6 +1,6 @@
 using System;
 
-namespace Reports.Attributes
+namespace Reports.Extensions.Builders.Attributes
 {
     public class ReportVariableAttribute : Attribute
     {

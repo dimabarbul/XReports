@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Reports.Attributes;
 using Reports.Builders;
+using Reports.Extensions.Builders.Attributes;
 using Reports.Interfaces;
 using Reports.ReportCellsProviders;
 
-namespace Reports.BuilderHelpers
+namespace Reports.Extensions.Builders.BuilderHelpers
 {
     public class EntityAttributeBuilderHelper
     {
@@ -44,6 +44,7 @@ namespace Reports.BuilderHelpers
             this.ApplyAttribute(instance, attribute);
         }
 
+        // TODO: apply attribute properties
         private void ApplyAttribute<TEntity>(IReportCellsProvider<TEntity> provider, ReportVariableAttribute attribute)
         {
         }

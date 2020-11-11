@@ -5,7 +5,7 @@ using Reports.PropertyHandlers;
 
 namespace Reports.Html.PropertyHandlers.StandardHtml
 {
-    public class StandardHtmlBoldPropertyHandler : PropertyHandler<BoldProperty, HtmlReportCell>
+    public class StandardHtmlBoldPropertyHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Html;
 

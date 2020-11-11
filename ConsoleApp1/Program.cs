@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using Reports;
 using Reports.Builders;
+using Reports.Excel.Models;
+using Reports.Excel.Writers;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.Writers;
 
 namespace ConsoleApp1
 {
@@ -86,7 +87,7 @@ namespace ConsoleApp1
         }
     }
 
-    public class FormatPropertyHandler : PropertyHandler<FormatProperty, ExcelReportCell>, IPropertyHandler<ExcelReportCell>
+    public class FormatPropertyHandler : SingleTypePropertyHandler<FormatProperty, ExcelReportCell>, IPropertyHandler<ExcelReportCell>
     {
         protected override void HandleProperty(FormatProperty property, ExcelReportCell cell)
         {

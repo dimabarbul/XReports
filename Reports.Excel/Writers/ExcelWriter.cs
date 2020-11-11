@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Reports.Enums;
+using Reports.Excel.Models;
 using Reports.Interfaces;
-using Reports.Models;
 
-namespace Reports.Writers
+namespace Reports.Excel.Writers
 {
     public class ExcelWriter
     {
@@ -97,6 +98,7 @@ namespace Reports.Writers
                 AlignmentType.Center => ExcelHorizontalAlignment.Center,
                 AlignmentType.Left => ExcelHorizontalAlignment.Left,
                 AlignmentType.Right => ExcelHorizontalAlignment.Right,
+                _ => throw new ArgumentOutOfRangeException(nameof(alignmentType)),
             };
         }
     }

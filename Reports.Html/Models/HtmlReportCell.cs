@@ -6,9 +6,9 @@ namespace Reports.Html.Models
     {
         public string Html { get; set; }
 
-        public override void Copy(BaseReportCell reportCell)
+        public override void CopyFrom(BaseReportCell reportCell)
         {
-            base.Copy(reportCell);
+            base.CopyFrom(reportCell);
 
             this.Html = reportCell.InternalValue.ToString();
         }

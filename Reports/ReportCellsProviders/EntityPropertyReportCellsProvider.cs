@@ -3,7 +3,7 @@ using Reports.Models;
 
 namespace Reports.ReportCellsProviders
 {
-    internal class EntityPropertyReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
+    public class EntityPropertyReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {
         public override Func<TSourceEntity, ReportCell> CellSelector {
             get

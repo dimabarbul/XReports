@@ -47,7 +47,7 @@ namespace Reports.Html.Tests
             };
         }
 
-        private class BoldToUpperHandler : PropertyHandler<BoldProperty, HtmlReportCell>
+        private class BoldToUpperHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
         {
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {

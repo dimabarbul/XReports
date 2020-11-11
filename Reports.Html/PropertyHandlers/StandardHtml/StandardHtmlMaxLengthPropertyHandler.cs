@@ -5,7 +5,7 @@ using Reports.PropertyHandlers;
 
 namespace Reports.Html.PropertyHandlers.StandardHtml
 {
-    public class StandardHtmlMaxLengthPropertyHandler : PropertyHandler<MaxLengthProperty, HtmlReportCell>
+    public class StandardHtmlMaxLengthPropertyHandler : SingleTypePropertyHandler<MaxLengthProperty, HtmlReportCell>
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 

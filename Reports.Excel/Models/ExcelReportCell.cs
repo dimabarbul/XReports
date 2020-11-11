@@ -1,6 +1,7 @@
 using Reports.Enums;
+using Reports.Models;
 
-namespace Reports.Models
+namespace Reports.Excel.Models
 {
     public class ExcelReportCell : BaseReportCell
     {
