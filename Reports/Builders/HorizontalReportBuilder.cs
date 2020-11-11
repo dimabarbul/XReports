@@ -9,6 +9,7 @@ namespace Reports.Builders
 {
     public class HorizontalReportBuilder<TSourceEntity>
     {
+        private readonly List<IReportCellsProvider<TSourceEntity>> headerRows = new List<IReportCellsProvider<TSourceEntity>>();
         private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
         private readonly List<IReportCellProcessor> titleCellProcessors = new List<IReportCellProcessor>();
 
@@ -37,9 +38,19 @@ namespace Reports.Builders
         {
             return new ReportTable<ReportCell>
             {
-                HeaderRows = Enumerable.Empty<IEnumerable<ReportCell>>(),
+                HeaderRows = this.GetHeaderRows(source),
                 Rows = this.GetRows(source),
             };
+        }
+
+        public void AddTitleProperty(string title, IReportCellProperty property)
+        {
+            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
+        }
+
+        public void AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
+        {
+            this.headerRows.Insert(rowIndex, provider);
         }
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
@@ -62,9 +73,12 @@ namespace Reports.Builders
             return cell;
         }
 
-        public void AddTitleProperty(string title, IReportCellProperty property)
+        private IEnumerable<IEnumerable<ReportCell>> GetHeaderRows(IEnumerable<TSourceEntity> source)
         {
-            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
+            return this.headerRows
+                .Select(row => Enumerable.Repeat(this.CreateTitleCell(row), 1)
+                    .Concat(source.Select(e => row.CellSelector(e)))
+                );
         }
     }
 }

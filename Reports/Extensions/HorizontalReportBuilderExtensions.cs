@@ -33,5 +33,24 @@ namespace Reports.Extensions
 
             return provider;
         }
+
+        public static IReportCellsProvider<TEntity, TValue> AddHeaderRow<TEntity, TValue>(
+            this HorizontalReportBuilder<TEntity> builder, int rowIndex, string title, Func<TEntity, TValue> valueSelector)
+        {
+            EntityPropertyReportCellsProvider<TEntity, TValue> provider =
+                new EntityPropertyReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            builder.AddHeaderRow(rowIndex, provider);
+
+            return provider;
+        }
+
+        public static IReportCellsProvider<TEntity, TValue> AddHeaderRow<TEntity, TValue>(
+            this HorizontalReportBuilder<TEntity> builder, int rowIndex, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
+        {
+            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
+            builder.AddHeaderRow(rowIndex, provider);
+
+            return provider;
+        }
     }
 }
