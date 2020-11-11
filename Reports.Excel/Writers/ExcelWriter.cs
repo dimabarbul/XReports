@@ -19,13 +19,7 @@ namespace Reports.Excel.Writers
 
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
 
-            this.row = 2;
-            worksheet.SetValue(1, 1, 1);
-            worksheet.SetValue(1, 2, "1");
-            worksheet.SetValue(1, 3, 1.00);
-            worksheet.Cells[1, 1, 1, 3].Style.Numberformat.Format = "#.00";
-            // worksheet.Cells[1, 1].Style.Numberformat.Format = "#.00";
-            // worksheet.Cells[1, 1].Style.Numberformat.Format = "#.00";
+            this.row = 1;
             this.WriteHeader(worksheet, table);
             this.WriteBody(worksheet, table);
 
@@ -39,7 +33,6 @@ namespace Reports.Excel.Writers
                 int col = 1;
                 foreach (ExcelReportCell cell in headerRow)
                 {
-                    // worksheet.SetValue(this.row, col, cell.Value);
                     this.WriteHeaderCell(worksheet.Cells[this.row, col], cell);
                     col++;
                 }
@@ -50,8 +43,6 @@ namespace Reports.Excel.Writers
 
         private void WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
-            int startRow = this.row;
-
             int col = 1;
             foreach (IEnumerable<ExcelReportCell> bodyRow in table.Rows)
             {
@@ -64,11 +55,6 @@ namespace Reports.Excel.Writers
 
                 this.row++;
             }
-
-            // for (int i = 1; i <= col; i++)
-            // {
-            //     worksheet.Cells[startRow, i, this.row - 1, i].Style.HorizontalAlignment = this.GetAlignment(AlignmentType.Center);
-            // }
         }
 
         private void WriteHeaderCell(ExcelRange worksheetCell, ExcelReportCell cell)
@@ -88,6 +74,22 @@ namespace Reports.Excel.Writers
             if (!string.IsNullOrEmpty(cell.NumberFormat))
             {
                 worksheetCell.Style.Numberformat.Format = cell.NumberFormat;
+            }
+
+            if (cell.IsBold)
+            {
+                worksheetCell.Style.Font.Bold = true;
+            }
+
+            if (cell.FontColor != null)
+            {
+                worksheetCell.Style.Font.Color.SetColor(cell.FontColor.Value);
+            }
+
+            if (cell.BackgroundColor != null)
+            {
+                worksheetCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheetCell.Style.Fill.BackgroundColor.SetColor(cell.BackgroundColor.Value);
             }
         }
 

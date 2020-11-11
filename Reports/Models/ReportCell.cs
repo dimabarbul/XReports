@@ -20,6 +20,16 @@ namespace Reports.Models
             this.ValueType = reportCell.ValueType;
             this.InternalValue = reportCell.InternalValue;
         }
+
+        public TValue GetValue<TValue>()
+        {
+            if (this.ValueType != typeof(TValue))
+            {
+                throw new InvalidCastException($"Value type is {this.ValueType} but requested {typeof(TValue)}");
+            }
+
+            return (TValue) this.InternalValue;
+        }
     }
 
     public abstract class ReportCell : BaseReportCell
@@ -39,16 +49,6 @@ namespace Reports.Models
         public void AddProperty<TProperty>(TProperty property) where TProperty : IReportCellProperty
         {
             this.Properties.Add(property);
-        }
-
-        public TValue GetValue<TValue>()
-        {
-            if (this.ValueType != typeof(TValue))
-            {
-                throw new InvalidCastException($"Value type is {this.ValueType} but requested {typeof(TValue)}");
-            }
-
-            return (TValue) this.InternalValue;
         }
     }
 

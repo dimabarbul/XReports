@@ -3,7 +3,6 @@ using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.Models.Properties;
 using Xunit;
 
 namespace Reports.Tests.Builders
@@ -34,7 +33,7 @@ namespace Reports.Tests.Builders
         {
             VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
-                .AddProperty(new BoldProperty());
+                .AddProperty(new CustomProperty());
 
             IReportTable<ReportCell> table = reportBuilder.Build(new []
             {
@@ -49,7 +48,7 @@ namespace Reports.Tests.Builders
             cells.Should().HaveCount(1);
             cells[0][0].Properties.Should()
                 .HaveCount(1).And
-                .AllBeOfType<BoldProperty>();
+                .AllBeOfType<CustomProperty>();
         }
 
         private class CustomPropertyProcessor : IReportCellProcessor
@@ -64,7 +63,7 @@ namespace Reports.Tests.Builders
         {
             public bool Assigned { get; }
 
-            public CustomProperty(bool assigned)
+            public CustomProperty(bool assigned = false)
             {
                 this.Assigned = assigned;
             }

@@ -1,9 +1,8 @@
 using Reports.Html.Enums;
 using Reports.Html.Models;
-using Reports.Models.Properties;
 using Reports.PropertyHandlers;
 
-namespace Reports.Html.PropertyHandlers.StandardHtml
+namespace Reports.Extensions.Properties.Handlers.StandardHtml
 {
     public class StandardHtmlBoldPropertyHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
     {

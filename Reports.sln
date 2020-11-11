@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Excel", "Reports.Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Extensions.Builders", "Reports.Extensions.Builders\Reports.Extensions.Builders.csproj", "{F2F1D6E1-19DA-435D-B8A7-EF8FE45C45E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Extensions.Properties", "Reports.Extensions.Properties\Reports.Extensions.Properties.csproj", "{A3129A54-D10E-403E-836A-DE2C95091F59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{F2F1D6E1-19DA-435D-B8A7-EF8FE45C45E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2F1D6E1-19DA-435D-B8A7-EF8FE45C45E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2F1D6E1-19DA-435D-B8A7-EF8FE45C45E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3129A54-D10E-403E-836A-DE2C95091F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3129A54-D10E-403E-836A-DE2C95091F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3129A54-D10E-403E-836A-DE2C95091F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3129A54-D10E-403E-836A-DE2C95091F59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

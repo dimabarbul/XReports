@@ -1,6 +1,6 @@
 using Reports.Interfaces;
 
-namespace Reports.Models.Properties
+namespace Reports.Extensions.Properties
 {
     public class BoldProperty : IReportCellProperty
     {

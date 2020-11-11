@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Reports.Html.Enums;
 using Reports.Html.Models;
-using Reports.Html.PropertyHandlers.StandardHtml;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.Models.Properties;
 using Reports.PropertyHandlers;
 using Xunit;
 
@@ -35,7 +33,7 @@ namespace Reports.Html.Tests
 
             HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
-            cells[0][0].Html.Should().Be("<strong>TEST</strong>");
+            cells[0][0].Html.Should().Be("bold: TEST");
         }
 
         private static IEnumerable<IPropertyHandler<HtmlReportCell>> GetCustomPropertyHandlers()
@@ -43,8 +41,12 @@ namespace Reports.Html.Tests
             return new IPropertyHandler<HtmlReportCell>[]
             {
                 new BoldToUpperHandler(),
-                new StandardHtmlBoldPropertyHandler(),
+                new BoldMarkedWithTextHandler(),
             };
+        }
+
+        private class BoldProperty : IReportCellProperty
+        {
         }
 
         private class BoldToUpperHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
@@ -52,6 +54,16 @@ namespace Reports.Html.Tests
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
                 cell.Html = cell.Html.ToUpperInvariant();
+            }
+
+            public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
+        }
+
+        private class BoldMarkedWithTextHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
+        {
+            protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
+            {
+                cell.Html = "bold: " + cell.Html;
             }
 
             public override int Priority => (int) HtmlPropertyHandlerPriority.Text;

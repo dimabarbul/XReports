@@ -7,9 +7,10 @@ using Reports.Builders;
 using Reports.Excel.Models;
 using Reports.Excel.Writers;
 using Reports.Extensions;
+using Reports.Extensions.Properties;
+using Reports.Extensions.Properties.Handlers.Excel;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.PropertyHandlers;
 
 namespace ConsoleApp1
 {
@@ -38,16 +39,27 @@ namespace ConsoleApp1
 
             VerticalReportBuilder<(decimal, decimal, decimal, decimal, decimal)> builder = new VerticalReportBuilder<(decimal, decimal, decimal, decimal, decimal)>();
             builder.AddColumn("#", i => DateTime.Now)
-                .AddProperty(new FormatProperty("dd MMM yyyy"));
+                .AddProperty(new DateTimeFormatProperty("nnnn dd MMM yyyy"));
             builder.AddColumn("#2", i => i.Item2);
-            builder.AddColumn("#3", i => i.Item3.ToString());
+            builder.AddColumn("#3", i => i.Item3)
+                .AddProperty(new DecimalFormatProperty(2));
             builder.AddColumn("#4", i => i.Item4.ToString());
-            builder.AddColumn("#5", i => i.Item5.ToString());
+            builder.AddColumn("#5", i => "Looooooooooong")
+                .AddProperty(new MaxLengthProperty(5));
 
             IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Range(1, 10000)
                 .Select<int, (decimal, decimal, decimal, decimal, decimal)>(x => (x, x + 1, x + 2, x + 3, x + 4)));
 
-            ReportConverter<ExcelReportCell> converter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[] { new FormatPropertyHandler() });
+            ReportConverter<ExcelReportCell> converter = new ReportConverter<ExcelReportCell>(
+                new IPropertyHandler<ExcelReportCell>[]
+                {
+                    new ExcelAlignmentPropertyHandler(),
+                    new ExcelBoldPropertyHandler(),
+                    new ExcelDateTimeFormatPropertyHandler(),
+                    new ExcelDecimalFormatPropertyHandler(),
+                    new ExcelMaxLengthPropertyHandler(),
+                }
+            );
             IReportTable<ExcelReportCell> excelReportTable = converter.Convert(reportTable);
 
             const string fileName = "/tmp/1.xlsx";
@@ -75,23 +87,5 @@ namespace ConsoleApp1
         //     [ReportVariable(1, "Name")]
         //     public string Name { get; set; }
         // }
-    }
-
-    public class FormatProperty : IReportCellProperty
-    {
-        public string Format { get; set; }
-
-        public FormatProperty(string format)
-        {
-            this.Format = format;
-        }
-    }
-
-    public class FormatPropertyHandler : SingleTypePropertyHandler<FormatProperty, ExcelReportCell>, IPropertyHandler<ExcelReportCell>
-    {
-        protected override void HandleProperty(FormatProperty property, ExcelReportCell cell)
-        {
-            cell.NumberFormat = property.Format;
-        }
     }
 }
