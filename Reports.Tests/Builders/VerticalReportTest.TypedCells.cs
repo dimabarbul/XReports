@@ -16,7 +16,7 @@ namespace Reports.Tests.Builders
         {
             VerticalReportBuilder<int> reportBuilder = new VerticalReportBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
-            reportBuilder.AddColumn("Today", i => DateTime.Today);
+            reportBuilder.AddColumn("Today", new CallbackValueProvider<DateTime>(() => DateTime.Today));
             reportBuilder.AddColumn("ToString()", i => i.ToString());
 
             IReportTable<ReportCell> table = reportBuilder.Build(new[]
@@ -129,6 +129,21 @@ namespace Reports.Tests.Builders
             cells[0][0].ValueType.Should().Be(typeof(DateTime));
             cells[0][1].InternalValue.Should().Be("10/25/2020");
             cells[0][1].ValueType.Should().Be(typeof(DateTime));
+        }
+
+        private class CallbackValueProvider<TValue> : IValueProvider<TValue>
+        {
+            private readonly Func<TValue> callback;
+
+            public CallbackValueProvider(Func<TValue> callback)
+            {
+                this.callback = callback;
+            }
+
+            public TValue GetValue()
+            {
+                return this.callback();
+            }
         }
     }
 }

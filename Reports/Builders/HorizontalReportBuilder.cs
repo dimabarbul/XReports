@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.ReportCellProcessors;
 
 namespace Reports.Builders
 {
     public class HorizontalReportBuilder<TSourceEntity>
     {
         private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
+        private readonly List<IReportCellProcessor> titleCellProcessors = new List<IReportCellProcessor>();
 
         public IReportCellsProvider<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
@@ -33,12 +35,11 @@ namespace Reports.Builders
 
         public IReportTable<ReportCell> Build(IEnumerable<TSourceEntity> source)
         {
-            ReportTable<ReportCell> table = new ReportTable<ReportCell>();
-
-            table.HeaderRows = Enumerable.Empty<IEnumerable<ReportCell>>();
-            table.Rows = this.GetRows(source);
-
-            return table;
+            return new ReportTable<ReportCell>
+            {
+                HeaderRows = Enumerable.Empty<IEnumerable<ReportCell>>(),
+                Rows = this.GetRows(source),
+            };
         }
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
@@ -51,7 +52,19 @@ namespace Reports.Builders
 
         private ReportCell CreateTitleCell(IReportCellsProvider<TSourceEntity> row)
         {
-            return new ReportCell<string>(row.Title);
+            ReportCell<string> cell = new ReportCell<string>(row.Title);
+
+            foreach (IReportCellProcessor reportCellProcessor in this.titleCellProcessors)
+            {
+                reportCellProcessor.Process(cell);
+            }
+
+            return cell;
+        }
+
+        public void AddTitleProperty(string title, IReportCellProperty property)
+        {
+            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
         }
     }
 }
