@@ -28,9 +28,11 @@ namespace Reports.Excel.Writers
 
         private void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
+            int startRow = this.row;
+
+            int col = 1;
             foreach (IEnumerable<ExcelReportCell> headerRow in table.HeaderRows)
             {
-                int col = 1;
                 foreach (ExcelReportCell cell in headerRow)
                 {
                     this.WriteHeaderCell(worksheet.Cells[this.row, col], cell);
@@ -38,6 +40,12 @@ namespace Reports.Excel.Writers
                 }
 
                 this.row++;
+            }
+
+            if (this.row > startRow)
+            {
+                worksheet.Cells[startRow, 1, this.row - 1, col].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 1, this.row - 1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             }
         }
 
@@ -60,7 +68,6 @@ namespace Reports.Excel.Writers
         private void WriteHeaderCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
             this.WriteCell(worksheetCell, cell);
-            worksheetCell.Style.Font.Bold = true;
         }
 
         private void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
