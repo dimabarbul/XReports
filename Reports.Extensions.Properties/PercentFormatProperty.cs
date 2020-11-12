@@ -2,11 +2,11 @@ using Reports.Interfaces;
 
 namespace Reports.Extensions.Properties
 {
-    public class DecimalFormatProperty : IReportCellProperty
+    public class PercentFormatProperty : IReportCellProperty
     {
         public int Precision { get; }
 
-        public DecimalFormatProperty(int precision)
+        public PercentFormatProperty(int precision)
         {
             this.Precision = precision;
         }

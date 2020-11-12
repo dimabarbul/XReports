@@ -37,18 +37,24 @@ namespace ConsoleApp1
             //     },
             // });
 
-            VerticalReportBuilder<(decimal, decimal, decimal, decimal, decimal)> builder = new VerticalReportBuilder<(decimal, decimal, decimal, decimal, decimal)>();
-            builder.AddColumn("#", i => DateTime.Now)
+            VerticalReportBuilder<(int, decimal)> builder = new VerticalReportBuilder<(int, decimal)>();
+            builder.AddColumn("Now", i => DateTime.Now)
                 .AddProperty(new DateTimeFormatProperty("nnnn dd MMM yyyy"));
-            builder.AddColumn("#2", i => i.Item2);
-            builder.AddColumn("#3", i => i.Item3)
+            builder.AddColumn("Now", i => DateTime.Now)
+                .AddProperty(new DateTimeFormatProperty("dd/MM/yyyy HH:mm:ss"));
+            builder.AddColumn("Integer", i => i.Item1);
+            builder.AddColumn("Without formatting", i => i.Item2);
+            builder.AddColumn("With 2 decimals", i => i.Item2)
                 .AddProperty(new DecimalFormatProperty(2));
-            builder.AddColumn("#4", i => i.Item4.ToString());
-            builder.AddColumn("#5", i => "Looooooooooong")
+            builder.AddColumn("String", i => i.Item2.ToString());
+            builder.AddColumn("With max.length", i => "Looooooooooong")
                 .AddProperty(new MaxLengthProperty(5));
+            builder.AddColumn("Percent", i => i.Item2)
+                .AddProperty(new PercentFormatProperty(1));
 
+            Random random = new Random(DateTime.Now.Millisecond);
             IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Range(1, 10000)
-                .Select<int, (decimal, decimal, decimal, decimal, decimal)>(x => (x, x + 1, x + 2, x + 3, x + 4)));
+                .Select(x => (random.Next(), (decimal) random.NextDouble())));
 
             ReportConverter<ExcelReportCell> converter = new ReportConverter<ExcelReportCell>(
                 new IPropertyHandler<ExcelReportCell>[]
@@ -58,6 +64,7 @@ namespace ConsoleApp1
                     new ExcelDateTimeFormatPropertyHandler(),
                     new ExcelDecimalFormatPropertyHandler(),
                     new ExcelMaxLengthPropertyHandler(),
+                    new ExcelPercentFormatPropertyHandler(),
                 }
             );
             IReportTable<ExcelReportCell> excelReportTable = converter.Convert(reportTable);
