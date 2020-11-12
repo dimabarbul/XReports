@@ -87,6 +87,17 @@ namespace Reports.Excel.EpplusWriter
             {
                 worksheetCell.Style.Font.Bold = true;
             }
+
+            if (cell.FontColor != null)
+            {
+                worksheetCell.Style.Font.Color.SetColor(cell.FontColor.Value);
+            }
+
+            if (cell.BackgroundColor != null)
+            {
+                worksheetCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheetCell.Style.Fill.BackgroundColor.SetColor(cell.BackgroundColor.Value);
+            }
         }
 
         private ExcelHorizontalAlignment GetAlignment(AlignmentType alignmentType)

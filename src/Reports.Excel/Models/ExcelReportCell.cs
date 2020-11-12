@@ -10,7 +10,7 @@ namespace Reports.Excel.Models
         public string NumberFormat { get; set; }
         public bool IsBold { get; set; }
 
-        public Color? BackgroundColor { get; set; } = Color.Aqua;
+        public Color? BackgroundColor { get; set; }
         public Color? FontColor { get; set; }
     }
 }

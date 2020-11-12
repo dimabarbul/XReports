@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Reports.Excel\Reports.Excel.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="EPPlus" Version="4.5.3.3"/>
+    </ItemGroup>
+
 </Project>

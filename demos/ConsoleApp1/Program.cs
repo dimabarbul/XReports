@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,9 @@ namespace ConsoleApp1
                 .AddProperty(new MaxLengthProperty(5));
             builder.AddColumn("Percent", i => i.Item2)
                 .AddProperty(new PercentFormatProperty(1));
+            builder.AddColumn("Colored", i => i.Item1 % 10)
+                .AddProperty(new ColorProperty(Color.Yellow, Color.Black));
+
             return builder;
         }
 
@@ -77,6 +81,7 @@ namespace ConsoleApp1
                 {
                     new ExcelAlignmentPropertyHandler(),
                     new ExcelBoldPropertyHandler(),
+                    new ExcelColorPropertyHandler(),
                     new ExcelDateTimeFormatPropertyHandler(),
                     new ExcelDecimalFormatPropertyHandler(),
                     new ExcelMaxLengthPropertyHandler(),
@@ -107,6 +112,7 @@ namespace ConsoleApp1
                 {
                     new StandardHtmlAlignmentPropertyHandler(),
                     new StandardHtmlBoldPropertyHandler(),
+                    new StandardHtmlColorPropertyHandler(),
                     new StandardHtmlDateTimeFormatPropertyHandler(),
                     new StandardHtmlDecimalFormatPropertyHandler(),
                     new StandardHtmlMaxLengthPropertyHandler(),
