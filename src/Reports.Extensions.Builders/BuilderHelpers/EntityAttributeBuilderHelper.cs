@@ -44,7 +44,6 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             this.ApplyAttribute(instance, attribute);
         }
 
-        // TODO: apply attribute properties
         private void ApplyAttribute<TEntity>(IReportCellsProvider<TEntity> provider, ReportVariableAttribute attribute)
         {
         }

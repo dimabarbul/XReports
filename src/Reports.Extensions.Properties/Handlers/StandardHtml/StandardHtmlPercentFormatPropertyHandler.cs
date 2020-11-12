@@ -4,7 +4,7 @@ using Reports.PropertyHandlers;
 
 namespace Reports.Extensions.Properties.Handlers.StandardHtml
 {
-    public class StandardHtmlPercentPropertyFormatHandler : SingleTypePropertyHandler<PercentFormatProperty, HtmlReportCell>
+    public class StandardHtmlPercentFormatPropertyHandler : SingleTypePropertyHandler<PercentFormatProperty, HtmlReportCell>
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 

@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Reports.Html\Reports.Html.csproj" />
+      <ProjectReference Include="..\..\src\Reports.Html\Reports.Html.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -7,7 +7,7 @@ using Reports.Enums;
 using Reports.Excel.Models;
 using Reports.Interfaces;
 
-namespace Reports.Excel.Writers
+namespace Reports.Excel.EpplusWriter
 {
     public class ExcelWriter
     {
