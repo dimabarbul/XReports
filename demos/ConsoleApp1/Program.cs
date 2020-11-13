@@ -12,10 +12,11 @@ using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Handlers.Excel;
 using Reports.Extensions.Properties.Handlers.StandardHtml;
-using Reports.Html.HtmlStringWriter;
+using Reports.Html.StringWriter;
 using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
+using StringWriter = Reports.Html.StringWriter.StringWriter;
 
 namespace ConsoleApp1
 {
@@ -97,7 +98,7 @@ namespace ConsoleApp1
                 File.Delete(fileName);
             }
 
-            ExcelWriter writer = new ExcelWriter();
+            EpplusWriter writer = new EpplusWriter();
             Stopwatch sw = Stopwatch.StartNew();
             writer.WriteToFile(excelReportTable, fileName);
             sw.Stop();
@@ -129,7 +130,7 @@ namespace ConsoleApp1
             }
 
             GeneralCellWriter cellWriter = new GeneralCellWriter();
-            HtmlStringWriter writer = new HtmlStringWriter(cellWriter.WriteHeaderCell, cellWriter.WriteBodyCell);
+            StringWriter writer = new StringWriter(cellWriter.WriteHeaderCell, cellWriter.WriteBodyCell);
             Stopwatch sw = Stopwatch.StartNew();
             await writer.WriteToFileAsync(htmlReportTable, fileName);
             sw.Stop();

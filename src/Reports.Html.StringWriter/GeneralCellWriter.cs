@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using Reports.Html.Models;
 
-namespace Reports.Html.HtmlStringWriter
+namespace Reports.Html.StringWriter
 {
     public class GeneralCellWriter
     {

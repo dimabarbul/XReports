@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Html", "src\Reports
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Excel.EpplusWriter", "src\Reports.Excel.EpplusWriter\Reports.Excel.EpplusWriter.csproj", "{58AAED8B-C3A1-4A6B-971E-E6DB3AA086F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Html.HtmlStringWriter", "src\Reports.Html.HtmlStringWriter\Reports.Html.HtmlStringWriter.csproj", "{FEDCC5D1-C6CD-4DB4-9BB6-9D4DB2AD1DD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Html.StringWriter", "src\Reports.Html.StringWriter\Reports.Html.StringWriter.csproj", "{FEDCC5D1-C6CD-4DB4-9BB6-9D4DB2AD1DD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

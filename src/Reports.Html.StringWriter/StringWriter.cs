@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using Reports.Html.Models;
 using Reports.Interfaces;
 
-namespace Reports.Html.HtmlStringWriter
+namespace Reports.Html.StringWriter
 {
-    public class HtmlStringWriter
+    public class StringWriter
     {
         private readonly Func<HtmlReportCell, string> writeHeaderCell;
         private readonly Func<HtmlReportCell, string> writeBodyCell;
 
-        public HtmlStringWriter(Func<HtmlReportCell, string> writeHeaderCell, Func<HtmlReportCell, string> writeBodyCell)
+        public StringWriter(Func<HtmlReportCell, string> writeHeaderCell, Func<HtmlReportCell, string> writeBodyCell)
         {
             this.writeHeaderCell = writeHeaderCell;
             this.writeBodyCell = writeBodyCell;

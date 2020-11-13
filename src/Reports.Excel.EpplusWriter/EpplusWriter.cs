@@ -9,7 +9,7 @@ using Reports.Interfaces;
 
 namespace Reports.Excel.EpplusWriter
 {
-    public class ExcelWriter
+    public class EpplusWriter
     {
         private int row;
 
