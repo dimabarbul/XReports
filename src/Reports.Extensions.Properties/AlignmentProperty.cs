@@ -1,9 +1,9 @@
 using Reports.Enums;
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class AlignmentProperty : IReportCellProperty
+    public class AlignmentProperty : ReportCellProperty
     {
         public AlignmentType AlignmentType { get; }
 

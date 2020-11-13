@@ -1,8 +1,8 @@
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class PercentFormatProperty : IReportCellProperty
+    public class PercentFormatProperty : ReportCellProperty
     {
         public int Precision { get; }
 

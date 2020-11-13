@@ -43,7 +43,7 @@ namespace Reports.Builders
             };
         }
 
-        public void AddTitleProperty(string title, IReportCellProperty property)
+        public void AddTitleProperty(string title, ReportCellProperty property)
         {
             this.titleCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
         }

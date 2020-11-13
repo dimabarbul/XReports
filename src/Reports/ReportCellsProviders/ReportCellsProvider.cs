@@ -9,7 +9,7 @@ namespace Reports.ReportCellsProviders
     {
         public string Title { get; }
         public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();
-        public ICollection<IReportCellProperty> Properties { get; } = new List<IReportCellProperty>();
+        public ICollection<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
         protected ReportCellsProvider(string title)
         {
@@ -21,7 +21,7 @@ namespace Reports.ReportCellsProviders
             this.Processors.Add(processor);
         }
 
-        public void AddProperty(IReportCellProperty property)
+        public void AddProperty(ReportCellProperty property)
         {
             this.Properties.Add(property);
         }
@@ -38,7 +38,7 @@ namespace Reports.ReportCellsProviders
 
         private void AddProperties(ReportCell<TValue> cell)
         {
-            foreach (IReportCellProperty property in this.Properties)
+            foreach (ReportCellProperty property in this.Properties)
             {
                 cell.AddProperty(property);
             }

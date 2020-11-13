@@ -1,8 +1,8 @@
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class DecimalFormatProperty : IReportCellProperty
+    public class DecimalFormatProperty : ReportCellProperty
     {
         public int Precision { get; }
 

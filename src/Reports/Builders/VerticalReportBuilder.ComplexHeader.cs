@@ -32,7 +32,7 @@ namespace Reports.Builders
             });
         }
 
-        public void AddHeaderProperty(string title, IReportCellProperty property)
+        public void AddHeaderProperty(string title, ReportCellProperty property)
         {
             this.headerCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
         }

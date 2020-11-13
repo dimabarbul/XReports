@@ -17,11 +17,11 @@ namespace Reports.Html.Tests
             return table.Rows.Select(row => row.ToArray()).ToArray();
         }
 
-        private ReportCell CreateReportCell<TValue>(TValue title, params IReportCellProperty[] properties)
+        private ReportCell CreateReportCell<TValue>(TValue title, params ReportCellProperty[] properties)
         {
             ReportCell<TValue> cell = new ReportCell<TValue>(title);
 
-            foreach (IReportCellProperty property in properties)
+            foreach (ReportCellProperty property in properties)
             {
                 cell.AddProperty(property);
             }

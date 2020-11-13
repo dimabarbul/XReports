@@ -43,15 +43,17 @@ namespace Reports
 
             this.ProcessProperties(cell.Properties, convertedCell);
 
+            convertedCell.Properties.AddRange(cell.Properties.Where(p => !p.Processed));
+
             return convertedCell;
         }
 
-        private void ProcessProperties(List<IReportCellProperty> cellProperties, TResultReportCell convertedCell)
+        private void ProcessProperties(List<ReportCellProperty> cellProperties, TResultReportCell convertedCell)
         {
             foreach (IPropertyHandler<TResultReportCell> handler in this.propertyHandlers
                 .OrderBy(h => h.Priority))
             {
-                foreach (IReportCellProperty property in cellProperties)
+                foreach (ReportCellProperty property in cellProperties)
                 {
                     handler.Handle(property, convertedCell);
                 }

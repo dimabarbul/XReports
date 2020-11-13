@@ -45,7 +45,7 @@ namespace Reports.Html.Tests
             };
         }
 
-        private class BoldProperty : IReportCellProperty
+        private class BoldProperty : ReportCellProperty
         {
         }
 

@@ -57,7 +57,7 @@ namespace Reports.Tests.Builders
             }
         }
 
-        private class CustomProperty : IReportCellProperty
+        private class CustomProperty : ReportCellProperty
         {
             public bool Assigned { get; }
 

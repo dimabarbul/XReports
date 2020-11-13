@@ -62,7 +62,7 @@ namespace Reports.Tests.Builders
             //     .ContainItemsAssignableTo<CustomTitleProperty>();
         }
 
-        private class CustomTitleProperty : IReportCellProperty
+        private class CustomTitleProperty : ReportCellProperty
         {
         }
 

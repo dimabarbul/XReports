@@ -7,9 +7,9 @@ namespace Reports.ReportCellProcessors
     public class AddPropertyReportCellProcessor : IReportCellProcessor
     {
         private readonly string title;
-        private readonly IReportCellProperty property;
+        private readonly ReportCellProperty property;
 
-        public AddPropertyReportCellProcessor(string title, IReportCellProperty property)
+        public AddPropertyReportCellProcessor(string title, ReportCellProperty property)
         {
             this.title = title;
             this.property = property;

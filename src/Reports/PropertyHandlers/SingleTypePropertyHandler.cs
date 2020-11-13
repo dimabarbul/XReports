@@ -1,13 +1,14 @@
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.PropertyHandlers
 {
     public abstract class SingleTypePropertyHandler<TPropertyType, TReportCell> : IPropertyHandler<TReportCell>
-        where TPropertyType : IReportCellProperty
+        where TPropertyType : ReportCellProperty
     {
         public virtual int Priority => 0;
 
-        public void Handle(IReportCellProperty property, TReportCell cell)
+        public void Handle(ReportCellProperty property, TReportCell cell)
         {
             if (!(property is TPropertyType))
             {
@@ -15,6 +16,7 @@ namespace Reports.PropertyHandlers
             }
 
             this.HandleProperty((TPropertyType) property, cell);
+            property.Processed = true;
         }
 
         protected abstract void HandleProperty(TPropertyType property, TReportCell cell);

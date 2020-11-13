@@ -1,8 +1,8 @@
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class MaxLengthProperty : IReportCellProperty
+    public class MaxLengthProperty : ReportCellProperty
     {
         public int MaxLength { get; }
 

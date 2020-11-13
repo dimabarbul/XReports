@@ -1,9 +1,9 @@
 using System.Drawing;
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class ColorProperty : IReportCellProperty
+    public class ColorProperty : ReportCellProperty
     {
         public Color? FontColor { get; }
         public Color? BackgroundColor { get; }

@@ -1,10 +1,10 @@
 using Reports.Extensions.Properties.Helpers;
 using Reports.Extensions.Properties.Models;
-using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {
-    public class DateTimeFormatProperty : IReportCellProperty
+    public class DateTimeFormatProperty : ReportCellProperty
     {
         public DateTimeFormatPart[] Parts { get; set; }
 
