@@ -12,10 +12,12 @@ using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Handlers.Excel;
 using Reports.Extensions.Properties.Handlers.StandardHtml;
+using Reports.Html.Enums;
 using Reports.Html.StringWriter;
 using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.PropertyHandlers;
 using StringWriter = Reports.Html.StringWriter.StringWriter;
 
 namespace ConsoleApp1
@@ -63,6 +65,8 @@ namespace ConsoleApp1
                 .AddProperty(new PercentFormatProperty(1));
             builder.AddColumn("Colored", i => i.Item1 % 10)
                 .AddProperty(new ColorProperty(Color.Yellow, Color.Black));
+            builder.AddColumn("With custom format", i => i.Item2 * 100)
+                .AddProperty(new MyCustomFormatProperty());
 
             return builder;
         }
@@ -98,7 +102,7 @@ namespace ConsoleApp1
                 File.Delete(fileName);
             }
 
-            EpplusWriter writer = new EpplusWriter();
+            EpplusWriter writer = new MyExcelWriter();
             Stopwatch sw = Stopwatch.StartNew();
             writer.WriteToFile(excelReportTable, fileName);
             sw.Stop();
@@ -118,6 +122,8 @@ namespace ConsoleApp1
                     new StandardHtmlDecimalFormatPropertyHandler(),
                     new StandardHtmlMaxLengthPropertyHandler(),
                     new StandardHtmlPercentFormatPropertyHandler(),
+
+                    new StandardHtmlMyCustomFormatPropertyHandler(),
                 }
             );
             IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(reportTable);
@@ -136,6 +142,23 @@ namespace ConsoleApp1
             sw.Stop();
 
             Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
+        }
+    }
+
+    public class MyCustomFormatProperty : ReportCellProperty
+    {
+    }
+
+    public class StandardHtmlMyCustomFormatPropertyHandler : SingleTypePropertyHandler<MyCustomFormatProperty, HtmlReportCell>
+    {
+        public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
+
+        protected override void HandleProperty(MyCustomFormatProperty property, HtmlReportCell cell)
+        {
+            decimal value = cell.GetValue<decimal>();
+            string format = value >= 90 ? "F0" : "F1";
+
+            cell.Html = value.ToString(format);
         }
     }
 }

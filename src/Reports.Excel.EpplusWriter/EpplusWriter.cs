@@ -26,7 +26,7 @@ namespace Reports.Excel.EpplusWriter
             excelPackage.Save();
         }
 
-        private void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             int startRow = this.row;
 
@@ -49,7 +49,7 @@ namespace Reports.Excel.EpplusWriter
             }
         }
 
-        private void WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual void WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             int col = 1;
             foreach (IEnumerable<ExcelReportCell> bodyRow in table.Rows)
@@ -65,12 +65,12 @@ namespace Reports.Excel.EpplusWriter
             }
         }
 
-        private void WriteHeaderCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        protected virtual void WriteHeaderCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
             this.WriteCell(worksheetCell, cell);
         }
 
-        private void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        protected virtual void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
             worksheetCell.Value = cell.InternalValue;
             if (cell.AlignmentType != null)
