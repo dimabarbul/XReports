@@ -15,7 +15,7 @@ namespace Reports.Interfaces
         ICollection<IReportCellProcessor> Processors { get; }
         ICollection<ReportCellProperty> Properties { get; }
 
-        void AddProcessor(IReportCellProcessor processor);
-        void AddProperty(ReportCellProperty property);
+        IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor processor);
+        IReportCellsProvider<TSourceEntity> AddProperty(ReportCellProperty property);
     }
 }

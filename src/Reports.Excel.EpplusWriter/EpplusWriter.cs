@@ -11,6 +11,8 @@ namespace Reports.Excel.EpplusWriter
 {
     public class EpplusWriter
     {
+        private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
+
         private int row;
 
         public void WriteToFile(IReportTable<ExcelReportCell> table, string fileName)
@@ -29,8 +31,8 @@ namespace Reports.Excel.EpplusWriter
         protected virtual void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             int startRow = this.row;
-
             int maxColumn = 1;
+
             foreach (IEnumerable<ExcelReportCell> headerRow in table.HeaderRows)
             {
                 int column = 1;
@@ -43,20 +45,35 @@ namespace Reports.Excel.EpplusWriter
                     column++;
                 }
 
-                maxColumn = Math.Max(maxColumn, column);
+                if (column > maxColumn)
+                {
+                    maxColumn = column;
+                }
 
                 this.row++;
             }
 
-            if (this.row > startRow)
+            if (this.row == startRow)
             {
-                worksheet.Cells[startRow, 1, this.row - 1, maxColumn].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 1, this.row - 1, maxColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                return;
             }
+
+            this.FormatHeader(worksheet, new ExcelAddress(startRow, 1, this.row - 1, maxColumn));
         }
 
-        protected virtual void WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
         {
+            ExcelRange range = worksheet.Cells[headerAddress.Address];
+
+            range.Style.Font.Bold = true;
+            range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        }
+
+        protected virtual ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        {
+            int startRow = this.row;
+            int maxColumn = 1;
+
             foreach (IEnumerable<ExcelReportCell> bodyRow in table.Rows)
             {
                 int column = 1;
@@ -69,7 +86,24 @@ namespace Reports.Excel.EpplusWriter
                     column++;
                 }
 
+                if (column > maxColumn)
+                {
+                    maxColumn = column;
+                }
+
                 this.row++;
+            }
+
+            this.ApplyColumnFormat(worksheet, startRow, this.row - 1);
+
+            return new ExcelAddress(startRow, 1, this.row - 1, maxColumn);
+        }
+
+        private void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)
+        {
+            foreach ((int column, ExcelReportCell cell) in this.columnFormatCells)
+            {
+                this.FormatCell(worksheet.Cells[startRow, column, endRow, column], cell);
             }
         }
 
@@ -81,6 +115,37 @@ namespace Reports.Excel.EpplusWriter
         protected virtual void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
             worksheetCell.Value = cell.InternalValue;
+
+            if (cell.ColumnSpan > 1 || cell.RowSpan > 1)
+            {
+                int startRow = worksheetCell.Start.Row;
+                int startColumn = worksheetCell.Start.Column;
+                ExcelRange excelRange = worksheetCell.Worksheet
+                    .Cells[startRow, startColumn, startRow + cell.RowSpan - 1, startColumn + cell.ColumnSpan - 1];
+                excelRange.Merge = true;
+
+                if (cell.RowSpan > 1)
+                {
+                    excelRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
+            }
+
+            if (cell.HasProperty<ColumnSameFormatProperty>())
+            {
+                int column = worksheetCell.Start.Column;
+                if (!this.columnFormatCells.ContainsKey(column))
+                {
+                    this.columnFormatCells.Add(column, cell);
+                }
+
+                return;
+            }
+
+            this.FormatCell(worksheetCell, cell);
+        }
+
+        protected virtual void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        {
             if (cell.AlignmentType != null)
             {
                 worksheetCell.Style.HorizontalAlignment = this.GetAlignment(cell.AlignmentType.Value);
@@ -105,15 +170,6 @@ namespace Reports.Excel.EpplusWriter
             {
                 worksheetCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheetCell.Style.Fill.BackgroundColor.SetColor(cell.BackgroundColor.Value);
-            }
-
-            if (cell.ColumnSpan > 1 || cell.RowSpan > 1)
-            {
-                int startRow = worksheetCell.Start.Row;
-                int startColumn = worksheetCell.Start.Column;
-                worksheetCell.Worksheet
-                    .Cells[startRow, startColumn, startRow + cell.RowSpan - 1, startColumn + cell.ColumnSpan - 1]
-                    .Merge = true;
             }
         }
 

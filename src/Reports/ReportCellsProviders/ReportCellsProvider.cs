@@ -16,14 +16,18 @@ namespace Reports.ReportCellsProviders
             this.Title = title;
         }
 
-        public void AddProcessor(IReportCellProcessor processor)
+        public IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor processor)
         {
             this.Processors.Add(processor);
+
+            return this;
         }
 
-        public void AddProperty(ReportCellProperty property)
+        public IReportCellsProvider<TSourceEntity> AddProperty(ReportCellProperty property)
         {
             this.Properties.Add(property);
+
+            return this;
         }
 
         protected ReportCell<TValue> CreateCell(TValue value)
