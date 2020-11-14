@@ -7,16 +7,6 @@ namespace ConsoleApp1
 {
     public class MyExcelWriter : EpplusWriter
     {
-        protected override void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)
-        {
-            base.FormatCell(worksheetCell, cell);
-
-            if (cell.HasProperty<MyCustomFormatProperty>())
-            {
-                worksheetCell.Style.Numberformat.Format = $"[>=90]0;[<90]0.0";
-            }
-        }
-
         protected override ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             ExcelAddress bodyAddress = base.WriteBody(worksheet, table);

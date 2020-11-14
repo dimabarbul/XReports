@@ -171,4 +171,12 @@ namespace ConsoleApp1
             cell.Html = value.ToString(format);
         }
     }
+
+    public class ExcelMyCustomFormatPropertyHandler : SingleTypePropertyHandler<MyCustomFormatProperty, ExcelReportCell>
+    {
+        protected override void HandleProperty(MyCustomFormatProperty property, ExcelReportCell cell)
+        {
+            cell.NumberFormat = "[>=90]0;[<90]0.0";
+        }
+    }
 }
