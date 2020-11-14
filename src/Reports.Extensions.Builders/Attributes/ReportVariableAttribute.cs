@@ -6,6 +6,7 @@ namespace Reports.Extensions.Builders.Attributes
     {
         public int Order { get; set; }
         public string Title { get; set; }
+        public string[] ComplexHeader { get; set; } = new string[0];
 
         public ReportVariableAttribute(int order, string title)
         {
