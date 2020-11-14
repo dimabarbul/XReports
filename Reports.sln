@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Html.StringWriter",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Extensions.Builders.Tests", "tests\Reports.Extensions.Builders.Tests\Reports.Extensions.Builders.Tests.csproj", "{8C346653-7549-4B6E-B3E9-9F93882383FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Demos.MVC", "demos\Reports.Demos.MVC\Reports.Demos.MVC.csproj", "{10C08E20-75E1-41E5-B5EC-574F469770F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{8C346653-7549-4B6E-B3E9-9F93882383FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C346653-7549-4B6E-B3E9-9F93882383FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C346653-7549-4B6E-B3E9-9F93882383FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10C08E20-75E1-41E5-B5EC-574F469770F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10C08E20-75E1-41E5-B5EC-574F469770F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10C08E20-75E1-41E5-B5EC-574F469770F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10C08E20-75E1-41E5-B5EC-574F469770F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9CBAAAC1-91D3-490F-ABA8-8EFB77C50F0E} = {0702E6BC-8F03-4672-972A-E16CBBD3424E}
@@ -91,5 +97,6 @@ Global
 		{58AAED8B-C3A1-4A6B-971E-E6DB3AA086F3} = {26DBFC2D-CE5F-488B-BC42-230CFA1DABBB}
 		{FEDCC5D1-C6CD-4DB4-9BB6-9D4DB2AD1DD1} = {26DBFC2D-CE5F-488B-BC42-230CFA1DABBB}
 		{8C346653-7549-4B6E-B3E9-9F93882383FF} = {F9E94722-061B-4A10-896F-880442F76D1F}
+		{10C08E20-75E1-41E5-B5EC-574F469770F7} = {0702E6BC-8F03-4672-972A-E16CBBD3424E}
 	EndGlobalSection
 EndGlobal

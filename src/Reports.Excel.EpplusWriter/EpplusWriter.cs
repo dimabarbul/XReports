@@ -36,6 +36,23 @@ namespace Reports.Excel.EpplusWriter
             excelPackage.Save();
         }
 
+        public Stream WriteToStream(IReportTable<ExcelReportCell> table)
+        {
+            Stream stream = new MemoryStream();
+            using ExcelPackage excelPackage = new ExcelPackage(stream);
+
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
+
+            this.row = 1;
+            this.WriteHeader(worksheet, table);
+            this.WriteBody(worksheet, table);
+
+            excelPackage.Save();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return stream;
+        }
+
         protected virtual void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             int startRow = this.row;
