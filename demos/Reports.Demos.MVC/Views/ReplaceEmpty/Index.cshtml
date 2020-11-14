@@ -1,0 +1,53 @@
+@model Reports.Demos.MVC.Controllers.CustomProperties.ReplaceEmptyController.ViewModel
+
+@{
+    ViewBag.Title = "Replace Empty Cells With Dash";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>Using one simple property we can display mock text when cell does not have value.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    class ReplaceEmptyProperty : ReportCellProperty
+    {
+        public string Text { get; }
+
+        public ReplaceEmptyProperty(string text)
+        {
+            this.Text = text;
+        }
+    }
+
+    class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler&lt;ReplaceEmptyProperty, HtmlReportCell&gt;
+    {
+        protected override void HandleProperty(ReplaceEmptyProperty property, HtmlReportCell cell)
+        {
+            if (string.IsNullOrEmpty(cell.Html))
+            {
+                cell.Html = property.Text;
+            }
+        }
+    }
+
+    class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler&lt;ReplaceEmptyProperty, ExcelReportCell&gt;
+    {
+        protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
+        {
+            if (cell.InternalValue == null || (cell.ValueType == typeof(string) && string.IsNullOrEmpty(cell.InternalValue)))
+            {
+                cell.InternalValue = property.Text;
+            }
+        }
+    }
+}

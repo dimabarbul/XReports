@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Bogus;
+using Bogus.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Builders;
 using Reports.Demos.MVC.Reports;
@@ -16,7 +17,7 @@ using Reports.PropertyHandlers;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
-    public class CustomFormatController : Controller
+    public class ReplaceEmptyController : Controller
     {
         private const int RecordsCount = 10;
 
@@ -46,9 +47,12 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         private IReportTable<ReportCell> BuildReport()
         {
             VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
+            reportBuilder.AddColumn("First Name", e => e.FirstName);
+            reportBuilder.AddColumn("Last Name", e => e.LastName);
+            reportBuilder.AddColumn("Email", e => e.Email)
+                .AddProperty(new ReplaceEmptyProperty("-"));
             reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperty(new CustomFormatProperty());
+                .AddProperty(new ReplaceEmptyProperty("(no score)"));
 
             IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
             return reportTable;
@@ -89,35 +93,50 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             int luckyGuyIndex = new Random().Next(3, RecordsCount - 1);
 
             return new Faker<Entity>()
-                .RuleFor(e => e.Name, f => f.Name.FullName())
-                .RuleFor(e => e.Score, f => f.IndexFaker % luckyGuyIndex == 0 ? 100m : f.Random.Decimal(80, 100))
+                .RuleFor(e => e.FirstName, f => f.Name.FirstName())
+                .RuleFor(e => e.LastName, f => f.Name.LastName())
+                .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).OrNull(f))
+                .RuleFor(e => e.Score, f => f.Random.Int(1, 10).OrNull(f))
                 .Generate(RecordsCount);
         }
 
         private class Entity
         {
-            public string Name { get; set; }
-            public decimal Score { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public int? Score { get; set; }
         }
 
-        private class CustomFormatProperty : ReportCellProperty { }
-
-        private class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler<CustomFormatProperty, HtmlReportCell>
+        private class ReplaceEmptyProperty : ReportCellProperty
         {
-            protected override void HandleProperty(CustomFormatProperty property, HtmlReportCell cell)
-            {
-                decimal value = cell.GetValue<decimal>();
-                string format = value == 100m ? "F0" : "F2";
+            public string Text { get; }
 
-                cell.Html = value.ToString(format);
+            public ReplaceEmptyProperty(string text)
+            {
+                this.Text = text;
             }
         }
 
-        private class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler<CustomFormatProperty, ExcelReportCell>
+        private class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler<ReplaceEmptyProperty, HtmlReportCell>
         {
-            protected override void HandleProperty(CustomFormatProperty property, ExcelReportCell cell)
+            protected override void HandleProperty(ReplaceEmptyProperty property, HtmlReportCell cell)
             {
-                cell.NumberFormat = "[=100]0;[<100]0.00";
+                if (string.IsNullOrEmpty(cell.Html))
+                {
+                    cell.Html = property.Text;
+                }
+            }
+        }
+
+        private class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler<ReplaceEmptyProperty, ExcelReportCell>
+        {
+            protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
+            {
+                if (cell.InternalValue == null || (cell.ValueType == typeof(string) && string.IsNullOrEmpty(cell.InternalValue)))
+                {
+                    cell.InternalValue = property.Text;
+                }
             }
         }
     }
