@@ -19,7 +19,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
                     Property = p,
                     Attribute = p.GetCustomAttribute<ReportVariableAttribute>(),
                 })
-                .Where(x => x.Property != null)
+                .Where(x => x.Attribute != null)
                 .OrderBy(x => x.Attribute.Order))
             {
                 this.AddColumn(builder, x.Property, x.Attribute);
