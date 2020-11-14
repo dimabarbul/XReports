@@ -12,8 +12,16 @@ namespace Reports.Excel.EpplusWriter
     public class EpplusWriter
     {
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
+        private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
 
         private int row;
+
+        public EpplusWriter AddFormatter(IEpplusFormatter formatter)
+        {
+            this.formatters.Add(formatter);
+
+            return this;
+        }
 
         public void WriteToFile(IReportTable<ExcelReportCell> table, string fileName)
         {
@@ -170,6 +178,11 @@ namespace Reports.Excel.EpplusWriter
             {
                 worksheetCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheetCell.Style.Fill.BackgroundColor.SetColor(cell.BackgroundColor.Value);
+            }
+
+            foreach (IEpplusFormatter formatter in this.formatters)
+            {
+                formatter.Format(worksheetCell, cell);
             }
         }
 
