@@ -14,4 +14,10 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\CustomProperties\CustomFormat.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Extensions\StringWriter.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Test\StringWriter.cshtml" />
+    </ItemGroup>
+
 </Project>

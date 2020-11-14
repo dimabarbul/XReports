@@ -16,8 +16,8 @@ namespace Reports.Html.StringWriter
 
         private FileStream fileStream;
         private StringBuilder stringBuilder;
-        private delegate Task WriteTextAsyncDelegate(string text);
-        private WriteTextAsyncDelegate writeTextAsync;
+        protected delegate Task WriteTextAsyncDelegate(string text);
+        protected WriteTextAsyncDelegate WriteTextAsync;
 
         public StringWriter()
         {
@@ -33,10 +33,10 @@ namespace Reports.Html.StringWriter
             this.writeBodyCell = writeBodyCell;
         }
 
-        public async Task<string> WriteToString(IReportTable<HtmlReportCell> reportTable)
+        public async Task<string> WriteToStringAsync(IReportTable<HtmlReportCell> reportTable)
         {
             this.stringBuilder = new StringBuilder();
-            this.writeTextAsync = this.WriteToStringBuilderAsync;
+            this.WriteTextAsync = this.WriteToStringBuilderAsync;
 
             await this.WriteReportAsync(reportTable);
 
@@ -46,7 +46,7 @@ namespace Reports.Html.StringWriter
         public async Task WriteToFileAsync(IReportTable<HtmlReportCell> reportTable, string fileName)
         {
             this.fileStream = File.OpenWrite(fileName);
-            this.writeTextAsync = this.WriteToFileAsync;
+            this.WriteTextAsync = this.WriteToFileAsync;
 
             await this.WriteReportAsync(reportTable);
 
@@ -63,7 +63,7 @@ namespace Reports.Html.StringWriter
 
         protected virtual async Task BeginTableAsync()
         {
-            await this.writeTextAsync("<table>");
+            await this.WriteTextAsync("<table>");
         }
 
         protected virtual async Task WriteHeaderAsync(IReportTable<HtmlReportCell> reportTable)
@@ -74,22 +74,22 @@ namespace Reports.Html.StringWriter
             {
                 if (!isHeaderStarted)
                 {
-                    await this.writeTextAsync("<thead>");
+                    await this.WriteTextAsync("<thead>");
 
                     isHeaderStarted = true;
                 }
 
-                await this.writeTextAsync("<tr>");
+                await this.WriteTextAsync("<tr>");
                 foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
-                    await this.writeTextAsync(this.writeHeaderCell(cell));
+                    await this.WriteTextAsync(this.writeHeaderCell(cell));
                 }
-                await this.writeTextAsync("</tr>");
+                await this.WriteTextAsync("</tr>");
             }
 
             if (isHeaderStarted)
             {
-                await this.writeTextAsync("</thead>");
+                await this.WriteTextAsync("</thead>");
             }
         }
 
@@ -101,28 +101,28 @@ namespace Reports.Html.StringWriter
             {
                 if (!isBodyStarted)
                 {
-                    await this.writeTextAsync("<tbody>");
+                    await this.WriteTextAsync("<tbody>");
 
                     isBodyStarted = true;
                 }
 
-                await this.writeTextAsync("<tr>");
+                await this.WriteTextAsync("<tr>");
                 foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
-                    await this.writeTextAsync(this.writeBodyCell(cell));
+                    await this.WriteTextAsync(this.writeBodyCell(cell));
                 }
-                await this.writeTextAsync("</tr>");
+                await this.WriteTextAsync("</tr>");
             }
 
             if (isBodyStarted)
             {
-                await this.writeTextAsync("</tbody>");
+                await this.WriteTextAsync("</tbody>");
             }
         }
 
         protected virtual async Task EndTableAsync()
         {
-            await this.writeTextAsync("</table>");
+            await this.WriteTextAsync("</table>");
         }
 
         private async Task WriteToFileAsync(string text)

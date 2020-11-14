@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Builders;
+using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
 using Reports.Extensions;
@@ -15,7 +15,7 @@ using Reports.Models;
 using Reports.PropertyHandlers;
 using StringWriter = Reports.Html.StringWriter.StringWriter;
 
-namespace Reports.Demos.MVC.Controllers
+namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
     public class CustomFormatController : Controller
     {
@@ -27,7 +27,7 @@ namespace Reports.Demos.MVC.Controllers
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
             string tableHtml = await this.WriteReportToString(htmlReportTable);
 
-            return View(new ViewModel() { ReportTableHtml = tableHtml });
+            return this.View(new ViewModel() { ReportTableHtml = tableHtml });
         }
 
         public IActionResult Download()
@@ -36,7 +36,7 @@ namespace Reports.Demos.MVC.Controllers
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
+            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
@@ -77,7 +77,7 @@ namespace Reports.Demos.MVC.Controllers
 
         private async Task<string> WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return await new StringWriter().WriteToString(htmlReportTable);
+            return await new BootstrapStringWriter().WriteToStringAsync(htmlReportTable);
         }
 
         public class ViewModel
