@@ -38,6 +38,11 @@ namespace Reports
 
         private TResultReportCell ConvertCell(ReportCell cell)
         {
+            if (cell == null)
+            {
+                return null;
+            }
+
             TResultReportCell convertedCell = new TResultReportCell();
             convertedCell.CopyFrom(cell);
 

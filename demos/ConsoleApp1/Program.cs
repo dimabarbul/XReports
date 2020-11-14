@@ -68,13 +68,15 @@ namespace ConsoleApp1
             builder.AddColumn("With custom format", i => i.Item2 * 100)
                 .AddProperty(new MyCustomFormatProperty());
 
+            builder.AddComplexHeader(0, "Date", 0, 1);
+
             return builder;
         }
 
         private static IReportTable<ReportCell> BuildReportTable(VerticalReportBuilder<(int, decimal)> builder)
         {
             Random random = new Random(DateTime.Now.Millisecond);
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Range(1, 10000)
+            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Range(1, 1000)
                 .Select(x => (random.Next(), (decimal) random.NextDouble())));
             return reportTable;
         }

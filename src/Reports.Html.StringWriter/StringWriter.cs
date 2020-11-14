@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reports.Html.Models;
@@ -50,7 +51,7 @@ namespace Reports.Html.StringWriter
                 }
 
                 await this.WriteTextAsync(fileStream, "<tr>");
-                foreach (HtmlReportCell cell in row)
+                foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
                     await this.WriteTextAsync(fileStream, this.writeHeaderCell(cell));
                 }
@@ -77,7 +78,7 @@ namespace Reports.Html.StringWriter
                 }
 
                 await this.WriteTextAsync(fileStream, "<tr>");
-                foreach (HtmlReportCell cell in row)
+                foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
                     await this.WriteTextAsync(fileStream, this.writeBodyCell(cell));
                 }

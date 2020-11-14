@@ -30,35 +30,43 @@ namespace Reports.Excel.EpplusWriter
         {
             int startRow = this.row;
 
-            int col = 1;
+            int maxColumn = 1;
             foreach (IEnumerable<ExcelReportCell> headerRow in table.HeaderRows)
             {
+                int column = 1;
                 foreach (ExcelReportCell cell in headerRow)
                 {
-                    this.WriteHeaderCell(worksheet.Cells[this.row, col], cell);
-                    col++;
+                    if (cell != null)
+                    {
+                        this.WriteHeaderCell(worksheet.Cells[this.row, column], cell);
+                    }
+                    column++;
                 }
+
+                maxColumn = Math.Max(maxColumn, column);
 
                 this.row++;
             }
 
             if (this.row > startRow)
             {
-                worksheet.Cells[startRow, 1, this.row - 1, col].Style.Font.Bold = true;
-                worksheet.Cells[startRow, 1, this.row - 1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[startRow, 1, this.row - 1, maxColumn].Style.Font.Bold = true;
+                worksheet.Cells[startRow, 1, this.row - 1, maxColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             }
         }
 
         protected virtual void WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
-            int col = 1;
             foreach (IEnumerable<ExcelReportCell> bodyRow in table.Rows)
             {
-                col = 1;
+                int column = 1;
                 foreach (ExcelReportCell cell in bodyRow)
                 {
-                    this.WriteCell(worksheet.Cells[this.row, col], cell);
-                    col++;
+                    if (cell != null)
+                    {
+                        this.WriteCell(worksheet.Cells[this.row, column], cell);
+                    }
+                    column++;
                 }
 
                 this.row++;
@@ -97,6 +105,15 @@ namespace Reports.Excel.EpplusWriter
             {
                 worksheetCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheetCell.Style.Fill.BackgroundColor.SetColor(cell.BackgroundColor.Value);
+            }
+
+            if (cell.ColumnSpan > 1 || cell.RowSpan > 1)
+            {
+                int startRow = worksheetCell.Start.Row;
+                int startColumn = worksheetCell.Start.Column;
+                worksheetCell.Worksheet
+                    .Cells[startRow, startColumn, startRow + cell.RowSpan - 1, startColumn + cell.ColumnSpan - 1]
+                    .Merge = true;
             }
         }
 
