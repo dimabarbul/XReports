@@ -83,7 +83,7 @@ namespace Reports.Excel.EpplusWriter
                 return;
             }
 
-            this.FormatHeader(worksheet, new ExcelAddress(startRow, 1, this.row - 1, maxColumn));
+            this.FormatHeader(worksheet, new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1));
         }
 
         protected virtual void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
@@ -121,7 +121,7 @@ namespace Reports.Excel.EpplusWriter
 
             this.ApplyColumnFormat(worksheet, startRow, this.row - 1);
 
-            return new ExcelAddress(startRow, 1, this.row - 1, maxColumn);
+            return new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1);
         }
 
         private void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)

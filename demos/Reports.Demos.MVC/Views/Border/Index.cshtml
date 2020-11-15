@@ -1,0 +1,39 @@
+@{
+    ViewBag.Title = "Border";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>EppluWriter class only writes data and formats. If we want to add border, for example, we may extend EpplusWriter.</p>
+}
+
+@section ReportTable
+{
+}
+
+@section Code
+{
+    class BorderExcelWriter : EpplusWriter
+    {
+        protected override void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
+        {
+            base.FormatHeader(worksheet, headerAddress);
+
+            Border bodyBorder = worksheet.Cells[headerAddress.Address].Style.Border;
+            bodyBorder.Bottom.Style = bodyBorder.Left.Style =
+                bodyBorder.Top.Style = bodyBorder.Right.Style = ExcelBorderStyle.Thin;
+        }
+
+        protected override ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable&lt;ExcelReportCell&gt; table)
+        {
+            ExcelAddress bodyAddress = base.WriteBody(worksheet, table);
+
+            worksheet.Cells[bodyAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+            return bodyAddress;
+        }
+    }
+}
