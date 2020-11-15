@@ -91,7 +91,6 @@ namespace Reports.Excel.EpplusWriter
             ExcelRange range = worksheet.Cells[headerAddress.Address];
 
             range.Style.Font.Bold = true;
-            range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
 
         protected virtual ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
