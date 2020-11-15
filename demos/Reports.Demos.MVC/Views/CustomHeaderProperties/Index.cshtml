@@ -20,27 +20,12 @@
 
 @section Code
 {
-    // Property is used to mark cells.
-    class CustomFormatProperty : ReportCellProperty { }
+VerticalReportBuilder&lt;Entity&gt; reportBuilder = new VerticalReportBuilder&lt;Entity&gt;();
+reportBuilder.AddColumn("Name", e => e.Name);
+reportBuilder.AddColumn("Email", e => e.Email);
+reportBuilder.AddColumn("Score", e => e.Score);
 
-    // The property handler processes cells during conversion to Html having custom property added.
-    class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler&lt;CustomFormatProperty, HtmlReportCell&gt;
-    {
-        protected override void HandleProperty(CustomFormatProperty property, HtmlReportCell cell)
-        {
-            decimal value = cell.GetValue&lt;decimal&gt;();
-            string format = value == 100m ? "F0" : "F2";
-
-            cell.Html = value.ToString(format);
-        }
-    }
-
-    // The property handler processes cells during conversion to Excel having custom property added.
-    class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler&lt;CustomFormatProperty, ExcelReportCell&gt;
-    {
-        protected override void HandleProperty(CustomFormatProperty property, ExcelReportCell cell)
-        {
-            cell.NumberFormat = "[=100]0;[&lt;100]0.00";
-        }
-    }
+reportBuilder.AddHeaderProperty("Name", new AlignmentProperty(AlignmentType.Right));
+reportBuilder.AddHeaderProperty("Email", new ColorProperty(Color.Blue, null));
+reportBuilder.AddHeaderProperty("Score", new AlignmentProperty(AlignmentType.Center));
 }
