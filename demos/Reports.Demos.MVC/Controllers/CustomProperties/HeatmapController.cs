@@ -46,7 +46,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            HeatmapProperty heatmapProperty = new HeatmapProperty(0, ColorTranslator.FromHtml("#ff3838"), 100, ColorTranslator.FromHtml("#729fff"));
+            HeatmapProperty heatmapProperty = new HeatmapProperty(0, Color.IndianRed, 100, Color.SkyBlue);
 
             VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
