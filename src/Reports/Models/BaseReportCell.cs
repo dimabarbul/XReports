@@ -23,12 +23,12 @@ namespace Reports.Models
 
         public TValue GetValue<TValue>()
         {
-            if (this.ValueType != typeof(TValue))
+            if (this.ValueType == typeof(TValue))
             {
-                throw new InvalidCastException($"Value type is {this.ValueType} but requested {typeof(TValue)}");
+                return this.InternalValue;
             }
 
-            return (TValue) this.InternalValue;
+            return Convert.ChangeType(this.InternalValue, typeof(TValue));
         }
 
         public bool HasProperty<TProperty>() where TProperty : ReportCellProperty
