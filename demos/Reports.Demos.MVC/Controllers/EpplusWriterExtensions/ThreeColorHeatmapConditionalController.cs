@@ -18,7 +18,7 @@ using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
 
-namespace Reports.Demos.MVC.Controllers.Extensions
+namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
     public class ThreeColorHeatmapConditionalController : Controller
     {
@@ -39,12 +39,12 @@ namespace Reports.Demos.MVC.Controllers.Extensions
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
+            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "3-color Heatmap Using Conditional Formatting.xlsx");
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            EpplusWriter writer = new EpplusWriter();
+            Excel.EpplusWriter.EpplusWriter writer = new Excel.EpplusWriter.EpplusWriter();
             writer.AddFormatter(new ConditionalFormattingThreeColorScaleFormatter());
 
             return writer.WriteToStream(reportTable);

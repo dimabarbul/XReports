@@ -1,7 +1,7 @@
-@model Reports.Demos.MVC.Controllers.Extensions.ThreeColorHeatmapConditionalController.ViewModel
+@model Reports.Demos.MVC.Controllers.EpplusWriterExtensions.ThreeColorHeatmapConditionalController.ViewModel
 
 @{
-    ViewBag.Title = "Heatmap";
+    ViewBag.Title = "3-Color Heatmap Using Conditional Formatting";
     Layout = "_DemoPageLayout";
 }
 
@@ -9,7 +9,8 @@
 
 @section Description
 {
-    <p>If we want to highlight some cells depending on their value, we can use custom property. In current implementation we hightlight values closer to 0 in red, to 50 - in yellow, closer to 100 - green.</p>
+    <p>Conditional formatting capability (as many other Excel features) is not provided out-of-the-box. But to improve Excel report quality, you may exten EpplusWriter.</p>
+    <p>In current implementation we highlight values closer to 0 in red, to 50 - in yellow, closer to 100 - green. And this is done using conditional formatting in Excel. Which means that if you change cell value, its color will change as well.</p>
 }
 
 @section ReportTable

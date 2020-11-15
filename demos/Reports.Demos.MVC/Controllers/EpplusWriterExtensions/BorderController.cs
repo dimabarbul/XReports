@@ -6,13 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Reports.Builders;
-using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
 
-namespace Reports.Demos.MVC.Controllers.Extensions
+namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
     public class BorderController : Controller
     {
@@ -29,12 +28,12 @@ namespace Reports.Demos.MVC.Controllers.Extensions
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
+            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Border.xlsx");
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            EpplusWriter writer = new BorderExcelWriter();
+            Excel.EpplusWriter.EpplusWriter writer = new BorderExcelWriter();
 
             return writer.WriteToStream(reportTable);
         }
@@ -75,7 +74,7 @@ namespace Reports.Demos.MVC.Controllers.Extensions
             public decimal Score { get; set; }
         }
 
-        private class BorderExcelWriter : EpplusWriter
+        private class BorderExcelWriter : Excel.EpplusWriter.EpplusWriter
         {
             protected override void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
             {

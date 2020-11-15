@@ -11,9 +11,9 @@ using Reports.Html.StringWriter;
 using Reports.Interfaces;
 using Reports.Models;
 
-namespace Reports.Demos.MVC.Controllers.Extensions
+namespace Reports.Demos.MVC.Controllers.StringWriterExtensions
 {
-    public class StringWriterController : Controller
+    public class CustomTableClassController : Controller
     {
         private const int RecordsCount = 10;
 
@@ -29,7 +29,7 @@ namespace Reports.Demos.MVC.Controllers.Extensions
                 RegularTableHtml = await stringWriter.WriteToStringAsync(htmlReport),
                 TableHtml = await bootstrapStringWriter.WriteToStringAsync(htmlReport),
             };
-            return View(vm);
+            return this.View(vm);
         }
 
         private IReportTable<ReportCell> BuildReport()

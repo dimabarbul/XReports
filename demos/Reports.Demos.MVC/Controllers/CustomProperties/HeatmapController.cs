@@ -36,7 +36,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
+            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Heatmap.xlsx");
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
