@@ -27,13 +27,7 @@ namespace Reports.Excel.EpplusWriter
         {
             using ExcelPackage excelPackage = new ExcelPackage(new FileInfo(fileName));
 
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
-
-            this.row = 1;
-            this.WriteHeader(worksheet, table);
-            this.WriteBody(worksheet, table);
-
-            excelPackage.Save();
+            this.WriteReport(table, excelPackage);
         }
 
         public Stream WriteToStream(IReportTable<ExcelReportCell> table)
@@ -41,19 +35,14 @@ namespace Reports.Excel.EpplusWriter
             Stream stream = new MemoryStream();
             using ExcelPackage excelPackage = new ExcelPackage(stream);
 
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
+            this.WriteReport(table, excelPackage);
 
-            this.row = 1;
-            this.WriteHeader(worksheet, table);
-            this.WriteBody(worksheet, table);
-
-            excelPackage.Save();
             stream.Seek(0, SeekOrigin.Begin);
 
             return stream;
         }
 
-        protected virtual void WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual ExcelAddress WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             int startRow = this.row;
             int maxColumn = 1;
@@ -80,10 +69,13 @@ namespace Reports.Excel.EpplusWriter
 
             if (this.row == startRow)
             {
-                return;
+                return null;
             }
 
-            this.FormatHeader(worksheet, new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1));
+            ExcelAddress address = new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1);
+            this.FormatHeader(worksheet, address);
+
+            return address;
         }
 
         protected virtual void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
@@ -123,7 +115,7 @@ namespace Reports.Excel.EpplusWriter
             return new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1);
         }
 
-        private void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)
+        protected virtual void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)
         {
             foreach ((int column, ExcelReportCell cell) in this.columnFormatCells)
             {
@@ -200,6 +192,24 @@ namespace Reports.Excel.EpplusWriter
             {
                 formatter.Format(worksheetCell, cell);
             }
+        }
+
+        protected virtual void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress,
+            ExcelAddress bodyAddress)
+        {
+        }
+
+        private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
+        {
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
+
+            this.row = 1;
+            ExcelAddress headerAddress = this.WriteHeader(worksheet, table);
+            ExcelAddress bodyAddress = this.WriteBody(worksheet, table);
+
+            this.PostCreate(worksheet, headerAddress, bodyAddress);
+
+            excelPackage.Save();
         }
 
         private ExcelHorizontalAlignment GetAlignment(AlignmentType alignmentType)

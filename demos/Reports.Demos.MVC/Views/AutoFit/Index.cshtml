@@ -1,0 +1,27 @@
+@{
+    ViewBag.Title = "AutoFit";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>By default EpplusWriter does not autofit columns. If we need this functionality, we can extend EpplusWriter and override PostCreate method.</p>
+    <p><strong>IMPORTANT!</strong> AutoFit may be slow. There are some workarounds: <a target="_blank" href="https://github.com/JanKallman/EPPlus/issues/191">https://github.com/JanKallman/EPPlus/issues/191</a></p>
+}
+
+@section ReportTable
+{
+}
+
+@section Code
+{
+    class BorderExcelWriter : EpplusWriter
+    {
+        protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress header, ExcelAddress body)
+        {
+            worksheet.Cells[header.Start.Row, header.Start.Column, body.End.Row, body.End.Column].AutoFitColumns();
+        }
+    }
+}

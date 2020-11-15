@@ -4,8 +4,8 @@ using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using Reports.Builders;
+using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Interfaces;
@@ -13,7 +13,7 @@ using Reports.Models;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
-    public class BorderController : Controller
+    public class AutoFitController : Controller
     {
         private const int RecordsCount = 20;
 
@@ -28,12 +28,12 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Border.xlsx");
+            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AutoFit.xlsx");
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            Excel.EpplusWriter.EpplusWriter writer = new BorderExcelWriter();
+            EpplusWriter writer = new AutoFitExcelWriter();
 
             return writer.WriteToStream(reportTable);
         }
@@ -74,17 +74,11 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             public decimal Score { get; set; }
         }
 
-        private class BorderExcelWriter : Excel.EpplusWriter.EpplusWriter
+        private class AutoFitExcelWriter : EpplusWriter
         {
-            protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress, ExcelAddress bodyAddress)
+            protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress header, ExcelAddress body)
             {
-                base.PostCreate(worksheet, headerAddress, bodyAddress);
-
-                Border headerBorder = worksheet.Cells[headerAddress.Address].Style.Border;
-                headerBorder.Bottom.Style = headerBorder.Left.Style =
-                    headerBorder.Top.Style = headerBorder.Right.Style = ExcelBorderStyle.Thin;
-
-                worksheet.Cells[bodyAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                worksheet.Cells[header.Start.Row, header.Start.Column, body.End.Row, body.End.Column].AutoFitColumns();
             }
         }
     }

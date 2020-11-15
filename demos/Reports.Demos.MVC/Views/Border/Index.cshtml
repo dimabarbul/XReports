@@ -18,22 +18,15 @@
 {
     class BorderExcelWriter : EpplusWriter
     {
-        protected override void FormatHeader(ExcelWorksheet worksheet, ExcelAddress headerAddress)
+        protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress, ExcelAddress bodyAddress)
         {
-            base.FormatHeader(worksheet, headerAddress);
+            base.PostCreate(worksheet, headerAddress, bodyAddress);
 
-            Border bodyBorder = worksheet.Cells[headerAddress.Address].Style.Border;
-            bodyBorder.Bottom.Style = bodyBorder.Left.Style =
-                bodyBorder.Top.Style = bodyBorder.Right.Style = ExcelBorderStyle.Thin;
-        }
-
-        protected override ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable&lt;ExcelReportCell&gt; table)
-        {
-            ExcelAddress bodyAddress = base.WriteBody(worksheet, table);
+            Border headerBorder = worksheet.Cells[headerAddress.Address].Style.Border;
+            headerBorder.Bottom.Style = headerBorder.Left.Style =
+                headerBorder.Top.Style = headerBorder.Right.Style = ExcelBorderStyle.Thin;
 
             worksheet.Cells[bodyAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-
-            return bodyAddress;
         }
     }
 }
