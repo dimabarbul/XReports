@@ -1,4 +1,5 @@
-using Reports.Extensions.Properties.Attributes;
+
+using Reports.Extensions.Builders.Attributes;
 
 namespace Reports.Demos.FromDb.ReportModels
 {
