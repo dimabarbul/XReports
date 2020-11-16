@@ -43,14 +43,28 @@ namespace Reports.Builders
             };
         }
 
-        public void AddTitleProperty(string title, ReportCellProperty property)
+        public void AddTitleProperty(string title, params ReportCellProperty[] properties)
         {
-            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, property));
+            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, properties));
         }
 
         public void AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
         {
             this.headerRows.Insert(rowIndex, provider);
+        }
+
+        public void AddHeaderProperty(string title, params ReportCellProperty[] properties)
+        {
+            IReportCellsProvider<TSourceEntity> row = this.headerRows.FirstOrDefault(r => r.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
+            if (row == null)
+            {
+                throw new ArgumentException($"Cannot find column {title}");
+            }
+
+            foreach (ReportCellProperty property in properties)
+            {
+                row.AddProperty(property);
+            }
         }
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)

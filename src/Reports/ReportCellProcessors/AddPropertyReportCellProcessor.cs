@@ -7,19 +7,22 @@ namespace Reports.ReportCellProcessors
     public class AddPropertyReportCellProcessor<TSourceEntity> : IReportCellProcessor<TSourceEntity>
     {
         private readonly string title;
-        private readonly ReportCellProperty property;
+        private readonly ReportCellProperty[] properties;
 
-        public AddPropertyReportCellProcessor(string title, ReportCellProperty property)
+        public AddPropertyReportCellProcessor(string title, params ReportCellProperty[] property)
         {
             this.title = title;
-            this.property = property;
+            this.properties = property;
         }
 
         public void Process(ReportCell cell, TSourceEntity entity)
         {
             if (cell.InternalValue.Equals(this.title, StringComparison.OrdinalIgnoreCase))
             {
-                cell.AddProperty(this.property);
+                foreach (ReportCellProperty property in this.properties)
+                {
+                    cell.AddProperty(property);
+                }
             }
         }
     }
