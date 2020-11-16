@@ -1,0 +1,9 @@
+@model Reports.Demos.FromDb.ViewModels.ModelBasedReport.IndexViewModel
+
+@{
+    ViewBag.Title = "Model Based Report";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+@Html.Raw(Model.ReportHtml)
