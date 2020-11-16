@@ -8,7 +8,7 @@ namespace Reports.ReportCellsProviders
         public override Func<TSourceEntity, ReportCell> CellSelector {
             get
             {
-                return entity => this.CreateCell(this.valueSelector(entity));
+                return entity => this.CreateCell(this.valueSelector(entity), entity);
             }
         }
 

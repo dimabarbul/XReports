@@ -4,18 +4,18 @@ using Reports.Models;
 
 namespace Reports.Interfaces
 {
-    public interface IReportCellsProvider<in TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
+    public interface IReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
     }
 
-    public interface IReportCellsProvider<in TSourceEntity>
+    public interface IReportCellsProvider<TSourceEntity>
     {
         string Title { get; }
         Func<TSourceEntity, ReportCell> CellSelector { get; }
-        ICollection<IReportCellProcessor> Processors { get; }
+        ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; }
         ICollection<ReportCellProperty> Properties { get; }
 
-        IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor processor);
+        IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor<TSourceEntity> processor);
         IReportCellsProvider<TSourceEntity> AddProperty(ReportCellProperty property);
     }
 }

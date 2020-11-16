@@ -24,9 +24,9 @@ namespace Reports.Tests.Builders
             headerCells[0][0].GetValue<string>().Should().Be("-- # --");
         }
 
-        public class CustomHeaderCellProcessor : IReportCellProcessor
+        public class CustomHeaderCellProcessor : IReportCellProcessor<int>
         {
-            public void Process(ReportCell cell)
+            public void Process(ReportCell cell, int data)
             {
                 cell.InternalValue = $"-- {cell.InternalValue} --";
             }

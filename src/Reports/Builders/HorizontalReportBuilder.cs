@@ -11,7 +11,7 @@ namespace Reports.Builders
     {
         private readonly List<IReportCellsProvider<TSourceEntity>> headerRows = new List<IReportCellsProvider<TSourceEntity>>();
         private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
-        private readonly List<IReportCellProcessor> titleCellProcessors = new List<IReportCellProcessor>();
+        private readonly List<IReportCellProcessor<TSourceEntity>> titleCellProcessors = new List<IReportCellProcessor<TSourceEntity>>();
 
         public IReportCellsProvider<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
@@ -45,7 +45,7 @@ namespace Reports.Builders
 
         public void AddTitleProperty(string title, ReportCellProperty property)
         {
-            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
+            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, property));
         }
 
         public void AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
@@ -65,9 +65,9 @@ namespace Reports.Builders
         {
             ReportCell<string> cell = new ReportCell<string>(row.Title);
 
-            foreach (IReportCellProcessor reportCellProcessor in this.titleCellProcessors)
+            foreach (IReportCellProcessor<TSourceEntity> reportCellProcessor in this.titleCellProcessors)
             {
-                reportCellProcessor.Process(cell);
+                reportCellProcessor.Process(cell, default);
             }
 
             return cell;

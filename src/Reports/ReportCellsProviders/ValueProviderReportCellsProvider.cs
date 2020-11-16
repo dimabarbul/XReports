@@ -10,7 +10,7 @@ namespace Reports.ReportCellsProviders
         {
             get
             {
-                return entity => this.CreateCell(this.provider.GetValue());
+                return entity => this.CreateCell(this.provider.GetValue(), entity);
             }
         }
 

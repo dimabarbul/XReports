@@ -2,8 +2,8 @@ using Reports.Models;
 
 namespace Reports.Interfaces
 {
-    public interface IReportCellProcessor
+    public interface IReportCellProcessor<in TSourceEntity>
     {
-        void Process(ReportCell cell);
+        void Process(ReportCell cell, TSourceEntity entity);
     }
 }

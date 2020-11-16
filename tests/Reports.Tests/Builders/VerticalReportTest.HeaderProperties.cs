@@ -66,9 +66,9 @@ namespace Reports.Tests.Builders
         {
         }
 
-        private class CustomHeaderPropertyProcessor : IReportCellProcessor
+        private class CustomHeaderPropertyProcessor : IReportCellProcessor<string>
         {
-            public void Process(ReportCell cell)
+            public void Process(ReportCell cell, string data)
             {
                 if (cell.InternalValue == "Complex")
                 {

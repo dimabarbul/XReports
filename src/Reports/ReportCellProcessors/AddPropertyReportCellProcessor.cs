@@ -4,7 +4,7 @@ using Reports.Models;
 
 namespace Reports.ReportCellProcessors
 {
-    public class AddPropertyReportCellProcessor : IReportCellProcessor
+    public class AddPropertyReportCellProcessor<TSourceEntity> : IReportCellProcessor<TSourceEntity>
     {
         private readonly string title;
         private readonly ReportCellProperty property;
@@ -15,7 +15,7 @@ namespace Reports.ReportCellProcessors
             this.property = property;
         }
 
-        public void Process(ReportCell cell)
+        public void Process(ReportCell cell, TSourceEntity entity)
         {
             if (cell.InternalValue.Equals(this.title, StringComparison.OrdinalIgnoreCase))
             {

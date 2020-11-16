@@ -8,7 +8,7 @@ namespace Reports.ReportCellsProviders
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
     {
         public string Title { get; }
-        public ICollection<IReportCellProcessor> Processors { get; } = new List<IReportCellProcessor>();
+        public ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
         public ICollection<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
         protected ReportCellsProvider(string title)
@@ -16,7 +16,7 @@ namespace Reports.ReportCellsProviders
             this.Title = title;
         }
 
-        public IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor processor)
+        public IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor<TSourceEntity> processor)
         {
             this.Processors.Add(processor);
 
@@ -30,12 +30,12 @@ namespace Reports.ReportCellsProviders
             return this;
         }
 
-        protected ReportCell<TValue> CreateCell(TValue value)
+        protected ReportCell<TValue> CreateCell(TValue value, TSourceEntity entity)
         {
             ReportCell<TValue> cell = new ReportCell<TValue>(value);
 
             this.AddProperties(cell);
-            this.RunProcessors(cell);
+            this.RunProcessors(cell, entity);
 
             return cell;
         }
@@ -48,11 +48,11 @@ namespace Reports.ReportCellsProviders
             }
         }
 
-        private void RunProcessors(ReportCell<TValue> cell)
+        private void RunProcessors(ReportCell<TValue> cell, TSourceEntity entity)
         {
-            foreach (IReportCellProcessor processor in this.Processors)
+            foreach (IReportCellProcessor<TSourceEntity> processor in this.Processors)
             {
-                processor.Process(cell);
+                processor.Process(cell, entity);
             }
         }
 

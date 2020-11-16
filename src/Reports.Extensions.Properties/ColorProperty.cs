@@ -8,6 +8,11 @@ namespace Reports.Extensions.Properties
         public Color? FontColor { get; }
         public Color? BackgroundColor { get; }
 
+        public ColorProperty(Color fontColor)
+            : this(fontColor, null)
+        {
+        }
+
         public ColorProperty(Color? fontColor, Color? backgroundColor)
         {
             this.FontColor = fontColor;

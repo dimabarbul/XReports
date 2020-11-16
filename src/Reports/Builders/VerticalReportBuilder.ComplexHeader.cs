@@ -34,7 +34,7 @@ namespace Reports.Builders
 
         public void AddHeaderProperty(string title, ReportCellProperty property)
         {
-            this.headerCellProcessors.Add(new AddPropertyReportCellProcessor(title, property));
+            this.headerCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, property));
         }
 
         private void BuildHeader(ReportTable<ReportCell> table)
@@ -180,9 +180,9 @@ namespace Reports.Builders
                 ColumnSpan = columnSpan
             };
 
-            foreach (IReportCellProcessor processor in this.headerCellProcessors)
+            foreach (IReportCellProcessor<TSourceEntity> processor in this.headerCellProcessors)
             {
-                processor.Process(headerCell);
+                processor.Process(headerCell, default);
             }
 
             return headerCell;

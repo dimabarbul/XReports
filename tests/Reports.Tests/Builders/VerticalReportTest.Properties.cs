@@ -51,9 +51,9 @@ namespace Reports.Tests.Builders
                 .AllBeOfType<CustomProperty>();
         }
 
-        private class CustomPropertyProcessor : IReportCellProcessor
+        private class CustomPropertyProcessor : IReportCellProcessor<string>
         {
-            public void Process(ReportCell cell)
+            public void Process(ReportCell cell, string data)
             {
                 cell.AddProperty(new CustomProperty(true));
             }

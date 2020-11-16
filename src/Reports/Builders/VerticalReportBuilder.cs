@@ -9,7 +9,7 @@ namespace Reports.Builders
     public partial class VerticalReportBuilder<TSourceEntity>
     {
         private readonly List<IReportCellsProvider<TSourceEntity>> columns = new List<IReportCellsProvider<TSourceEntity>>();
-        private readonly List<IReportCellProcessor> headerCellProcessors = new List<IReportCellProcessor>();
+        private readonly List<IReportCellProcessor<TSourceEntity>> headerCellProcessors = new List<IReportCellProcessor<TSourceEntity>>();
 
         public IReportCellsProvider<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
         {
@@ -32,7 +32,7 @@ namespace Reports.Builders
                 ?? throw new ArgumentException($"Column {title} is of another type: expected {typeof(IReportCellsProvider<TSourceEntity, TValue>)}");
         }
 
-        public void AddHeaderCellProcessor(IReportCellProcessor processor)
+        public void AddHeaderCellProcessor(IReportCellProcessor<TSourceEntity> processor)
         {
             this.headerCellProcessors.Add(processor);
         }
