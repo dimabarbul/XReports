@@ -27,10 +27,6 @@ namespace Reports.Demos.FromDb.Services
             EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
             helper.BuildVerticalReport(builder);
 
-            builder.AddColumn("Age", u => (int) (DateTime.Now - u.DateOfBirth).TotalDays / 365);
-            builder.AddColumn("Register Days", u => (int) (DateTime.Now - u.CreatedOn).TotalDays)
-                .AddProperty(new AlignmentProperty(AlignmentType.Center));
-
             return builder.Build(await this.userService.GetActiveUsersAsync(limit));
         }
     }

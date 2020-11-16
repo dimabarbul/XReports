@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Bogus;
 using Bogus.Extensions;
 using Reports.Demos.FromDb.Data;
@@ -10,6 +11,11 @@ namespace Reports.Demos.FromDb
     {
         public static void Seed(AppDbContext db)
         {
+            if (db.Users.Any())
+            {
+                return;
+            }
+
             List<Product> products = new Faker<Product>()
                 .RuleFor(p => p.Price, f => f.Random.Decimal(1, 100))
                 .RuleFor(p => p.Title, f => f.Commerce.Product())

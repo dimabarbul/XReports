@@ -105,7 +105,7 @@ namespace Reports.Demos.FromDb
 
             AppDbContext context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
             // context.Database.OpenConnection();
-            context.Database.EnsureDeleted();
+            // context.Database.EnsureDeleted();
             // context.Database.EnsureCreated();
             context.Database.Migrate();
             Console.WriteLine($"DB created, elapsed {sw.ElapsedMilliseconds}");

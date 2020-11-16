@@ -1,5 +1,4 @@
-using System;
-using Reports.Extensions.Builders.Attributes;
+using Reports.Extensions.Properties.Attributes;
 
 namespace Reports.Demos.FromDb.ReportModels
 {
@@ -20,7 +19,10 @@ namespace Reports.Demos.FromDb.ReportModels
         [ReportVariable(5, "Orders #")]
         public int OrdersCount { get; set; }
 
-        public DateTime CreatedOn { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        [ReportVariable(6, "Age")]
+        public int Age { get; set; }
+
+        [ReportVariable(7, "Registered Days")]
+        public int RegisteredInDays { get; set; }
     }
 }

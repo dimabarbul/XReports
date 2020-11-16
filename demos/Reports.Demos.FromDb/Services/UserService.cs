@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,8 +28,8 @@ namespace Reports.Demos.FromDb.Services
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Email = u.Email,
-                    CreatedOn = u.CreatedOn,
-                    DateOfBirth = u.DateOfBirth,
+                    Age = (int) (DateTime.Now - u.DateOfBirth).TotalDays / 365,
+                    RegisteredInDays = (int) (DateTime.Now - u.CreatedOn).TotalDays,
                     OrdersCount = u.Orders.Count(),
                 });
 
