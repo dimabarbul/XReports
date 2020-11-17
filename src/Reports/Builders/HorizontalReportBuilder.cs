@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportCellProcessors;
 
 namespace Reports.Builders
 {
@@ -12,6 +11,7 @@ namespace Reports.Builders
         private readonly List<IReportCellsProvider<TSourceEntity>> headerRows = new List<IReportCellsProvider<TSourceEntity>>();
         private readonly List<IReportCellsProvider<TSourceEntity>> rows = new List<IReportCellsProvider<TSourceEntity>>();
         private readonly List<IReportCellProcessor<TSourceEntity>> titleCellProcessors = new List<IReportCellProcessor<TSourceEntity>>();
+        private readonly Dictionary<string, List<ReportCellProperty>> titleCellProperties = new Dictionary<string, List<ReportCellProperty>>();
 
         public IReportCellsProvider<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
@@ -45,7 +45,17 @@ namespace Reports.Builders
 
         public void AddTitleProperty(string title, params ReportCellProperty[] properties)
         {
-            this.titleCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, properties));
+            if (!this.titleCellProperties.ContainsKey(title))
+            {
+                this.titleCellProperties.Add(title, new List<ReportCellProperty>());
+            }
+
+            this.titleCellProperties[title].AddRange(properties);
+        }
+
+        public void AddTitleProcessor(IReportCellProcessor<TSourceEntity> processor)
+        {
+            this.titleCellProcessors.Add(processor);
         }
 
         public void AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
@@ -78,6 +88,11 @@ namespace Reports.Builders
         private ReportCell CreateTitleCell(IReportCellsProvider<TSourceEntity> row)
         {
             ReportCell<string> cell = new ReportCell<string>(row.Title);
+
+            if (this.titleCellProperties.ContainsKey(row.Title))
+            {
+                cell.Properties.AddRange(this.titleCellProperties[row.Title]);
+            }
 
             foreach (IReportCellProcessor<TSourceEntity> reportCellProcessor in this.titleCellProcessors)
             {

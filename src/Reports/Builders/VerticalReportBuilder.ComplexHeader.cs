@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportCellProcessors;
 
 namespace Reports.Builders
 {
     public partial class VerticalReportBuilder<TSourceEntity>
     {
         private readonly List<ComplexHeader> complexHeader = new List<ComplexHeader>();
+        private readonly Dictionary<string, List<ReportCellProperty>> headerCellProperties = new Dictionary<string, List<ReportCellProperty>>();
 
         public void AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
@@ -32,9 +32,19 @@ namespace Reports.Builders
             });
         }
 
-        public void AddHeaderProperty(string title, ReportCellProperty property)
+        public void AddHeaderProperty(string title, params ReportCellProperty[] properties)
         {
-            this.headerCellProcessors.Add(new AddPropertyReportCellProcessor<TSourceEntity>(title, property));
+            if (!this.headerCellProperties.ContainsKey(title))
+            {
+                this.headerCellProperties.Add(title, new List<ReportCellProperty>());
+            }
+
+            this.headerCellProperties[title].AddRange(properties);
+        }
+
+        public void AddHeaderProcessor(IReportCellProcessor<TSourceEntity> processor)
+        {
+            this.headerCellProcessors.Add(processor);
         }
 
         private void BuildHeader(ReportTable<ReportCell> table)
@@ -174,11 +184,17 @@ namespace Reports.Builders
                 header[rowIndex, columnIndex + i].MarkUsed();
             }
 
-            ReportCell<string> headerCell = new ReportCell<string>(header[rowIndex, columnIndex].Title)
+            string title = header[rowIndex, columnIndex].Title;
+            ReportCell<string> headerCell = new ReportCell<string>(title)
             {
                 RowSpan = rowSpan,
                 ColumnSpan = columnSpan
             };
+
+            if (this.headerCellProperties.ContainsKey(title))
+            {
+                headerCell.Properties.AddRange(this.headerCellProperties[title]);
+            }
 
             foreach (IReportCellProcessor<TSourceEntity> processor in this.headerCellProcessors)
             {
