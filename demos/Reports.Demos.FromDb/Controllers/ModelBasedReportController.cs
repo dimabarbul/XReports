@@ -2,7 +2,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.FromDb.Services;
-using Reports.Demos.FromDb.ViewModels.ModelBasedReport;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
 using Reports.Html.Models;
@@ -14,6 +13,8 @@ namespace Reports.Demos.FromDb.Controllers
 {
     public class ModelBasedReportController : Controller
     {
+        private const string ExcelMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
         private readonly ReportService reportService;
         private readonly ReportConverter<HtmlReportCell> htmlConverter;
         private readonly ReportConverter<ExcelReportCell> excelConverter;
@@ -35,20 +36,45 @@ namespace Reports.Demos.FromDb.Controllers
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
 
-            return this.View(new IndexViewModel()
-            {
-                ReportHtml = reportHtml,
-            });
+            return this.View(new ReportViewModel(reportHtml));
         }
 
-        public async Task<IActionResult> DownloadExcel()
+        public async Task<IActionResult> DownloadUsers()
         {
             IReportTable<ReportCell> report = await this.reportService.GetUsersAsync();
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
 
             Stream excelStream = this.excelWriter.WriteToStream(excelTable);
 
-            return File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.xlsx");
+            return File(excelStream, ExcelMimeType, "Users.xlsx");
+        }
+
+        public async Task<IActionResult> Products()
+        {
+            IReportTable<ReportCell> report = await this.reportService.GetProductsAsync(50);
+            IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
+            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+
+            return this.View(new ReportViewModel(reportHtml));
+        }
+
+        public async Task<IActionResult> DownloadProducts()
+        {
+            IReportTable<ReportCell> report = await this.reportService.GetProductsAsync();
+            IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
+            Stream stream = this.excelWriter.WriteToStream(excelTable);
+
+            return new FileStreamResult(stream, ExcelMimeType){ FileDownloadName = "Products.xlsx" };
+        }
+
+        public class ReportViewModel
+        {
+            public string ReportHtml { get; set; }
+
+            public ReportViewModel(string reportHtml)
+            {
+                this.ReportHtml = reportHtml;
+            }
         }
     }
 }

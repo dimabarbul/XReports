@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reports.Demos.FromDb.Data;
 using Reports.Demos.FromDb.Reports;
+using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
@@ -44,6 +45,7 @@ namespace Reports.Demos.FromDb
             });
 
             services.AddScoped<UserService>();
+            services.AddScoped<ProductService>();
             services.AddScoped<ReportService>();
             services.AddScoped<StringWriter, MyStringWriter>();
             services.AddScoped<EpplusWriter, MyExcelWriter>();
@@ -56,6 +58,8 @@ namespace Reports.Demos.FromDb
                     new StandardHtmlDecimalFormatPropertyHandler(),
                     new StandardHtmlPercentFormatPropertyHandler(),
                     new StandardHtmlDateTimeFormatPropertyHandler(),
+
+                    new HtmlYesNoPropertyHandler(),
                 })
             );
             services.AddScoped<ReportConverter<ExcelReportCell>>(
@@ -67,6 +71,8 @@ namespace Reports.Demos.FromDb
                     new ExcelDecimalFormatPropertyHandler(),
                     new ExcelPercentFormatPropertyHandler(),
                     new ExcelDateTimeFormatPropertyHandler(),
+
+                    new ExcelYesNoPropertyHandler(),
                 })
             );
         }
