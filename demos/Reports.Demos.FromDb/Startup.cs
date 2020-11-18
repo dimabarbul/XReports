@@ -45,10 +45,10 @@ namespace Reports.Demos.FromDb
 
             services.AddScoped<UserService>();
             services.AddScoped<ReportService>();
-            services.AddSingleton<StringWriter, MyStringWriter>();
-            services.AddSingleton<EpplusWriter, MyExcelWriter>();
-            services.AddSingleton<ReportConverter<HtmlReportCell>>(
-                new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
+            services.AddScoped<StringWriter, MyStringWriter>();
+            services.AddScoped<EpplusWriter, MyExcelWriter>();
+            services.AddScoped<ReportConverter<HtmlReportCell>>(
+                _ => new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
                 {
                     new StandardHtmlAlignmentPropertyHandler(),
                     new StandardHtmlBoldPropertyHandler(),
@@ -58,8 +58,8 @@ namespace Reports.Demos.FromDb
                     new StandardHtmlDateTimeFormatPropertyHandler(),
                 })
             );
-            services.AddSingleton<ReportConverter<ExcelReportCell>>(
-                new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
+            services.AddScoped<ReportConverter<ExcelReportCell>>(
+                _ => new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
                 {
                     new ExcelAlignmentPropertyHandler(),
                     new ExcelBoldPropertyHandler(),
