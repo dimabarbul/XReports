@@ -21,6 +21,7 @@ namespace Reports.Demos.FromDb.Services
         {
             IQueryable<UsersListReport> usersQuery = this.dbContext
                 .Users
+                .AsNoTracking()
                 .Where(u => u.IsActive)
                 .Select(u => new UsersListReport()
                 {
