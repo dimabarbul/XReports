@@ -37,5 +37,34 @@ namespace Reports.Demos.FromDb.Services
 
             return await productsQuery.ToArrayAsync();
         }
+
+        public async Task<IEnumerable<OrdersDetailsReport>> GetOrdersDetailsAsync(int? limit)
+        {
+            IQueryable<OrdersDetailsReport> detailsQuery = this.dbContext
+                .OrderLineItems
+                .AsNoTracking()
+                .Select(li => new OrdersDetailsReport()
+                {
+                    LineItemId = li.Id,
+                    OrderId = li.OrderId,
+                    CreatedOn = li.CreatedOn,
+                    PriceWhenAdded = li.PriceWhenAdded,
+                    ProductId = li.ProductId,
+                    ProductTitle = li.Product.Title,
+                    ProductDescription = li.Product.Description,
+                    ProductPrice = li.Product.Price,
+                    ProductIsActive = li.Product.IsActive,
+                    UserFirstName = li.Order.User.FirstName,
+                    UserLastName = li.Order.User.LastName,
+                    UserEmail = li.Order.User.Email,
+                    UserDateOfBirth = li.Order.User.DateOfBirth,
+                    UserCreatedOn = li.Order.User.CreatedOn,
+                    UserIsActive = li.Order.User.IsActive,
+                });
+
+            detailsQuery = detailsQuery.Take(limit ?? 100000);
+
+            return await detailsQuery.ToArrayAsync();
+        }
     }
 }

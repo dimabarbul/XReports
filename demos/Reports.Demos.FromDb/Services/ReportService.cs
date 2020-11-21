@@ -51,5 +51,17 @@ namespace Reports.Demos.FromDb.Services
 
             return builder.Build(await this.productService.GetAllAsync(limit));
         }
+
+        public async Task<IReportTable<ReportCell>> GetOrdersDetailsAsync(int? limit = null)
+        {
+            VerticalReportBuilder<OrdersDetailsReport> builder = new VerticalReportBuilder<OrdersDetailsReport>();
+            EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
+            helper.BuildVerticalReport(builder);
+
+            builder.GetColumn("Ordered On")
+                .AddProperty(new DateTimeFormatProperty("dd MMM yyyy"));
+
+            return builder.Build(await this.productService.GetOrdersDetailsAsync(limit));
+        }
     }
 }

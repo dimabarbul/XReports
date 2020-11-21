@@ -67,6 +67,24 @@ namespace Reports.Demos.FromDb.Controllers
             return new FileStreamResult(stream, ExcelMimeType){ FileDownloadName = "Products.xlsx" };
         }
 
+        public async Task<IActionResult> OrdersDetails()
+        {
+            IReportTable<ReportCell> report = await this.reportService.GetOrdersDetailsAsync(50);
+            IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
+            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+
+            return this.View(new ReportViewModel(reportHtml));
+        }
+
+        public async Task<IActionResult> DownloadOrdersDetails()
+        {
+            IReportTable<ReportCell> report = await this.reportService.GetOrdersDetailsAsync();
+            IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
+            Stream stream = this.excelWriter.WriteToStream(excelTable);
+
+            return new FileStreamResult(stream, ExcelMimeType){ FileDownloadName = "OrdersDetails.xlsx" };
+        }
+
         public class ReportViewModel
         {
             public string ReportHtml { get; set; }
