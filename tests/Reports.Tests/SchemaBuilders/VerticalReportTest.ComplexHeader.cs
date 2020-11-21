@@ -1,23 +1,24 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class VerticalReportTest
     {
         [Fact]
         public void Build_OneColumnTwoHeaderRows_CorrectCells()
         {
-            VerticalReportBuilder<int> reportBuilder = new VerticalReportBuilder<int>();
+            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("Value", i => i);
             reportBuilder.AddComplexHeader(0, "Statistics", "Value");
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[] { 1 });
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[] { 1 });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
@@ -32,12 +33,13 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_TwoColumnsTwoHeaderRowsByColumnName_CorrectCells()
         {
-            VerticalReportBuilder<(string Name, int Age)> reportBuilder = new VerticalReportBuilder<(string Name, int Age)>();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "Name", "Age");
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 27),
@@ -65,13 +67,14 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_ThreeColumnsTwoHeaderRowsByColumnIndexes_CorrectCells()
         {
-            VerticalReportBuilder<(string Name, int Age, string Gender)> reportBuilder = new VerticalReportBuilder<(string Name, int Age, string Gender)>();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age, string Gender)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Gender", x => x.Gender);
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 2);
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John Doe", 30, "Male"),
                 ("Jane Doe", 27, "Female"),
@@ -100,8 +103,8 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_TwoHeaderGroups_CorrectCells()
         {
-            VerticalReportBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder =
-                new VerticalReportBuilder<(string Name, int Age, string Job, decimal Salary)>();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Job", x => x.Job);
@@ -109,7 +112,8 @@ namespace Reports.Tests.Builders
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 1);
             reportBuilder.AddComplexHeader(0, "Job Info", 2, 3);
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John Doe", 30, "Developer", 1000m),
             });
@@ -138,14 +142,15 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_ColumnOutOfHeaderGroup_CorrectCells()
         {
-            VerticalReportBuilder<(string Name, int Age)> reportBuilder =
-                new VerticalReportBuilder<(string Name, int Age)>();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age)>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Employee", 1, 2);
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 30),
@@ -187,8 +192,8 @@ namespace Reports.Tests.Builders
              | 2 | Jane       | Doe       | 30  |
              ------------------------------------
              */
-            VerticalReportBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
-                new VerticalReportBuilder<(string FirstName, string LastName, int Age)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
@@ -196,7 +201,8 @@ namespace Reports.Tests.Builders
             reportBuilder.AddComplexHeader(0, "Employee", "First Name", "Age");
             reportBuilder.AddComplexHeader(1, "Personal Info", "First Name", "Last Name");
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),
@@ -246,15 +252,16 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_TwoHeaderGroupsInOneRow_CorrectCells()
         {
-            VerticalReportBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
-                new VerticalReportBuilder<(string FirstName, string LastName, int Age)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "First Name", "Last Name");
             reportBuilder.AddComplexHeader(0, "Extra", "Age");
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),

@@ -1,23 +1,23 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ValueProviders;
+using Reports.SchemaBuilders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class HorizontalReportTest
     {
         [Fact]
         public void Build_TwoRows_CorrectCells()
         {
-            HorizontalReportBuilder<(string FirstName, string LastName)> reportBuilder = new HorizontalReportBuilder<(string FirstName, string LastName)>();
+            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new HorizontalReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddRow("First name", x => x.FirstName);
             reportBuilder.AddRow("Last name", x => x.LastName);
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 ("John", "Doe"),
                 ("Jane", "Do"),

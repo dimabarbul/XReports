@@ -12,10 +12,5 @@ namespace Reports.Interfaces
     {
         string Title { get; }
         Func<TSourceEntity, ReportCell> CellSelector { get; }
-        ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; }
-        ICollection<ReportCellProperty> Properties { get; }
-
-        IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor<TSourceEntity> processor);
-        IReportCellsProvider<TSourceEntity> AddProperty(ReportCellProperty property);
     }
 }

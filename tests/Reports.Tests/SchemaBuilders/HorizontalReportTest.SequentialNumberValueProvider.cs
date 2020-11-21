@@ -1,22 +1,23 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class HorizontalReportTest
     {
         [Fact]
         public void Build_SequentialNumberValueProviderWithDefaultStartValue_CorrectValues()
         {
-            HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("#", new SequentialNumberValueProvider());
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 "John Doe",
                 "Jane Doe",
@@ -35,10 +36,11 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_SequentialNumberValueProviderWithNonDefaultStartValue_CorrectValues()
         {
-            HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("#", new SequentialNumberValueProvider(50));
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 "John Doe",
                 "Jane Doe",

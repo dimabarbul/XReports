@@ -1,22 +1,23 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class HorizontalReportTest
     {
         [Fact]
         public void Build_WithHeader_CorrectValues()
         {
-            HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(0, string.Empty, s => s.Length);
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new []
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new []
             {
                 "Test",
             });
@@ -30,12 +31,13 @@ namespace Reports.Tests.Builders
         [Fact]
         public void Build_WithSeveralHeaders_CorrectValues()
         {
-            HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(0, string.Empty, s => s.Length);
             reportBuilder.AddHeaderRow(1, string.Empty, s => s.Substring(0, 1));
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new []
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new []
             {
                 "Test",
             });

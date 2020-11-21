@@ -1,52 +1,52 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
-    public partial class VerticalReportTest
+    public partial class HorizontalReportTest
     {
         [Fact]
-        public void Build_CustomPropertyUsingProcessor_CorrectProperties()
+        public void Build_WithCustomProperty_CorrectProperties()
         {
-            VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
-            reportBuilder.AddColumn("Value", s => s)
-                .AddProcessor(new CustomPropertyProcessor());
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            reportBuilder.AddRow("Value", s => s)
+                .AddProcessors(new CustomPropertyProcessor());
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new []
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new []
             {
                 "Test",
             });
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should()
+            cells[0][0].Properties.Should().BeEmpty();
+            cells[0][1].Properties.Should()
                 .HaveCount(1).And
                 .ContainSingle(p => p is CustomProperty && ((CustomProperty) p).Assigned);
         }
 
         [Fact]
-        public void Build_CustomPropertyUsingAddProperty_CorrectProperties()
+        public void Build_CustomPropertyWithoutProcessor_CorrectProperties()
         {
-            VerticalReportBuilder<string> reportBuilder = new VerticalReportBuilder<string>();
-            reportBuilder.AddColumn("Value", s => s)
-                .AddProperty(new CustomProperty());
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            reportBuilder.AddRow("Value", s => s)
+                .AddProperties(new CustomProperty());
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new []
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new []
             {
                 "Test",
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].Properties.Should().BeEmpty();
-
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should()
+            cells[0][0].Properties.Should().BeEmpty();
+            cells[0][1].Properties.Should()
                 .HaveCount(1).And
                 .AllBeOfType<CustomProperty>();
         }

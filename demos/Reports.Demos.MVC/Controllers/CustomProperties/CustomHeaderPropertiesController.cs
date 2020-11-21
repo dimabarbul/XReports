@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
-using Reports.Builders;
 using Reports.Demos.MVC.Reports;
 using Reports.Enums;
 using Reports.Excel.EpplusWriter;
@@ -18,6 +17,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
+using Reports.ReportBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {

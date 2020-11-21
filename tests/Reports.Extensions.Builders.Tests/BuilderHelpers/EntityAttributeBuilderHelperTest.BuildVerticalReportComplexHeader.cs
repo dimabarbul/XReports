@@ -1,10 +1,10 @@
 using System.Linq;
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Extensions.Builders.BuilderHelpers;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.ReportBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers

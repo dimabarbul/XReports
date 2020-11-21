@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Reports.Builders;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Interfaces;
+using Reports.ReportBuilders;
 using Reports.ReportCellsProviders;
 
 namespace Reports.Extensions.Builders.BuilderHelpers

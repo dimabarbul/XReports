@@ -1,0 +1,9 @@
+@model Reports.Demos.FromDb.Controllers.GenericController.IndexViewModel
+
+@{
+    ViewBag.Title = "Generic";
+    Layout = "_Layout";
+}
+
+<h2>From generic query</h2>
+@Html.Raw(Model.ReportHtml)

@@ -1,25 +1,26 @@
 using System;
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Reports.ValueProviders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class VerticalReportTest
     {
         [Fact]
         public void Build_DifferentTypes_CorrectInternalValue()
         {
-            VerticalReportBuilder<int> reportBuilder = new VerticalReportBuilder<int>();
+            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
             reportBuilder.AddColumn("Today", new CallbackValueProvider<DateTime>(() => DateTime.Today));
             reportBuilder.AddColumn("ToString()", i => i.ToString());
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 3,
                 6,
@@ -53,11 +54,12 @@ namespace Reports.Tests.Builders
         [Fact(Skip = "Formatting is to be moved to converting")]
         public void Build_DecimalColumnWithoutRounding_CorrectDisplayValue()
         {
-            VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
+            VerticalReportSchemaBuilder<decimal> reportBuilder = new VerticalReportSchemaBuilder<decimal>();
             reportBuilder.AddColumn("Score", d => d);
                 // .SetValueFormatter(new DecimalValueFormatter(2));
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 3m,
                 6.5m,
@@ -79,11 +81,12 @@ namespace Reports.Tests.Builders
         [Fact(Skip = "Formatting is to be moved to converting")]
         public void Build_DecimalColumnWithRounding_CorrectDisplayValue()
         {
-            VerticalReportBuilder<decimal> reportBuilder = new VerticalReportBuilder<decimal>();
+            VerticalReportSchemaBuilder<decimal> reportBuilder = new VerticalReportSchemaBuilder<decimal>();
             reportBuilder.AddColumn("Score", d => d);
                 // .SetValueFormatter(new DecimalValueFormatter(0));
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 3m,
                 6.5m,
@@ -105,13 +108,14 @@ namespace Reports.Tests.Builders
         [Fact(Skip = "Formatting is to be moved to converting")]
         public void Build_DateTimeColumnWithFormat_CorrectDisplayValue()
         {
-            VerticalReportBuilder<DateTime> reportBuilder = new VerticalReportBuilder<DateTime>();
+            VerticalReportSchemaBuilder<DateTime> reportBuilder = new VerticalReportSchemaBuilder<DateTime>();
             reportBuilder.AddColumn("The Date", d => d);
                 // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
             reportBuilder.AddColumn("Next Day", new CallbackComputedValueProvider<DateTime, DateTime>(d => d.AddDays(1)));
                 // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new[]
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
             {
                 new DateTime(2020, 10, 24, 20, 25, 00),
             });

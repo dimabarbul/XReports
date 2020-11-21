@@ -1,22 +1,23 @@
 using FluentAssertions;
-using Reports.Builders;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.SchemaBuilders;
 using Xunit;
 
-namespace Reports.Tests.Builders
+namespace Reports.Tests.SchemaBuilders
 {
     public partial class HorizontalReportTest
     {
         [Fact]
         public void Build_WithCustomHeaderProperty_CorrectProperties()
         {
-            HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
-            reportBuilder.AddRow("Value", s => s);
-            reportBuilder.AddTitleProperty("Value", new CustomTitleProperty());
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            reportBuilder.AddRow("Value", s => s)
+                .AddHeaderProperties(new CustomTitleProperty());
 
-            IReportTable<ReportCell> table = reportBuilder.Build(new []
+            var schema = reportBuilder.BuildSchema();
+            IReportTable<ReportCell> table = schema.BuildReportTable(new []
             {
                 "Test",
             });
@@ -31,7 +32,7 @@ namespace Reports.Tests.Builders
         [Fact(Skip = "Complex title is not implemented yet")]
         public void Build_WithCustomPropertyForComplexHeaderUsingAddHeaderProperty_CorrectProperties()
         {
-            // HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            // HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             // reportBuilder.AddRow("Value", s => s);
             // reportBuilder.AddComplexTitle(0, "Complex", "Value");
             // reportBuilder.AddTitleProperty("Complex", new CustomTitleProperty());
@@ -48,7 +49,7 @@ namespace Reports.Tests.Builders
         [Fact(Skip = "Complex title is not implemented yet")]
         public void Build_WithCustomPropertyForComplexHeaderUsingProcessor_CorrectProperties()
         {
-            // HorizontalReportBuilder<string> reportBuilder = new HorizontalReportBuilder<string>();
+            // HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             // reportBuilder.AddRow("Value", s => s);
             // reportBuilder.AddComplexTitle(0, "Complex", "Value");
             // reportBuilder.AddTitleCellProcessor(new CustomTitlePropertyProcessor());

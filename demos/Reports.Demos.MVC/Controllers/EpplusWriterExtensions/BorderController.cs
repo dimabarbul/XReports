@@ -5,11 +5,11 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Reports.Builders;
 using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.ReportBuilders;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {

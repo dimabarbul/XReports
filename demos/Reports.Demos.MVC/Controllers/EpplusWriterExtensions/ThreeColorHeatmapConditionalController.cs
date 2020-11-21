@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
-using Reports.Builders;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
@@ -17,6 +16,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
+using Reports.ReportBuilders;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {

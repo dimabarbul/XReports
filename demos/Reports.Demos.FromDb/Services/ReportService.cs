@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Reports.Builders;
 using Reports.Demos.FromDb.ReportModels;
 using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Enums;
@@ -7,6 +6,7 @@ using Reports.Extensions.Builders.BuilderHelpers;
 using Reports.Extensions.Properties;
 using Reports.Interfaces;
 using Reports.Models;
+using Reports.ReportBuilders;
 
 namespace Reports.Demos.FromDb.Services
 {

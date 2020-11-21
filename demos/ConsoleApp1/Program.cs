@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Reports;
-using Reports.Builders;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
 using Reports.Extensions;
@@ -18,6 +17,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
+using Reports.ReportBuilders;
 using StringWriter = Reports.Html.StringWriter.StringWriter;
 
 namespace ConsoleApp1
