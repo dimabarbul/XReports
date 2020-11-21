@@ -12,7 +12,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
@@ -45,12 +45,12 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperty(new CustomFormatProperty());
+                .AddProperties(new CustomFormatProperty());
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

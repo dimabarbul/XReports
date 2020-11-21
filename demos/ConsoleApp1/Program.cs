@@ -12,12 +12,12 @@ using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Handlers.Excel;
 using Reports.Extensions.Properties.Handlers.StandardHtml;
 using Reports.Html.Enums;
-using Reports.Html.StringWriter;
 using Reports.Html.Models;
+using Reports.Html.StringWriter;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 using StringWriter = Reports.Html.StringWriter.StringWriter;
 
 namespace ConsoleApp1
@@ -26,7 +26,7 @@ namespace ConsoleApp1
     {
         public static async Task Main(string[] args)
         {
-            VerticalReportBuilder<(int, decimal)> builder = CreateBuilder();
+            VerticalReportSchemaBuilder<(int, decimal)> builder = CreateBuilder();
             IReportTable<ReportCell> reportTable = BuildReportTable(builder);
 
             Console.Write("Export to excel? y=excel n=html: ");
@@ -44,47 +44,41 @@ namespace ConsoleApp1
             return;
         }
 
-        private static VerticalReportBuilder<(int, decimal)> CreateBuilder()
+        private static VerticalReportSchemaBuilder<(int, decimal)> CreateBuilder()
         {
             ColumnSameFormatProperty columnSameFormatProperty = new ColumnSameFormatProperty();
 
-            VerticalReportBuilder<(int, decimal)> builder = new VerticalReportBuilder<(int, decimal)>();
+            VerticalReportSchemaBuilder<(int, decimal)> builder = new VerticalReportSchemaBuilder<(int, decimal)>();
             builder.AddColumn("Now", i => DateTime.Now)
-                .AddProperty(new DateTimeFormatProperty("dd MMM yyyy"))
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new DateTimeFormatProperty("dd MMM yyyy"), columnSameFormatProperty);
             builder.AddColumn("Now", i => DateTime.Now)
-                .AddProperty(new DateTimeFormatProperty("dd/MM/yyyy HH:mm:ss"))
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new DateTimeFormatProperty("dd/MM/yyyy HH:mm:ss"), columnSameFormatProperty);
             builder.AddColumn("Integer", i => i.Item1);
             builder.AddColumn("Without formatting", i => i.Item2);
             builder.AddColumn("With 2 decimals", i => i.Item2)
-                .AddProperty(new DecimalFormatProperty(2))
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new DecimalFormatProperty(2), columnSameFormatProperty);
             builder.AddColumn("String", i => i.Item2.ToString());
             builder.AddColumn("Is odd", i => i.Item1 % 2 == 0
                 ? "YES"
                 : (string) null);
             builder.AddColumn("With max.length", i => "Some very loooooong text")
-                .AddProperty(new MaxLengthProperty(15));
+                .AddProperties(new MaxLengthProperty(15));
             builder.AddColumn("Percent", i => i.Item2)
-                .AddProperty(new PercentFormatProperty(1))
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new PercentFormatProperty(1), columnSameFormatProperty);
             builder.AddColumn("Colored", i => i.Item1 % 10)
-                .AddProperty(new ColorProperty(Color.Yellow, Color.Black))
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new ColorProperty(Color.Yellow, Color.Black), columnSameFormatProperty);
             builder.AddColumn("With custom format", i => i.Item2 * 100)
-                .AddProperty(new MyCustomFormatProperty())
-                .AddProperty(columnSameFormatProperty);
+                .AddProperties(new MyCustomFormatProperty(), columnSameFormatProperty);
 
             builder.AddComplexHeader(0, "Date", 0, 1);
 
             return builder;
         }
 
-        private static IReportTable<ReportCell> BuildReportTable(VerticalReportBuilder<(int, decimal)> builder)
+        private static IReportTable<ReportCell> BuildReportTable(VerticalReportSchemaBuilder<(int, decimal)> builder)
         {
             Random random = new Random(DateTime.Now.Millisecond);
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Range(1, 1000)
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Range(1, 1000)
                 .Select(x => (random.Next(), (decimal) random.NextDouble())));
             return reportTable;
         }

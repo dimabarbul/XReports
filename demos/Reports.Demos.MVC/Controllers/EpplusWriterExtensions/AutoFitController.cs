@@ -9,7 +9,7 @@ using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -40,12 +40,12 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Last Score", e => e.LastScore);
             reportBuilder.AddColumn("Score", e => e.Score);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

@@ -16,8 +16,7 @@ using Reports.Extensions.Properties.Handlers.StandardHtml;
 using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
@@ -50,16 +49,15 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
-            reportBuilder.AddColumn("Email", e => e.Email);
-            reportBuilder.AddColumn("Score", e => e.Score);
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            reportBuilder.AddColumn("Name", e => e.Name)
+                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Right))
+                .AddColumn("Email", e => e.Email)
+                .AddHeaderProperties(new ColorProperty(Color.Blue))
+                .AddColumn("Score", e => e.Score)
+                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
 
-            reportBuilder.AddHeaderProperty("Name", new AlignmentProperty(AlignmentType.Right));
-            reportBuilder.AddHeaderProperty("Email", new ColorProperty(Color.Blue));
-            reportBuilder.AddHeaderProperty("Score", new AlignmentProperty(AlignmentType.Center));
-
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

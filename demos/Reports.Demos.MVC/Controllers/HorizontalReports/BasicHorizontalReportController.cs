@@ -17,8 +17,8 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
 using Reports.ReportCellsProviders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.HorizontalReports
 {
@@ -54,29 +54,29 @@ namespace Reports.Demos.MVC.Controllers.HorizontalReports
         private IReportTable<ReportCell> BuildReport()
         {
             ReportCellProperty centerAlignment = new AlignmentProperty(AlignmentType.Center);
+            BoldProperty bold = new BoldProperty();
+            IndentationProperty indentation = new IndentationProperty();
 
-            HorizontalReportBuilder<Entity> reportBuilder = new HorizontalReportBuilder<Entity>();
-            reportBuilder.AddHeaderRow(0, string.Empty, e => e.Name)
-                .AddProperty(centerAlignment);
-            reportBuilder.AddRow("Age", e => e.Age)
-                .AddProperty(centerAlignment);
+            HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
+            reportBuilder
+                .AddHeaderRow(0, string.Empty, e => e.Name)
+                .AddProperties(centerAlignment)
+                .AddRow("Age", e => e.Age)
+                .AddHeaderProperties(bold)
+                .AddProperties(centerAlignment)
+                .AddRow(new NullCellsProvider<Entity>("Score"))
+                .AddHeaderProperties(bold)
+                .AddRow("Min. Score", e => e.MinScore)
+                .AddHeaderProperties(indentation)
+                .AddProperties(centerAlignment)
+                .AddRow("Max. Score", e => e.MaxScore)
+                .AddHeaderProperties(indentation)
+                .AddProperties(centerAlignment)
+                .AddRow("Avg. Score", e => e.AverageScore)
+                .AddHeaderProperties(indentation)
+                .AddProperties(new DecimalFormatProperty(2), centerAlignment);
 
-            reportBuilder.AddRow(new NullCellsProvider<Entity>("Score"));
-            reportBuilder.AddRow("Min. Score", e => e.MinScore)
-                .AddProperty(centerAlignment);
-            reportBuilder.AddRow("Max. Score", e => e.MaxScore)
-                .AddProperty(centerAlignment);
-            reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
-                .AddProperty(new DecimalFormatProperty(2))
-                .AddProperty(centerAlignment);
-
-            reportBuilder.AddTitleProperty("Age", new BoldProperty());
-            reportBuilder.AddTitleProperty("Score", new BoldProperty());
-            reportBuilder.AddTitleProperty("Min. Score", new IndentationProperty());
-            reportBuilder.AddTitleProperty("Max. Score", new IndentationProperty());
-            reportBuilder.AddTitleProperty("Avg. Score", new IndentationProperty());
-
-            return reportBuilder.Build(this.GetData());
+            return reportBuilder.BuildSchema().BuildReportTable(this.GetData());
         }
 
         private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)

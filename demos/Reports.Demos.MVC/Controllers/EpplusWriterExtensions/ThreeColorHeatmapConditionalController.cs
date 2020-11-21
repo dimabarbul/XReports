@@ -16,7 +16,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -44,7 +44,7 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            Excel.EpplusWriter.EpplusWriter writer = new Excel.EpplusWriter.EpplusWriter();
+            EpplusWriter writer = new EpplusWriter();
             writer.AddFormatter(new ConditionalFormattingThreeColorScaleFormatter());
 
             return writer.WriteToStream(reportTable);
@@ -55,14 +55,15 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             ThreeColorHeatmapProperty scoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 50, Color.Yellow, 100, Color.Lime);
             ThreeColorHeatmapProperty lastScoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 5, Color.Yellow, 10, Color.Lime);
 
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
-            reportBuilder.AddColumn("Last Score", e => e.LastScore)
-                .AddProperty(lastScoreHeatmapProperty);
-            reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperty(scoreHeatmapProperty);
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            reportBuilder
+                .AddColumn("Name", e => e.Name)
+                .AddColumn("Last Score", e => e.LastScore)
+                .AddProperties(lastScoreHeatmapProperty)
+                .AddColumn("Score", e => e.Score)
+                .AddProperties(scoreHeatmapProperty);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

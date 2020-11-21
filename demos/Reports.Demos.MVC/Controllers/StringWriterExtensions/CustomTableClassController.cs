@@ -9,7 +9,7 @@ using Reports.Html.Models;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.StringWriterExtensions
 {
@@ -34,13 +34,13 @@ namespace Reports.Demos.MVC.Controllers.StringWriterExtensions
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportBuilder<Entity> builder = new VerticalReportBuilder<Entity>();
+            VerticalReportSchemaBuilder<Entity> builder = new VerticalReportSchemaBuilder<Entity>();
             builder.AddColumn("First name", e => e.FirstName);
             builder.AddColumn("Last name", e => e.LastName);
             builder.AddColumn("Email", e => e.Email);
             builder.AddColumn("Age", e => e.Age);
 
-            return builder.Build(this.GetData());
+            return builder.BuildSchema().BuildReportTable(this.GetData());
         }
 
         private IEnumerable<Entity> GetData()

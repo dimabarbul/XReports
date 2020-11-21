@@ -14,7 +14,7 @@ using Reports.Extensions.Properties.Handlers.StandardHtml;
 using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
@@ -49,13 +49,13 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             HighlightCellProcessor highlightCellProcessor = new HighlightCellProcessor();
 
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name)
-                .AddProcessor(highlightCellProcessor);
-            reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProcessor(highlightCellProcessor);
+                .AddProcessors(highlightCellProcessor)
+                .AddColumn("Score", e => e.Score)
+                .AddProcessors(highlightCellProcessor);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

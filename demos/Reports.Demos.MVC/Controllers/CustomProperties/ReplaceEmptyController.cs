@@ -13,7 +13,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
@@ -46,15 +46,16 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
-            reportBuilder.AddColumn("First Name", e => e.FirstName);
-            reportBuilder.AddColumn("Last Name", e => e.LastName);
-            reportBuilder.AddColumn("Email", e => e.Email)
-                .AddProperty(new ReplaceEmptyProperty("-"));
-            reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperty(new ReplaceEmptyProperty("(no score)"));
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            reportBuilder
+                .AddColumn("First Name", e => e.FirstName)
+                .AddColumn("Last Name", e => e.LastName)
+                .AddColumn("Email", e => e.Email)
+                .AddProperties(new ReplaceEmptyProperty("-"))
+                .AddColumn("Score", e => e.Score)
+                .AddProperties(new ReplaceEmptyProperty("(no score)"));
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 
@@ -90,8 +91,6 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private IEnumerable<Entity> GetData()
         {
-            int luckyGuyIndex = new Random().Next(3, RecordsCount - 1);
-
             return new Faker<Entity>()
                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                 .RuleFor(e => e.LastName, f => f.Name.LastName())

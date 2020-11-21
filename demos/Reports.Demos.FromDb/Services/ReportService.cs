@@ -6,7 +6,7 @@ using Reports.Extensions.Builders.BuilderHelpers;
 using Reports.Extensions.Properties;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.FromDb.Services
 {
@@ -23,45 +23,41 @@ namespace Reports.Demos.FromDb.Services
 
         public async Task<IReportTable<ReportCell>> GetUsersAsync(int? limit = null)
         {
-            VerticalReportBuilder<UsersListReport> builder = new VerticalReportBuilder<UsersListReport>();
+            VerticalReportSchemaBuilder<UsersListReport> builder = new VerticalReportSchemaBuilder<UsersListReport>();
             EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
             helper.BuildVerticalReport(builder);
 
-            return builder.Build(await this.userService.GetActiveUsersAsync(limit));
+            return builder.BuildSchema().BuildReportTable(await this.userService.GetActiveUsersAsync(limit));
         }
 
         public async Task<IReportTable<ReportCell>> GetProductsAsync(int? limit = null)
         {
-            VerticalReportBuilder<ProductListReport> builder = new VerticalReportBuilder<ProductListReport>();
+            VerticalReportSchemaBuilder<ProductListReport> builder = new VerticalReportSchemaBuilder<ProductListReport>();
             EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
             helper.BuildVerticalReport(builder);
 
             AlignmentProperty centerAlignmentProperty = new AlignmentProperty(AlignmentType.Center);
-            builder.GetColumn("Price")
-                .AddProperty(new DecimalFormatProperty(2))
-                .AddProperty(centerAlignmentProperty);
+            builder
+                .ForColumn("Price").AddProperties(new DecimalFormatProperty(2), centerAlignmentProperty)
+                .ForColumn("Active").AddProperties(new YesNoProperty())
+                .ForColumn("ID").AddHeaderProperties(centerAlignmentProperty)
+                .ForColumn("Title").AddHeaderProperties(centerAlignmentProperty)
+                .ForColumn("Description").AddHeaderProperties(centerAlignmentProperty)
+                .ForColumn("Active").AddHeaderProperties(centerAlignmentProperty);
 
-            builder.GetColumn("Active")
-                .AddProperty(new YesNoProperty());
-
-            builder.AddHeaderProperty("ID", centerAlignmentProperty);
-            builder.AddHeaderProperty("Title", centerAlignmentProperty);
-            builder.AddHeaderProperty("Description", centerAlignmentProperty);
-            builder.AddHeaderProperty("Active", centerAlignmentProperty);
-
-            return builder.Build(await this.productService.GetAllAsync(limit));
+            return builder.BuildSchema().BuildReportTable(await this.productService.GetAllAsync(limit));
         }
 
         public async Task<IReportTable<ReportCell>> GetOrdersDetailsAsync(int? limit = null)
         {
-            VerticalReportBuilder<OrdersDetailsReport> builder = new VerticalReportBuilder<OrdersDetailsReport>();
+            VerticalReportSchemaBuilder<OrdersDetailsReport> builder = new VerticalReportSchemaBuilder<OrdersDetailsReport>();
             EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
             helper.BuildVerticalReport(builder);
 
-            builder.GetColumn("Ordered On")
-                .AddProperty(new DateTimeFormatProperty("dd MMM yyyy"));
+            builder.ForColumn("Ordered On")
+                .AddProperties(new DateTimeFormatProperty("dd MMM yyyy"));
 
-            return builder.Build(await this.productService.GetOrdersDetailsAsync(limit));
+            return builder.BuildSchema().BuildReportTable(await this.productService.GetOrdersDetailsAsync(limit));
         }
     }
 }

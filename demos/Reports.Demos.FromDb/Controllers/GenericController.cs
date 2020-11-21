@@ -7,7 +7,7 @@ using Reports.Extensions;
 using Reports.Html.Models;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.FromDb.Controllers
 {
@@ -26,10 +26,10 @@ namespace Reports.Demos.FromDb.Controllers
         {
             await using SqliteConnection connection = new SqliteConnection("Data Source=Test.db");
             IEnumerable<dynamic> products = await connection.QueryAsync("SELECT * FROM Products");
-            VerticalReportBuilder<dynamic> builder = new VerticalReportBuilder<dynamic>();
+            VerticalReportSchemaBuilder<dynamic> builder = new VerticalReportSchemaBuilder<dynamic>();
             builder.AddColumn("ID", x => x.Id);
             builder.AddColumn("Title", x => x.Title);
-            IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.Build(products));
+            IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildSchema().BuildReportTable(products));
             string tableHtml = await this.stringWriter.WriteToStringAsync(reportTable);
 
             return View(new IndexViewModel()

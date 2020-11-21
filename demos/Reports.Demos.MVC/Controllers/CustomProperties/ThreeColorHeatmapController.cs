@@ -13,7 +13,7 @@ using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.CustomProperties
 {
@@ -48,12 +48,13 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             ThreeColorHeatmapProperty heatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 50, Color.Yellow, 100, Color.Lime);
 
-            VerticalReportBuilder<Entity> reportBuilder = new VerticalReportBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
-            reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperty(heatmapProperty);
+            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            reportBuilder
+                .AddColumn("Name", e => e.Name)
+                .AddColumn("Score", e => e.Score)
+                .AddProperties(heatmapProperty);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.Build(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 
