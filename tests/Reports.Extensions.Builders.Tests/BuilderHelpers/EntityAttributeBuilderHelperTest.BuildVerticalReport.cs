@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Linq;
 using FluentAssertions;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Extensions.Builders.BuilderHelpers;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers
@@ -16,11 +15,11 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralProperties_CorrectOrder()
         {
-            VerticalReportBuilder<SeveralPropertiesClass> builder = new VerticalReportBuilder<SeveralPropertiesClass>();
+            VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = new VerticalReportSchemaBuilder<SeveralPropertiesClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Empty<SeveralPropertiesClass>());
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(1);
@@ -39,11 +38,11 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
-            VerticalReportBuilder<SomePropertiesWithoutAttribute> builder = new VerticalReportBuilder<SomePropertiesWithoutAttribute>();
+            VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = new VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Empty<SomePropertiesWithoutAttribute>());
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(1);
@@ -62,11 +61,11 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
-            VerticalReportBuilder<PropertiesWithAttributes> builder = new VerticalReportBuilder<PropertiesWithAttributes>();
+            VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = new VerticalReportSchemaBuilder<PropertiesWithAttributes>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            IReportTable<ReportCell> reportTable = builder.Build(new []
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new []
             {
                 new PropertiesWithAttributes(){ Id = 1, Name = "John Doe", Salary = 1000m, DateOfBirth = new DateTime(2000, 4, 7)},
             });

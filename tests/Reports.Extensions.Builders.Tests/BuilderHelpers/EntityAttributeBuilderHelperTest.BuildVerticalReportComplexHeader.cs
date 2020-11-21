@@ -4,7 +4,7 @@ using Reports.Extensions.Builders.Attributes;
 using Reports.Extensions.Builders.BuilderHelpers;
 using Reports.Interfaces;
 using Reports.Models;
-using Reports.ReportBuilders;
+using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers
@@ -14,11 +14,12 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_OneComplexHeader_CorrectTable()
         {
-            VerticalReportBuilder<OneComplexHeaderClass> builder = new VerticalReportBuilder<OneComplexHeaderClass>();
+            VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = new VerticalReportSchemaBuilder<OneComplexHeaderClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Empty<OneComplexHeaderClass>());
+            var schema = builder.BuildSchema();
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(2);
@@ -47,11 +48,12 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
-            VerticalReportBuilder<SeveralLevelsOfComplexHeaderClass> builder = new VerticalReportBuilder<SeveralLevelsOfComplexHeaderClass>();
+            VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = new VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            IReportTable<ReportCell> reportTable = builder.Build(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
+            var schema = builder.BuildSchema();
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(4);

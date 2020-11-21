@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Interfaces;
-using Reports.ReportBuilders;
 using Reports.ReportCellsProviders;
+using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.Builders.BuilderHelpers
 {
     public class EntityAttributeBuilderHelper
     {
-        public void BuildVerticalReport<TEntity>(VerticalReportBuilder<TEntity> builder)
+        public void BuildVerticalReport<TEntity>(VerticalReportSchemaBuilder<TEntity> builder)
         {
             ReportVariableData[] properties = typeof(TEntity).GetProperties()
                 .Select(p => new
@@ -33,7 +33,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             this.AddComplexHeader(builder, properties);
         }
 
-        private void AddColumns<TEntity>(VerticalReportBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
         {
             foreach (ReportVariableData x in properties)
             {
@@ -41,7 +41,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             }
         }
 
-        private void AddComplexHeader<TEntity>(VerticalReportBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddComplexHeader<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
         {
             Dictionary<int, Dictionary<string, List<int>>> complexHeader = new Dictionary<int, Dictionary<string, List<int>>>();
 
@@ -74,7 +74,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             }
         }
 
-        private void AddColumn<TEntity>(VerticalReportBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute)
+        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
