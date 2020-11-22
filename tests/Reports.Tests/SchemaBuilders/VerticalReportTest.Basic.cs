@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            VerticalReportSchema<(string FirstName, string LastName)> schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new (string, string)[] { });
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new (string, string)[] { });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
@@ -35,8 +34,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe"),
                 ("Jane", "Do"),
@@ -62,8 +60,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Item1", a => a[0]);
             reportBuilder.AddColumn("Item2", a => a[1]);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 new[] { "John Doe", "Manager" },
                 new[] { "Jane Doe", "Developer" },

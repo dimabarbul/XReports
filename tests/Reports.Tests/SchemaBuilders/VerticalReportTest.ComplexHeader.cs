@@ -17,8 +17,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Value", i => i);
             reportBuilder.AddComplexHeader(0, "Statistics", "Value");
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[] { 1 });
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[] { 1 });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(2);
@@ -38,8 +37,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "Name", "Age");
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 27),
@@ -73,8 +71,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Gender", x => x.Gender);
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 2);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John Doe", 30, "Male"),
                 ("Jane Doe", 27, "Female"),
@@ -112,8 +109,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddComplexHeader(0, "Personal Info", 0, 1);
             reportBuilder.AddComplexHeader(0, "Job Info", 2, 3);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John Doe", 30, "Developer", 1000m),
             });
@@ -149,8 +145,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Employee", 1, 2);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John Doe", 30),
                 ("Jane Doe", 30),
@@ -201,8 +196,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddComplexHeader(0, "Employee", "First Name", "Age");
             reportBuilder.AddComplexHeader(1, "Personal Info", "First Name", "Last Name");
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),
@@ -260,8 +254,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddComplexHeader(0, "Personal Info", "First Name", "Last Name");
             reportBuilder.AddComplexHeader(0, "Extra", "Age");
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe", 30),
                 ("Jane", "Doe", 30),

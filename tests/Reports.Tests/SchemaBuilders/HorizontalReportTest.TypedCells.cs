@@ -17,8 +17,7 @@ namespace Reports.Tests.SchemaBuilders
             HorizontalReportSchemaBuilder<int> reportBuilder = new HorizontalReportSchemaBuilder<int>();
             reportBuilder.AddRow("#", i => i);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 3,
                 6,
@@ -43,8 +42,7 @@ namespace Reports.Tests.SchemaBuilders
             HorizontalReportSchemaBuilder<decimal> reportBuilder = new HorizontalReportSchemaBuilder<decimal>();
             reportBuilder.AddRow("Score", d => d);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 3m,
                 6.5m,
@@ -66,8 +64,7 @@ namespace Reports.Tests.SchemaBuilders
             HorizontalReportSchemaBuilder<decimal> reportBuilder = new HorizontalReportSchemaBuilder<decimal>();
             reportBuilder.AddRow("Score", d => d);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 3m,
                 6.5m,
@@ -92,8 +89,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddRow("Next Day", new CallbackComputedValueProvider<DateTime, DateTime>(d => d.AddDays(1)));
                 // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 new DateTime(2020, 10, 24, 20, 25, 00),
             });

@@ -17,8 +17,7 @@ namespace Reports.Tests.SchemaBuilders
         //     reportBuilder.AddColumn("#", i => i);
         //     reportBuilder.AddHeaderCellProcessor(new CustomHeaderCellProcessor());
         //
-        //     var schema = reportBuilder.BuildSchema();
-        //     IReportTable<ReportCell> table = schema.BuildReportTable(Enumerable.Empty<int>());
+        //     IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
         //
         //     ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
         //     headerCells.Should().HaveCount(1);

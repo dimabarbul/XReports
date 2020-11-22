@@ -18,8 +18,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            var schema = builder.BuildSchema();
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(2);
@@ -52,8 +51,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
             builderHelper.BuildVerticalReport(builder);
 
-            var schema = builder.BuildSchema();
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(4);

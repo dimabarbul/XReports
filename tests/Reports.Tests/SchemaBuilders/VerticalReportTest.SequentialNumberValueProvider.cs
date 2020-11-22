@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "John Doe",
                 "Jane Doe",
@@ -39,8 +38,7 @@ namespace Reports.Tests.SchemaBuilders
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider(15));
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "John Doe",
                 "Jane Doe",

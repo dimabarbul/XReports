@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(0, string.Empty, s => s.Length);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });
@@ -36,8 +35,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddHeaderRow(0, string.Empty, s => s.Length);
             reportBuilder.AddHeaderRow(1, string.Empty, s => s.Substring(0, 1));
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });

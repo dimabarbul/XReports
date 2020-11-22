@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddRow("Value", s => s)
                 .AddHeaderProperties(new CustomTitleProperty());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });

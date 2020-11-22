@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Value", s => s)
                 .AddHeaderProperties(new CustomHeaderProperty());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });
@@ -37,8 +36,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddComplexHeader(0, "Complex", "Value");
             reportBuilder.AddComplexHeaderProperties("Complex", new CustomHeaderProperty());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new string[] { });
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new string[] { });
 
             ReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
             cells.Should().HaveCount(2);

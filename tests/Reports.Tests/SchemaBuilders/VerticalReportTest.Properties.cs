@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Value", s => s)
                 .AddProcessors(new CustomPropertyProcessor());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });
@@ -36,8 +35,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddColumn("Value", s => s)
                 .AddProperties(new CustomProperty());
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
             {
                 "Test",
             });

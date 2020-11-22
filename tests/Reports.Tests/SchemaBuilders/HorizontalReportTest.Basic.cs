@@ -16,8 +16,7 @@ namespace Reports.Tests.SchemaBuilders
             reportBuilder.AddRow("First name", x => x.FirstName);
             reportBuilder.AddRow("Last name", x => x.LastName);
 
-            var schema = reportBuilder.BuildSchema();
-            IReportTable<ReportCell> table = schema.BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe"),
                 ("Jane", "Do"),
