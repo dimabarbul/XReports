@@ -36,6 +36,11 @@ namespace Reports.Models
             return this.Properties.OfType<TProperty>().Any();
         }
 
+        public bool HasProperty(Type propertyType)
+        {
+            return this.Properties.Any(p => p.GetType() == propertyType);
+        }
+
         public TProperty GetProperty<TProperty>() where TProperty : ReportCellProperty
         {
             return this.Properties.OfType<TProperty>().FirstOrDefault();

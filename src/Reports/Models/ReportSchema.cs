@@ -39,5 +39,18 @@ namespace Reports.Models
         }
 
         public abstract IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source);
+
+        protected ReportCell AddTableProperties(ReportCell cell)
+        {
+            foreach (ReportCellProperty tableProperty in this.TableProperties)
+            {
+                if (!cell.HasProperty(tableProperty.GetType()))
+                {
+                    cell.AddProperty(tableProperty);
+                }
+            }
+
+            return cell;
+        }
     }
 }

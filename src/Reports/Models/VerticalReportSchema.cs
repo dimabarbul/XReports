@@ -28,15 +28,9 @@ namespace Reports.Models
         {
             return source
                 .Select(entity => this.CellsProviders
-                    .Select(p => p.CreateCell(entity))
+                    .Select(p => this.AddTableProperties(p.CreateCell(entity)))
                 );
         }
-
-
-
-
-
-
 
 
         private void BuildHeader(ReportTable<ReportCell> table)
