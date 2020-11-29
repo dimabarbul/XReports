@@ -1,5 +1,6 @@
 using System;
 using Reports.Extensions.Builders.Attributes;
+using Reports.Extensions.Properties.Attributes;
 
 namespace Reports.Demos.FromDb.ReportModels
 {
@@ -10,6 +11,7 @@ namespace Reports.Demos.FromDb.ReportModels
         [ReportVariable(2, "Order #")]
         public int OrderId { get; set; }
         [ReportVariable(3, "Ordered On")]
+        [DateTimeFormat("dd MMM yyyy")]
         public DateTime CreatedOn { get; set; }
         [ReportVariable(4, "Bought at Price")]
         public decimal PriceWhenAdded { get; set; }

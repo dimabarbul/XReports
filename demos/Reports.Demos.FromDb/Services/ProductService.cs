@@ -16,7 +16,7 @@ namespace Reports.Demos.FromDb.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<ProductListReport>> GetAllAsync(int? limit)
+        public async Task<IEnumerable<ProductListReport>> GetAllAsync(int? limit = null)
         {
             IQueryable<ProductListReport> productsQuery = this.dbContext
                 .Products
@@ -38,7 +38,7 @@ namespace Reports.Demos.FromDb.Services
             return await productsQuery.ToArrayAsync();
         }
 
-        public async Task<IEnumerable<OrdersDetailsReport>> GetOrdersDetailsAsync(int? limit)
+        public async Task<IEnumerable<OrdersDetailsReport>> GetOrdersDetailsAsync(int? limit = null)
         {
             IQueryable<OrdersDetailsReport> detailsQuery = this.dbContext
                 .OrderLineItems

@@ -17,7 +17,7 @@ namespace Reports.Demos.FromDb.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<UsersListReport>> GetActiveUsersAsync(int? limit)
+        public async Task<IEnumerable<UsersListReport>> GetActiveUsersAsync(int? limit = null)
         {
             IQueryable<UsersListReport> usersQuery = this.dbContext
                 .Users

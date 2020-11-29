@@ -16,6 +16,10 @@ using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
 using Reports.Excel.Models;
+using Reports.Extensions.Builders.AttributeHandlers;
+using Reports.Extensions.Builders.BuilderHelpers;
+using Reports.Extensions.Builders.Interfaces;
+using Reports.Extensions.Properties.AttributeHandlers;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
 using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
 using Reports.Html.Models;
@@ -75,6 +79,13 @@ namespace Reports.Demos.FromDb
                     new ExcelYesNoPropertyHandler(),
                 })
             );
+            services.AddScoped<EntityAttributeBuilderHelper>(sp => new EntityAttributeBuilderHelper(
+                new IEntityAttributeHandler[]
+                {
+                    new CommonAttributeHandler(),
+                    new CustomPropertyAttributeHandler(),
+                }
+            ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,6 +16,14 @@ namespace Reports.Extensions.Builders.BuilderHelpers
     {
         private readonly List<IEntityAttributeHandler> attributeHandlers = new List<IEntityAttributeHandler>();
 
+        public EntityAttributeBuilderHelper(IEnumerable<IEntityAttributeHandler> handlers = null)
+        {
+            if (handlers != null)
+            {
+                this.attributeHandlers.AddRange(handlers);
+            }
+        }
+
         public void AddAttributeHandler(IEntityAttributeHandler handler)
         {
             this.attributeHandlers.Add(handler);

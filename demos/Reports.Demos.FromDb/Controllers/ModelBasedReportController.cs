@@ -16,23 +16,27 @@ namespace Reports.Demos.FromDb.Controllers
         private const string ExcelMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         private readonly ReportService reportService;
+        private readonly ProductService productService;
+        private readonly UserService userService;
         private readonly ReportConverter<HtmlReportCell> htmlConverter;
         private readonly ReportConverter<ExcelReportCell> excelConverter;
         private readonly StringWriter stringWriter;
         private readonly EpplusWriter excelWriter;
 
-        public ModelBasedReportController(ReportService reportService, ReportConverter<HtmlReportCell> htmlConverter, StringWriter stringWriter, ReportConverter<ExcelReportCell> excelConverter, EpplusWriter excelWriter)
+        public ModelBasedReportController(ReportService reportService, ReportConverter<HtmlReportCell> htmlConverter, StringWriter stringWriter, ReportConverter<ExcelReportCell> excelConverter, EpplusWriter excelWriter, ProductService productService, UserService userService)
         {
             this.reportService = reportService;
             this.htmlConverter = htmlConverter;
             this.stringWriter = stringWriter;
             this.excelConverter = excelConverter;
             this.excelWriter = excelWriter;
+            this.productService = productService;
+            this.userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetUsersAsync(50);
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.userService.GetActiveUsersAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
 
@@ -41,7 +45,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public async Task<IActionResult> DownloadUsers()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetUsersAsync();
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.userService.GetActiveUsersAsync());
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
 
             Stream excelStream = this.excelWriter.WriteToStream(excelTable);
@@ -51,7 +55,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public async Task<IActionResult> Products()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetProductsAsync(50);
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetAllAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
 
@@ -60,7 +64,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public async Task<IActionResult> DownloadProducts()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetProductsAsync();
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetAllAsync());
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
             Stream stream = this.excelWriter.WriteToStream(excelTable);
 
@@ -69,7 +73,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public async Task<IActionResult> OrdersDetails()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetOrdersDetailsAsync(50);
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetOrdersDetailsAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
 
@@ -78,7 +82,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public async Task<IActionResult> DownloadOrdersDetails()
         {
-            IReportTable<ReportCell> report = await this.reportService.GetOrdersDetailsAsync();
+            IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetOrdersDetailsAsync());
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
             Stream stream = this.excelWriter.WriteToStream(excelTable);
 
@@ -87,7 +91,7 @@ namespace Reports.Demos.FromDb.Controllers
 
         public class ReportViewModel
         {
-            public string ReportHtml { get; set; }
+            public string ReportHtml { get; }
 
             public ReportViewModel(string reportHtml)
             {
