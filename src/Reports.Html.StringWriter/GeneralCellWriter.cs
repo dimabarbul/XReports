@@ -27,7 +27,7 @@ namespace Reports.Html.StringWriter
             return stringBuilder.ToString();
         }
 
-        private void WriteCell(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
+        protected virtual void WriteCell(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
         {
             stringBuilder.Append("<").Append(tableCellTagName).Append(" ");
             this.WriteAttributes(stringBuilder, cell);
@@ -53,9 +53,9 @@ namespace Reports.Html.StringWriter
                 )
             );
 
-            foreach (KeyValuePair<string, string> attribute in cell.Attributes)
+            foreach ((string name, string value) in cell.Attributes)
             {
-                this.WriteAttribute(stringBuilder, attribute.Key, attribute.Value);
+                this.WriteAttribute(stringBuilder, name, value);
             }
         }
 
