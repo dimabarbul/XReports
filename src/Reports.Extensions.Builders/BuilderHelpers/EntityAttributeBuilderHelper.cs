@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Extensions.Builders.Enums;
+using Reports.Extensions.Builders.Interfaces;
 using Reports.Interfaces;
 using Reports.ReportCellsProviders;
 using Reports.SchemaBuilders;
@@ -13,13 +14,20 @@ namespace Reports.Extensions.Builders.BuilderHelpers
 {
     public class EntityAttributeBuilderHelper
     {
+        private readonly List<IEntityAttributeHandler> attributeHandlers = new List<IEntityAttributeHandler>();
+
+        public void AddAttributeHandler(IEntityAttributeHandler handler)
+        {
+            this.attributeHandlers.Add(handler);
+        }
+
         public IReportSchema<TEntity> BuildSchema<TEntity>()
         {
             ReportTypeAttribute reportTypeAttribute = typeof(TEntity).GetCustomAttribute<ReportTypeAttribute>();
 
             return reportTypeAttribute?.Type == ReportType.Horizontal
-                ? (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>().BuildSchema()
-                : (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity>().BuildSchema();
+                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity>().BuildSchema()
+                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>().BuildSchema();
         }
 
         private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>()
@@ -47,7 +55,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
 
             builder.AddRow(instance);
 
-            this.ApplyAttribute(builder, attribute);
+            this.ApplyAttribute(builder, property);
         }
 
         private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property, ReportVariableAttribute attribute)
@@ -123,11 +131,18 @@ namespace Reports.Extensions.Builders.BuilderHelpers
 
             builder.AddColumn(instance);
 
-            this.ApplyAttribute(builder, attribute);
+            this.ApplyAttribute(builder, property);
         }
 
-        private void ApplyAttribute<TEntity>(ReportSchemaBuilder<TEntity> builder, ReportVariableAttribute attribute)
+        private void ApplyAttribute<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property)
         {
+            foreach (Attribute attribute in property.GetCustomAttributes())
+            {
+                foreach (IEntityAttributeHandler handler in this.attributeHandlers)
+                {
+                    handler.Handle(builder, attribute);
+                }
+            }
         }
 
         private ReportVariableData[] GetProperties<TEntity>()

@@ -21,6 +21,9 @@
       <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.BuildVerticalReportComplexHeader.cs">
         <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.AttributeHandler.cs">
+        <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
