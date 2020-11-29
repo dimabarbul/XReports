@@ -50,10 +50,8 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             HighlightCellProcessor highlightCellProcessor = new HighlightCellProcessor();
 
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name)
-                .AddProcessors(highlightCellProcessor)
-                .AddColumn("Score", e => e.Score)
-                .AddProcessors(highlightCellProcessor);
+            reportBuilder.AddColumn("Name", e => e.Name).AddProcessors(highlightCellProcessor);
+            reportBuilder.AddColumn("Score", e => e.Score).AddProcessors(highlightCellProcessor);
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;

@@ -51,8 +51,8 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
                 .AddColumn("First Name", e => e.FirstName)
                 .AddColumn("Last Name", e => e.LastName)
                 .AddColumn("Email", e => e.Email)
-                .AddProperties(new ReplaceEmptyProperty("-"))
-                .AddColumn("Score", e => e.Score)
+                .AddProperties(new ReplaceEmptyProperty("-"));
+            reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(new ReplaceEmptyProperty("(no score)"));
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());

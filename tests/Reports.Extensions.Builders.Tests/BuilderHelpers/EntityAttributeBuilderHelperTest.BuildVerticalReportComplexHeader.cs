@@ -14,9 +14,8 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_OneComplexHeader_CorrectTable()
         {
-            VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = new VerticalReportSchemaBuilder<OneComplexHeaderClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
-            builderHelper.BuildVerticalReport(builder);
+            VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = builderHelper.BuildVerticalReport<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
 
@@ -47,9 +46,8 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
-            VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = new VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
-            builderHelper.BuildVerticalReport(builder);
+            VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = builderHelper.BuildVerticalReport<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
 

@@ -1,30 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Reports.Interfaces;
 using Reports.Models;
 
 namespace Reports.SchemaBuilders
 {
-    public class HorizontalReportSchemaBuilder<TSourceEntity>
+    public class HorizontalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>
     {
-        private readonly List<CellsProviderWithCellsConfig> rows = new List<CellsProviderWithCellsConfig>();
-        private readonly List<CellsProviderWithCellsConfig> headerRows = new List<CellsProviderWithCellsConfig>();
-
-        private CellsProviderWithCellsConfig currentConfig;
-
         public HorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
-            this.currentConfig = new CellsProviderWithCellsConfig(provider);
+            this.CurrentProvider = new ConfiguredCellsProvider(provider);
 
-            this.rows.Add(this.currentConfig);
+            this.CellsProviders.Add(this.CurrentProvider);
 
             return this;
         }
 
         public HorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title)
         {
-            this.currentConfig = this.rows
+            this.CurrentProvider = this.CellsProviders
                 .First(c => c.Provider.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
 
             return this;
@@ -32,36 +26,8 @@ namespace Reports.SchemaBuilders
 
         public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.currentConfig = new CellsProviderWithCellsConfig(provider);
-            this.headerRows.Insert(rowIndex, this.currentConfig);
-
-            return this;
-        }
-
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
-        {
-            this.currentConfig.CellProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
-        {
-            this.currentConfig.HeaderProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
-        {
-            this.currentConfig.CellProcessors.AddRange(processors);
-
-            return this;
-        }
-
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
-        {
-            this.currentConfig.HeaderProcessors.AddRange(processors);
+            this.CurrentProvider = new ConfiguredCellsProvider(provider);
+            this.HeaderProviders.Insert(rowIndex, this.CurrentProvider);
 
             return this;
         }
@@ -69,7 +35,7 @@ namespace Reports.SchemaBuilders
         public HorizontalReportSchema<TSourceEntity> BuildSchema()
         {
             return ReportSchema<TSourceEntity>.CreateHorizontal(
-                this.rows
+                this.CellsProviders
                     .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
                         r.Provider,
                         r.CellProperties.ToArray(),
@@ -79,7 +45,7 @@ namespace Reports.SchemaBuilders
                     ))
                     .ToArray(),
                 new ReportCellProperty[0],
-                this.headerRows
+                this.HeaderProviders
                     .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
                         r.Provider,
                         r.CellProperties.ToArray(),
@@ -152,19 +118,5 @@ namespace Reports.SchemaBuilders
         //             .Concat(source.Select(e => row.CellSelector(e)))
         //         );
         // }
-
-        private class CellsProviderWithCellsConfig
-        {
-            public IReportCellsProvider<TSourceEntity> Provider { get; set; }
-            public List<ReportCellProperty> CellProperties { get; set; } = new List<ReportCellProperty>();
-            public List<ReportCellProperty> HeaderProperties { get; set; } = new List<ReportCellProperty>();
-            public List<IReportCellProcessor<TSourceEntity>> CellProcessors { get; set; } = new List<IReportCellProcessor<TSourceEntity>>();
-            public List<IReportCellProcessor<TSourceEntity>> HeaderProcessors { get; set; } = new List<IReportCellProcessor<TSourceEntity>>();
-
-            public CellsProviderWithCellsConfig(IReportCellsProvider<TSourceEntity> provider)
-            {
-                this.Provider = provider;
-            }
-        }
     }
 }

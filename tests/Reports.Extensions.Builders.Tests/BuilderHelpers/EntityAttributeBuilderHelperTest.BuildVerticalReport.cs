@@ -15,9 +15,8 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralProperties_CorrectOrder()
         {
-            VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = new VerticalReportSchemaBuilder<SeveralPropertiesClass>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
-            builderHelper.BuildVerticalReport(builder);
+            VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = builderHelper.BuildVerticalReport<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
 
@@ -30,17 +29,18 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
 
         private class SeveralPropertiesClass
         {
-            [ReportVariable(1, "ID")] public int Id { get; set; }
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
 
-            [ReportVariable(2, "Name")] public string Name { get; set; }
+            [ReportVariable(2, "Name")]
+            public string Name { get; set; }
         }
 
         [Fact]
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
-            VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = new VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
-            builderHelper.BuildVerticalReport(builder);
+            VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = builderHelper.BuildVerticalReport<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
 
@@ -61,9 +61,8 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
-            VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = new VerticalReportSchemaBuilder<PropertiesWithAttributes>();
             EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
-            builderHelper.BuildVerticalReport(builder);
+            VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = builderHelper.BuildVerticalReport<PropertiesWithAttributes>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new []
             {

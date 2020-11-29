@@ -59,8 +59,8 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             reportBuilder
                 .AddColumn("Name", e => e.Name)
                 .AddColumn("Last Score", e => e.LastScore)
-                .AddProperties(lastScoreHeatmapProperty)
-                .AddColumn("Score", e => e.Score)
+                .AddProperties(lastScoreHeatmapProperty);
+            reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(scoreHeatmapProperty);
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());

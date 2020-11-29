@@ -60,19 +60,19 @@ namespace Reports.Demos.MVC.Controllers.HorizontalReports
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
             reportBuilder
                 .AddHeaderRow(0, string.Empty, e => e.Name)
-                .AddProperties(centerAlignment)
-                .AddRow("Age", e => e.Age)
+                .AddProperties(centerAlignment);
+            reportBuilder.AddRow("Age", e => e.Age)
                 .AddHeaderProperties(bold)
-                .AddProperties(centerAlignment)
-                .AddRow(new NullCellsProvider<Entity>("Score"))
-                .AddHeaderProperties(bold)
-                .AddRow("Min. Score", e => e.MinScore)
+                .AddProperties(centerAlignment);
+            reportBuilder.AddRow(new NullCellsProvider<Entity>("Score"))
+                .AddHeaderProperties(bold);
+            reportBuilder.AddRow("Min. Score", e => e.MinScore)
                 .AddHeaderProperties(indentation)
-                .AddProperties(centerAlignment)
-                .AddRow("Max. Score", e => e.MaxScore)
+                .AddProperties(centerAlignment);
+            reportBuilder.AddRow("Max. Score", e => e.MaxScore)
                 .AddHeaderProperties(indentation)
-                .AddProperties(centerAlignment)
-                .AddRow("Avg. Score", e => e.AverageScore)
+                .AddProperties(centerAlignment);
+            reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
                 .AddHeaderProperties(indentation)
                 .AddProperties(new DecimalFormatProperty(2), centerAlignment);
 
