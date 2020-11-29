@@ -1,7 +1,7 @@
 using Reports.Excel.Models;
 using Reports.PropertyHandlers;
 
-namespace Reports.Extensions.Properties.Handlers.Excel
+namespace Reports.Extensions.Properties.PropertyHandlers.Excel
 {
     public class ExcelMaxLengthPropertyHandler : SingleTypePropertyHandler<MaxLengthProperty, ExcelReportCell>
     {

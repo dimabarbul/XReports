@@ -2,7 +2,7 @@ using System.Drawing;
 using Reports.Html.Models;
 using Reports.PropertyHandlers;
 
-namespace Reports.Extensions.Properties.Handlers.StandardHtml
+namespace Reports.Extensions.Properties.PropertyHandlers.StandardHtml
 {
     public class StandardHtmlColorPropertyHandler : SingleTypePropertyHandler<ColorProperty, HtmlReportCell>
     {

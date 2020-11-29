@@ -9,12 +9,12 @@ namespace Reports.Extensions.Builders.AttributeHandlers
     {
         public void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
         {
-            if (attribute is TAttribute)
+            if (attribute is TAttribute typedAttribute)
             {
-                this.HandleAttribute(builder, attribute);
+                this.HandleAttribute(builder, typedAttribute);
             }
         }
 
-        protected abstract void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute);
+        protected abstract void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, TAttribute attribute);
     }
 }

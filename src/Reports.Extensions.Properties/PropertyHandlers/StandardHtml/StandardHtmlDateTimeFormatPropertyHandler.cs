@@ -2,40 +2,16 @@ using System;
 using System.Linq;
 using Reports.Extensions.Properties.Enums;
 using Reports.Extensions.Properties.Models;
-using Reports.Excel.Models;
+using Reports.Html.Models;
 using Reports.PropertyHandlers;
 
-namespace Reports.Extensions.Properties.Handlers.Excel
+namespace Reports.Extensions.Properties.PropertyHandlers.StandardHtml
 {
-    public class ExcelDateTimeFormatPropertyHandler : SingleTypePropertyHandler<DateTimeFormatProperty, ExcelReportCell>
+    public class StandardHtmlDateTimeFormatPropertyHandler : SingleTypePropertyHandler<DateTimeFormatProperty, HtmlReportCell>
     {
-        protected override void HandleProperty(DateTimeFormatProperty property, ExcelReportCell cell)
+        protected override void HandleProperty(DateTimeFormatProperty property, HtmlReportCell cell)
         {
-            this.ValidateFormat(property.Parts);
-
-            cell.NumberFormat = this.GetFormatString(property);
-        }
-
-        private void ValidateFormat(DateTimeFormatPart[] propertyParts)
-        {
-            bool has12HourPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.Hour12
-                    || p.Type == DateTimeFormatPartType.Hour12WithLeadingZero);
-            bool has24HourPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.Hour
-                    || p.Type == DateTimeFormatPartType.HourWithLeadingZero);
-            bool hasAmPmPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.AmPm);
-
-            if (has12HourPart && !hasAmPmPart)
-            {
-                throw new InvalidOperationException("To get hour in 12-hour format, please, add am/pm part");
-            }
-
-            if (has24HourPart && hasAmPmPart)
-            {
-                throw new InvalidOperationException("Cannot show am/pm part when hour in 24-hour format is added");
-            }
+            cell.Html = cell.GetValue<DateTime>().ToString(this.GetFormatString(property));
         }
 
         private string GetFormatString(DateTimeFormatProperty property)
@@ -63,7 +39,7 @@ namespace Reports.Extensions.Properties.Handlers.Excel
                 DateTimeFormatPartType.Minute => "m",
                 DateTimeFormatPartType.SecondWithLeadingZero => "ss",
                 DateTimeFormatPartType.Second => "s",
-                DateTimeFormatPartType.AmPm => "AM/PM",
+                DateTimeFormatPartType.AmPm => "tt",
                 _ => throw new ArgumentOutOfRangeException(nameof(formatPart)),
             };
         }

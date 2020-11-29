@@ -1,10 +1,9 @@
 using System;
 using Reports.Enums;
 using Reports.Excel.Models;
-using Reports.Html.Models;
 using Reports.PropertyHandlers;
 
-namespace Reports.Extensions.Properties.Handlers.Excel
+namespace Reports.Extensions.Properties.PropertyHandlers.Excel
 {
     public class ExcelAlignmentPropertyHandler : SingleTypePropertyHandler<AlignmentProperty, ExcelReportCell>
     {

@@ -48,7 +48,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
 
         private class CustomAttributeHandler : EntityAttributeHandler<CustomAttribute>
         {
-            protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
+            protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, CustomAttribute attribute)
             {
                 builder.AddProperties(new CustomProperty());
             }
