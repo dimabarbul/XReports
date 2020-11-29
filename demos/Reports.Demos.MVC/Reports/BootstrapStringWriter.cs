@@ -9,5 +9,10 @@ namespace Reports.Demos.MVC.Reports
         {
             await this.WriteTextAsync(@"<table class=""table table-sm"">");
         }
+
+        protected override async Task BeginHeadAsync()
+        {
+            await this.WriteTextAsync(@"<thead class=""thead-dark"">");
+        }
     }
 }
