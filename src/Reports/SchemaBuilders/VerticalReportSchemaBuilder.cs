@@ -16,14 +16,14 @@ namespace Reports.SchemaBuilders
             this.CurrentProvider = new ConfiguredCellsProvider(provider);
 
             this.CellsProviders.Add(this.CurrentProvider);
+            this.NamedProviders[this.CurrentProvider.Provider.Title] = this.CurrentProvider;
 
             return this;
         }
 
         public VerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
         {
-            this.CurrentProvider = this.CellsProviders
-                .First(c => c.Provider.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
+            this.CurrentProvider = this.NamedProviders[title];
 
             return this;
         }

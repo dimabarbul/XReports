@@ -62,6 +62,7 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddRow(instance);
+            builder.AddAlias(property.Name);
 
             this.ApplyAttribute(builder, property);
         }

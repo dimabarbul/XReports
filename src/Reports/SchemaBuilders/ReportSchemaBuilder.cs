@@ -7,6 +7,7 @@ namespace Reports.SchemaBuilders
     public abstract class ReportSchemaBuilder<TSourceEntity>
     {
         protected readonly List<ConfiguredCellsProvider> CellsProviders = new List<ConfiguredCellsProvider>();
+        protected readonly Dictionary<string, ConfiguredCellsProvider> NamedProviders = new Dictionary<string, ConfiguredCellsProvider>();
         protected readonly List<ConfiguredCellsProvider> HeaderProviders = new List<ConfiguredCellsProvider>();
         protected ConfiguredCellsProvider CurrentProvider;
 
@@ -22,6 +23,20 @@ namespace Reports.SchemaBuilders
             {
                 this.Provider = provider;
             }
+        }
+
+        public ReportSchemaBuilder<TSourceEntity> AddAlias(string alias)
+        {
+            this.NamedProviders[alias] = this.CurrentProvider;
+
+            return this;
+        }
+
+        public ReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target)
+        {
+            this.NamedProviders[alias] = this.NamedProviders[target];
+
+            return this;
         }
 
         public ReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
