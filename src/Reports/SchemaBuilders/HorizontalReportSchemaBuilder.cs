@@ -8,9 +8,14 @@ namespace Reports.SchemaBuilders
     {
         public HorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
+            return this.InsertRow(this.CellsProviders.Count, provider);
+        }
+
+        public HorizontalReportSchemaBuilder<TSourceEntity> InsertRow(int index, IReportCellsProvider<TSourceEntity> provider)
+        {
             this.CurrentProvider = new ConfiguredCellsProvider(provider);
 
-            this.CellsProviders.Add(this.CurrentProvider);
+            this.CellsProviders.Insert(index, this.CurrentProvider);
             this.NamedProviders[this.CurrentProvider.Provider.Title] = this.CurrentProvider;
 
             return this;

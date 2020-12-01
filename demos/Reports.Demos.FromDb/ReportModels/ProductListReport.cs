@@ -3,6 +3,7 @@ using Reports.Enums;
 using Reports.Extensions;
 using Reports.Extensions.Builders.Attributes;
 using Reports.Extensions.Builders.Interfaces;
+using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Attributes;
 using Reports.SchemaBuilders;
 using Reports.ValueProviders;
@@ -40,7 +41,8 @@ namespace Reports.Demos.FromDb.ReportModels
     {
         public void Build<TSourceEntity>(VerticalReportSchemaBuilder<TSourceEntity> builder)
         {
-            builder.AddColumn("#", new SequentialNumberValueProvider());
+            builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
+                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
         }
     }
 }

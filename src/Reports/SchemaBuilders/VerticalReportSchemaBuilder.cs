@@ -13,9 +13,14 @@ namespace Reports.SchemaBuilders
 
         public VerticalReportSchemaBuilder<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
         {
+            return this.InsertColumn(this.CellsProviders.Count, provider);
+        }
+
+        public VerticalReportSchemaBuilder<TSourceEntity> InsertColumn(int index, IReportCellsProvider<TSourceEntity> provider)
+        {
             this.CurrentProvider = new ConfiguredCellsProvider(provider);
 
-            this.CellsProviders.Add(this.CurrentProvider);
+            this.CellsProviders.Insert(index, this.CurrentProvider);
             this.NamedProviders[this.CurrentProvider.Provider.Title] = this.CurrentProvider;
 
             return this;
