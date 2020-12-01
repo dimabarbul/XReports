@@ -1,10 +1,15 @@
 using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Enums;
+using Reports.Extensions;
 using Reports.Extensions.Builders.Attributes;
+using Reports.Extensions.Builders.Interfaces;
 using Reports.Extensions.Properties.Attributes;
+using Reports.SchemaBuilders;
+using Reports.ValueProviders;
 
 namespace Reports.Demos.FromDb.ReportModels
 {
+    [VerticalReport(PostBuilder = typeof(ProductListReportPostBuilder))]
     public class ProductListReport
     {
         [ReportVariable(1, "ID")]
@@ -29,5 +34,13 @@ namespace Reports.Demos.FromDb.ReportModels
         [Alignment(AlignmentType.Center, IsHeader = true)]
         [CustomProperty(typeof(YesNoProperty))]
         public bool IsActive { get; set; }
+    }
+
+    public class ProductListReportPostBuilder : IVerticalReportPostBuilder
+    {
+        public void Build<TSourceEntity>(VerticalReportSchemaBuilder<TSourceEntity> builder)
+        {
+            builder.AddColumn("#", new SequentialNumberValueProvider());
+        }
     }
 }

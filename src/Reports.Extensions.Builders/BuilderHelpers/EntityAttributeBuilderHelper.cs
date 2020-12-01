@@ -31,20 +31,25 @@ namespace Reports.Extensions.Builders.BuilderHelpers
 
         public IReportSchema<TEntity> BuildSchema<TEntity>()
         {
-            ReportTypeAttribute reportTypeAttribute = typeof(TEntity).GetCustomAttribute<ReportTypeAttribute>();
+            ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
 
-            return reportTypeAttribute?.Type == ReportType.Horizontal
-                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity>().BuildSchema()
-                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>().BuildSchema();
+            return reportAttribute?.Type == ReportType.Horizontal
+                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity>(reportAttribute as HorizontalReportAttribute).BuildSchema()
+                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
         }
 
-        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>()
+        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute = null)
         {
             HorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
             ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
 
             this.AddRows(builder, reportVariables);
+
+            if (reportAttribute?.PostBuilder != null)
+            {
+                ((IHorizontalReportPostBuilder) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+            }
 
             return builder;
         }
@@ -82,13 +87,19 @@ namespace Reports.Extensions.Builders.BuilderHelpers
             return instance;
         }
 
-        public VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>()
+        public VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             ReportVariableData[] properties = this.GetProperties<TEntity>();
 
             this.AddColumns(builder, properties);
             this.AddComplexHeader(builder, properties);
+
+
+            if (reportAttribute?.PostBuilder != null)
+            {
+                ((IVerticalReportPostBuilder) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+            }
 
             return builder;
         }

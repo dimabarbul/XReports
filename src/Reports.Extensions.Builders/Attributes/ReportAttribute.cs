@@ -4,11 +4,11 @@ using Reports.Extensions.Builders.Enums;
 namespace Reports.Extensions.Builders.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class ReportTypeAttribute : Attribute
+    public abstract class ReportAttribute : Attribute
     {
         public ReportType Type { get; }
 
-        public ReportTypeAttribute(ReportType type)
+        public ReportAttribute(ReportType type)
         {
             this.Type = type;
         }
