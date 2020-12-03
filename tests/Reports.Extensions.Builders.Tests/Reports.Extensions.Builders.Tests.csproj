@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports.Extensions.Builders\Reports.Extensions.Builders.csproj" />
+      <ProjectReference Include="..\..\src\Reports.Extensions.AttributeBasedBuilder\Reports.Extensions.AttributeBasedBuilder.csproj" />
     </ItemGroup>
 
 </Project>

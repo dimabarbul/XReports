@@ -1,8 +1,7 @@
 using System;
 using FluentAssertions;
-using Reports.Extensions.Builders.AttributeHandlers;
-using Reports.Extensions.Builders.Attributes;
-using Reports.Extensions.Builders.BuilderHelpers;
+using Reports.Extensions.AttributeBasedBuilder.AttributeHandlers;
+using Reports.Extensions.AttributeBasedBuilder.Attributes;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.SchemaBuilders;
@@ -15,7 +14,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_CustomAttributeHandler_Applied()
         {
-            EntityAttributeBuilderHelper helper = new EntityAttributeBuilderHelper();
+            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder();
             helper.AddAttributeHandler(new CustomAttributeHandler());
 
             IReportSchema<EntityWithCustomAttribute> schema = helper.BuildSchema<EntityWithCustomAttribute>();
@@ -46,7 +45,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         {
         }
 
-        private class CustomAttributeHandler : EntityAttributeHandler<CustomAttribute>
+        private class CustomAttributeHandler : AttributeHandler<CustomAttribute>
         {
             protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, CustomAttribute attribute)
             {

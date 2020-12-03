@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,9 +6,7 @@ using Bogus.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -117,7 +114,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             }
         }
 
-        private class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler<ReplaceEmptyProperty, HtmlReportCell>
+        private class CustomFormatPropertyHtmlHandler : PropertyHandler<ReplaceEmptyProperty, HtmlReportCell>
         {
             protected override void HandleProperty(ReplaceEmptyProperty property, HtmlReportCell cell)
             {
@@ -128,7 +125,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             }
         }
 
-        private class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler<ReplaceEmptyProperty, ExcelReportCell>
+        private class CustomFormatPropertyExcelHandler : PropertyHandler<ReplaceEmptyProperty, ExcelReportCell>
         {
             protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
             {

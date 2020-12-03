@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Reports.Html.Models;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Html.StringWriter
 {
@@ -21,7 +21,7 @@ namespace Reports.Html.StringWriter
 
         public StringWriter()
         {
-            GeneralCellWriter cellWriter = new GeneralCellWriter();
+            StringCellWriter cellWriter = new StringCellWriter();
 
             this.writeHeaderCell = cellWriter.WriteHeaderCell;
             this.writeBodyCell = cellWriter.WriteBodyCell;

@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using FluentAssertions;
-using Reports.Html.Models;
-using Reports.Interfaces;
-using Reports.Models;
 using Xunit;
 
 namespace Reports.Html.Tests

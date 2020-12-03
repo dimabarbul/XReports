@@ -5,9 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Reports.Excel\Reports.Excel.csproj" />
-      <ProjectReference Include="..\Reports.Extensions.Builders\Reports.Extensions.Builders.csproj" />
-      <ProjectReference Include="..\Reports.Html\Reports.Html.csproj" />
+      <ProjectReference Include="..\Reports.Extensions.AttributeBasedBuilder\Reports.Extensions.AttributeBasedBuilder.csproj" />
       <ProjectReference Include="..\Reports\Reports.csproj" />
     </ItemGroup>
 

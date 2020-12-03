@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports.Html\Reports.Html.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="HtmlReportConverterTest.Basic.cs">
         <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
@@ -28,6 +24,10 @@
       <Compile Update="HtmlReportConverterTest.CustomPropertyHandlersCollection.cs">
         <DependentUpon>HtmlReportConverterTest.cs</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Reports\Reports.csproj" />
     </ItemGroup>
 
 </Project>

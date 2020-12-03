@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,16 +11,15 @@ using Reports.Demos.FromDb.Reports;
 using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
-using Reports.Extensions.Builders.AttributeHandlers;
-using Reports.Extensions.Builders.BuilderHelpers;
-using Reports.Extensions.Builders.Interfaces;
+using Reports.Extensions.AttributeBasedBuilder;
+using Reports.Extensions.AttributeBasedBuilder.AttributeHandlers;
+using Reports.Extensions.AttributeBasedBuilder.Interfaces;
 using Reports.Extensions.Properties.AttributeHandlers;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
-using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
-using Reports.Html.Models;
+using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Demos.FromDb
 {
@@ -56,12 +51,12 @@ namespace Reports.Demos.FromDb
             services.AddScoped<ReportConverter<HtmlReportCell>>(
                 _ => new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
                 {
-                    new StandardHtmlAlignmentPropertyHandler(),
-                    new StandardHtmlBoldPropertyHandler(),
-                    new StandardHtmlColorPropertyHandler(),
-                    new StandardHtmlDecimalFormatPropertyHandler(),
-                    new StandardHtmlPercentFormatPropertyHandler(),
-                    new StandardHtmlDateTimeFormatPropertyHandler(),
+                    new AlignmentPropertyHtmlHandler(),
+                    new BoldPropertyHtmlHandler(),
+                    new ColorPropertyHtmlHandler(),
+                    new DecimalFormatPropertyHtmlHandler(),
+                    new PercentFormatPropertyHtmlHandler(),
+                    new DateTimeFormatPropertyHtmlHandler(),
 
                     new HtmlYesNoPropertyHandler(),
                 })
@@ -69,18 +64,18 @@ namespace Reports.Demos.FromDb
             services.AddScoped<ReportConverter<ExcelReportCell>>(
                 _ => new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
                 {
-                    new ExcelAlignmentPropertyHandler(),
-                    new ExcelBoldPropertyHandler(),
-                    new ExcelColorPropertyHandler(),
-                    new ExcelDecimalFormatPropertyHandler(),
-                    new ExcelPercentFormatPropertyHandler(),
-                    new ExcelDateTimeFormatPropertyHandler(),
+                    new AlignmentPropertyExcelHandler(),
+                    new BoldPropertyExcelHandler(),
+                    new ColorPropertyExcelHandler(),
+                    new DecimalFormatPropertyExcelHandler(),
+                    new PercentFormatPropertyExcelHandler(),
+                    new DateTimeFormatPropertyExcelHandler(),
 
                     new ExcelYesNoPropertyHandler(),
                 })
             );
-            services.AddScoped<EntityAttributeBuilderHelper>(sp => new EntityAttributeBuilderHelper(
-                new IEntityAttributeHandler[]
+            services.AddScoped<AttributeBasedBuilder>(sp => new AttributeBasedBuilder(
+                new IAttributeHandler[]
                 {
                     new CommonAttributeHandler(),
                     new CustomPropertyAttributeHandler(),

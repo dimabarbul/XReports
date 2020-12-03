@@ -10,9 +10,7 @@ using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -161,7 +159,7 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             }
         }
 
-        private class ThreeColorHeatmapPropertyHtmlHandler : SingleTypePropertyHandler<ThreeColorHeatmapProperty, HtmlReportCell>
+        private class ThreeColorHeatmapPropertyHtmlHandler : PropertyHandler<ThreeColorHeatmapProperty, HtmlReportCell>
         {
             protected override void HandleProperty(ThreeColorHeatmapProperty property, HtmlReportCell cell)
             {

@@ -8,12 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Enums;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
-using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
-using Reports.Html.Models;
+using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.SchemaBuilders;
@@ -65,8 +63,8 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
             {
-                new StandardHtmlAlignmentPropertyHandler(),
-                new StandardHtmlColorPropertyHandler(),
+                new AlignmentPropertyHtmlHandler(),
+                new ColorPropertyHtmlHandler(),
             });
 
             return htmlConverter.Convert(reportTable);
@@ -76,8 +74,8 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
             {
-                new ExcelAlignmentPropertyHandler(),
-                new ExcelColorPropertyHandler(),
+                new AlignmentPropertyExcelHandler(),
+                new ColorPropertyExcelHandler(),
             });
 
             return excelConverter.Convert(reportTable);

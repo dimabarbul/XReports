@@ -5,7 +5,6 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
 using Reports.Models;

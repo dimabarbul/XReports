@@ -4,8 +4,8 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Reports.Enums;
-using Reports.Excel.Models;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Excel.EpplusWriter
 {

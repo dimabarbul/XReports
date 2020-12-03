@@ -4,9 +4,9 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
+using Reports.Models;
 using Reports.SchemaBuilders;
 
 namespace Reports.Demos.FromDb.Controllers

@@ -1,5 +1,4 @@
 using System.Linq;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 

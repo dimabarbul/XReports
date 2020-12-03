@@ -1,15 +1,31 @@
-using System;
-using Reports.Extensions.Builders.AttributeHandlers;
-using Reports.Extensions.Builders.Interfaces;
+using Reports.Extensions.AttributeBasedBuilder.AttributeHandlers;
 using Reports.Extensions.Properties.Attributes;
 using Reports.Models;
 using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.Properties.AttributeHandlers
 {
-    public class CommonAttributeHandler : EntityAttributeHandler<AttributeBase>
+    public class CommonAttributeHandler : AttributeHandler<AttributeBase>
     {
         protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, AttributeBase attribute)
+        {
+            ReportCellProperty property = this.GetCellProperty(attribute);
+            if (property == null)
+            {
+                return;
+            }
+
+            if (attribute.IsHeader)
+            {
+                builder.AddHeaderProperties(property);
+            }
+            else
+            {
+                builder.AddProperties(property);
+            }
+        }
+
+        private ReportCellProperty GetCellProperty(AttributeBase attribute)
         {
             ReportCellProperty property = null;
 
@@ -27,6 +43,9 @@ namespace Reports.Extensions.Properties.AttributeHandlers
                 case DateTimeFormatAttribute dateTimeFormatAttribute:
                     property = new DateTimeFormatProperty(dateTimeFormatAttribute.Format);
                     break;
+                case DecimalFormatAttribute decimalFormatAttribute:
+                    property = new DecimalFormatProperty(decimalFormatAttribute.Precision);
+                    break;
                 case MaxLengthAttribute maxLengthAttribute:
                     property = new MaxLengthProperty(maxLengthAttribute.MaxLength);
                     break;
@@ -35,17 +54,7 @@ namespace Reports.Extensions.Properties.AttributeHandlers
                     break;
             }
 
-            if (property != null)
-            {
-                if (attribute.IsHeader)
-                {
-                    builder.AddHeaderProperties(property);
-                }
-                else
-                {
-                    builder.AddProperties(property);
-                }
-            }
+            return property;
         }
     }
 }

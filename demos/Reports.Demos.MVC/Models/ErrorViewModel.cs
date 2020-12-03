@@ -1,5 +1,3 @@
-using System;
-
 namespace Reports.Demos.MVC.Models
 {
     public class ErrorViewModel

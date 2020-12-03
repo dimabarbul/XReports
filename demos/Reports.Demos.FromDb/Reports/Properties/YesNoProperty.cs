@@ -1,7 +1,4 @@
-using Reports.Excel.Models;
-using Reports.Html.Enums;
-using Reports.Html.Models;
-using Reports.Interfaces;
+using Reports.Enums;
 using Reports.Models;
 using Reports.PropertyHandlers;
 
@@ -13,7 +10,7 @@ namespace Reports.Demos.FromDb.Reports.Properties
         public string NoText => "No";
     }
 
-    public class HtmlYesNoPropertyHandler : SingleTypePropertyHandler<YesNoProperty, HtmlReportCell>
+    public class HtmlYesNoPropertyHandler : PropertyHandler<YesNoProperty, HtmlReportCell>
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 
@@ -23,7 +20,7 @@ namespace Reports.Demos.FromDb.Reports.Properties
         }
     }
 
-    public class ExcelYesNoPropertyHandler : SingleTypePropertyHandler<YesNoProperty, ExcelReportCell>
+    public class ExcelYesNoPropertyHandler : PropertyHandler<YesNoProperty, ExcelReportCell>
     {
         protected override void HandleProperty(YesNoProperty property, ExcelReportCell cell)
         {

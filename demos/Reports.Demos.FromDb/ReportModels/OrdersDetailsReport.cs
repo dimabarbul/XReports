@@ -1,5 +1,5 @@
 using System;
-using Reports.Extensions.Builders.Attributes;
+using Reports.Extensions.AttributeBasedBuilder.Attributes;
 using Reports.Extensions.Properties.Attributes;
 
 namespace Reports.Demos.FromDb.ReportModels

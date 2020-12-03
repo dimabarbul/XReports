@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Reports.Html.Enums;
-using Reports.Html.Models;
+using Reports.Enums;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -49,7 +48,7 @@ namespace Reports.Html.Tests
         {
         }
 
-        private class BoldToUpperHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
+        private class BoldToUpperHandler : PropertyHandler<BoldProperty, HtmlReportCell>
         {
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
@@ -59,7 +58,7 @@ namespace Reports.Html.Tests
             public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
         }
 
-        private class BoldMarkedWithTextHandler : SingleTypePropertyHandler<BoldProperty, HtmlReportCell>
+        private class BoldMarkedWithTextHandler : PropertyHandler<BoldProperty, HtmlReportCell>
         {
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {

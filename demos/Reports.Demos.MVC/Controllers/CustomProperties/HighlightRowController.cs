@@ -6,12 +6,10 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
-using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
-using Reports.Html.Models;
+using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.SchemaBuilders;
@@ -61,7 +59,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new[]
             {
-                new StandardHtmlColorPropertyHandler(),
+                new ColorPropertyHtmlHandler(),
             });
 
             return htmlConverter.Convert(reportTable);
@@ -71,7 +69,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
         {
             ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new []
             {
-                new ExcelColorPropertyHandler(),
+                new ColorPropertyExcelHandler(),
             });
 
             return excelConverter.Convert(reportTable);

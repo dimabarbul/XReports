@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Reports.Extensions.Builders.BuilderHelpers;
+using Reports.Extensions.AttributeBasedBuilder;
 using Reports.Interfaces;
 using Reports.Models;
 
@@ -7,9 +7,9 @@ namespace Reports.Demos.FromDb.Services
 {
     public class ReportService
     {
-        private readonly EntityAttributeBuilderHelper builderHelper;
+        private readonly AttributeBasedBuilder builderHelper;
 
-        public ReportService(EntityAttributeBuilderHelper builderHelper)
+        public ReportService(AttributeBasedBuilder builderHelper)
         {
             this.builderHelper = builderHelper;
         }

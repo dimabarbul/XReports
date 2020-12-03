@@ -6,9 +6,7 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -102,7 +100,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
 
         private class CustomFormatProperty : ReportCellProperty { }
 
-        private class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler<CustomFormatProperty, HtmlReportCell>
+        private class CustomFormatPropertyHtmlHandler : PropertyHandler<CustomFormatProperty, HtmlReportCell>
         {
             protected override void HandleProperty(CustomFormatProperty property, HtmlReportCell cell)
             {
@@ -113,7 +111,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             }
         }
 
-        private class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler<CustomFormatProperty, ExcelReportCell>
+        private class CustomFormatPropertyExcelHandler : PropertyHandler<CustomFormatProperty, ExcelReportCell>
         {
             protected override void HandleProperty(CustomFormatProperty property, ExcelReportCell cell)
             {

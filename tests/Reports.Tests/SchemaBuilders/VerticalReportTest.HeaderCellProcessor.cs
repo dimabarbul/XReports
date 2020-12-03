@@ -1,11 +1,3 @@
-using System.Linq;
-using FluentAssertions;
-using Reports.Extensions;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.SchemaBuilders;
-using Xunit;
-
 namespace Reports.Tests.SchemaBuilders
 {
     public partial class VerticalReportTest

@@ -1,7 +1,7 @@
 using OfficeOpenXml;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Interfaces;
+using Reports.Models;
 
 namespace ConsoleApp1
 {

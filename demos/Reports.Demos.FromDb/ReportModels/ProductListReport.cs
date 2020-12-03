@@ -1,8 +1,8 @@
 using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Enums;
 using Reports.Extensions;
-using Reports.Extensions.Builders.Attributes;
-using Reports.Extensions.Builders.Interfaces;
+using Reports.Extensions.AttributeBasedBuilder.Attributes;
+using Reports.Extensions.AttributeBasedBuilder.Interfaces;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Attributes;
 using Reports.SchemaBuilders;

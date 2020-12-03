@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Reports.Extensions.Builders.Attributes;
-using Reports.Extensions.Builders.BuilderHelpers;
+using Reports.Extensions.AttributeBasedBuilder.Attributes;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.SchemaBuilders;
@@ -15,7 +14,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralProperties_CorrectOrder()
         {
-            EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
             VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = builderHelper.BuildVerticalReport<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
@@ -39,7 +38,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
-            EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
             VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = builderHelper.BuildVerticalReport<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
@@ -61,7 +60,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
-            EntityAttributeBuilderHelper builderHelper = new EntityAttributeBuilderHelper();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
             VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = builderHelper.BuildVerticalReport<PropertiesWithAttributes>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new []

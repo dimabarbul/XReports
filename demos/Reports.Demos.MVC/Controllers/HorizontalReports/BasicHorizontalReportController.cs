@@ -8,12 +8,10 @@ using OfficeOpenXml.Style;
 using Reports.Demos.MVC.Reports;
 using Reports.Enums;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
-using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
-using Reports.Html.Models;
+using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -83,10 +81,10 @@ namespace Reports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
             {
-                new StandardHtmlDecimalFormatPropertyHandler(),
-                new StandardHtmlAlignmentPropertyHandler(),
-                new StandardHtmlBoldPropertyHandler(),
-                new StandardHtmlColorPropertyHandler(),
+                new DecimalFormatPropertyHtmlHandler(),
+                new AlignmentPropertyHtmlHandler(),
+                new BoldPropertyHtmlHandler(),
+                new ColorPropertyHtmlHandler(),
                 new HtmlIndentationPropertyHandler(),
             });
 
@@ -97,10 +95,10 @@ namespace Reports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
             {
-                new ExcelDecimalFormatPropertyHandler(),
-                new ExcelAlignmentPropertyHandler(),
-                new ExcelBoldPropertyHandler(),
-                new ExcelColorPropertyHandler(),
+                new DecimalFormatPropertyExcelHandler(),
+                new AlignmentPropertyExcelHandler(),
+                new BoldPropertyExcelHandler(),
+                new ColorPropertyExcelHandler(),
             });
 
             return excelConverter.Convert(reportTable);
@@ -148,7 +146,7 @@ namespace Reports.Demos.MVC.Controllers.HorizontalReports
             }
         }
 
-        private class HtmlIndentationPropertyHandler : SingleTypePropertyHandler<IndentationProperty, HtmlReportCell>
+        private class HtmlIndentationPropertyHandler : PropertyHandler<IndentationProperty, HtmlReportCell>
         {
             protected override void HandleProperty(IndentationProperty property, HtmlReportCell cell)
             {

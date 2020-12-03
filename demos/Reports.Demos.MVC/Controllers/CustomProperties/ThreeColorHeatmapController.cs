@@ -7,9 +7,7 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Reports.PropertyHandlers;
@@ -151,7 +149,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             }
         }
 
-        private class ThreeColorHeatmapPropertyHtmlHandler : SingleTypePropertyHandler<ThreeColorHeatmapProperty, HtmlReportCell>
+        private class ThreeColorHeatmapPropertyHtmlHandler : PropertyHandler<ThreeColorHeatmapProperty, HtmlReportCell>
         {
             protected override void HandleProperty(ThreeColorHeatmapProperty property, HtmlReportCell cell)
             {
@@ -161,7 +159,7 @@ namespace Reports.Demos.MVC.Controllers.CustomProperties
             }
         }
 
-        private class ThreeColorHeatmapPropertyExcelHandler : SingleTypePropertyHandler<ThreeColorHeatmapProperty, ExcelReportCell>
+        private class ThreeColorHeatmapPropertyExcelHandler : PropertyHandler<ThreeColorHeatmapProperty, ExcelReportCell>
         {
             protected override void HandleProperty(ThreeColorHeatmapProperty property, ExcelReportCell cell)
             {

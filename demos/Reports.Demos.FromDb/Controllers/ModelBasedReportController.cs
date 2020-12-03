@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using StringWriter = Reports.Html.StringWriter.StringWriter;

@@ -5,7 +5,6 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Interfaces;
 using Reports.Models;

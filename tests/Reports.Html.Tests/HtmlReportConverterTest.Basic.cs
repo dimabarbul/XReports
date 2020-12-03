@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Reports.Html.Models;
 using Reports.Interfaces;
 using Reports.Models;
 using Xunit;

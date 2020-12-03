@@ -5,14 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Reports;
+using Reports.Enums;
 using Reports.Excel.EpplusWriter;
-using Reports.Excel.Models;
 using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
-using Reports.Extensions.Properties.PropertyHandlers.StandardHtml;
-using Reports.Html.Enums;
-using Reports.Html.Models;
+using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Html.StringWriter;
 using Reports.Interfaces;
 using Reports.Models;
@@ -88,13 +86,13 @@ namespace ConsoleApp1
             ReportConverter<ExcelReportCell> converter = new ReportConverter<ExcelReportCell>(
                 new IPropertyHandler<ExcelReportCell>[]
                 {
-                    new ExcelAlignmentPropertyHandler(),
-                    new ExcelBoldPropertyHandler(),
-                    new ExcelColorPropertyHandler(),
-                    new ExcelDateTimeFormatPropertyHandler(),
-                    new ExcelDecimalFormatPropertyHandler(),
-                    new ExcelMaxLengthPropertyHandler(),
-                    new ExcelPercentFormatPropertyHandler(),
+                    new AlignmentPropertyExcelHandler(),
+                    new BoldPropertyExcelHandler(),
+                    new ColorPropertyExcelHandler(),
+                    new DateTimeFormatPropertyExcelHandler(),
+                    new DecimalFormatPropertyExcelHandler(),
+                    new MaxLengthPropertyExcelHandler(),
+                    new PercentFormatPropertyExcelHandler(),
                 }
             );
             IReportTable<ExcelReportCell> excelReportTable = converter.Convert(reportTable);
@@ -119,13 +117,13 @@ namespace ConsoleApp1
             ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(
                 new IPropertyHandler<HtmlReportCell>[]
                 {
-                    new StandardHtmlAlignmentPropertyHandler(),
-                    new StandardHtmlBoldPropertyHandler(),
-                    new StandardHtmlColorPropertyHandler(),
-                    new StandardHtmlDateTimeFormatPropertyHandler(),
-                    new StandardHtmlDecimalFormatPropertyHandler(),
-                    new StandardHtmlMaxLengthPropertyHandler(),
-                    new StandardHtmlPercentFormatPropertyHandler(),
+                    new AlignmentPropertyHtmlHandler(),
+                    new BoldPropertyHtmlHandler(),
+                    new ColorPropertyHtmlHandler(),
+                    new DateTimeFormatPropertyHtmlHandler(),
+                    new DecimalFormatPropertyHtmlHandler(),
+                    new MaxLengthPropertyHtmlHandler(),
+                    new PercentFormatPropertyHtmlHandler(),
 
                     new StandardHtmlMyCustomFormatPropertyHandler(),
                 }
@@ -139,7 +137,7 @@ namespace ConsoleApp1
                 File.Delete(fileName);
             }
 
-            GeneralCellWriter cellWriter = new GeneralCellWriter();
+            StringCellWriter cellWriter = new StringCellWriter();
             StringWriter writer = new StringWriter(cellWriter.WriteHeaderCell, cellWriter.WriteBodyCell);
             Stopwatch sw = Stopwatch.StartNew();
             await writer.WriteToFileAsync(htmlReportTable, fileName);
@@ -153,7 +151,7 @@ namespace ConsoleApp1
     {
     }
 
-    public class StandardHtmlMyCustomFormatPropertyHandler : SingleTypePropertyHandler<MyCustomFormatProperty, HtmlReportCell>
+    public class StandardHtmlMyCustomFormatPropertyHandler : PropertyHandler<MyCustomFormatProperty, HtmlReportCell>
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 
@@ -166,7 +164,7 @@ namespace ConsoleApp1
         }
     }
 
-    public class ExcelMyCustomFormatPropertyHandler : SingleTypePropertyHandler<MyCustomFormatProperty, ExcelReportCell>
+    public class ExcelMyCustomFormatPropertyHandler : PropertyHandler<MyCustomFormatProperty, ExcelReportCell>
     {
         protected override void HandleProperty(MyCustomFormatProperty property, ExcelReportCell cell)
         {
