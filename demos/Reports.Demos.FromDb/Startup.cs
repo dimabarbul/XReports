@@ -46,44 +46,12 @@ namespace Reports.Demos.FromDb
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
             services.AddScoped<ReportService>();
-            services.AddScoped<StringWriter, MyStringWriter>();
-            services.AddScoped<EpplusWriter, MyExcelWriter>();
-            services.AddScoped<ReportConverter<HtmlReportCell>>(
-                _ => new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
-                {
-                    new AlignmentPropertyHtmlHandler(),
-                    new BoldPropertyHtmlHandler(),
-                    new ColorPropertyHtmlHandler(),
-                    new DecimalFormatPropertyHtmlHandler(),
-                    new PercentFormatPropertyHtmlHandler(),
-                    new DateTimeFormatPropertyHtmlHandler(),
 
-                    new HtmlYesNoPropertyHandler(),
-                })
-            );
-            services.AddScoped<ReportConverter<ExcelReportCell>>(
-                _ => new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
-                {
-                    new AlignmentPropertyExcelHandler(),
-                    new BoldPropertyExcelHandler(),
-                    new ColorPropertyExcelHandler(),
-                    new DecimalFormatPropertyExcelHandler(),
-                    new PercentFormatPropertyExcelHandler(),
-                    new DateTimeFormatPropertyExcelHandler(),
-
-                    new ExcelYesNoPropertyHandler(),
-                })
-            );
-            services.AddScoped<AttributeBasedBuilder>(sp => new AttributeBasedBuilder(
-                new IAttributeHandler[]
-                {
-                    new CommonAttributeHandler(),
-                    new CustomPropertyAttributeHandler(),
-                }
-            ));
+            this.UseReports(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -125,6 +93,27 @@ namespace Reports.Demos.FromDb
 
             DatabaseSeeder.Seed(context);
             Console.WriteLine($"DB seeded, elapsed {sw.ElapsedMilliseconds}");
+        }
+
+        private void UseReports(IServiceCollection services)
+        {
+            services.UseStringWriter<MyStringWriter>();
+            services.UseEpplusWriter<MyExcelWriter>();
+            services.AddReportConverter<HtmlReportCell, IHtmlHandler>(
+                new AlignmentPropertyHtmlHandler(),
+                new BoldPropertyHtmlHandler(),
+                new ColorPropertyHtmlHandler(),
+                new DecimalFormatPropertyHtmlHandler(),
+                new PercentFormatPropertyHtmlHandler(),
+                new DateTimeFormatPropertyHtmlHandler());
+            services.AddReportConverter<ExcelReportCell, IExcelHandler>(
+                new AlignmentPropertyExcelHandler(),
+                new BoldPropertyExcelHandler(),
+                new ColorPropertyExcelHandler(),
+                new DecimalFormatPropertyExcelHandler(),
+                new PercentFormatPropertyExcelHandler(),
+                new DateTimeFormatPropertyExcelHandler());
+            services.UseAttributeBasedBuilder();
         }
     }
 }

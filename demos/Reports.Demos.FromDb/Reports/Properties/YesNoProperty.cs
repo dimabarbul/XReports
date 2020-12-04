@@ -10,7 +10,7 @@ namespace Reports.Demos.FromDb.Reports.Properties
         public string NoText => "No";
     }
 
-    public class HtmlYesNoPropertyHandler : PropertyHandler<YesNoProperty, HtmlReportCell>
+    public class YesNoPropertyHtmlHandler : PropertyHandler<YesNoProperty, HtmlReportCell>, IHtmlHandler
     {
         public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
 
@@ -20,7 +20,7 @@ namespace Reports.Demos.FromDb.Reports.Properties
         }
     }
 
-    public class ExcelYesNoPropertyHandler : PropertyHandler<YesNoProperty, ExcelReportCell>
+    public class YesNoPropertyExcelHandler : PropertyHandler<YesNoProperty, ExcelReportCell>, IExcelHandler
     {
         protected override void HandleProperty(YesNoProperty property, ExcelReportCell cell)
         {
