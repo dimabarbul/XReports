@@ -44,10 +44,7 @@ namespace Reports.Extensions.Properties.AttributeHandlers
                     property = new DateTimeFormatProperty(dateTimeFormatAttribute.Format);
                     break;
                 case DecimalFormatAttribute decimalFormatAttribute:
-                    property = new DecimalFormatProperty(decimalFormatAttribute.Precision)
-                    {
-                        CultureAgnostic = decimalFormatAttribute.CultureAgnostic,
-                    };
+                    property = new DecimalFormatProperty(decimalFormatAttribute.Precision);
                     break;
                 case MaxLengthAttribute maxLengthAttribute:
                     property = new MaxLengthProperty(maxLengthAttribute.MaxLength);
