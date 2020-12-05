@@ -47,7 +47,7 @@ namespace Reports.Html.StringWriter
             stringBuilder.Append("</").Append(tableCellTagName).Append(">");
         }
 
-        private void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
+        protected void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
         {
             this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString(), "1");
             this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString(), "1");
@@ -68,6 +68,11 @@ namespace Reports.Html.StringWriter
             }
         }
 
+        protected void WriteContent(StringBuilder stringBuilder, HtmlReportCell cell)
+        {
+            stringBuilder.Append(cell.Html);
+        }
+
         private void WriteAttribute(StringBuilder stringBuilder, string name, string value, string defaultValue = "")
         {
             if (value.Equals(defaultValue, StringComparison.Ordinal))
@@ -76,11 +81,6 @@ namespace Reports.Html.StringWriter
             }
 
             stringBuilder.Append(name).Append(@"=""").Append(HttpUtility.HtmlAttributeEncode(value)).Append(@""" ");
-        }
-
-        private void WriteContent(StringBuilder stringBuilder, HtmlReportCell cell)
-        {
-            stringBuilder.Append(cell.Html);
         }
     }
 }
