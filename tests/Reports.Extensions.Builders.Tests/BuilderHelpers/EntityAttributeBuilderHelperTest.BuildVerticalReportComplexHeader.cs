@@ -1,9 +1,9 @@
 using System.Linq;
 using FluentAssertions;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
+using Reports.Core.SchemaBuilders;
 using Reports.Extensions.AttributeBasedBuilder.Attributes;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers

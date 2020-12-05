@@ -1,6 +1,6 @@
+using Reports.Core.Models;
 using Reports.Extensions.Properties.Helpers;
 using Reports.Extensions.Properties.Models;
-using Reports.Models;
 
 namespace Reports.Extensions.Properties
 {

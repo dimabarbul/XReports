@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Reports.Models;
+using Reports.Core.Models;
 
 namespace Reports.Tests.SchemaBuilders
 {

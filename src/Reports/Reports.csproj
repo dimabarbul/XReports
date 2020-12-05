@@ -5,15 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
-        <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\..\opt\dotnet_core\packs\Microsoft.AspNetCore.App.Ref\3.1.10\ref\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\Reports.Excel.EpplusWriter\Reports.Excel.EpplusWriter.csproj" />
+      <ProjectReference Include="..\Reports.Extensions.Properties\Reports.Extensions.Properties.csproj" />
+      <ProjectReference Include="..\Reports.Html.StringWriter\Reports.Html.StringWriter.csproj" />
     </ItemGroup>
 
 </Project>

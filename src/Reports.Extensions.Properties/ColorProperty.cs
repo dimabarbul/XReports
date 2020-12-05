@@ -1,5 +1,5 @@
 using System.Drawing;
-using Reports.Models;
+using Reports.Core.Models;
 
 namespace Reports.Extensions.Properties
 {

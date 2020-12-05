@@ -6,20 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Reports.Core;
+using Reports.Core.Models;
 using Reports.Demos.FromDb.Data;
 using Reports.Demos.FromDb.Reports;
-using Reports.Demos.FromDb.Reports.Properties;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
 using Reports.Extensions.AttributeBasedBuilder;
-using Reports.Extensions.AttributeBasedBuilder.AttributeHandlers;
-using Reports.Extensions.AttributeBasedBuilder.Interfaces;
-using Reports.Extensions.Properties.AttributeHandlers;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
 using Reports.Extensions.Properties.PropertyHandlers.Html;
 using Reports.Html.StringWriter;
-using Reports.Interfaces;
-using Reports.Models;
 
 namespace Reports.Demos.FromDb
 {

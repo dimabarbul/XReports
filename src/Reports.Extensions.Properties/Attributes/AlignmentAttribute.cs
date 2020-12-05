@@ -1,4 +1,4 @@
-using Reports.Enums;
+using Reports.Core.Enums;
 
 namespace Reports.Extensions.Properties.Attributes
 {

@@ -5,10 +5,12 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Reports.Extensions;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.SchemaBuilders;
+using Reports.Core;
+using Reports.Core.Extensions;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
+using Reports.Core.SchemaBuilders;
+using Reports.Excel.EpplusWriter;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -32,7 +34,7 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            Excel.EpplusWriter.EpplusWriter writer = new BorderExcelWriter();
+            EpplusWriter writer = new BorderExcelWriter();
 
             return writer.WriteToStream(reportTable);
         }
@@ -73,7 +75,7 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
             public decimal Score { get; set; }
         }
 
-        private class BorderExcelWriter : Excel.EpplusWriter.EpplusWriter
+        private class BorderExcelWriter : EpplusWriter
         {
             protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress, ExcelAddress bodyAddress)
             {

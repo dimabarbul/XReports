@@ -1,4 +1,4 @@
-using Reports.SchemaBuilders;
+using Reports.Core.SchemaBuilders;
 
 namespace Reports.Extensions.AttributeBasedBuilder.Interfaces
 {

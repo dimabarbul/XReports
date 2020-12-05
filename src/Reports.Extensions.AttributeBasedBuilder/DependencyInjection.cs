@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Reports.Core.Extensions;
 using Reports.Extensions.AttributeBasedBuilder.Interfaces;
 
 namespace Reports.Extensions.AttributeBasedBuilder

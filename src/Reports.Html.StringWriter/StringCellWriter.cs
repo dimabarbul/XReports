@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Web;
-using Reports.Models;
+using Reports.Core.Models;
 
 namespace Reports.Html.StringWriter
 {

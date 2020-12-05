@@ -1,5 +1,5 @@
 using System;
-using Reports.Models;
+using Reports.Core.Models;
 
 namespace Reports.Extensions.AttributeBasedBuilder.Attributes
 {

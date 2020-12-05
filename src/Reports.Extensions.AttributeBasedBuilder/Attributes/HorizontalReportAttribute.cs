@@ -1,4 +1,5 @@
 using System;
+using Reports.Core.Extensions;
 using Reports.Extensions.AttributeBasedBuilder.Enums;
 using Reports.Extensions.AttributeBasedBuilder.Interfaces;
 

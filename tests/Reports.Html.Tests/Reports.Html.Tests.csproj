@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports\Reports.csproj" />
+      <ProjectReference Include="..\..\src\Reports.Core\Reports.Core.csproj" />
     </ItemGroup>
 
 </Project>

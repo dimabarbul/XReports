@@ -1,10 +1,10 @@
 using System;
 using FluentAssertions;
-using Reports.Extensions;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.SchemaBuilders;
-using Reports.ValueProviders;
+using Reports.Core.Extensions;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
+using Reports.Core.SchemaBuilders;
+using Reports.Core.ValueProviders;
 using Xunit;
 
 namespace Reports.Tests.SchemaBuilders

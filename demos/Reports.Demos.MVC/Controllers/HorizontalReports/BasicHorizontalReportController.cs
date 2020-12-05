@@ -5,18 +5,19 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Reports.Core;
+using Reports.Core.Enums;
+using Reports.Core.Extensions;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
+using Reports.Core.PropertyHandlers;
+using Reports.Core.ReportCellsProviders;
+using Reports.Core.SchemaBuilders;
 using Reports.Demos.MVC.Reports;
-using Reports.Enums;
 using Reports.Excel.EpplusWriter;
-using Reports.Extensions;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.PropertyHandlers.Excel;
 using Reports.Extensions.Properties.PropertyHandlers.Html;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.PropertyHandlers;
-using Reports.ReportCellsProviders;
-using Reports.SchemaBuilders;
 
 namespace Reports.Demos.MVC.Controllers.HorizontalReports
 {

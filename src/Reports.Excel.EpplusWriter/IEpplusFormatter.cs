@@ -1,5 +1,5 @@
 using OfficeOpenXml;
-using Reports.Models;
+using Reports.Core.Models;
 
 namespace Reports.Excel.EpplusWriter
 {

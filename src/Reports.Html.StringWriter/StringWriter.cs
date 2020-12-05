@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Reports.Interfaces;
-using Reports.Models;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
 
 namespace Reports.Html.StringWriter
 {

@@ -1,6 +1,6 @@
-using Reports.Enums;
-using Reports.Models;
-using Reports.PropertyHandlers;
+using Reports.Core.Enums;
+using Reports.Core.Models;
+using Reports.Core.PropertyHandlers;
 
 namespace Reports.Demos.FromDb.Reports.Properties
 {

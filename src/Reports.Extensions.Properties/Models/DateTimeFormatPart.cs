@@ -1,3 +1,4 @@
+
 using Reports.Extensions.Properties.Enums;
 
 namespace Reports.Extensions.Properties.Models

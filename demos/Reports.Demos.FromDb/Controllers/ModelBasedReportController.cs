@@ -1,10 +1,11 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Reports.Core;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
-using Reports.Interfaces;
-using Reports.Models;
 using StringWriter = Reports.Html.StringWriter.StringWriter;
 
 namespace Reports.Demos.FromDb.Controllers

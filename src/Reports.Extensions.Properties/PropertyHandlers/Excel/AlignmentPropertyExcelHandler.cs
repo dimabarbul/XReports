@@ -1,7 +1,7 @@
 using System;
-using Reports.Enums;
-using Reports.Models;
-using Reports.PropertyHandlers;
+using Reports.Core.Enums;
+using Reports.Core.Models;
+using Reports.Core.PropertyHandlers;
 
 namespace Reports.Extensions.Properties.PropertyHandlers.Excel
 {

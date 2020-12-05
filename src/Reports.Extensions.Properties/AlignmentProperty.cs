@@ -1,5 +1,5 @@
-using Reports.Enums;
-using Reports.Models;
+using Reports.Core.Enums;
+using Reports.Core.Models;
 
 namespace Reports.Extensions.Properties
 {

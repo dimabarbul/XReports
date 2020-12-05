@@ -1,7 +1,7 @@
 using System;
+using Reports.Core.Models;
+using Reports.Core.SchemaBuilders;
 using Reports.Extensions.AttributeBasedBuilder.Attributes;
-using Reports.Models;
-using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.AttributeBasedBuilder.AttributeHandlers
 {

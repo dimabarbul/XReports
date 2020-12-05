@@ -1,12 +1,12 @@
+using Reports.Core.Enums;
+using Reports.Core.Extensions;
+using Reports.Core.SchemaBuilders;
+using Reports.Core.ValueProviders;
 using Reports.Demos.FromDb.Reports.Properties;
-using Reports.Enums;
-using Reports.Extensions;
 using Reports.Extensions.AttributeBasedBuilder.Attributes;
 using Reports.Extensions.AttributeBasedBuilder.Interfaces;
 using Reports.Extensions.Properties;
 using Reports.Extensions.Properties.Attributes;
-using Reports.SchemaBuilders;
-using Reports.ValueProviders;
 
 namespace Reports.Demos.FromDb.ReportModels
 {

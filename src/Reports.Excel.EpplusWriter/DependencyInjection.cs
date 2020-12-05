@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Reports.Extensions;
+using Reports.Core.Extensions;
 
 namespace Reports.Excel.EpplusWriter
 {

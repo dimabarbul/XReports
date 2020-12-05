@@ -1,6 +1,6 @@
 using System;
+using Reports.Core.SchemaBuilders;
 using Reports.Extensions.AttributeBasedBuilder.Interfaces;
-using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.AttributeBasedBuilder.AttributeHandlers
 {

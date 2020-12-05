@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Reports.Enums;
-using Reports.Interfaces;
-using Reports.Models;
+using Reports.Core.Enums;
+using Reports.Core.Interfaces;
+using Reports.Core.Models;
 
 namespace Reports.Excel.EpplusWriter
 {

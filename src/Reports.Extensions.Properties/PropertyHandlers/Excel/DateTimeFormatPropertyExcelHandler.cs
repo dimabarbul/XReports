@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
+using Reports.Core.Models;
+using Reports.Core.PropertyHandlers;
 using Reports.Extensions.Properties.Enums;
 using Reports.Extensions.Properties.Models;
-using Reports.Models;
-using Reports.PropertyHandlers;
 
 namespace Reports.Extensions.Properties.PropertyHandlers.Excel
 {

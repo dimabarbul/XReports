@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports\Reports.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="Builders\VerticalReportTest.HeaderCellProcessor.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
@@ -91,6 +87,10 @@
       <Compile Update="SchemaBuilders\HorizontalReportTest.Basic.cs">
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Reports.Core\Reports.Core.csproj" />
     </ItemGroup>
 
 </Project>

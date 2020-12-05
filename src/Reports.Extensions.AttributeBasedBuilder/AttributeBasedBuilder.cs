@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Reports.Core.Interfaces;
+using Reports.Core.ReportCellsProviders;
+using Reports.Core.SchemaBuilders;
 using Reports.Extensions.AttributeBasedBuilder.Attributes;
 using Reports.Extensions.AttributeBasedBuilder.Enums;
 using Reports.Extensions.AttributeBasedBuilder.Interfaces;
-using Reports.Interfaces;
-using Reports.ReportCellsProviders;
-using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.AttributeBasedBuilder
 {
