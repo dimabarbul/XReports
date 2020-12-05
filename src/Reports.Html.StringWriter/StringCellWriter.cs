@@ -28,12 +28,22 @@ namespace Reports.Html.StringWriter
 
         protected virtual void WriteCell(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
         {
-            stringBuilder.Append("<").Append(tableCellTagName).Append(" ");
-            this.WriteAttributes(stringBuilder, cell);
-            stringBuilder.Append(">");
+            this.BeginWrappingElement(stringBuilder, cell, tableCellTagName);
 
             this.WriteContent(stringBuilder, cell);
 
+            EndWrappingElement(stringBuilder, tableCellTagName);
+        }
+
+        protected virtual void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
+        {
+            stringBuilder.Append("<").Append(tableCellTagName).Append(" ");
+            this.WriteAttributes(stringBuilder, cell);
+            stringBuilder.Append(">");
+        }
+
+        protected virtual void EndWrappingElement(StringBuilder stringBuilder, string tableCellTagName)
+        {
             stringBuilder.Append("</").Append(tableCellTagName).Append(">");
         }
 
