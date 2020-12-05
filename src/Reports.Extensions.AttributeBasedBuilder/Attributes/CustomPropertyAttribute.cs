@@ -3,6 +3,7 @@ using Reports.Core.Models;
 
 namespace Reports.Extensions.AttributeBasedBuilder.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public class CustomPropertyAttribute : Attribute
     {
         public Type PropertyType { get; }
