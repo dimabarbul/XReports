@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>Reports</Title>
+        <Authors>Dmitriy Barbul</Authors>
     </PropertyGroup>
 
     <ItemGroup>
