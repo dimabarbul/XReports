@@ -26,6 +26,11 @@ namespace Reports.SchemaBuilders
             return this;
         }
 
+        public VerticalReportSchemaBuilder<TSourceEntity> InsertColumnBefore(string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.CellsProviders.IndexOf(this.NamedProviders[title]), provider);
+        }
+
         public VerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
         {
             this.CurrentProvider = this.NamedProviders[title];

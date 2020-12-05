@@ -54,5 +54,29 @@ namespace Reports.Extensions
 
             return builder.InsertColumn(index, provider);
         }
+
+        public static VerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+            this VerticalReportSchemaBuilder<TEntity> builder, string beforeTitle, string title, Func<TEntity, TValue> valueSelector)
+        {
+            EntityPropertyReportCellsProvider<TEntity,TValue> provider = new EntityPropertyReportCellsProvider<TEntity,TValue>(title, valueSelector);
+
+            return builder.InsertColumnBefore(beforeTitle, provider);
+        }
+
+        public static VerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+            this VerticalReportSchemaBuilder<TEntity> builder, string beforeTitle, string title, IValueProvider<TValue> valueProvider)
+        {
+            ValueProviderReportCellsProvider<TEntity,TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+
+            return builder.InsertColumnBefore(beforeTitle, provider);
+        }
+
+        public static VerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+            this VerticalReportSchemaBuilder<TEntity> builder, string beforeTitle, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
+        {
+            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
+
+            return builder.InsertColumnBefore(beforeTitle, provider);
+        }
     }
 }

@@ -21,6 +21,11 @@ namespace Reports.SchemaBuilders
             return this;
         }
 
+        public HorizontalReportSchemaBuilder<TSourceEntity> InsertRowBefore(string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertRow(this.CellsProviders.IndexOf(this.NamedProviders[title]), provider);
+        }
+
         public HorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title)
         {
             this.CurrentProvider = this.NamedProviders[title];
