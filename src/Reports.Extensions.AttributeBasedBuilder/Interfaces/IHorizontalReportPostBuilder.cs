@@ -2,8 +2,8 @@ using Reports.SchemaBuilders;
 
 namespace Reports.Extensions.AttributeBasedBuilder.Interfaces
 {
-    public interface IHorizontalReportPostBuilder
+    public interface IHorizontalReportPostBuilder<TSourceEntity>
     {
-        void Build<TSourceEntity>(HorizontalReportSchemaBuilder<TSourceEntity> builder);
+        void Build(HorizontalReportSchemaBuilder<TSourceEntity> builder);
     }
 }

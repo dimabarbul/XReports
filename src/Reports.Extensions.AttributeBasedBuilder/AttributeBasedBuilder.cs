@@ -48,7 +48,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IHorizontalReportPostBuilder) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+                ((IHorizontalReportPostBuilder<TEntity>) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;
@@ -98,7 +98,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IVerticalReportPostBuilder) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+                ((IVerticalReportPostBuilder<TEntity>) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;

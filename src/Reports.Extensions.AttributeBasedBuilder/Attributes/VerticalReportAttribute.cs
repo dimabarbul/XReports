@@ -13,9 +13,9 @@ namespace Reports.Extensions.AttributeBasedBuilder.Attributes
             get => this.postBuilder;
             set
             {
-                if (!typeof(IVerticalReportPostBuilder).IsAssignableFrom(value))
+                if (!value.ImplementsGenericInterface(typeof(IVerticalReportPostBuilder<>)))
                 {
-                    throw new ArgumentException($"Type {value} should implement {typeof(IVerticalReportPostBuilder)}");
+                    throw new ArgumentException($"Type {value} should implement {typeof(IVerticalReportPostBuilder<>)}");
                 }
 
                 this.postBuilder = value;

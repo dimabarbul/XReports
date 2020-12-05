@@ -37,9 +37,9 @@ namespace Reports.Demos.FromDb.ReportModels
         public bool IsActive { get; set; }
     }
 
-    public class ProductListReportPostBuilder : IVerticalReportPostBuilder
+    public class ProductListReportPostBuilder : IVerticalReportPostBuilder<ProductListReport>
     {
-        public void Build<TSourceEntity>(VerticalReportSchemaBuilder<TSourceEntity> builder)
+        public void Build(VerticalReportSchemaBuilder<ProductListReport> builder)
         {
             builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
                 .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
