@@ -10,7 +10,7 @@ namespace Reports.Extensions.Properties.PropertyHandlers.Html
 
         protected override void HandleProperty(PercentFormatProperty property, HtmlReportCell cell)
         {
-            cell.Html = (cell.GetValue<decimal>() * 100).ToString($"F{property.Precision}") + " %";
+            cell.Html = (cell.GetValue<decimal>() * 100).ToString($"F{property.Precision}") + property.PostfixText;
         }
     }
 }

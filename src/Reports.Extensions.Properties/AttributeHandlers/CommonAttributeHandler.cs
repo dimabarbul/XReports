@@ -50,7 +50,10 @@ namespace Reports.Extensions.Properties.AttributeHandlers
                     property = new MaxLengthProperty(maxLengthAttribute.MaxLength);
                     break;
                 case PercentFormatAttribute percentFormatAttribute:
-                    property = new PercentFormatProperty(percentFormatAttribute.Precision);
+                    property = new PercentFormatProperty(percentFormatAttribute.Precision)
+                    {
+                        PostfixText = percentFormatAttribute.PostfixText,
+                    };
                     break;
             }
 

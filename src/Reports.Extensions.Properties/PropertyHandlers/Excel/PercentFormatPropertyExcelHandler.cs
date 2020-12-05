@@ -8,7 +8,7 @@ namespace Reports.Extensions.Properties.PropertyHandlers.Excel
     {
         protected override void HandleProperty(PercentFormatProperty property, ExcelReportCell cell)
         {
-            cell.NumberFormat = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))} %";
+            cell.NumberFormat = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))}{property.PostfixText}";
         }
     }
 }
