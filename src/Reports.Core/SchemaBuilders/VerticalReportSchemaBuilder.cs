@@ -91,7 +91,7 @@ namespace Reports.Core.SchemaBuilders
                         c.HeaderProcessors.ToArray()
                     ))
                     .ToArray(),
-                new ReportCellProperty[0],
+                this.TableProperties.ToArray(),
                 this.complexHeaders.ToArray(),
                 this.complexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray())

@@ -53,7 +53,7 @@ namespace Reports.Core.SchemaBuilders
                         r.HeaderProcessors.ToArray()
                     ))
                     .ToArray(),
-                new ReportCellProperty[0],
+                this.TableProperties.ToArray(),
                 this.HeaderProviders
                     .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
                         r.Provider,

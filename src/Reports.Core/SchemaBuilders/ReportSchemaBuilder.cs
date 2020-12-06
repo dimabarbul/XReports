@@ -9,6 +9,7 @@ namespace Reports.Core.SchemaBuilders
         protected readonly List<ConfiguredCellsProvider> CellsProviders = new List<ConfiguredCellsProvider>();
         protected readonly Dictionary<string, ConfiguredCellsProvider> NamedProviders = new Dictionary<string, ConfiguredCellsProvider>();
         protected readonly List<ConfiguredCellsProvider> HeaderProviders = new List<ConfiguredCellsProvider>();
+        protected List<ReportCellProperty> TableProperties { get; set; } = new List<ReportCellProperty>();
         protected ConfiguredCellsProvider CurrentProvider;
 
         protected class ConfiguredCellsProvider
@@ -35,6 +36,13 @@ namespace Reports.Core.SchemaBuilders
         public ReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target)
         {
             this.NamedProviders[alias] = this.NamedProviders[target];
+
+            return this;
+        }
+
+        public ReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportCellProperty[] properties)
+        {
+            this.TableProperties.AddRange(properties);
 
             return this;
         }
