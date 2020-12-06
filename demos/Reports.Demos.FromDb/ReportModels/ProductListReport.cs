@@ -29,7 +29,7 @@ namespace Reports.Demos.FromDb.ReportModels
         [Alignment(AlignmentType.Center, IsHeader = true)]
         [DecimalFormat(2)]
         [Alignment(AlignmentType.Center)]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [ReportVariable(5, "Active")]
         [Alignment(AlignmentType.Center, IsHeader = true)]
