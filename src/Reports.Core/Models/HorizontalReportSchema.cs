@@ -29,7 +29,7 @@ namespace Reports.Core.Models
         {
             return this.CellsProviders
                 .Select(row => new ReportCell[] { row.CreateHeaderCell() }
-                    .Concat(source.Select(row.CreateCell))
+                    .Concat(source.Select(entity => this.AddTableProperties(row.CreateCell(entity))))
                 );
         }
     }
