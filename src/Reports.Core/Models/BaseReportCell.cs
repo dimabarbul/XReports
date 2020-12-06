@@ -31,6 +31,22 @@ namespace Reports.Core.Models
             return Convert.ChangeType(this.InternalValue, typeof(TValue));
         }
 
+        public TValue? GetNullableValue<TValue>()
+            where TValue : struct
+        {
+            if (this.InternalValue == null)
+            {
+                return null;
+            }
+
+            if (this.ValueType == typeof(TValue))
+            {
+                return this.InternalValue;
+            }
+
+            return Convert.ChangeType(this.InternalValue, typeof(TValue));
+        }
+
         public bool HasProperty<TProperty>() where TProperty : ReportCellProperty
         {
             return this.Properties.OfType<TProperty>().Any();

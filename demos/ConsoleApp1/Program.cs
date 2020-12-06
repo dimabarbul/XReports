@@ -62,7 +62,7 @@ namespace ConsoleApp1
             builder.AddColumn("With max.length", i => "Some very loooooong text")
                 .AddProperties(new MaxLengthProperty(15));
             builder.AddColumn("Percent", i => i.Item2)
-                .AddProperties(new PercentFormatProperty(1), columnSameFormatProperty);
+                .AddProperties(new PercentFormatProperty(1){PostfixText = null}, columnSameFormatProperty);
             builder.AddColumn("Colored", i => i.Item1 % 10)
                 .AddProperties(new ColorProperty(Color.Yellow, Color.Black), columnSameFormatProperty);
             builder.AddColumn("With custom format", i => i.Item2 * 100)

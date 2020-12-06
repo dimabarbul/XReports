@@ -7,7 +7,7 @@ namespace Reports.Extensions.Properties.PropertyHandlers.Html
     {
         protected override void HandleProperty(DecimalFormatProperty property, HtmlReportCell cell)
         {
-            cell.Html = cell.GetValue<decimal?>()?.ToString($"F{property.Precision}");
+            cell.Html = cell.GetNullableValue<decimal>()?.ToString($"F{property.Precision}");
         }
     }
 }
