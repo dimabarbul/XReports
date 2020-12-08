@@ -11,7 +11,7 @@ namespace Reports.Extensions.Properties.PropertyHandlers.Html
     {
         protected override void HandleProperty(DateTimeFormatProperty property, HtmlReportCell cell)
         {
-            cell.Html = cell.GetValue<DateTime>().ToString(this.GetFormatString(property));
+            cell.Html = cell.GetNullableValue<DateTime>()?.ToString(this.GetFormatString(property));
         }
 
         private string GetFormatString(DateTimeFormatProperty property)
