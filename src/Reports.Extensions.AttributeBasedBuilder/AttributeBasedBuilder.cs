@@ -150,6 +150,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddColumn(instance);
+            builder.AddAlias(property.Name);
 
             this.ApplyAttribute(builder, property);
         }
