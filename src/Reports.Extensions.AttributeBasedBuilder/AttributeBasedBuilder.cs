@@ -87,7 +87,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
             return instance;
         }
 
-        public VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
+        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             ReportVariableData[] properties = this.GetProperties<TEntity>();
