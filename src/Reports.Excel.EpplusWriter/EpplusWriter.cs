@@ -112,7 +112,9 @@ namespace Reports.Excel.EpplusWriter
 
             this.ApplyColumnFormat(worksheet, startRow, this.row - 1);
 
-            return new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1);
+            return this.row > startRow ?
+                new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1) :
+                null;
         }
 
         protected virtual void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)
