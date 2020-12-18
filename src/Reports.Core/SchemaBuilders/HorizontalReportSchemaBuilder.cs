@@ -54,6 +54,9 @@ namespace Reports.Core.SchemaBuilders
                     ))
                     .ToArray(),
                 this.TableProperties.ToArray(),
+                this.ComplexHeaders.ToArray(),
+                this.ComplexHeadersProperties
+                    .ToDictionary(x => x.Key, x => x.Value.ToArray()),
                 this.HeaderProviders
                     .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
                         r.Provider,

@@ -3,10 +3,13 @@ using Reports.Core.Interfaces;
 
 namespace Reports.Core.Models
 {
-    public abstract class ReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
+    public abstract partial class ReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
     {
         protected ReportSchemaCellsProvider<TSourceEntity>[] CellsProviders { get; private set; }
         protected ReportCellProperty[] TableProperties { get; private set; }
+        protected ComplexHeader[] ComplexHeaders { get; private set; }
+        protected Dictionary<string, ReportCellProperty[]> ComplexHeaderProperties { get; private set; }
+
 
         public static VerticalReportSchema<TSourceEntity> CreateVertical(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
@@ -27,6 +30,8 @@ namespace Reports.Core.Models
         public static HorizontalReportSchema<TSourceEntity> CreateHorizontal(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
             ReportCellProperty[] tableProperties,
+            ComplexHeader[] complexHeaders,
+            Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
             ReportSchemaCellsProvider<TSourceEntity>[] headerRows
         )
         {
@@ -34,6 +39,8 @@ namespace Reports.Core.Models
             {
                 CellsProviders = cellsProviders,
                 TableProperties = tableProperties,
+                ComplexHeaders = complexHeaders,
+                ComplexHeaderProperties = complexHeaderProperties,
                 HeaderRows = headerRows,
             };
         }
