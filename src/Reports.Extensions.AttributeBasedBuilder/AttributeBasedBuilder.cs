@@ -45,6 +45,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
             ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
 
             this.AddRows(builder, reportVariables);
+            this.AddComplexHeader(builder, reportVariables);
 
             if (reportAttribute?.PostBuilder != null)
             {
@@ -95,7 +96,6 @@ namespace Reports.Extensions.AttributeBasedBuilder
             this.AddColumns(builder, properties);
             this.AddComplexHeader(builder, properties);
 
-
             if (reportAttribute?.PostBuilder != null)
             {
                 ((IVerticalReportPostBuilder<TEntity>) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
@@ -112,7 +112,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
             }
         }
 
-        private void AddComplexHeader<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddComplexHeader<TEntity>(ReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
         {
             Dictionary<int, Dictionary<string, List<int>>> complexHeader = new Dictionary<int, Dictionary<string, List<int>>>();
 
