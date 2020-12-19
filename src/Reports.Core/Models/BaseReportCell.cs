@@ -39,12 +39,7 @@ namespace Reports.Core.Models
                 return null;
             }
 
-            if (this.ValueType == typeof(TValue))
-            {
-                return this.InternalValue;
-            }
-
-            return Convert.ChangeType(this.InternalValue, typeof(TValue));
+            return this.GetValue<TValue>();
         }
 
         public bool HasProperty<TProperty>() where TProperty : ReportCellProperty
