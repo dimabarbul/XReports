@@ -13,7 +13,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_OneComplexHeader_CorrectTable()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = builderHelper.BuildVerticalReport<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
@@ -45,7 +45,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = builderHelper.BuildVerticalReport<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());

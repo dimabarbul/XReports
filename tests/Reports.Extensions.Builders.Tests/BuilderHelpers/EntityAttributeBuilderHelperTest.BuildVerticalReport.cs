@@ -14,7 +14,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralProperties_CorrectOrder()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = builderHelper.BuildVerticalReport<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
@@ -38,7 +38,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = builderHelper.BuildVerticalReport<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
@@ -60,7 +60,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = builderHelper.BuildVerticalReport<PropertiesWithAttributes>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new []

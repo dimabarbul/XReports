@@ -14,7 +14,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_CustomAttributeHandler_Applied()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder();
+            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
             helper.AddAttributeHandler(new CustomAttributeHandler());
 
             IReportSchema<EntityWithCustomAttribute> schema = helper.BuildSchema<EntityWithCustomAttribute>();

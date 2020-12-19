@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Reports.Core.Interfaces;
 using Reports.Core.ReportCellsProviders;
 using Reports.Core.SchemaBuilders;
@@ -14,10 +15,12 @@ namespace Reports.Extensions.AttributeBasedBuilder
 {
     public class AttributeBasedBuilder
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly List<IAttributeHandler> attributeHandlers = new List<IAttributeHandler>();
 
-        public AttributeBasedBuilder(IEnumerable<IAttributeHandler> handlers = null)
+        public AttributeBasedBuilder(IServiceProvider serviceProvider, IEnumerable<IAttributeHandler> handlers = null)
         {
+            this.serviceProvider = serviceProvider;
             if (handlers != null)
             {
                 this.attributeHandlers.AddRange(handlers);
@@ -49,7 +52,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IHorizontalReportPostBuilder<TEntity>) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+                ((IHorizontalReportPostBuilder<TEntity>) this.serviceProvider.GetRequiredService(reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;
@@ -98,7 +101,7 @@ namespace Reports.Extensions.AttributeBasedBuilder
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IVerticalReportPostBuilder<TEntity>) Activator.CreateInstance(reportAttribute.PostBuilder)).Build(builder);
+                ((IVerticalReportPostBuilder<TEntity>) this.serviceProvider.GetRequiredService(reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;

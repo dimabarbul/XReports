@@ -7,11 +7,9 @@ namespace Reports.Extensions.AttributeBasedBuilder.Attributes
 {
     public class VerticalReportAttribute : ReportAttribute
     {
-        private Type postBuilder;
-
-        public Type PostBuilder
+        public override Type PostBuilder
         {
-            get => this.postBuilder;
+            get => base.PostBuilder;
             set
             {
                 if (!value.ImplementsGenericInterface(typeof(IVerticalReportPostBuilder<>)))
@@ -19,7 +17,7 @@ namespace Reports.Extensions.AttributeBasedBuilder.Attributes
                     throw new ArgumentException($"Type {value} should implement {typeof(IVerticalReportPostBuilder<>)}");
                 }
 
-                this.postBuilder = value;
+                base.PostBuilder = value;
             }
         }
 

@@ -7,6 +7,7 @@ namespace Reports.Extensions.AttributeBasedBuilder.Attributes
     public abstract class ReportAttribute : Attribute
     {
         public ReportType Type { get; }
+        public virtual Type PostBuilder { get; set; }
 
         public ReportAttribute(ReportType type)
         {
