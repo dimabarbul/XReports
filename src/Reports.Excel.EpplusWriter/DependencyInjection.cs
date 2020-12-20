@@ -9,11 +9,18 @@ namespace Reports.Excel.EpplusWriter
     {
         public static IServiceCollection UseEpplusWriter(this IServiceCollection services)
         {
-            return services.UseEpplusWriter<EpplusWriter>();
+            return services.UseEpplusWriter<IEpplusWriter, EpplusWriter>();
         }
 
         public static IServiceCollection UseEpplusWriter<TEpplusWriter>(this IServiceCollection services)
-            where TEpplusWriter : EpplusWriter, new()
+            where TEpplusWriter : class, IEpplusWriter, new()
+        {
+            return services.UseEpplusWriter<IEpplusWriter, TEpplusWriter>();
+        }
+
+        public static IServiceCollection UseEpplusWriter<TIEpplusWriter, TEpplusWriter>(this IServiceCollection services)
+            where TIEpplusWriter : class, IEpplusWriter
+            where TEpplusWriter : class, TIEpplusWriter, new()
         {
             Type[] formatterTypes = typeof(IEpplusFormatter).GetImplementingTypes();
 
@@ -22,7 +29,7 @@ namespace Reports.Excel.EpplusWriter
                 services.AddScoped(formatterType);
             }
 
-            services.AddScoped<EpplusWriter, TEpplusWriter>(sp =>
+            services.AddScoped<TIEpplusWriter, TEpplusWriter>(sp =>
             {
                 TEpplusWriter writer = new TEpplusWriter();
 
@@ -33,6 +40,11 @@ namespace Reports.Excel.EpplusWriter
 
                 return writer;
             });
+
+            if (typeof(IEpplusWriter) != typeof(TIEpplusWriter))
+            {
+                services.AddScoped<IEpplusWriter, TIEpplusWriter>();
+            }
 
             return services;
         }

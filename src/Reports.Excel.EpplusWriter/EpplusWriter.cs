@@ -9,14 +9,14 @@ using Reports.Core.Models;
 
 namespace Reports.Excel.EpplusWriter
 {
-    public class EpplusWriter
+    public class EpplusWriter : IEpplusWriter
     {
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
         private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
 
         private int row;
 
-        public EpplusWriter AddFormatter(IEpplusFormatter formatter)
+        public IEpplusWriter AddFormatter(IEpplusFormatter formatter)
         {
             this.formatters.Add(formatter);
 
