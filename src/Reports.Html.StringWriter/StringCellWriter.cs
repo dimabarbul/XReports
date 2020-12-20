@@ -6,7 +6,7 @@ using Reports.Core.Models;
 
 namespace Reports.Html.StringWriter
 {
-    public class StringCellWriter
+    public class StringCellWriter : IStringCellWriter
     {
         public string WriteHeaderCell(HtmlReportCell cell)
         {

@@ -6,7 +6,7 @@ using Reports.Core.Interfaces;
 using Reports.Core.Models;
 using Reports.Demos.FromDb.Services;
 using Reports.Excel.EpplusWriter;
-using StringWriter = Reports.Html.StringWriter.StringWriter;
+using Reports.Html.StringWriter;
 
 namespace Reports.Demos.FromDb.Controllers
 {
@@ -19,10 +19,10 @@ namespace Reports.Demos.FromDb.Controllers
         private readonly UserService userService;
         private readonly ReportConverter<HtmlReportCell> htmlConverter;
         private readonly ReportConverter<ExcelReportCell> excelConverter;
-        private readonly StringWriter stringWriter;
-        private readonly EpplusWriter excelWriter;
+        private readonly IStringWriter stringWriter;
+        private readonly IEpplusWriter excelWriter;
 
-        public ModelBasedReportController(ReportService reportService, ReportConverter<HtmlReportCell> htmlConverter, StringWriter stringWriter, ReportConverter<ExcelReportCell> excelConverter, EpplusWriter excelWriter, ProductService productService, UserService userService)
+        public ModelBasedReportController(ReportService reportService, ReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter, ReportConverter<ExcelReportCell> excelConverter, IEpplusWriter excelWriter, ProductService productService, UserService userService)
         {
             this.reportService = reportService;
             this.htmlConverter = htmlConverter;

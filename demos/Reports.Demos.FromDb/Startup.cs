@@ -93,23 +93,24 @@ namespace Reports.Demos.FromDb
 
         private void UseReports(IServiceCollection services)
         {
-            services.UseStringWriter<MyStringWriter>();
-            services.UseEpplusWriter<MyExcelWriter>();
-            services.AddReportConverter<HtmlReportCell, IHtmlHandler>(
-                new AlignmentPropertyHtmlHandler(),
-                new BoldPropertyHtmlHandler(),
-                new ColorPropertyHtmlHandler(),
-                new DecimalFormatPropertyHtmlHandler(),
-                new PercentFormatPropertyHtmlHandler(),
-                new DateTimeFormatPropertyHtmlHandler());
-            services.AddReportConverter<ExcelReportCell, IExcelHandler>(
-                new AlignmentPropertyExcelHandler(),
-                new BoldPropertyExcelHandler(),
-                new ColorPropertyExcelHandler(),
-                new DecimalFormatPropertyExcelHandler(),
-                new PercentFormatPropertyExcelHandler(),
-                new DateTimeFormatPropertyExcelHandler());
-            services.UseAttributeBasedBuilder();
+            services
+                .UseStringWriter<MyStringWriter>()
+                .UseEpplusWriter<MyExcelWriter>()
+                .AddReportConverter<HtmlReportCell, IHtmlHandler>(
+                    new AlignmentPropertyHtmlHandler(),
+                    new BoldPropertyHtmlHandler(),
+                    new ColorPropertyHtmlHandler(),
+                    new DecimalFormatPropertyHtmlHandler(),
+                    new PercentFormatPropertyHtmlHandler(),
+                    new DateTimeFormatPropertyHtmlHandler())
+                .AddReportConverter<ExcelReportCell, IExcelHandler>(
+                    new AlignmentPropertyExcelHandler(),
+                    new BoldPropertyExcelHandler(),
+                    new ColorPropertyExcelHandler(),
+                    new DecimalFormatPropertyExcelHandler(),
+                    new PercentFormatPropertyExcelHandler(),
+                    new DateTimeFormatPropertyExcelHandler())
+                .UseAttributeBasedBuilder();
         }
     }
 }

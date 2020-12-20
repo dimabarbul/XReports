@@ -14,10 +14,10 @@ namespace Reports.Demos.FromDb.Controllers
 {
     public class GenericController : Controller
     {
-        private ReportConverter<HtmlReportCell> htmlConverter;
-        private readonly StringWriter stringWriter;
+        private readonly ReportConverter<HtmlReportCell> htmlConverter;
+        private readonly IStringWriter stringWriter;
 
-        public GenericController(ReportConverter<HtmlReportCell> htmlConverter, StringWriter stringWriter)
+        public GenericController(ReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter)
         {
             this.htmlConverter = htmlConverter;
             this.stringWriter = stringWriter;

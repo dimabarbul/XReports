@@ -9,7 +9,7 @@ using Reports.Core.Models;
 
 namespace Reports.Html.StringWriter
 {
-    public class StringWriter
+    public class StringWriter : IStringWriter
     {
         private readonly Func<HtmlReportCell, string> writeHeaderCell;
         private readonly Func<HtmlReportCell, string> writeBodyCell;
