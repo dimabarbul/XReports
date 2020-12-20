@@ -38,8 +38,6 @@ namespace ConsoleApp1
             {
                 await ExportToHtmlAsync(reportTable);
             }
-
-            return;
         }
 
         private static VerticalReportSchemaBuilder<(int, decimal)> CreateBuilder()
