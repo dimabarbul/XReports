@@ -12,9 +12,7 @@ namespace Reports.Html.StringWriter
         public static IServiceCollection UseStringWriter<TStringWriter>(this IServiceCollection services)
             where TStringWriter : StringWriter
         {
-            services.UseStringWriter<IStringWriter, TStringWriter>();
-
-            return services;
+            return services.UseStringWriter<IStringWriter, TStringWriter>();
         }
 
         public static IServiceCollection UseStringWriter<TIStringWriter, TStringWriter>(this IServiceCollection services)
@@ -22,6 +20,11 @@ namespace Reports.Html.StringWriter
             where TStringWriter : class, TIStringWriter
         {
             services.AddScoped<TIStringWriter, TStringWriter>();
+
+            if (typeof(TIStringWriter) != typeof(IStringWriter))
+            {
+                services.AddScoped<IStringWriter>(sp => sp.GetRequiredService<TIStringWriter>());
+            }
 
             return services;
         }
@@ -34,9 +37,7 @@ namespace Reports.Html.StringWriter
         public static IServiceCollection UseStringCellWriter<TStringCellWriter>(this IServiceCollection services)
             where TStringCellWriter : StringCellWriter
         {
-            services.UseStringCellWriter<IStringCellWriter, TStringCellWriter>();
-
-            return services;
+            return services.UseStringCellWriter<IStringCellWriter, TStringCellWriter>();
         }
 
         public static IServiceCollection UseStringCellWriter<TIStringCellWriter, TStringCellWriter>(this IServiceCollection services)
@@ -44,6 +45,11 @@ namespace Reports.Html.StringWriter
             where TStringCellWriter : class, TIStringCellWriter
         {
             services.AddScoped<TIStringCellWriter, TStringCellWriter>();
+
+            if (typeof(TIStringCellWriter) != typeof(IStringCellWriter))
+            {
+                services.AddScoped<IStringCellWriter>(sp => sp.GetRequiredService<TIStringCellWriter>());
+            }
 
             return services;
         }

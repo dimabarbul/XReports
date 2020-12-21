@@ -42,7 +42,7 @@ namespace Reports.Excel.EpplusWriter
 
             if (typeof(IEpplusWriter) != typeof(TIEpplusWriter))
             {
-                services.AddScoped<IEpplusWriter, TIEpplusWriter>();
+                services.AddScoped<IEpplusWriter>(sp => sp.GetRequiredService<TIEpplusWriter>());
             }
 
             return services;
