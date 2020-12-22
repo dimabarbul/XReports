@@ -5,6 +5,11 @@ namespace Reports.Demos.MVC.Reports
 {
     public class BootstrapStringWriter : StringWriter
     {
+        public BootstrapStringWriter(IStringCellWriter stringCellWriter)
+            : base(stringCellWriter)
+        {
+        }
+
         protected override async Task BeginTableAsync()
         {
             await this.WriteTextAsync(@"<table class=""table table-sm"">");

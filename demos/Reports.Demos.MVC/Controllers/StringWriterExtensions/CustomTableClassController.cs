@@ -21,8 +21,8 @@ namespace Reports.Demos.MVC.Controllers.StringWriterExtensions
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReport = this.Convert(reportTable);
-            StringWriter bootstrapStringWriter = new BootstrapStringWriter();
-            StringWriter stringWriter = new StringWriter();
+            StringWriter bootstrapStringWriter = new BootstrapStringWriter(new StringCellWriter());
+            StringWriter stringWriter = new StringWriter(new StringCellWriter());
 
             ViewModel vm = new ViewModel()
             {

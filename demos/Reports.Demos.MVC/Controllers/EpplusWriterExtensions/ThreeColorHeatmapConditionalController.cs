@@ -16,6 +16,7 @@ using Reports.Core.PropertyHandlers;
 using Reports.Core.SchemaBuilders;
 using Reports.Demos.MVC.Reports;
 using Reports.Excel.EpplusWriter;
+using Reports.Html.StringWriter;
 
 namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -87,7 +88,7 @@ namespace Reports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private async Task<string> WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return await new BootstrapStringWriter().WriteToStringAsync(htmlReportTable);
+            return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
         public class ViewModel

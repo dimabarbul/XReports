@@ -138,7 +138,7 @@ namespace ConsoleApp1
             }
 
             StringCellWriter cellWriter = new StringCellWriter();
-            StringWriter writer = new StringWriter(cellWriter.WriteHeaderCell, cellWriter.WriteBodyCell);
+            StringWriter writer = new StringWriter(cellWriter);
             Stopwatch sw = Stopwatch.StartNew();
             await writer.WriteToFileAsync(htmlReportTable, fileName);
             sw.Stop();

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,26 +10,16 @@ namespace Reports.Html.StringWriter
 {
     public class StringWriter : IStringWriter
     {
-        private readonly Func<HtmlReportCell, string> writeHeaderCell;
-        private readonly Func<HtmlReportCell, string> writeBodyCell;
+        private readonly IStringCellWriter stringCellWriter;
 
         private FileStream fileStream;
         private StringBuilder stringBuilder;
         protected delegate Task WriteTextAsyncDelegate(string text);
         protected WriteTextAsyncDelegate WriteTextAsync;
 
-        public StringWriter()
+        public StringWriter(IStringCellWriter stringCellWriter)
         {
-            StringCellWriter cellWriter = new StringCellWriter();
-
-            this.writeHeaderCell = cellWriter.WriteHeaderCell;
-            this.writeBodyCell = cellWriter.WriteBodyCell;
-        }
-
-        public StringWriter(Func<HtmlReportCell, string> writeHeaderCell, Func<HtmlReportCell, string> writeBodyCell)
-        {
-            this.writeHeaderCell = writeHeaderCell;
-            this.writeBodyCell = writeBodyCell;
+            this.stringCellWriter = stringCellWriter;
         }
 
         public async Task<string> WriteToStringAsync(IReportTable<HtmlReportCell> reportTable)
@@ -77,7 +66,7 @@ namespace Reports.Html.StringWriter
                 await this.BeginRowAsync();
                 foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
-                    await this.WriteTextAsync(this.writeHeaderCell(cell));
+                    await this.WriteTextAsync(this.stringCellWriter.WriteHeaderCell(cell));
                 }
                 await this.EndRowAsync();
             }
@@ -104,7 +93,7 @@ namespace Reports.Html.StringWriter
                 await this.BeginRowAsync();
                 foreach (HtmlReportCell cell in row.Where(c => c != null))
                 {
-                    await this.WriteTextAsync(this.writeBodyCell(cell));
+                    await this.WriteTextAsync(this.stringCellWriter.WriteBodyCell(cell));
                 }
                 await this.EndRowAsync();
             }
