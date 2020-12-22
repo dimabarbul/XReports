@@ -1,4 +1,5 @@
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Reports.Core.Interfaces;
 using Reports.Core.Models;
 using Reports.Excel.EpplusWriter;
@@ -7,6 +8,19 @@ namespace ConsoleApp1
 {
     public class MyExcelWriter : EpplusWriter
     {
+        protected override void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        {
+            base.FormatCell(worksheetCell, cell);
+
+            if (cell is MyExcelReportCell myExcelReportCell)
+            {
+                if (myExcelReportCell.BorderColor.HasValue)
+                {
+                    worksheetCell.Style.Border.BorderAround(ExcelBorderStyle.Thin, myExcelReportCell.BorderColor.Value);
+                }
+            }
+        }
+
         protected override ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
         {
             ExcelAddress bodyAddress = base.WriteBody(worksheet, table);

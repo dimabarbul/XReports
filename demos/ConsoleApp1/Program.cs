@@ -64,7 +64,7 @@ namespace ConsoleApp1
             builder.AddColumn("Colored", i => i.Item1 % 10)
                 .AddProperties(new ColorProperty(Color.Yellow, Color.Black), columnSameFormatProperty);
             builder.AddColumn("With custom format", i => i.Item2 * 100)
-                .AddProperties(new MyCustomFormatProperty(), columnSameFormatProperty);
+                .AddProperties(new MyCustomFormatProperty(), columnSameFormatProperty, new BorderProperty(Color.Chocolate));
 
             builder.AddComplexHeader(0, "Date", 0, 1);
 
@@ -81,8 +81,8 @@ namespace ConsoleApp1
 
         private static void ExportToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> converter = new ReportConverter<ExcelReportCell>(
-                new IPropertyHandler<ExcelReportCell>[]
+            ReportConverter<MyExcelReportCell> converter = new ReportConverter<MyExcelReportCell>(
+                new IPropertyHandler<MyExcelReportCell>[]
                 {
                     new AlignmentPropertyExcelHandler(),
                     new BoldPropertyExcelHandler(),
@@ -91,9 +91,11 @@ namespace ConsoleApp1
                     new DecimalFormatPropertyExcelHandler(),
                     new MaxLengthPropertyExcelHandler(),
                     new PercentFormatPropertyExcelHandler(),
+
+                    new BorderPropertyExcelHandler(),
                 }
             );
-            IReportTable<ExcelReportCell> excelReportTable = converter.Convert(reportTable);
+            IReportTable<MyExcelReportCell> excelReportTable = converter.Convert(reportTable);
 
             const string fileName = "/tmp/report.xlsx";
 
@@ -167,6 +169,29 @@ namespace ConsoleApp1
         protected override void HandleProperty(MyCustomFormatProperty property, ExcelReportCell cell)
         {
             cell.NumberFormat = "[>=90]0;[<90]0.0";
+        }
+    }
+
+    public class MyExcelReportCell : ExcelReportCell
+    {
+        public Color? BorderColor { get; set; }
+    }
+
+    public class BorderProperty : ReportCellProperty
+    {
+        public Color BorderColor { get; }
+
+        public BorderProperty(Color borderColor)
+        {
+            this.BorderColor = borderColor;
+        }
+    }
+
+    public class BorderPropertyExcelHandler : PropertyHandler<BorderProperty, MyExcelReportCell>
+    {
+        protected override void HandleProperty(BorderProperty property, MyExcelReportCell cell)
+        {
+            cell.BorderColor = property.BorderColor;
         }
     }
 }
