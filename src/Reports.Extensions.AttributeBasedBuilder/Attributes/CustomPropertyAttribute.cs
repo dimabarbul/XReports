@@ -3,11 +3,9 @@ using Reports.Core.Models;
 
 namespace Reports.Extensions.AttributeBasedBuilder.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
-    public class CustomPropertyAttribute : Attribute
+    public class CustomPropertyAttribute : AttributeBase
     {
         public Type PropertyType { get; }
-        public bool IsHeader { get; set; }
 
         public CustomPropertyAttribute(Type type)
         {

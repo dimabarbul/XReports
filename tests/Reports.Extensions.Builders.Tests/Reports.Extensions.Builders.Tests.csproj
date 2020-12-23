@@ -25,10 +25,14 @@
       <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.AttributeHandler.cs">
         <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.TableProperties.cs">
+        <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Reports.Extensions.AttributeBasedBuilder\Reports.Extensions.AttributeBasedBuilder.csproj" />
+      <ProjectReference Include="..\..\src\Reports.Extensions.Properties\Reports.Extensions.Properties.csproj" />
     </ItemGroup>
 
 </Project>

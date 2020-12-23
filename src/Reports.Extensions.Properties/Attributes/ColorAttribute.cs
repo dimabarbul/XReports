@@ -1,4 +1,5 @@
 using System.Drawing;
+using Reports.Extensions.AttributeBasedBuilder.Attributes;
 
 namespace Reports.Extensions.Properties.Attributes
 {

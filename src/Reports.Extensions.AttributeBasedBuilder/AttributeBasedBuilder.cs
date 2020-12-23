@@ -46,8 +46,9 @@ namespace Reports.Extensions.AttributeBasedBuilder
             HorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
             ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
+            Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();
 
-            this.AddRows(builder, reportVariables);
+            this.AddRows(builder, reportVariables, tableAttributes);
             this.AddComplexHeader(builder, reportVariables);
 
             if (reportAttribute?.PostBuilder != null)
@@ -58,22 +59,22 @@ namespace Reports.Extensions.AttributeBasedBuilder
             return builder;
         }
 
-        private void AddRows<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables)
+        private void AddRows<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] tableAttributes)
         {
             foreach (ReportVariableData x in reportVariables)
             {
-                this.AddRow(builder, x.Property, x.Attribute);
+                this.AddRow(builder, x.Property, x.Attribute, tableAttributes);
             }
         }
 
-        private void AddRow<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute)
+        private void AddRow<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] tableAttributes)
         {
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddRow(instance);
             builder.AddAlias(property.Name);
 
-            this.ApplyAttribute(builder, property);
+            this.ApplyAttributes(builder, property, tableAttributes);
         }
 
         private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property, ReportVariableAttribute attribute)
@@ -94,9 +95,10 @@ namespace Reports.Extensions.AttributeBasedBuilder
         public VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
+            Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();
             ReportVariableData[] properties = this.GetProperties<TEntity>();
 
-            this.AddColumns(builder, properties);
+            this.AddColumns(builder, properties, tableAttributes);
             this.AddComplexHeader(builder, properties);
 
             if (reportAttribute?.PostBuilder != null)
@@ -107,11 +109,11 @@ namespace Reports.Extensions.AttributeBasedBuilder
             return builder;
         }
 
-        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] tableAttributes)
         {
             foreach (ReportVariableData x in properties)
             {
-                this.AddColumn(builder, x.Property, x.Attribute);
+                this.AddColumn(builder, x.Property, x.Attribute, tableAttributes);
             }
         }
 
@@ -148,25 +150,49 @@ namespace Reports.Extensions.AttributeBasedBuilder
             }
         }
 
-        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute)
+        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] tableAttributes)
         {
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddColumn(instance);
             builder.AddAlias(property.Name);
 
-            this.ApplyAttribute(builder, property);
+            this.ApplyAttributes(builder, property, tableAttributes);
         }
 
-        private void ApplyAttribute<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property)
+        private void ApplyAttributes<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property, Attribute[] tableAttributes)
         {
-            foreach (Attribute attribute in property.GetCustomAttributes())
+            Attribute[] propertyAttributes = property.GetCustomAttributes().ToArray();
+            Attribute[] attributes = this.MergeTableAttributes(propertyAttributes, tableAttributes);
+
+            foreach (Attribute attribute in attributes)
             {
                 foreach (IAttributeHandler handler in this.attributeHandlers)
                 {
                     handler.Handle(builder, attribute);
                 }
             }
+        }
+
+        private Attribute[] MergeTableAttributes(Attribute[] propertyAttributes, Attribute[] tableAttributes)
+        {
+            return propertyAttributes
+                .Concat(tableAttributes
+                    .Where(ta =>
+                        (
+                            !(ta is AttributeBase)
+                            && propertyAttributes.All(pa => pa.GetType() != ta.GetType())
+                        )
+                        || (
+                            ta is AttributeBase
+                            && propertyAttributes.All(pa =>
+                                pa.GetType() != ta.GetType()
+                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)ta).IsHeader
+                            )
+                        )
+                    )
+                )
+                .ToArray();
         }
 
         private ReportVariableData[] GetProperties<TEntity>()
@@ -184,6 +210,13 @@ namespace Reports.Extensions.AttributeBasedBuilder
                     Attribute = x.Attribute,
                 })
                 .OrderBy(x => x.Attribute.Order)
+                .ToArray();
+        }
+
+        private Attribute[] GetTableAttributes<TEntity>()
+        {
+            return typeof(TEntity).GetCustomAttributes()
+                .Where(a => !(a is ReportAttribute))
                 .ToArray();
         }
 
