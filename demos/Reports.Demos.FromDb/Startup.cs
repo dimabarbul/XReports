@@ -94,6 +94,7 @@ namespace Reports.Demos.FromDb
         private void UseReports(IServiceCollection services)
         {
             services
+                .UseStringCellWriter()
                 .UseStringWriter<MyStringWriter>()
                 .UseEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell, IHtmlHandler>(
