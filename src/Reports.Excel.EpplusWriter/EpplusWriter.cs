@@ -148,7 +148,7 @@ namespace Reports.Excel.EpplusWriter
                 }
             }
 
-            if (cell.HasProperty<ColumnSameFormatProperty>())
+            if (cell.HasProperty<SameColumnFormatProperty>())
             {
                 int column = worksheetCell.Start.Column;
                 if (!this.columnFormatCells.ContainsKey(column))

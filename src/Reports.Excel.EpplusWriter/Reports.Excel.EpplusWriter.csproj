@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Reports.Core\Reports.Core.csproj" />
+      <ProjectReference Include="..\Reports.Extensions.AttributeBasedBuilder\Reports.Extensions.AttributeBasedBuilder.csproj" />
     </ItemGroup>
 
 </Project>

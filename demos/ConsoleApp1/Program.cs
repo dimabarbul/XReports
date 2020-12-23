@@ -42,17 +42,17 @@ namespace ConsoleApp1
 
         private static VerticalReportSchemaBuilder<(int, decimal)> CreateBuilder()
         {
-            ColumnSameFormatProperty columnSameFormatProperty = new ColumnSameFormatProperty();
+            SameColumnFormatProperty sameColumnFormatProperty = new SameColumnFormatProperty();
 
             VerticalReportSchemaBuilder<(int, decimal)> builder = new VerticalReportSchemaBuilder<(int, decimal)>();
             builder.AddColumn("Now", i => DateTime.Now)
-                .AddProperties(new DateTimeFormatProperty("dd MMM yyyy"), columnSameFormatProperty);
+                .AddProperties(new DateTimeFormatProperty("dd MMM yyyy"), sameColumnFormatProperty);
             builder.AddColumn("Now", i => DateTime.Now)
-                .AddProperties(new DateTimeFormatProperty("dd/MM/yyyy HH:mm:ss"), columnSameFormatProperty);
+                .AddProperties(new DateTimeFormatProperty("dd/MM/yyyy HH:mm:ss"), sameColumnFormatProperty);
             builder.AddColumn("Integer", i => i.Item1);
             builder.AddColumn("Without formatting", i => i.Item2);
             builder.AddColumn("With 2 decimals", i => i.Item2)
-                .AddProperties(new DecimalFormatProperty(2), columnSameFormatProperty);
+                .AddProperties(new DecimalFormatProperty(2), sameColumnFormatProperty);
             builder.AddColumn("String", i => i.Item2.ToString());
             builder.AddColumn("Is odd", i => i.Item1 % 2 == 0
                 ? "YES"
@@ -60,11 +60,11 @@ namespace ConsoleApp1
             builder.AddColumn("With max.length", i => "Some very loooooong text")
                 .AddProperties(new MaxLengthProperty(15));
             builder.AddColumn("Percent", i => i.Item2)
-                .AddProperties(new PercentFormatProperty(1){PostfixText = null}, columnSameFormatProperty);
+                .AddProperties(new PercentFormatProperty(1){PostfixText = null}, sameColumnFormatProperty);
             builder.AddColumn("Colored", i => i.Item1 % 10)
-                .AddProperties(new ColorProperty(Color.Yellow, Color.Black), columnSameFormatProperty);
+                .AddProperties(new ColorProperty(Color.Yellow, Color.Black), sameColumnFormatProperty);
             builder.AddColumn("With custom format", i => i.Item2 * 100)
-                .AddProperties(new MyCustomFormatProperty(), columnSameFormatProperty, new BorderProperty(Color.Chocolate));
+                .AddProperties(new MyCustomFormatProperty(), sameColumnFormatProperty, new BorderProperty(Color.Chocolate));
 
             builder.AddComplexHeader(0, "Date", 0, 1);
 
