@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Reports.Core.Interfaces;
 using Reports.Core.Models;
+using Reports.Core.ReportCellProcessors;
 
 namespace Reports.Core.SchemaBuilders
 {
@@ -54,6 +55,13 @@ namespace Reports.Core.SchemaBuilders
         public ReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
         {
             this.CurrentProvider.CellProperties.AddRange(properties);
+
+            return this;
+        }
+
+        public ReportSchemaBuilder<TSourceEntity> AddDynamicProperty(Func<TSourceEntity, ReportCellProperty> propertySelector)
+        {
+            this.CurrentProvider.CellProcessors.Add(new DynamicPropertiesCellProcessor<TSourceEntity>(propertySelector));
 
             return this;
         }
