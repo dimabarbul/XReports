@@ -435,3 +435,4 @@ $RECYCLE.BIN/
 
 *.db*
 published
+nuget.config
