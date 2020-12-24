@@ -5,6 +5,9 @@
         <PackageVersion>0.1.0</PackageVersion>
         <Title>Reports</Title>
         <Authors>Dmitriy Barbul</Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/dimabarbul/Reports</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dimabarbul/Reports</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
