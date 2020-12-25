@@ -74,7 +74,7 @@ namespace XReports.Writers
             stringBuilder.Append(cell.Html);
         }
 
-        private void WriteAttribute(StringBuilder stringBuilder, string name, string value, string defaultValue = "")
+        protected void WriteAttribute(StringBuilder stringBuilder, string name, string value, string defaultValue = "")
         {
             if (value.Equals(defaultValue, StringComparison.Ordinal))
             {
