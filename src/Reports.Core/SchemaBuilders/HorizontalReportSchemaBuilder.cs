@@ -1,8 +1,8 @@
 using System.Linq;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core.SchemaBuilders
+namespace Reports.SchemaBuilders
 {
     public class HorizontalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>
     {

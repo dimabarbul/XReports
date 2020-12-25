@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core
+namespace Reports
 {
     public class ReportConverter<TResultReportCell>
         where TResultReportCell : BaseReportCell, new()

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core.ReportCellProcessors
+namespace Reports.ReportCellProcessors
 {
     public class DynamicPropertiesCellProcessor<TSourceEntity> : IReportCellProcessor<TSourceEntity>
     {

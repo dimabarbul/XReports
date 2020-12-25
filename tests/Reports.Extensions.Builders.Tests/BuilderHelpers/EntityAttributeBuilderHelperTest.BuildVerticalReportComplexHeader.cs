@@ -1,9 +1,9 @@
 using System.Linq;
 using FluentAssertions;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Core.SchemaBuilders;
-using Reports.Extensions.AttributeBasedBuilder.Attributes;
+using Reports.Attributes;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers
@@ -13,7 +13,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_OneComplexHeader_CorrectTable()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = builderHelper.BuildVerticalReport<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
@@ -45,7 +45,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder builderHelper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = builderHelper.BuildVerticalReport<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());

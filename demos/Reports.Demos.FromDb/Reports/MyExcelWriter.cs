@@ -1,6 +1,6 @@
 using System;
 using OfficeOpenXml;
-using Reports.Excel.EpplusWriter;
+using Reports.Writers;
 
 namespace Reports.Demos.FromDb.Reports
 {

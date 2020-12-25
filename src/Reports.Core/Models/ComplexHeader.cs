@@ -1,4 +1,4 @@
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public class ComplexHeader
     {

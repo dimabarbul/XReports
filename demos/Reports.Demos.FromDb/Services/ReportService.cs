@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Extensions.AttributeBasedBuilder;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.SchemaBuilders;
 
 namespace Reports.Demos.FromDb.Services
 {

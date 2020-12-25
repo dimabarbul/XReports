@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Reports.Core.Interfaces;
+using Reports.Interfaces;
 
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public abstract partial class ReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
     {

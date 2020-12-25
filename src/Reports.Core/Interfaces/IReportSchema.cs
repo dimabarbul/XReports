@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Reports.Core.Models;
+using Reports.Models;
 
-namespace Reports.Core.Interfaces
+namespace Reports.Interfaces
 {
     public interface IReportSchema<in TSourceEntity>
     {

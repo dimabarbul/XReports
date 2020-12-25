@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Reports.Core;
-using Reports.Core.Enums;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Core.PropertyHandlers;
+using Reports.Enums;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.PropertyHandlers;
 using Xunit;
 
 namespace Reports.Html.Tests

@@ -1,10 +1,10 @@
 using System;
 using FluentAssertions;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Core.SchemaBuilders;
-using Reports.Extensions.AttributeBasedBuilder.AttributeHandlers;
-using Reports.Extensions.AttributeBasedBuilder.Attributes;
+using Reports.AttributeHandlers;
+using Reports.Attributes;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers
@@ -14,7 +14,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_CustomAttributeHandler_Applied()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             helper.AddAttributeHandler(new CustomAttributeHandler());
 
             IReportSchema<EntityWithCustomAttribute> schema = helper.BuildSchema<EntityWithCustomAttribute>();

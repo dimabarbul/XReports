@@ -1,6 +1,6 @@
-using Reports.Core.Interfaces;
+using Reports.Interfaces;
 
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public class ReportSchemaCellsProvider<TSourceEntity>
     {

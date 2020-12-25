@@ -1,4 +1,4 @@
-namespace Reports.Core.Interfaces
+namespace Reports.Interfaces
 {
     public interface IComputedValueProvider<in TSourceEntity, out TValue>
     {

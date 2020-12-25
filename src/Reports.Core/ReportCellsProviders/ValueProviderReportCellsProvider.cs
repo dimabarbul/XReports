@@ -1,8 +1,8 @@
 using System;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core.ReportCellsProviders
+namespace Reports.ReportCellsProviders
 {
     public class ValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {

@@ -7,6 +7,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/dimabarbul/Reports</PackageProjectUrl>
         <RepositoryUrl>https://github.com/dimabarbul/Reports</RepositoryUrl>
+        <RootNamespace>Reports</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,7 +1,7 @@
 using System;
-using Reports.Core.Interfaces;
+using Reports.Interfaces;
 
-namespace Reports.Core.ValueProviders
+namespace Reports.ValueProviders
 {
     public class CallbackComputedValueProvider<TSourceEntity, TValue> : IComputedValueProvider<TSourceEntity, TValue>
     {

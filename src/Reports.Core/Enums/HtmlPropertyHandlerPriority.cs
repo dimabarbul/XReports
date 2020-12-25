@@ -1,4 +1,4 @@
-namespace Reports.Core.Enums
+namespace Reports.Enums
 {
     public enum HtmlPropertyHandlerPriority
     {

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core.ReportCellsProviders
+namespace Reports.ReportCellsProviders
 {
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
     {

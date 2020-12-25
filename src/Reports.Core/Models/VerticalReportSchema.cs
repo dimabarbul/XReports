@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Reports.Core.Interfaces;
+using Reports.Interfaces;
 
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public class VerticalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>
     {

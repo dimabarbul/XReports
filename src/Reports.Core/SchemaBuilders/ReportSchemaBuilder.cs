@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Core.ReportCellProcessors;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.ReportCellProcessors;
 
-namespace Reports.Core.SchemaBuilders
+namespace Reports.SchemaBuilders
 {
     public abstract class ReportSchemaBuilder<TSourceEntity>
     {

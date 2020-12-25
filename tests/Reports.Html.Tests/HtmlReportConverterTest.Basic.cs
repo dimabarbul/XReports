@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Reports.Core;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 using Xunit;
 
 namespace Reports.Html.Tests

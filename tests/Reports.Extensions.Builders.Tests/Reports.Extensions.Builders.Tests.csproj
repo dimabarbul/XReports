@@ -31,8 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports.Extensions.AttributeBasedBuilder\Reports.Extensions.AttributeBasedBuilder.csproj" />
-      <ProjectReference Include="..\..\src\Reports.Extensions.Properties\Reports.Extensions.Properties.csproj" />
+      <ProjectReference Include="..\..\src\Reports\Reports.csproj" />
     </ItemGroup>
 
 </Project>

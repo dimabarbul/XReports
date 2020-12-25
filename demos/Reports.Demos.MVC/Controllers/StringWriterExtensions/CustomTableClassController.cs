@@ -3,13 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
-using Reports.Core;
-using Reports.Core.Extensions;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Core.SchemaBuilders;
 using Reports.Demos.MVC.Reports;
-using Reports.Html.StringWriter;
+using Reports.Extensions;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.SchemaBuilders;
+using Reports.Writers;
 
 namespace Reports.Demos.MVC.Controllers.StringWriterExtensions
 {

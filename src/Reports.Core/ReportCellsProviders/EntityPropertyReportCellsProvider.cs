@@ -1,7 +1,7 @@
 using System;
-using Reports.Core.Models;
+using Reports.Models;
 
-namespace Reports.Core.ReportCellsProviders
+namespace Reports.ReportCellsProviders
 {
     public class EntityPropertyReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
     {

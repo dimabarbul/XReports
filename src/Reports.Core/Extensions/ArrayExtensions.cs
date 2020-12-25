@@ -1,6 +1,6 @@
 using System;
 
-namespace Reports.Core.Extensions
+namespace Reports.Extensions
 {
     public static class ArrayExtensions
     {

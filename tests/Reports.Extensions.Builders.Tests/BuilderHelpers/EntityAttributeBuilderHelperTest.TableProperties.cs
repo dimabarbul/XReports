@@ -1,11 +1,11 @@
 using FluentAssertions;
-using Reports.Core.Enums;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
-using Reports.Extensions.AttributeBasedBuilder.Attributes;
-using Reports.Extensions.Properties;
-using Reports.Extensions.Properties.AttributeHandlers;
-using Reports.Extensions.Properties.Attributes;
+using Reports.AttributeHandlers;
+using Reports.Attributes;
+using Reports.Enums;
+using Reports.Interfaces;
+using Reports.Models;
+using Reports.Properties;
+using Reports.SchemaBuilders;
 using Xunit;
 
 namespace Reports.Extensions.Builders.Tests.BuilderHelpers
@@ -24,7 +24,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TableProperties_Applied()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             helper.AddAttributeHandler(new CommonAttributeHandler());
 
             IReportSchema<WithTableProperties> schema = helper.BuildSchema<WithTableProperties>();
@@ -57,7 +57,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwritten_NotApplied()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             helper.AddAttributeHandler(new CommonAttributeHandler());
 
             IReportSchema<WithOverwrittenTableProperties> schema = helper.BuildSchema<WithOverwrittenTableProperties>();
@@ -85,7 +85,7 @@ namespace Reports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwrittenForHeader_Applied()
         {
-            AttributeBasedBuilder.AttributeBasedBuilder helper = new AttributeBasedBuilder.AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             helper.AddAttributeHandler(new CommonAttributeHandler());
 
             IReportSchema<WithOverwrittenForHeaderTableProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderTableProperties>();

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public abstract partial class ReportSchema<TSourceEntity>
     {

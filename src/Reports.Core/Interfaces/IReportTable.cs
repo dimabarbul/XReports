@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Reports.Core.Interfaces
+namespace Reports.Interfaces
 {
     public interface IReportTable<out TReportCell>
     {

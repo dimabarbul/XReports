@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using Reports.Html.StringWriter;
+using Reports.Interfaces;
+using Reports.Writers;
 
 namespace Reports.Demos.MVC.Reports
 {

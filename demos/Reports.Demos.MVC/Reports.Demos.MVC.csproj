@@ -5,9 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Reports.Excel.EpplusWriter\Reports.Excel.EpplusWriter.csproj" />
-      <ProjectReference Include="..\..\src\Reports.Extensions.Properties\Reports.Extensions.Properties.csproj" />
-      <ProjectReference Include="..\..\src\Reports.Html.StringWriter\Reports.Html.StringWriter.csproj" />
+      <ProjectReference Include="..\..\src\Reports\Reports.csproj" />
     </ItemGroup>
 
     <ItemGroup>

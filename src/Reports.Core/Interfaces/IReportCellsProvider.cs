@@ -1,7 +1,7 @@
 using System;
-using Reports.Core.Models;
+using Reports.Models;
 
-namespace Reports.Core.Interfaces
+namespace Reports.Interfaces
 {
     public interface IReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {

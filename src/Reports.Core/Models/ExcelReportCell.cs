@@ -1,7 +1,7 @@
 using System.Drawing;
-using Reports.Core.Enums;
+using Reports.Enums;
 
-namespace Reports.Core.Models
+namespace Reports.Models
 {
     public class ExcelReportCell : BaseReportCell
     {

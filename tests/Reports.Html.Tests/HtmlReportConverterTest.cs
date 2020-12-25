@@ -1,6 +1,6 @@
 using System.Linq;
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Html.Tests
 {

@@ -1,7 +1,7 @@
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
-namespace Reports.Core.PropertyHandlers
+namespace Reports.PropertyHandlers
 {
     public abstract class PropertyHandler<TPropertyType, TReportCell> : IPropertyHandler<TReportCell>
         where TPropertyType : ReportCellProperty

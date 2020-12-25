@@ -1,9 +1,9 @@
 using System;
-using Reports.Core.Interfaces;
-using Reports.Core.ReportCellsProviders;
-using Reports.Core.SchemaBuilders;
+using Reports.Interfaces;
+using Reports.ReportCellsProviders;
+using Reports.SchemaBuilders;
 
-namespace Reports.Core.Extensions
+namespace Reports.Extensions
 {
     public static class HorizontalReportSchemaBuilderExtensions
     {

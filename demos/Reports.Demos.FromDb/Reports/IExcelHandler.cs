@@ -1,5 +1,5 @@
-using Reports.Core.Interfaces;
-using Reports.Core.Models;
+using Reports.Interfaces;
+using Reports.Models;
 
 namespace Reports.Demos.FromDb.Reports
 {
