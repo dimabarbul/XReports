@@ -1,0 +1,89 @@
+@model XReports.Demos.MVC.Controllers.CustomProperties.ThreeColorHeatmapController.ViewModel
+
+@{
+    ViewBag.Title = "3-Color Heatmap";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>In current implementation we highlight values closer to 0 in red, to 50 - in yellow, closer to 100 - green.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    class ThreeColorHeatmapProperty : ReportCellProperty
+    {
+        public decimal MinimumValue { get; set; }
+        public Color MinimumColor { get; set; }
+        public decimal MiddleValue { get; set; }
+        public Color MiddleColor { get; set; }
+        public decimal MaximumValue { get; set; }
+        public Color MaximumColor { get; set; }
+
+        public ThreeColorHeatmapProperty(decimal minimumValue, Color minimumColor, decimal middleValue, Color middleColor, decimal maximumValue, Color maximumColor)
+        {
+            this.MinimumValue = minimumValue;
+            this.MinimumColor = minimumColor;
+            this.MiddleValue = middleValue;
+            this.MiddleColor = middleColor;
+            this.MaximumValue = maximumValue;
+            this.MaximumColor = maximumColor;
+        }
+
+        public Color GetColorForValue(decimal value)
+        {
+            if (value &lt; this.MiddleValue)
+            {
+                return this.GetColorForValue(value, this.MinimumValue, this.MinimumColor, this.MiddleValue, this.MiddleColor);
+            }
+            else
+            {
+                return this.GetColorForValue(value, this.MiddleValue, this.MiddleColor, this.MaximumValue, this.MaximumColor);
+            }
+        }
+
+        private Color GetColorForValue(decimal value, decimal min, Color minColor, decimal max, Color maxColor)
+        {
+            decimal valueDelta = max - min;
+            decimal valuePercentage = (value - min) / valueDelta;
+
+            byte cellRed = this.GetProportionalValue(valuePercentage, minColor.R, maxColor.R);
+            byte cellGreen = this.GetProportionalValue(valuePercentage, minColor.G, maxColor.G);
+            byte cellBlue = this.GetProportionalValue(valuePercentage, minColor.B, maxColor.B);
+
+            return Color.FromArgb(cellRed, cellGreen, cellBlue);
+        }
+
+        private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
+        {
+            return (byte) (min + valuePercentage * (max - min));
+        }
+    }
+
+    class ThreeColorHeatmapPropertyHtmlHandler : SingleTypePropertyHandler&lt;ThreeColorHeatmapProperty, HtmlReportCell&gt;
+    {
+        protected override void HandleProperty(ThreeColorHeatmapProperty property, HtmlReportCell cell)
+        {
+            decimal value = cell.GetValue&lt;decimal&gt;();
+
+            cell.Styles.Add("background-color", ColorTranslator.ToHtml(property.GetColorForValue(value)));
+        }
+    }
+
+    class ThreeColorHeatmapPropertyExcelHandler : SingleTypePropertyHandler&lt;ThreeColorHeatmapProperty, ExcelReportCell&gt;
+    {
+        protected override void HandleProperty(ThreeColorHeatmapProperty property, ExcelReportCell cell)
+        {
+            decimal value = cell.GetValue&lt;decimal&gt;();
+            cell.BackgroundColor = property.GetColorForValue(value);
+        }
+    }
+}

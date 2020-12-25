@@ -4,18 +4,18 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Reports;
-using Reports.Enums;
-using Reports.Extensions;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.Properties;
-using Reports.PropertyHandlers;
-using Reports.PropertyHandlers.Excel;
-using Reports.PropertyHandlers.Html;
-using Reports.SchemaBuilders;
-using Reports.Writers;
-using StringWriter = Reports.Writers.StringWriter;
+using XReports;
+using XReports.Enums;
+using XReports.Extensions;
+using XReports.Interfaces;
+using XReports.Models;
+using XReports.Properties;
+using XReports.PropertyHandlers;
+using XReports.PropertyHandlers.Excel;
+using XReports.PropertyHandlers.Html;
+using XReports.SchemaBuilders;
+using XReports.Writers;
+using StringWriter = XReports.Writers.StringWriter;
 
 namespace ConsoleApp1
 {

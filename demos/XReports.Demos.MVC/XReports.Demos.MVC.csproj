@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Bogus" Version="31.0.3" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\CustomProperties\CustomFormat.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Extensions\StringWriter.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Test\StringWriter.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
+    </ItemGroup>
+
+</Project>

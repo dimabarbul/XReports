@@ -6,21 +6,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F9E94722
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "demos\ConsoleApp1\ConsoleApp1.csproj", "{9CBAAAC1-91D3-490F-ABA8-8EFB77C50F0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Html.Tests", "tests\Reports.Html.Tests\Reports.Html.Tests.csproj", "{B2E04F07-6B8C-4522-8799-8F5619875BD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Html.Tests", "tests\XReports.Html.Tests\XReports.Html.Tests.csproj", "{B2E04F07-6B8C-4522-8799-8F5619875BD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Tests", "tests\Reports.Tests\Reports.Tests.csproj", "{45EFC336-0978-4C5C-91B6-22541C463736}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Tests", "tests\XReports.Tests\XReports.Tests.csproj", "{45EFC336-0978-4C5C-91B6-22541C463736}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{26DBFC2D-CE5F-488B-BC42-230CFA1DABBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Core", "src\Reports.Core\Reports.Core.csproj", "{1A08F77C-F8A2-4742-9365-E2F98AAB183D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Core", "src\XReports.Core\XReports.Core.csproj", "{1A08F77C-F8A2-4742-9365-E2F98AAB183D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Extensions.Builders.Tests", "tests\Reports.Extensions.Builders.Tests\Reports.Extensions.Builders.Tests.csproj", "{8C346653-7549-4B6E-B3E9-9F93882383FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Extensions.Builders.Tests", "tests\XReports.Extensions.Builders.Tests\XReports.Extensions.Builders.Tests.csproj", "{8C346653-7549-4B6E-B3E9-9F93882383FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Demos.MVC", "demos\Reports.Demos.MVC\Reports.Demos.MVC.csproj", "{10C08E20-75E1-41E5-B5EC-574F469770F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Demos.MVC", "demos\XReports.Demos.MVC\XReports.Demos.MVC.csproj", "{10C08E20-75E1-41E5-B5EC-574F469770F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports.Demos.FromDb", "demos\Reports.Demos.FromDb\Reports.Demos.FromDb.csproj", "{E5790856-5135-49AF-BEB8-FEA0A55C2211}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Demos.FromDb", "demos\XReports.Demos.FromDb\XReports.Demos.FromDb.csproj", "{E5790856-5135-49AF-BEB8-FEA0A55C2211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports", "src\Reports\Reports.csproj", "{B7B563B3-D050-4221-B6EE-3ADC1711A229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports", "src\XReports\XReports.csproj", "{B7B563B3-D050-4221-B6EE-3ADC1711A229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

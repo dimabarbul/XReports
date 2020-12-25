@@ -1,0 +1,31 @@
+@model XReports.Demos.MVC.Controllers.CustomProperties.CustomHeaderPropertiesController.ViewModel
+
+@{
+    ViewBag.Title = "Custom Format";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>Custom properties may also be assigned to header cells.</p>
+    <p>In this example we use properties from Reports.Extensions.Properties package.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+VerticalReportBuilder&lt;Entity&gt; reportBuilder = new VerticalReportBuilder&lt;Entity&gt;();
+reportBuilder.AddColumn("Name", e => e.Name);
+reportBuilder.AddColumn("Email", e => e.Email);
+reportBuilder.AddColumn("Score", e => e.Score);
+
+reportBuilder.AddHeaderProperty("Name", new AlignmentProperty(AlignmentType.Right));
+reportBuilder.AddHeaderProperty("Email", new ColorProperty(Color.Blue, null));
+reportBuilder.AddHeaderProperty("Score", new AlignmentProperty(AlignmentType.Center));
+}

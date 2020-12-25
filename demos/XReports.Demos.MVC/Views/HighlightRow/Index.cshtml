@@ -1,0 +1,39 @@
+@model XReports.Demos.MVC.Controllers.CustomProperties.HighlightRowController.ViewModel
+
+@{
+    ViewBag.Title = "Highlight Row";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>Generally customizing report cell is done depending on cell value. In this example we highlight row based on value of one of the cells.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+   class HighlightCellProcessor : IReportCellProcessor&lt;Entity&gt;
+    {
+        private static readonly ColorProperty Bad = new ColorProperty(Color.Red);
+        private static readonly ColorProperty Good = new ColorProperty(Color.Lime);
+
+        public void Process(ReportCell cell, Entity entity)
+        {
+            if (entity.Score < 3)
+            {
+                cell.AddProperty(Bad);
+            }
+            else if (entity.Score >= 9)
+            {
+                cell.AddProperty(Good);
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Reports.Interfaces;
-using Reports.Models;
-using Reports.Writers;
+using XReports.Interfaces;
+using XReports.Models;
+using XReports.Writers;
 
 namespace ConsoleApp1
 {
