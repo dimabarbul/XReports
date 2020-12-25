@@ -3,9 +3,9 @@ using XReports.Models;
 
 namespace XReports.ReportCellsProviders
 {
-    public class NullCellsProvider<TSourceEntity> : ReportCellsProvider<TSourceEntity, string>
+    public class EmptyCellsProvider<TSourceEntity> : ReportCellsProvider<TSourceEntity, string>
     {
-        public NullCellsProvider(string title)
+        public EmptyCellsProvider(string title)
             : base(title)
         {
         }
