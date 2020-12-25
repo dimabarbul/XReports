@@ -9,7 +9,7 @@ using XReports.Models;
 
 namespace XReports.DependencyInjection
 {
-    public static class ReportsDI
+    public static class XReportsDI
     {
         private static readonly Dictionary<string, Tuple<object, Type>> NamedReportHandlers = new Dictionary<string, Tuple<object, Type>>();
 

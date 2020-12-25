@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using XReports.Interfaces;
 using XReports.Writers;
 
-namespace XReports.Demos.MVC.Reports
+namespace XReports.Demos.MVC.XReports
 {
     public class BootstrapStringWriter : StringWriter
     {

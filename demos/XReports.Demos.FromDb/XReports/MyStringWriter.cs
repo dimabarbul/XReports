@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using XReports.Interfaces;
 using XReports.Writers;
 
-namespace XReports.Demos.FromDb.Reports
+namespace XReports.Demos.FromDb.XReports
 {
     public class MyStringWriter : StringWriter
     {

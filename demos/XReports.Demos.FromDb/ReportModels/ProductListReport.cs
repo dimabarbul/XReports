@@ -1,5 +1,5 @@
 using XReports.Attributes;
-using XReports.Demos.FromDb.Reports.Properties;
+using XReports.Demos.FromDb.XReports.Properties;
 using XReports.Enums;
 using XReports.Extensions;
 using XReports.Interfaces;

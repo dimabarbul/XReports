@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using XReports;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;

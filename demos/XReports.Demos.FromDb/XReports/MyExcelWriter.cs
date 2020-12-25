@@ -2,7 +2,7 @@ using System;
 using OfficeOpenXml;
 using XReports.Writers;
 
-namespace XReports.Demos.FromDb.Reports
+namespace XReports.Demos.FromDb.XReports
 {
     public class MyExcelWriter : EpplusWriter
     {

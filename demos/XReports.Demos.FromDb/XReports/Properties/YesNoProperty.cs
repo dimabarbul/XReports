@@ -2,7 +2,7 @@ using XReports.Enums;
 using XReports.Models;
 using XReports.PropertyHandlers;
 
-namespace XReports.Demos.FromDb.Reports.Properties
+namespace XReports.Demos.FromDb.XReports.Properties
 {
     public class YesNoProperty : ReportCellProperty
     {

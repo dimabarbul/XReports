@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports;
 using XReports.Enums;
 using XReports.Interfaces;
 using XReports.Models;

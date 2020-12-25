@@ -1,7 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using XReports;
 using XReports.Demos.FromDb.Services;
 using XReports.Interfaces;
 using XReports.Models;
