@@ -5,7 +5,7 @@ using XReports.Models;
 
 namespace XReports
 {
-    public class ReportConverter<TResultReportCell>
+    public class ReportConverter<TResultReportCell> : IReportConverter<TResultReportCell>
         where TResultReportCell : BaseReportCell, new()
     {
         private readonly IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers;

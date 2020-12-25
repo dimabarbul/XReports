@@ -12,10 +12,10 @@ namespace XReports.Demos.FromDb.Controllers
 {
     public class GenericController : Controller
     {
-        private readonly ReportConverter<HtmlReportCell> htmlConverter;
+        private readonly IReportConverter<HtmlReportCell> htmlConverter;
         private readonly IStringWriter stringWriter;
 
-        public GenericController(ReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter)
+        public GenericController(IReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter)
         {
             this.htmlConverter = htmlConverter;
             this.stringWriter = stringWriter;

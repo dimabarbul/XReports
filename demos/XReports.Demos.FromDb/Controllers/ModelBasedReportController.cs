@@ -14,12 +14,12 @@ namespace XReports.Demos.FromDb.Controllers
         private readonly ReportService reportService;
         private readonly ProductService productService;
         private readonly UserService userService;
-        private readonly ReportConverter<HtmlReportCell> htmlConverter;
-        private readonly ReportConverter<ExcelReportCell> excelConverter;
+        private readonly IReportConverter<HtmlReportCell> htmlConverter;
+        private readonly IReportConverter<ExcelReportCell> excelConverter;
         private readonly IStringWriter stringWriter;
         private readonly IEpplusWriter excelWriter;
 
-        public ModelBasedReportController(ReportService reportService, ReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter, ReportConverter<ExcelReportCell> excelConverter, IEpplusWriter excelWriter, ProductService productService, UserService userService)
+        public ModelBasedReportController(ReportService reportService, IReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter, IReportConverter<ExcelReportCell> excelConverter, IEpplusWriter excelWriter, ProductService productService, UserService userService)
         {
             this.reportService = reportService;
             this.htmlConverter = htmlConverter;

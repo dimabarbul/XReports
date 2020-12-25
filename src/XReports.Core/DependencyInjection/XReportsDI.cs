@@ -18,7 +18,7 @@ namespace XReports.DependencyInjection
         )
             where TReportCell : BaseReportCell, new()
         {
-            services.AddScoped<ReportConverter<TReportCell>>(
+            services.AddScoped<IReportConverter<TReportCell>>(
                 sp => CreateReportConverter(sp, handlers)
             );
 
@@ -33,7 +33,7 @@ namespace XReports.DependencyInjection
         {
             RegisterHandlers(services, typeof(TPropertyHandler));
 
-            services.AddScoped<ReportConverter<TReportCell>>(
+            services.AddScoped<IReportConverter<TReportCell>>(
                 sp => CreateReportConverter(sp, handlers, typeof(TPropertyHandler))
             );
 
@@ -69,7 +69,7 @@ namespace XReports.DependencyInjection
         private static void TryRegisterFactory<TReportCell>(IServiceCollection services)
             where TReportCell : BaseReportCell, new()
         {
-            services.TryAddScoped<Func<string, ReportConverter<TReportCell>>>(sp =>
+            services.TryAddScoped<Func<string, IReportConverter<TReportCell>>>(sp =>
                 key => CreateReportConverter(sp, (IPropertyHandler<TReportCell>[]) NamedReportHandlers[key].Item1, NamedReportHandlers[key].Item2)
             );
         }
@@ -82,7 +82,7 @@ namespace XReports.DependencyInjection
             }
         }
 
-        private static ReportConverter<TReportCell> CreateReportConverter<TReportCell>(
+        private static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
             IServiceProvider sp,
             IPropertyHandler<TReportCell>[] handlers,
             Type markerInterface = null
