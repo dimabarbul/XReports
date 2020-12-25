@@ -3,11 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <PackageVersion>0.1.0</PackageVersion>
-        <Title>Reports</Title>
+        <Title>XReports</Title>
         <Authors>Dmitriy Barbul</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/dimabarbul/Reports</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/dimabarbul/Reports</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
+        <Description>Extensible library for building reports. Includes some general properties, writers etc.</Description>
     </PropertyGroup>
 
     <ItemGroup>

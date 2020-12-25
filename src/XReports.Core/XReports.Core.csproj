@@ -5,9 +5,11 @@
         <PackageVersion>0.1.0</PackageVersion>
         <Authors>Dmitriy Barbul</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/dimabarbul/Reports</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/dimabarbul/Reports</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
         <RootNamespace>XReports</RootNamespace>
+        <Title>XReports.Core</Title>
+        <Description>Extensible library for building reports. Only basic classes and abstractions are included.</Description>
     </PropertyGroup>
 
     <ItemGroup>
