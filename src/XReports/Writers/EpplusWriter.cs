@@ -15,8 +15,6 @@ namespace XReports.Writers
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
         private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
 
-        private int row;
-
         public IEpplusWriter AddFormatter(IEpplusFormatter formatter)
         {
             this.formatters.Add(formatter);
@@ -43,19 +41,19 @@ namespace XReports.Writers
             return stream;
         }
 
-        protected virtual ExcelAddress WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual ExcelAddress WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table, int startRow, int startColumn)
         {
-            int startRow = this.row;
-            int maxColumn = 1;
+            int maxColumn = startColumn;
+            int row = startRow;
 
             foreach (IEnumerable<ExcelReportCell> headerRow in table.HeaderRows)
             {
-                int column = 1;
+                int column = startColumn;
                 foreach (ExcelReportCell cell in headerRow)
                 {
                     if (cell != null)
                     {
-                        this.WriteHeaderCell(worksheet.Cells[this.row, column], cell);
+                        this.WriteHeaderCell(worksheet.Cells[row, column], cell);
                     }
                     column++;
                 }
@@ -65,15 +63,18 @@ namespace XReports.Writers
                     maxColumn = column;
                 }
 
-                this.row++;
+                row++;
             }
 
-            if (this.row == startRow)
+            row--;
+            maxColumn--;
+
+            if (row < startRow)
             {
                 return null;
             }
 
-            ExcelAddress address = new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1);
+            ExcelAddress address = new ExcelAddress(startRow, startColumn, row, maxColumn);
             this.FormatHeader(worksheet, address);
 
             return address;
@@ -86,19 +87,19 @@ namespace XReports.Writers
             range.Style.Font.Bold = true;
         }
 
-        protected virtual ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table)
+        protected virtual ExcelAddress WriteBody(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table, int startRow, int startColumn)
         {
-            int startRow = this.row;
-            int maxColumn = 1;
+            int maxColumn = startColumn;
+            int row = startRow;
 
             foreach (IEnumerable<ExcelReportCell> bodyRow in table.Rows)
             {
-                int column = 1;
+                int column = startColumn;
                 foreach (ExcelReportCell cell in bodyRow)
                 {
                     if (cell != null)
                     {
-                        this.WriteCell(worksheet.Cells[this.row, column], cell);
+                        this.WriteCell(worksheet.Cells[row, column], cell);
                     }
                     column++;
                 }
@@ -108,13 +109,16 @@ namespace XReports.Writers
                     maxColumn = column;
                 }
 
-                this.row++;
+                row++;
             }
 
-            this.ApplyColumnFormat(worksheet, startRow, this.row - 1);
+            row--;
+            maxColumn--;
 
-            return this.row > startRow ?
-                new ExcelAddress(startRow, 1, this.row - 1, maxColumn - 1) :
+            this.ApplyColumnFormat(worksheet, startRow, row);
+
+            return row >= startRow ?
+                new ExcelAddress(startRow, startColumn, row, maxColumn) :
                 null;
         }
 
@@ -202,15 +206,20 @@ namespace XReports.Writers
         {
         }
 
+        protected void WriteReportOnWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
+        {
+            ExcelAddress headerAddress = this.WriteHeader(worksheet, table, row, column);
+            ExcelAddress bodyAddress = this.WriteBody(
+                worksheet, table, headerAddress == null ? row : (headerAddress.End.Row + 1), column);
+
+            this.PostCreate(worksheet, headerAddress, bodyAddress);
+        }
+
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
         {
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
 
-            this.row = 1;
-            ExcelAddress headerAddress = this.WriteHeader(worksheet, table);
-            ExcelAddress bodyAddress = this.WriteBody(worksheet, table);
-
-            this.PostCreate(worksheet, headerAddress, bodyAddress);
+            this.WriteReportOnWorksheet(table, worksheet, 1, 1);
 
             excelPackage.Save();
         }
