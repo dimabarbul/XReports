@@ -25,9 +25,11 @@ namespace XReports.Models
                 .Select(row =>
                 {
                     ReportCell headerCell = row.CreateHeaderCell();
-                    headerCell.ColumnSpan = complexHeader[0].Length;
+                    int columnSpan = complexHeader[0].Length;
+                    headerCell.ColumnSpan = columnSpan;
 
                     return new ReportCell[] { headerCell }
+                        .Concat(Enumerable.Repeat<ReportCell>(null, columnSpan - 1))
                         .Concat(source.Select(row.CreateCell));
                 });
         }
