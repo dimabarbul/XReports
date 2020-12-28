@@ -12,6 +12,8 @@ namespace XReports.Writers
 {
     public class EpplusWriter : IEpplusWriter
     {
+        private const string WorksheetName = "Data";
+
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
         private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
 
@@ -27,6 +29,8 @@ namespace XReports.Writers
             using ExcelPackage excelPackage = new ExcelPackage(new FileInfo(fileName));
 
             this.WriteReport(table, excelPackage);
+
+            excelPackage.Save();
         }
 
         public Stream WriteToStream(IReportTable<ExcelReportCell> table)
@@ -35,6 +39,8 @@ namespace XReports.Writers
             using ExcelPackage excelPackage = new ExcelPackage(stream);
 
             this.WriteReport(table, excelPackage);
+
+            excelPackage.Save();
 
             stream.Seek(0, SeekOrigin.Begin);
 
@@ -206,7 +212,7 @@ namespace XReports.Writers
         {
         }
 
-        protected void WriteReportOnWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
+        protected void WriteReportToWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
         {
             ExcelAddress headerAddress = this.WriteHeader(worksheet, table, row, column);
             ExcelAddress bodyAddress = this.WriteBody(
@@ -217,11 +223,9 @@ namespace XReports.Writers
 
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
         {
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Data");
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(WorksheetName);
 
-            this.WriteReportOnWorksheet(table, worksheet, 1, 1);
-
-            excelPackage.Save();
+            this.WriteReportToWorksheet(table, worksheet, 1, 1);
         }
 
         private ExcelHorizontalAlignment GetAlignment(AlignmentType alignmentType)
