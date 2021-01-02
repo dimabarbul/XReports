@@ -33,7 +33,15 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
+        public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(IReportCellsProvider<TSourceEntity> provider)
+        {
+            this.CurrentProvider = new ConfiguredCellsProvider(provider);
+            this.HeaderProviders.Add(this.CurrentProvider);
+
+            return this;
+        }
+
+        public HorizontalReportSchemaBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
         {
             this.CurrentProvider = new ConfiguredCellsProvider(provider);
             this.HeaderProviders.Insert(rowIndex, this.CurrentProvider);

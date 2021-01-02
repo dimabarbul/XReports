@@ -24,7 +24,7 @@
         ReportCellProperty centerAlignment = new AlignmentProperty(AlignmentType.Center);
 
         HorizontalReportBuilder&lt;Entity&gt; reportBuilder = new HorizontalReportBuilder&lt;Entity&gt;();
-        reportBuilder.AddHeaderRow(0, string.Empty, e =&gt; e.Name)
+        reportBuilder.AddHeaderRow(string.Empty, e =&gt; e.Name)
             .AddProperty(centerAlignment);
         reportBuilder.AddRow("Age", e =&gt; e.Age)
             .AddProperty(centerAlignment);

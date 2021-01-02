@@ -52,7 +52,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
 
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
             reportBuilder
-                .AddHeaderRow(0, "Metrics", e => e.Name)
+                .AddHeaderRow("Metrics", e => e.Name)
                 .AddProperties(centerAlignment)
                 .AddHeaderProperties(centerAlignment);
             reportBuilder.AddRow("Age", e => e.Age)
