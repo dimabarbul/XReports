@@ -20,6 +20,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Demos.FromDb", "de
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports", "src\XReports\XReports.csproj", "{B7B563B3-D050-4221-B6EE-3ADC1711A229}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{2979B4B0-E5A0-4819-9A27-A25B02A4B15B}"
+ProjectSection(SolutionItems) = preProject
+	docs\index.md = docs\index.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
