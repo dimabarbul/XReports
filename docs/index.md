@@ -11,7 +11,7 @@ XReports is a library intended to provide extendable way of building reports and
 
 ## Table of Contents
 1. XReports.Core
-    1. Building Reports
+    1. [Building Reports](core/1.md)
     2. Properties
     3. Cell Processors
     4. Cells Provider
