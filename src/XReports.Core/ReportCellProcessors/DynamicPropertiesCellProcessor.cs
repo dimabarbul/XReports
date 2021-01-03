@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
 
@@ -21,7 +22,7 @@ namespace XReports.ReportCellProcessors
 
         public void Process(ReportCell cell, TSourceEntity entity)
         {
-            foreach (ReportCellProperty property in this.propertySelector(entity))
+            foreach (ReportCellProperty property in this.propertySelector(entity).Where(p => p != null))
             {
                 cell.AddProperty(property);
             }
