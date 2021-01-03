@@ -10,9 +10,9 @@ namespace XReports
     {
         private readonly IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers;
 
-        public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers)
+        public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers = null)
         {
-            this.propertyHandlers = propertyHandlers;
+            this.propertyHandlers = propertyHandlers ?? Enumerable.Empty<IPropertyHandler<TResultReportCell>>();
         }
 
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
