@@ -1,6 +1,6 @@
 namespace XReports.Models
 {
-    public abstract class ReportCell : BaseReportCell
+    public class ReportCell : BaseReportCell
     {
     }
 
