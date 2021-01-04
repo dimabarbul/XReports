@@ -30,6 +30,7 @@ ProjectSection(SolutionItems) = preProject
 	docs\core\1.md = docs\core\1.md
 	docs\core\2.md = docs\core\2.md
 	docs\core\3.md = docs\core\3.md
+	docs\core\4.md = docs\core\4.md
 EndProjectSection
 EndProject
 Global
