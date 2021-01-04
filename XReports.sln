@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demos", "demos", "{0702E6BC-8F03-4672-972A-E16CBBD3424E}"
 EndProject
@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1DA9AC59-2
 ProjectSection(SolutionItems) = preProject
 	docs\core\1.md = docs\core\1.md
 	docs\core\2.md = docs\core\2.md
+	docs\core\3.md = docs\core\3.md
 EndProjectSection
 EndProject
 Global
