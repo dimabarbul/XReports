@@ -33,9 +33,6 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-
-
-
         public VerticalReportSchema<TSourceEntity> BuildSchema()
         {
             return ReportSchema<TSourceEntity>.CreateVertical
