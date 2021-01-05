@@ -129,9 +129,9 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
             {
-                if (cell.InternalValue == null || (cell.ValueType == typeof(string) && string.IsNullOrEmpty(cell.InternalValue)))
+                if (cell.Value == null || (cell.ValueType == typeof(string) && string.IsNullOrEmpty(cell.Value)))
                 {
-                    cell.InternalValue = property.Text;
+                    cell.Value = property.Text;
                 }
             }
         }

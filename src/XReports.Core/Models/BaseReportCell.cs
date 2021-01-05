@@ -11,30 +11,30 @@ namespace XReports.Models
         public Type ValueType { get; set; } = typeof(string);
         public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
-        public virtual dynamic InternalValue { get; set; }
+        public virtual dynamic Value { get; set; }
 
         public virtual void CopyFrom(BaseReportCell reportCell)
         {
             this.ColumnSpan = reportCell.ColumnSpan;
             this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
-            this.InternalValue = reportCell.InternalValue;
+            this.Value = reportCell.Value;
         }
 
         public TValue GetValue<TValue>()
         {
             if (this.ValueType == typeof(TValue))
             {
-                return this.InternalValue;
+                return this.Value;
             }
 
-            return Convert.ChangeType(this.InternalValue, typeof(TValue));
+            return Convert.ChangeType(this.Value, typeof(TValue));
         }
 
         public TValue? GetNullableValue<TValue>()
             where TValue : struct
         {
-            if (this.InternalValue == null)
+            if (this.Value == null)
             {
                 return null;
             }

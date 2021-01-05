@@ -14,7 +14,7 @@ namespace XReports.Models
             this.ValueType = typeof(TValue);
         }
 
-        public override dynamic InternalValue
+        public override dynamic Value
         {
             get => this.value;
             set => this.value = value;

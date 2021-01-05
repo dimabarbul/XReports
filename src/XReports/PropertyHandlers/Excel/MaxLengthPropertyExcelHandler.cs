@@ -19,7 +19,7 @@ namespace XReports.PropertyHandlers.Excel
                 return;
             }
 
-            cell.InternalValue = text.Substring(0, property.MaxLength - 1) + "…";
+            cell.Value = text.Substring(0, property.MaxLength - 1) + "…";
         }
     }
 }

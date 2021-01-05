@@ -12,7 +12,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_DifferentTypes_CorrectInternalValue()
+        public void Build_DifferentTypes_CorrectValue()
         {
             VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
@@ -65,14 +65,14 @@ namespace XReports.Tests.SchemaBuilders
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
-            headerCells[0][0].InternalValue.Should().Be("Score");
+            headerCells[0][0].Value.Should().Be("Score");
             headerCells[0][0].ValueType.Should().Be(typeof(string));
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
-            cells[0][0].InternalValue.Should().Be("3.00");
+            cells[0][0].Value.Should().Be("3.00");
             cells[0][0].ValueType.Should().Be(typeof(decimal));
-            cells[1][0].InternalValue.Should().Be("6.50");
+            cells[1][0].Value.Should().Be("6.50");
             cells[1][0].ValueType.Should().Be(typeof(decimal));
         }
 
@@ -91,14 +91,14 @@ namespace XReports.Tests.SchemaBuilders
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
-            headerCells[0][0].InternalValue.Should().Be("Score");
+            headerCells[0][0].Value.Should().Be("Score");
             headerCells[0][0].ValueType.Should().Be(typeof(string));
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
-            cells[0][0].InternalValue.Should().Be("3");
+            cells[0][0].Value.Should().Be("3");
             cells[0][0].ValueType.Should().Be(typeof(decimal));
-            cells[1][0].InternalValue.Should().Be("7");
+            cells[1][0].Value.Should().Be("7");
             cells[1][0].ValueType.Should().Be(typeof(decimal));
         }
 
@@ -118,16 +118,16 @@ namespace XReports.Tests.SchemaBuilders
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);
-            headerCells[0][0].InternalValue.Should().Be("The Date");
+            headerCells[0][0].Value.Should().Be("The Date");
             headerCells[0][0].ValueType.Should().Be(typeof(string));
-            headerCells[0][1].InternalValue.Should().Be("Next Day");
+            headerCells[0][1].Value.Should().Be("Next Day");
             headerCells[0][1].ValueType.Should().Be(typeof(string));
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(1);
-            cells[0][0].InternalValue.Should().Be("10/24/2020");
+            cells[0][0].Value.Should().Be("10/24/2020");
             cells[0][0].ValueType.Should().Be(typeof(DateTime));
-            cells[0][1].InternalValue.Should().Be("10/25/2020");
+            cells[0][1].Value.Should().Be("10/25/2020");
             cells[0][1].ValueType.Should().Be(typeof(DateTime));
         }
 

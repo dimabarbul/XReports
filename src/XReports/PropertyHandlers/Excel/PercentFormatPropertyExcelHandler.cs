@@ -10,7 +10,7 @@ namespace XReports.PropertyHandlers.Excel
         {
             if (!(property.PostfixText ?? string.Empty).Contains('%'))
             {
-                cell.InternalValue = cell.GetNullableValue<decimal>() * 100;
+                cell.Value = cell.GetNullableValue<decimal>() * 100;
             }
 
             cell.NumberFormat = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))}{property.PostfixText}";

@@ -17,7 +17,7 @@ namespace XReports.Models
         {
             base.CopyFrom(reportCell);
 
-            this.Html = reportCell.InternalValue?.ToString() ?? string.Empty;
+            this.Html = reportCell.Value?.ToString() ?? string.Empty;
         }
     }
 }
