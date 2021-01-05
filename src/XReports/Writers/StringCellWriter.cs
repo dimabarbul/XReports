@@ -71,7 +71,13 @@ namespace XReports.Writers
 
         protected void WriteContent(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            stringBuilder.Append(cell.GetValue<string>());
+            string value = cell.GetValue<string>();
+            if (!cell.IsHtml)
+            {
+                value = HttpUtility.HtmlEncode(value);
+            }
+
+            stringBuilder.Append(value);
         }
 
         protected void WriteAttribute(StringBuilder stringBuilder, string name, string value, string defaultValue = "")
