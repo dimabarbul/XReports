@@ -10,7 +10,7 @@ namespace XReports.Extensions
         public static HorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
             this HorizontalReportSchemaBuilder<TEntity> builder, string title, Func<TEntity, TValue> valueSelector)
         {
-            EntityPropertyReportCellsProvider<TEntity, TValue> provider = new EntityPropertyReportCellsProvider<TEntity,TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity,TValue>(title, valueSelector);
 
             return builder.AddRow(provider);
         }
@@ -23,18 +23,10 @@ namespace XReports.Extensions
             return builder.AddRow(provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
-        {
-            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
-
-            return builder.AddRow(provider);
-        }
-
         public static HorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
             this HorizontalReportSchemaBuilder<TEntity> builder, int index, string title, Func<TEntity, TValue> valueSelector)
         {
-            EntityPropertyReportCellsProvider<TEntity, TValue> provider = new EntityPropertyReportCellsProvider<TEntity,TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity,TValue>(title, valueSelector);
 
             return builder.InsertRow(index, provider);
         }
@@ -47,18 +39,10 @@ namespace XReports.Extensions
             return builder.InsertRow(index, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder, int index, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
-        {
-            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
-
-            return builder.InsertRow(index, provider);
-        }
-
         public static HorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
             this HorizontalReportSchemaBuilder<TEntity> builder, string beforeTitle, string title, Func<TEntity, TValue> valueSelector)
         {
-            EntityPropertyReportCellsProvider<TEntity, TValue> provider = new EntityPropertyReportCellsProvider<TEntity,TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity,TValue>(title, valueSelector);
 
             return builder.InsertRowBefore(beforeTitle, provider);
         }
@@ -71,27 +55,11 @@ namespace XReports.Extensions
             return builder.InsertRowBefore(beforeTitle, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder, string beforeTitle, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
-        {
-            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
-
-            return builder.InsertRowBefore(beforeTitle, provider);
-        }
-
         public static HorizontalReportSchemaBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
             this HorizontalReportSchemaBuilder<TEntity> builder, int rowIndex, string title, Func<TEntity, TValue> valueSelector)
         {
-            EntityPropertyReportCellsProvider<TEntity, TValue> provider =
-                new EntityPropertyReportCellsProvider<TEntity, TValue>(title, valueSelector);
-
-            return builder.InsertHeaderRow(rowIndex, provider);
-        }
-
-        public static HorizontalReportSchemaBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder, int rowIndex, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
-        {
-            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider =
+                new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
 
             return builder.InsertHeaderRow(rowIndex, provider);
         }
@@ -99,16 +67,8 @@ namespace XReports.Extensions
         public static HorizontalReportSchemaBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
             this HorizontalReportSchemaBuilder<TEntity> builder, string title, Func<TEntity, TValue> valueSelector)
         {
-            EntityPropertyReportCellsProvider<TEntity, TValue> provider =
-                new EntityPropertyReportCellsProvider<TEntity, TValue>(title, valueSelector);
-
-            return builder.AddHeaderRow(provider);
-        }
-
-        public static HorizontalReportSchemaBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder, string title, IComputedValueProvider<TEntity, TValue> valueProvider)
-        {
-            ComputedValueProviderReportCellsProvider<TEntity,TValue> provider = new ComputedValueProviderReportCellsProvider<TEntity,TValue>(title, valueProvider);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider =
+                new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
 
             return builder.AddHeaderRow(provider);
         }

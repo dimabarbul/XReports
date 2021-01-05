@@ -86,7 +86,7 @@ namespace XReports.Tests.SchemaBuilders
             HorizontalReportSchemaBuilder<DateTime> reportBuilder = new HorizontalReportSchemaBuilder<DateTime>();
             reportBuilder.AddRow("The Date", d => d);
                 // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
-            reportBuilder.AddRow("Next Day", new CallbackComputedValueProvider<DateTime, DateTime>(d => d.AddDays(1)));
+            reportBuilder.AddRow("Next Day", d => d.AddDays(1));
                 // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]

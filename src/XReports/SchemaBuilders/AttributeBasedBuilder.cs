@@ -82,7 +82,7 @@ namespace XReports.SchemaBuilders
             LambdaExpression lambdaExpression = Expression.Lambda(memberExpression, parameter);
 
             IReportCellsProvider<TEntity> instance = (IReportCellsProvider<TEntity>) Activator.CreateInstance(
-                typeof(EntityPropertyReportCellsProvider<,>)
+                typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(TEntity), property.PropertyType),
                 attribute.Title,
                 lambdaExpression.Compile()
