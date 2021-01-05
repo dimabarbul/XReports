@@ -32,7 +32,7 @@ namespace XReports.Html.Tests
 
             HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
-            cells[0][0].Html.Should().Be("bold: TEST");
+            cells[0][0].GetValue<string>().Should().Be("bold: TEST");
         }
 
         private static IEnumerable<IPropertyHandler<HtmlReportCell>> GetCustomPropertyHandlers()
@@ -52,7 +52,7 @@ namespace XReports.Html.Tests
         {
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
-                cell.Html = cell.Html.ToUpperInvariant();
+                cell.Value = cell.Value.ToUpperInvariant();
             }
 
             public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
@@ -62,7 +62,7 @@ namespace XReports.Html.Tests
         {
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
-                cell.Html = "bold: " + cell.Html;
+                cell.Value = "bold: " + cell.Value;
             }
 
             public override int Priority => (int) HtmlPropertyHandlerPriority.Text;

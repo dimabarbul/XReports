@@ -6,35 +6,57 @@ namespace XReports.Models
 {
     public abstract class BaseReportCell
     {
+        private dynamic value;
+
         public int ColumnSpan { get; set; } = 1;
         public int RowSpan { get; set; } = 1;
         public Type ValueType { get; set; } = typeof(string);
         public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
-        public virtual dynamic Value { get; set; }
+        public dynamic Value
+        {
+            get => this.value;
+            set
+            {
+                this.value = value;
+
+                if (value != null)
+                {
+                    this.ValueType = value.GetType();
+                }
+                else
+                {
+                    bool isCurrentTypeAllowsNull = !this.ValueType.IsValueType || (Nullable.GetUnderlyingType(this.ValueType) != null);
+                    if (!isCurrentTypeAllowsNull)
+                    {
+                        this.ValueType = typeof(string);
+                    }
+                }
+            }
+        }
 
         public virtual void CopyFrom(BaseReportCell reportCell)
         {
             this.ColumnSpan = reportCell.ColumnSpan;
             this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
-            this.Value = reportCell.Value;
+            this.value = reportCell.Value;
         }
 
         public TValue GetValue<TValue>()
         {
             if (this.ValueType == typeof(TValue))
             {
-                return this.Value;
+                return this.value;
             }
 
-            return Convert.ChangeType(this.Value, typeof(TValue));
+            return Convert.ChangeType(this.value, typeof(TValue));
         }
 
         public TValue? GetNullableValue<TValue>()
             where TValue : struct
         {
-            if (this.Value == null)
+            if (this.value == null)
             {
                 return null;
             }

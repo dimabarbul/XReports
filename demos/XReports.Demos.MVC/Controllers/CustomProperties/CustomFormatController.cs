@@ -107,7 +107,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 decimal value = cell.GetValue<decimal>();
                 string format = value == 100m ? "F0" : "F2";
 
-                cell.Html = value.ToString(format);
+                cell.Value = value.ToString(format);
             }
         }
 

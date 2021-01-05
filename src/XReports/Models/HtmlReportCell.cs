@@ -4,12 +4,9 @@ namespace XReports.Models
 {
     public class HtmlReportCell : BaseReportCell
     {
-        public string Html { get; set; }
-
-        #region Most used or complex HTML attributes
         public HashSet<string> CssClasses { get; set; } = new HashSet<string>();
+
         public Dictionary<string, string> Styles { get; set; } = new Dictionary<string, string>();
-        #endregion
 
         public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
@@ -17,7 +14,7 @@ namespace XReports.Models
         {
             base.CopyFrom(reportCell);
 
-            this.Html = reportCell.Value?.ToString() ?? string.Empty;
+            // this.Value = this.GetValue<string>() ?? string.Empty;
         }
     }
 }

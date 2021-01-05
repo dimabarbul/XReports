@@ -30,7 +30,7 @@
             decimal value = cell.GetValue&lt;decimal&gt;();
             string format = value == 100m ? "F0" : "F2";
 
-            cell.Html = value.ToString(format);
+            cell.Value = value.ToString(format);
         }
     }
 

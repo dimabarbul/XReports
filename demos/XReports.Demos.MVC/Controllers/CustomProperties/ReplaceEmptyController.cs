@@ -118,9 +118,9 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             protected override void HandleProperty(ReplaceEmptyProperty property, HtmlReportCell cell)
             {
-                if (string.IsNullOrEmpty(cell.Html))
+                if (string.IsNullOrEmpty(cell.GetValue<string>()))
                 {
-                    cell.Html = property.Text;
+                    cell.Value = property.Text;
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
             {
-                if (cell.Value == null || (cell.ValueType == typeof(string) && string.IsNullOrEmpty(cell.Value)))
+                if (string.IsNullOrEmpty(cell.GetValue<string>()))
                 {
                     cell.Value = property.Text;
                 }

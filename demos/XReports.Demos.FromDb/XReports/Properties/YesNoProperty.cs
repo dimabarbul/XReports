@@ -16,7 +16,7 @@ namespace XReports.Demos.FromDb.XReports.Properties
 
         protected override void HandleProperty(YesNoProperty property, HtmlReportCell cell)
         {
-            cell.Html = cell.GetValue<bool>() ? property.YesText : property.NoText;
+            cell.Value = cell.GetValue<bool>() ? property.YesText : property.NoText;
         }
     }
 

@@ -29,13 +29,13 @@ namespace XReports.Html.Tests
 
             HtmlReportCell[][] headerCells = this.GetHeaderCellsAsArray(htmlReportTable);
             headerCells.Should().HaveCount(1);
-            headerCells[0][0].Html.Should().Be("Value");
+            headerCells[0][0].GetValue<string>().Should().Be("Value");
             headerCells[0][0].ColumnSpan.Should().Be(1);
             headerCells[0][0].RowSpan.Should().Be(1);
 
             HtmlReportCell[][] cells = this.GetBodyCellsAsArray(htmlReportTable);
             cells.Should().HaveCount(1);
-            cells[0][0].Html.Should().Be("Test");
+            cells[0][0].GetValue<string>().Should().Be("Test");
             cells[0][0].ColumnSpan.Should().Be(1);
             cells[0][0].RowSpan.Should().Be(1);
         }
