@@ -14,9 +14,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         public void BuildVerticalReport_OneComplexHeader_CorrectTable()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            VerticalReportSchemaBuilder<OneComplexHeaderClass> builder = builderHelper.BuildVerticalReport<OneComplexHeaderClass>();
+            IReportSchema<OneComplexHeaderClass> schema = builderHelper.BuildSchema<OneComplexHeaderClass>();
 
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(2);
@@ -46,9 +46,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            VerticalReportSchemaBuilder<SeveralLevelsOfComplexHeaderClass> builder = builderHelper.BuildVerticalReport<SeveralLevelsOfComplexHeaderClass>();
+            IReportSchema<SeveralLevelsOfComplexHeaderClass> schema = builderHelper.BuildSchema<SeveralLevelsOfComplexHeaderClass>();
 
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(4);

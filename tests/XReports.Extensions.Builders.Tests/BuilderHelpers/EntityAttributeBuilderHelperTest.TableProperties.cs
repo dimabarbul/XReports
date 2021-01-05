@@ -24,8 +24,10 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TableProperties_Applied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            helper.AddAttributeHandler(new CommonAttributeHandler());
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
+            {
+                new CommonAttributeHandler()
+            });
 
             IReportSchema<WithTableProperties> schema = helper.BuildSchema<WithTableProperties>();
 
@@ -57,8 +59,10 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwritten_NotApplied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            helper.AddAttributeHandler(new CommonAttributeHandler());
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
+            {
+                new CommonAttributeHandler()
+            });
 
             IReportSchema<WithOverwrittenTableProperties> schema = helper.BuildSchema<WithOverwrittenTableProperties>();
 
@@ -85,8 +89,10 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwrittenForHeader_Applied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            helper.AddAttributeHandler(new CommonAttributeHandler());
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
+            {
+                new CommonAttributeHandler()
+            });
 
             IReportSchema<WithOverwrittenForHeaderTableProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderTableProperties>();
 

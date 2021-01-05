@@ -25,11 +25,6 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        public void AddAttributeHandler(IAttributeHandler handler)
-        {
-            this.attributeHandlers.Add(handler);
-        }
-
         public IReportSchema<TEntity> BuildSchema<TEntity>()
         {
             ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
@@ -90,7 +85,7 @@ namespace XReports.SchemaBuilders
             return instance;
         }
 
-        public VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
+        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();

@@ -15,9 +15,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         public void BuildVerticalReport_SeveralProperties_CorrectOrder()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            VerticalReportSchemaBuilder<SeveralPropertiesClass> builder = builderHelper.BuildVerticalReport<SeveralPropertiesClass>();
+            IReportSchema<SeveralPropertiesClass> schema = builderHelper.BuildSchema<SeveralPropertiesClass>();
 
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(1);
@@ -39,9 +39,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            VerticalReportSchemaBuilder<SomePropertiesWithoutAttribute> builder = builderHelper.BuildVerticalReport<SomePropertiesWithoutAttribute>();
+            IReportSchema<SomePropertiesWithoutAttribute> schema = builderHelper.BuildSchema<SomePropertiesWithoutAttribute>();
 
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
             headerCells.Should().HaveCount(1);
@@ -61,9 +61,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
-            VerticalReportSchemaBuilder<PropertiesWithAttributes> builder = builderHelper.BuildVerticalReport<PropertiesWithAttributes>();
+            IReportSchema<PropertiesWithAttributes> schema = builderHelper.BuildSchema<PropertiesWithAttributes>();
 
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new []
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new []
             {
                 new PropertiesWithAttributes(){ Id = 1, Name = "John Doe", Salary = 1000m, DateOfBirth = new DateTime(2000, 4, 7)},
             });
