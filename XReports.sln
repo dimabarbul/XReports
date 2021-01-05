@@ -27,10 +27,10 @@ EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1DA9AC59-265A-49D0-9524-3DBB76EAECB5}"
 ProjectSection(SolutionItems) = preProject
-	docs\core\1.md = docs\core\1.md
-	docs\core\2.md = docs\core\2.md
-	docs\core\3.md = docs\core\3.md
-	docs\core\4.md = docs\core\4.md
+	docs\core\building-reports.md = docs\core\building-reports.md
+	docs\core\cell-processors.md = docs\core\cell-processors.md
+	docs\core\properties.md = docs\core\properties.md
+	docs\core\using-report-converter.md = docs\core\using-report-converter.md
 EndProjectSection
 EndProject
 Global
