@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
 
 namespace XReports.Demos.FromDb.Services
 {
     public class ReportService
     {
-        private readonly AttributeBasedBuilder builderHelper;
+        private readonly IAttributeBasedBuilder builderHelper;
 
-        public ReportService(AttributeBasedBuilder builderHelper)
+        public ReportService(IAttributeBasedBuilder builderHelper)
         {
             this.builderHelper = builderHelper;
         }

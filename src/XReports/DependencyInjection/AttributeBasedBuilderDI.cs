@@ -19,7 +19,7 @@ namespace XReports.DependencyInjection
                 services.AddScoped(t);
             }
 
-            services.AddScoped<AttributeBasedBuilder>(
+            services.AddScoped<IAttributeBasedBuilder, AttributeBasedBuilder>(
                 sp => new AttributeBasedBuilder(sp, types.Select(t => (IAttributeHandler) sp.GetRequiredService(t)))
             );
 

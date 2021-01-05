@@ -11,7 +11,7 @@ using XReports.Interfaces;
 
 namespace XReports.SchemaBuilders
 {
-    public class AttributeBasedBuilder
+    public class AttributeBasedBuilder : IAttributeBasedBuilder
     {
         private readonly IServiceProvider serviceProvider;
         private readonly List<IAttributeHandler> attributeHandlers = new List<IAttributeHandler>();
