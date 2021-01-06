@@ -12,11 +12,12 @@ XReports is a library intended to provide extendable way of building reports and
 ## Table of Contents
 1. XReports.Core
     1. [Building Reports](core/building-reports.md)
-    2. [Properties](core/properties.md)
-    3. [Using Report Converter](core/using-report-converter.md)
-    4. [Cell Processors](core/cell-processors.md)
-    5. Cells Providers
-    6. .NET Core Integration
+    2. [Value providers](core/value-providers.md)
+    3. [Properties](core/properties.md)
+    4. [Using Report Converter](core/using-report-converter.md)
+    5. [Cell Processors](core/cell-processors.md)
+    6. Cells Providers
+    7. .NET Core Integration
 2. XReports
     1. Properties
     2. Using AttributeBasedBuilder
