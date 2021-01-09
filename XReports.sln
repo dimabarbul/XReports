@@ -25,15 +25,15 @@ ProjectSection(SolutionItems) = preProject
 	docs\index.md = docs\index.md
 EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{1DA9AC59-265A-49D0-9524-3DBB76EAECB5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xreports.core", "xreports.core", "{1DA9AC59-265A-49D0-9524-3DBB76EAECB5}"
 ProjectSection(SolutionItems) = preProject
-	docs\core\building-reports.md = docs\core\building-reports.md
-	docs\core\cell-processors.md = docs\core\cell-processors.md
-	docs\core\properties.md = docs\core\properties.md
-	docs\core\using-report-converter.md = docs\core\using-report-converter.md
-	docs\core\value-providers.md = docs\core\value-providers.md
-	docs\core\cells-providers.md = docs\core\cells-providers.md
-	docs\core\net-core-integration.md = docs\core\net-core-integration.md
+	docs\xreports.core\building-reports.md = docs\xreports.core\building-reports.md
+	docs\xreports.core\cell-processors.md = docs\xreports.core\cell-processors.md
+	docs\xreports.core\properties.md = docs\xreports.core\properties.md
+	docs\xreports.core\using-report-converter.md = docs\xreports.core\using-report-converter.md
+	docs\xreports.core\value-providers.md = docs\xreports.core\value-providers.md
+	docs\xreports.core\cells-providers.md = docs\xreports.core\cells-providers.md
+	docs\xreports.core\net-core-integration.md = docs\xreports.core\net-core-integration.md
 EndProjectSection
 EndProject
 Global
