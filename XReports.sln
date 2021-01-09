@@ -33,6 +33,7 @@ ProjectSection(SolutionItems) = preProject
 	docs\core\using-report-converter.md = docs\core\using-report-converter.md
 	docs\core\value-providers.md = docs\core\value-providers.md
 	docs\core\cells-providers.md = docs\core\cells-providers.md
+	docs\core\net-core-integration.md = docs\core\net-core-integration.md
 EndProjectSection
 EndProject
 Global
