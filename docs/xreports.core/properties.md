@@ -182,3 +182,12 @@ GUEST                | *****
 admin                | ********            
 */
 ```
+
+## Table Properties
+
+To assign property to all columns/rows you may use AddTableProperties method.
+
+```c#
+// All columns/rows (including added later) will have this property(-ies) assigned.
+builder.AddTableProperties(new UpperCaseProperty());
+```
