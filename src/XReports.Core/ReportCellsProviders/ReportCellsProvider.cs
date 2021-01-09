@@ -5,7 +5,7 @@ using XReports.Models;
 
 namespace XReports.ReportCellsProviders
 {
-    public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity, TValue>
+    public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
         public string Title { get; }
         public ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
