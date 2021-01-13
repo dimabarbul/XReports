@@ -23,20 +23,13 @@ namespace XReports.DependencyInjection
             where TIEpplusWriter : class, IEpplusWriter
             where TEpplusWriter : class, TIEpplusWriter, new()
         {
-            Type[] formatterTypes = typeof(IEpplusFormatter).GetImplementingTypes();
-
-            foreach (Type formatterType in formatterTypes)
-            {
-                services.AddScoped(formatterType);
-            }
-
             services.AddScoped<TIEpplusWriter, TEpplusWriter>(sp =>
             {
                 TEpplusWriter writer = new TEpplusWriter();
 
-                foreach (Type formatterType in formatterTypes)
+                foreach (Type formatterType in typeof(IEpplusFormatter).GetImplementingTypes())
                 {
-                    writer.AddFormatter((IEpplusFormatter) sp.GetRequiredService(formatterType));
+                    writer.AddFormatter((IEpplusFormatter) ActivatorUtilities.GetServiceOrCreateInstance(sp, formatterType));
                 }
 
                 return writer;

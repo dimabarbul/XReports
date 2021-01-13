@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.ReportCellsProviders;
 using XReports.Attributes;
 using XReports.Enums;
 using XReports.Interfaces;
+using XReports.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {
@@ -46,7 +46,7 @@ namespace XReports.SchemaBuilders
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IHorizontalReportPostBuilder<TEntity>) this.serviceProvider.GetRequiredService(reportAttribute.PostBuilder)).Build(builder);
+                ((IHorizontalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;
@@ -96,7 +96,7 @@ namespace XReports.SchemaBuilders
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IVerticalReportPostBuilder<TEntity>) this.serviceProvider.GetRequiredService(reportAttribute.PostBuilder)).Build(builder);
+                ((IVerticalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
             }
 
             return builder;
