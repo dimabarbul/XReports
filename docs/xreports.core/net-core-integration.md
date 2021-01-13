@@ -194,19 +194,19 @@ services.AddReportConverter<HtmlReportCell>("bootstrap", new BoldPropertyBootstr
 services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>("email");
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-// To get factory you need to get Func<string, IReportConverter<TReportCell>>
+// To get factory you need to get IReportConverterFactory<TReportCell>
 // where TReportCell is your report cell class.
-Func<string, IReportConverter<HtmlReportCell>> converterFactory =
-    serviceProvider.GetRequiredService<Func<string, IReportConverter<HtmlReportCell>>>();
+IReportConverterFactory<HtmlReportCell> converterFactory =
+    serviceProvider.GetRequiredService<IReportConverterFactory<HtmlReportCell>>();
 
 // Use factory to get "bootstrap" converter.
-IReportConverter<HtmlReportCell> bootstrapConverter = converterFactory("bootstrap");
+IReportConverter<HtmlReportCell> bootstrapConverter = converterFactory.Get("bootstrap");
 Console.WriteLine("Bootstrap");
 new HtmlWriter().Write(bootstrapConverter.Convert(reportTable));
 Console.WriteLine();
 
 // Use factory to get "email" converter.
-IReportConverter<HtmlReportCell> emailConverter = converterFactory("email");
+IReportConverter<HtmlReportCell> emailConverter = converterFactory.Get("email");
 Console.WriteLine("Email");
 new HtmlWriter().Write(emailConverter.Convert(reportTable));
 ```

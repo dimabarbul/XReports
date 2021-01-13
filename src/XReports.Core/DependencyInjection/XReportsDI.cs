@@ -11,8 +11,6 @@ namespace XReports.DependencyInjection
 {
     public static class XReportsDI
     {
-        private static readonly Dictionary<string, Tuple<object, Type>> NamedReportHandlers = new Dictionary<string, Tuple<object, Type>>();
-
         public static IServiceCollection AddReportConverter<TReportCell>(
             this IServiceCollection services, params IPropertyHandler<TReportCell>[] handlers
         )
@@ -31,8 +29,6 @@ namespace XReports.DependencyInjection
             where TReportCell : BaseReportCell, new()
             where TPropertyHandler : IPropertyHandler<TReportCell>
         {
-            RegisterHandlers(services, typeof(TPropertyHandler));
-
             services.AddScoped<IReportConverter<TReportCell>>(
                 sp => CreateReportConverter(sp, handlers, typeof(TPropertyHandler))
             );
@@ -45,9 +41,8 @@ namespace XReports.DependencyInjection
         )
             where TReportCell : BaseReportCell, new()
         {
+            AddFactoryRegistration(services, name, handlers);
             TryRegisterFactory<TReportCell>(services);
-
-            NamedReportHandlers[name] = new Tuple<object, Type>(handlers, null);
 
             return services;
         }
@@ -58,44 +53,49 @@ namespace XReports.DependencyInjection
             where TReportCell : BaseReportCell, new()
             where TPropertyHandler : IPropertyHandler<TReportCell>
         {
-            RegisterHandlers(services, typeof(TPropertyHandler));
+            AddFactoryRegistration(services, name, handlers, typeof(TPropertyHandler));
             TryRegisterFactory<TReportCell>(services);
 
-            NamedReportHandlers[name] = new Tuple<object, Type>(handlers, typeof(TPropertyHandler));
-
             return services;
+        }
+
+        internal static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
+            IServiceProvider sp,
+            IEnumerable<IPropertyHandler<TReportCell>> handlers,
+            Type markerInterface = null
+        )
+            where TReportCell : BaseReportCell, new()
+        {
+            return markerInterface == null ?
+                new ReportConverter<TReportCell>(handlers) :
+                new ReportConverter<TReportCell>(
+                    handlers.Concat(
+                        markerInterface.GetImplementingTypes()
+                            .Select(t => (IPropertyHandler<TReportCell>) ActivatorUtilities.GetServiceOrCreateInstance(sp, t))
+                    )
+                );
+        }
+
+        private static void AddFactoryRegistration<TReportCell>(
+            IServiceCollection services, string name, IPropertyHandler<TReportCell>[] handlers, Type type = null
+        )
+            where TReportCell : BaseReportCell, new()
+        {
+            services.Configure<ReportConverterFactoryOptions<TReportCell>>(o =>
+            {
+                o.Registrations.Add(new ReportConverterRegistration<TReportCell>()
+                {
+                    Name = name,
+                    Handlers = handlers,
+                    PropertyHandlersInterface = type,
+                });
+            });
         }
 
         private static void TryRegisterFactory<TReportCell>(IServiceCollection services)
             where TReportCell : BaseReportCell, new()
         {
-            services.TryAddScoped<Func<string, IReportConverter<TReportCell>>>(sp =>
-                key => CreateReportConverter(sp, (IPropertyHandler<TReportCell>[]) NamedReportHandlers[key].Item1, NamedReportHandlers[key].Item2)
-            );
-        }
-
-        private static void RegisterHandlers(IServiceCollection services, Type type)
-        {
-            foreach (Type t in type.GetImplementingTypes())
-            {
-                services.AddScoped(t);
-            }
-        }
-
-        private static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
-            IServiceProvider sp,
-            IPropertyHandler<TReportCell>[] handlers,
-            Type markerInterface = null
-        )
-            where TReportCell : BaseReportCell, new()
-        {
-            return new ReportConverter<TReportCell>(
-                handlers.Concat(
-                    markerInterface == null ? new IPropertyHandler<TReportCell>[0] :
-                        markerInterface.GetImplementingTypes()
-                            .Select(t => (IPropertyHandler<TReportCell>) sp.GetRequiredService(t))
-                )
-            );
+            services.TryAddScoped<IReportConverterFactory<TReportCell>, ReportConverterFactory<TReportCell>>();
         }
     }
 }
