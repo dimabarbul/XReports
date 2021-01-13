@@ -91,9 +91,9 @@ namespace XReports.Demos.FromDb
         private void UseReports(IServiceCollection services)
         {
             services
-                .UseStringCellWriter()
-                .UseStringWriter<MyStringWriter>()
-                .UseEpplusWriter<MyExcelWriter>()
+                .AddStringCellWriter()
+                .AddStringWriter<MyStringWriter>()
+                .AddEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell, IHtmlHandler>(
                     new AlignmentPropertyHtmlHandler(),
                     new BoldPropertyHtmlHandler(),
@@ -108,7 +108,7 @@ namespace XReports.Demos.FromDb
                     new DecimalFormatPropertyExcelHandler(),
                     new PercentFormatPropertyExcelHandler(),
                     new DateTimeFormatPropertyExcelHandler())
-                .UseAttributeBasedBuilder();
+                .AddAttributeBasedBuilder();
         }
     }
 }

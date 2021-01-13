@@ -8,18 +8,18 @@ namespace XReports.DependencyInjection
 {
     public static class EpplusWriterDI
     {
-        public static IServiceCollection UseEpplusWriter(this IServiceCollection services)
+        public static IServiceCollection AddEpplusWriter(this IServiceCollection services)
         {
-            return services.UseEpplusWriter<IEpplusWriter, EpplusWriter>();
+            return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>();
         }
 
-        public static IServiceCollection UseEpplusWriter<TEpplusWriter>(this IServiceCollection services)
+        public static IServiceCollection AddEpplusWriter<TEpplusWriter>(this IServiceCollection services)
             where TEpplusWriter : class, IEpplusWriter, new()
         {
-            return services.UseEpplusWriter<IEpplusWriter, TEpplusWriter>();
+            return services.AddEpplusWriter<IEpplusWriter, TEpplusWriter>();
         }
 
-        public static IServiceCollection UseEpplusWriter<TIEpplusWriter, TEpplusWriter>(this IServiceCollection services)
+        public static IServiceCollection AddEpplusWriter<TIEpplusWriter, TEpplusWriter>(this IServiceCollection services)
             where TIEpplusWriter : class, IEpplusWriter
             where TEpplusWriter : class, TIEpplusWriter, new()
         {

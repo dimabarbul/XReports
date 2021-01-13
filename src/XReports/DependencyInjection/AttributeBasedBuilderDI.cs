@@ -8,7 +8,7 @@ namespace XReports.DependencyInjection
 {
     public static class AttributeBasedBuilderDI
     {
-        public static IServiceCollection UseAttributeBasedBuilder(this IServiceCollection services)
+        public static IServiceCollection AddAttributeBasedBuilder(this IServiceCollection services)
         {
             services.AddScoped<IAttributeBasedBuilder, AttributeBasedBuilder>(
                 sp => new AttributeBasedBuilder(

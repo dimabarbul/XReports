@@ -4,7 +4,7 @@ AttributeBasedBuilder allows building report schema using attributes on class pr
 
 ## .NET Core Integration
 
-You need to call extension method UseAttributeBasedBuilder. This will register IAttributeBasedBuilder. Attribute handlers and post-builders can be registered in DI container.
+You need to call extension method AddAttributeBasedBuilder. This will register IAttributeBasedBuilder. Attribute handlers and post-builders can be registered in DI container.
 
 ```c#
 class ReportModel
@@ -22,7 +22,7 @@ class ReportModel
 
 ServiceCollection services = new ServiceCollection();
 // Register IAttributeBasedBuilder
-services.UseAttributeBasedBuilder();
+services.AddAttributeBasedBuilder();
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 // Get builder.

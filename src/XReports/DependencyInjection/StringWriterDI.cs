@@ -6,18 +6,18 @@ namespace XReports.DependencyInjection
 {
     public static class StringWriterDI
     {
-        public static IServiceCollection UseStringWriter(this IServiceCollection services)
+        public static IServiceCollection AddStringWriter(this IServiceCollection services)
         {
-            return services.UseStringWriter<StringWriter>();
+            return services.AddStringWriter<StringWriter>();
         }
 
-        public static IServiceCollection UseStringWriter<TStringWriter>(this IServiceCollection services)
+        public static IServiceCollection AddStringWriter<TStringWriter>(this IServiceCollection services)
             where TStringWriter : StringWriter
         {
-            return services.UseStringWriter<IStringWriter, TStringWriter>();
+            return services.AddStringWriter<IStringWriter, TStringWriter>();
         }
 
-        public static IServiceCollection UseStringWriter<TIStringWriter, TStringWriter>(this IServiceCollection services)
+        public static IServiceCollection AddStringWriter<TIStringWriter, TStringWriter>(this IServiceCollection services)
             where TIStringWriter : class, IStringWriter
             where TStringWriter : class, TIStringWriter
         {
@@ -31,18 +31,18 @@ namespace XReports.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection UseStringCellWriter(this IServiceCollection services)
+        public static IServiceCollection AddStringCellWriter(this IServiceCollection services)
         {
-            return services.UseStringCellWriter<StringCellWriter>();
+            return services.AddStringCellWriter<StringCellWriter>();
         }
 
-        public static IServiceCollection UseStringCellWriter<TStringCellWriter>(this IServiceCollection services)
+        public static IServiceCollection AddStringCellWriter<TStringCellWriter>(this IServiceCollection services)
             where TStringCellWriter : StringCellWriter
         {
-            return services.UseStringCellWriter<IStringCellWriter, TStringCellWriter>();
+            return services.AddStringCellWriter<IStringCellWriter, TStringCellWriter>();
         }
 
-        public static IServiceCollection UseStringCellWriter<TIStringCellWriter, TStringCellWriter>(this IServiceCollection services)
+        public static IServiceCollection AddStringCellWriter<TIStringCellWriter, TStringCellWriter>(this IServiceCollection services)
             where TIStringCellWriter : class, IStringCellWriter
             where TStringCellWriter : class, TIStringCellWriter
         {
