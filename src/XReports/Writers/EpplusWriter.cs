@@ -212,13 +212,25 @@ namespace XReports.Writers
         {
         }
 
-        protected void WriteReportToWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
+        protected ExcelAddress WriteReportToWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
         {
             ExcelAddress headerAddress = this.WriteHeader(worksheet, table, row, column);
             ExcelAddress bodyAddress = this.WriteBody(
                 worksheet, table, headerAddress == null ? row : (headerAddress.End.Row + 1), column);
 
             this.PostCreate(worksheet, headerAddress, bodyAddress);
+
+            if (headerAddress == null && bodyAddress == null)
+            {
+                return null;
+            }
+
+            return new ExcelAddress(
+                (headerAddress ?? bodyAddress).Start.Row,
+                (headerAddress ?? bodyAddress).Start.Column,
+                (bodyAddress ?? headerAddress).End.Row,
+                (bodyAddress ?? headerAddress).End.Column
+            );
         }
 
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
