@@ -39,6 +39,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xreports", "xreports", "{89A33C19-AC55-40F3-9392-11CF17EB04B7}"
 ProjectSection(SolutionItems) = preProject
 	docs\xreports\attribute-based-builder.md = docs\xreports\attribute-based-builder.md
+	docs\xreports\cell-types.md = docs\xreports\cell-types.md
 EndProjectSection
 EndProject
 Global
