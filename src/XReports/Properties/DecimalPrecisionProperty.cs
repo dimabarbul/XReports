@@ -3,11 +3,11 @@ using XReports.Models;
 
 namespace XReports.Properties
 {
-    public class DecimalFormatProperty : ReportCellProperty
+    public class DecimalPrecisionProperty : ReportCellProperty
     {
         public int Precision { get; }
 
-        public DecimalFormatProperty(int precision)
+        public DecimalPrecisionProperty(int precision)
         {
             if (precision < 0)
             {

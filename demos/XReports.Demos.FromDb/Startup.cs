@@ -98,14 +98,14 @@ namespace XReports.Demos.FromDb
                     new AlignmentPropertyHtmlHandler(),
                     new BoldPropertyHtmlHandler(),
                     new ColorPropertyHtmlHandler(),
-                    new DecimalFormatPropertyHtmlHandler(),
+                    new DecimalPrecisionPropertyHtmlHandler(),
                     new PercentFormatPropertyHtmlHandler(),
                     new DateTimeFormatPropertyHtmlHandler())
                 .AddReportConverter<ExcelReportCell, IExcelHandler>(
                     new AlignmentPropertyExcelHandler(),
                     new BoldPropertyExcelHandler(),
                     new ColorPropertyExcelHandler(),
-                    new DecimalFormatPropertyExcelHandler(),
+                    new DecimalPrecisionPropertyExcelHandler(),
                     new PercentFormatPropertyExcelHandler(),
                     new DateTimeFormatPropertyExcelHandler())
                 .AddAttributeBasedBuilder();

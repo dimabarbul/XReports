@@ -63,7 +63,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             reportBuilder.AddRow("Max. Score", e => e.MaxScore)
                 .AddProperties(centerAlignment);
             reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
-                .AddProperties(new DecimalFormatProperty(2), centerAlignment);
+                .AddProperties(new DecimalPrecisionProperty(2), centerAlignment);
 
             reportBuilder.AddComplexHeader(0, "Score", "Min. Score", "Avg. Score");
             reportBuilder.AddComplexHeaderProperties("Score", new ColorProperty(Color.Blue));
@@ -75,7 +75,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
             {
-                new DecimalFormatPropertyHtmlHandler(),
+                new DecimalPrecisionPropertyHtmlHandler(),
                 new AlignmentPropertyHtmlHandler(),
                 new BoldPropertyHtmlHandler(),
                 new ColorPropertyHtmlHandler(),
@@ -88,7 +88,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
             {
-                new DecimalFormatPropertyExcelHandler(),
+                new DecimalPrecisionPropertyExcelHandler(),
                 new AlignmentPropertyExcelHandler(),
                 new BoldPropertyExcelHandler(),
                 new ColorPropertyExcelHandler(),

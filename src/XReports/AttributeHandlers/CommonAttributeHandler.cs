@@ -43,8 +43,8 @@ namespace XReports.AttributeHandlers
                 case DateTimeFormatAttribute dateTimeFormatAttribute:
                     property = new DateTimeFormatProperty(dateTimeFormatAttribute.Format);
                     break;
-                case DecimalFormatAttribute decimalFormatAttribute:
-                    property = new DecimalFormatProperty(decimalFormatAttribute.Precision);
+                case DecimalPrecisionAttribute decimalPrecisionAttribute:
+                    property = new DecimalPrecisionProperty(decimalPrecisionAttribute.Precision);
                     break;
                 case MaxLengthAttribute maxLengthAttribute:
                     property = new MaxLengthProperty(maxLengthAttribute.MaxLength);

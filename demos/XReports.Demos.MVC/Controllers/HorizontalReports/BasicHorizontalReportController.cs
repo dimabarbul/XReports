@@ -72,7 +72,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
                 .AddProperties(centerAlignment);
             reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
                 .AddHeaderProperties(indentation)
-                .AddProperties(new DecimalFormatProperty(2), centerAlignment);
+                .AddProperties(new DecimalPrecisionProperty(2), centerAlignment);
 
             return reportBuilder.BuildSchema().BuildReportTable(this.GetData());
         }
@@ -81,7 +81,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
             {
-                new DecimalFormatPropertyHtmlHandler(),
+                new DecimalPrecisionPropertyHtmlHandler(),
                 new AlignmentPropertyHtmlHandler(),
                 new BoldPropertyHtmlHandler(),
                 new ColorPropertyHtmlHandler(),
@@ -95,7 +95,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
         {
             ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
             {
-                new DecimalFormatPropertyExcelHandler(),
+                new DecimalPrecisionPropertyExcelHandler(),
                 new AlignmentPropertyExcelHandler(),
                 new BoldPropertyExcelHandler(),
                 new ColorPropertyExcelHandler(),

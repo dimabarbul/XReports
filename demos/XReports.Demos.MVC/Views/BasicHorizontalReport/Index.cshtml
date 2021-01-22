@@ -35,7 +35,7 @@
         reportBuilder.AddRow("Max. Score", e =&gt; e.MaxScore)
             .AddProperty(centerAlignment);
         reportBuilder.AddRow("Avg. Score", e =&gt; e.AverageScore)
-            .AddProperty(new DecimalFormatProperty(2))
+            .AddProperty(new DecimalPrecisionProperty(2))
             .AddProperty(centerAlignment);
 
         reportBuilder.AddTitleProperty("Age", new BoldProperty());

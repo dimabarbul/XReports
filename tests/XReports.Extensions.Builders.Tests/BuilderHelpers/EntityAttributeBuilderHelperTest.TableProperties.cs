@@ -48,11 +48,11 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [VerticalReport]
-        [DecimalFormat(2)]
+        [DecimalPrecision(2)]
         private class WithOverwrittenTableProperties
         {
             [ReportVariable(1, "ID")]
-            [DecimalFormat(0)]
+            [DecimalPrecision(0)]
             public int Id { get; set; }
         }
 
@@ -74,7 +74,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
 
             cells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is DecimalFormatProperty && ((DecimalFormatProperty)p).Precision == 0);
+                .And.ContainSingle(p => p is DecimalPrecisionProperty && ((DecimalPrecisionProperty)p).Precision == 0);
         }
 
         [VerticalReport]

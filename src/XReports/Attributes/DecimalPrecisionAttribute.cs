@@ -2,11 +2,11 @@ using System;
 
 namespace XReports.Attributes
 {
-    public class DecimalFormatAttribute : AttributeBase
+    public class DecimalPrecisionAttribute : AttributeBase
     {
         public int Precision { get; }
 
-        public DecimalFormatAttribute(int precision)
+        public DecimalPrecisionAttribute(int precision)
         {
             if (precision < 0)
             {

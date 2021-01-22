@@ -26,7 +26,7 @@ namespace XReports.Demos.FromDb.ReportModels
 
         [ReportVariable(4, "Price")]
         [Alignment(AlignmentType.Center, IsHeader = true)]
-        [DecimalFormat(2)]
+        [DecimalPrecision(2)]
         [Alignment(AlignmentType.Center)]
         public decimal? Price { get; set; }
 

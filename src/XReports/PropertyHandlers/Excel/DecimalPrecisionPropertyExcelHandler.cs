@@ -4,9 +4,9 @@ using XReports.Properties;
 
 namespace XReports.PropertyHandlers.Excel
 {
-    public class DecimalFormatPropertyExcelHandler : PropertyHandler<DecimalFormatProperty, ExcelReportCell>
+    public class DecimalPrecisionPropertyExcelHandler : PropertyHandler<DecimalPrecisionProperty, ExcelReportCell>
     {
-        protected override void HandleProperty(DecimalFormatProperty property, ExcelReportCell cell)
+        protected override void HandleProperty(DecimalPrecisionProperty property, ExcelReportCell cell)
         {
             cell.NumberFormat = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))}";
         }
