@@ -1,3 +1,5 @@
+using System;
+
 namespace XReports.Attributes
 {
     public class PercentFormatAttribute : AttributeBase
@@ -7,6 +9,11 @@ namespace XReports.Attributes
 
         public PercentFormatAttribute(int precision)
         {
+            if (precision < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(precision), "Precision cannot be negative");
+            }
+
             this.Precision = precision;
         }
     }

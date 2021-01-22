@@ -10,6 +10,11 @@ namespace XReports.Attributes
 
         public ReportVariableAttribute(int order, string title)
         {
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             this.Order = order;
             this.Title = title;
         }

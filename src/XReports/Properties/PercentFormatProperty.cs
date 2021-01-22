@@ -1,3 +1,4 @@
+using System;
 using XReports.Models;
 
 namespace XReports.Properties
@@ -9,6 +10,11 @@ namespace XReports.Properties
 
         public PercentFormatProperty(int precision)
         {
+            if (precision < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(precision), "Precision cannot be negative");
+            }
+
             this.Precision = precision;
         }
     }
