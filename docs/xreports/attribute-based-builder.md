@@ -229,6 +229,10 @@ class ReportModel
 
 For vertical report post-builder class should implement IVerticalReportPostBuilder interface.
 
+### Parameterized Post-Builder
+
+_TBD_
+
 ### Table Properties
 
 Often you may want all columns/rows in report to have the same attribute, for example, center alignment. To do so you may add the attribute to class.

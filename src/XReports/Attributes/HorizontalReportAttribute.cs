@@ -12,9 +12,10 @@ namespace XReports.Attributes
             get => base.PostBuilder;
             set
             {
-                if (!value.ImplementsGenericInterface(typeof(IHorizontalReportPostBuilder<>)))
+                if (!value.ImplementsGenericInterface(typeof(IHorizontalReportPostBuilder<>))
+                    && !value.ImplementsGenericInterface(typeof(IHorizontalReportPostBuilder<,>)))
                 {
-                    throw new ArgumentException($"Type {value} should implement {typeof(IHorizontalReportPostBuilder<>)}");
+                    throw new ArgumentException($"Type {value} should implement {typeof(IHorizontalReportPostBuilder<>)} or {typeof(IHorizontalReportPostBuilder<,>)}");
                 }
 
                 base.PostBuilder = value;

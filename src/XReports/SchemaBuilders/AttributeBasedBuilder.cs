@@ -34,7 +34,45 @@ namespace XReports.SchemaBuilders
                 : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
         }
 
-        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute = null)
+        public IReportSchema<TEntity> BuildSchema<TEntity, TBuildParameter>(TBuildParameter parameter)
+        {
+            ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
+
+            return reportAttribute?.Type == ReportType.Horizontal
+                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity, TBuildParameter>(reportAttribute as HorizontalReportAttribute, parameter).BuildSchema()
+                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
+        }
+
+        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute)
+        {
+            HorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
+
+            if (reportAttribute?.PostBuilder != null)
+            {
+                ((IHorizontalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
+            }
+
+            return builder;
+        }
+
+        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity, TBuildParameter>(
+            HorizontalReportAttribute reportAttribute, TBuildParameter parameter)
+        {
+            HorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
+
+            if (reportAttribute?.PostBuilder == null)
+            {
+                throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
+            }
+
+            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>) ActivatorUtilities
+                .GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+            ).Build(builder, parameter);
+
+            return builder;
+        }
+
+        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReportNoPostBuild<TEntity>()
         {
             HorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
@@ -43,11 +81,6 @@ namespace XReports.SchemaBuilders
 
             this.AddRows(builder, reportVariables, tableAttributes);
             this.AddComplexHeader(builder, reportVariables);
-
-            if (reportAttribute?.PostBuilder != null)
-            {
-                ((IHorizontalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
-            }
 
             return builder;
         }
@@ -85,7 +118,36 @@ namespace XReports.SchemaBuilders
             return instance;
         }
 
-        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute = null)
+        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute)
+        {
+            VerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
+
+            if (reportAttribute?.PostBuilder != null)
+            {
+                ((IVerticalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
+            }
+
+            return builder;
+        }
+
+        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity, TBuildParameter>(
+            VerticalReportAttribute reportAttribute, TBuildParameter parameter)
+        {
+            VerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
+
+            if (reportAttribute?.PostBuilder == null)
+            {
+                throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
+            }
+
+            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>) ActivatorUtilities
+                .GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+            ).Build(builder, parameter);
+
+            return builder;
+        }
+
+        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReportNoPostBuild<TEntity>()
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();
@@ -93,11 +155,6 @@ namespace XReports.SchemaBuilders
 
             this.AddColumns(builder, properties, tableAttributes);
             this.AddComplexHeader(builder, properties);
-
-            if (reportAttribute?.PostBuilder != null)
-            {
-                ((IVerticalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
-            }
 
             return builder;
         }
