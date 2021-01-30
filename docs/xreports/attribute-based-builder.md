@@ -16,7 +16,7 @@ class ReportModel
     public string Email { get; set; }
 
     [ReportVariable(3, "Score")]
-    [DecimalFormat(2)]
+    [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
 
@@ -135,7 +135,7 @@ Built-in attributes:
 - **Color**. Has 1 (font color) or 2 (font and background colors) required arguments.
 - **CustomProperty**. Has 1 required argument - type of property to assign. Property should have no constructor arguments.
 - **DateTimeFormat**. Has 1 required argument - format string - c# DateTime format string.
-- **DecimalFormat**. Has 1 required argument - decimal places count.
+- **DecimalPrecision**. Has 1 required argument - decimal places count.
 - **MaxLength**. Has 1 required argument - maximum characters count.
 - **PercentFormat**. Has 1 required argument - decimal places count. Optionally may have PostfixText - text appended after percent value.
 - **SameColumnFormat**. No arguments. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
@@ -209,7 +209,7 @@ class ReportModel
     public string Email { get; set; }
 
     [ReportVariable(2, "Score")]
-    [DecimalFormat(2)]
+    [DecimalPrecision(2)]
     public decimal Score { get; set; }
 
     // Post-builder class does NOT have to be nested class.
@@ -244,7 +244,7 @@ class ReportModel
     public string Email { get; set; }
 
     [ReportVariable(3, "Score")]
-    [DecimalFormat(2)]
+    [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
 
@@ -261,7 +261,7 @@ class ReportModel
     public string Email { get; set; }
 
     [ReportVariable(3, "Score")]
-    [DecimalFormat(2)]
+    [DecimalPrecision(2)]
     [Alignment(AlignmentType.Center)]
     public decimal Score { get; set; }
 }
