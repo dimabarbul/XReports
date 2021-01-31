@@ -49,7 +49,8 @@ namespace XReports.SchemaBuilders
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IHorizontalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
+                object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
+                (postBuilder as IHorizontalReportPostBuilder<TEntity>)?.Build(builder);
             }
 
             return builder;
@@ -65,9 +66,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>) ActivatorUtilities
-                .GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-            ).Build(builder, parameter);
+            object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
+            (postBuilder as IHorizontalReportPostBuilder<TEntity, TBuildParameter>)?.Build(builder, parameter);
 
             return builder;
         }
@@ -124,7 +124,8 @@ namespace XReports.SchemaBuilders
 
             if (reportAttribute?.PostBuilder != null)
             {
-                ((IVerticalReportPostBuilder<TEntity>) ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)).Build(builder);
+                object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
+                (postBuilder as IVerticalReportPostBuilder<TEntity>)?.Build(builder);
             }
 
             return builder;
@@ -140,9 +141,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>) ActivatorUtilities
-                .GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-            ).Build(builder, parameter);
+            object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
+            (postBuilder as IVerticalReportPostBuilder<TEntity, TBuildParameter>)?.Build(builder, parameter);
 
             return builder;
         }
