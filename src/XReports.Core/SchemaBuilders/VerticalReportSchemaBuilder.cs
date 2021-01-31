@@ -49,7 +49,8 @@ namespace XReports.SchemaBuilders
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties
-                    .ToDictionary(x => x.Key, x => x.Value.ToArray())
+                    .ToDictionary(x => x.Key, x => x.Value.ToArray()),
+                this.CommonComplexHeadersProperties.ToArray()
             );
         }
     }

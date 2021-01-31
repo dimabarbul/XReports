@@ -13,6 +13,7 @@ namespace XReports.SchemaBuilders
         protected readonly List<ConfiguredCellsProvider> HeaderProviders = new List<ConfiguredCellsProvider>();
         protected readonly List<ComplexHeader> ComplexHeaders = new List<ComplexHeader>();
         protected readonly Dictionary<string, List<ReportCellProperty>> ComplexHeadersProperties = new Dictionary<string, List<ReportCellProperty>>();
+        protected readonly List<ReportCellProperty> CommonComplexHeadersProperties = new List<ReportCellProperty>();
 
         protected List<ReportCellProperty> TableProperties { get; set; } = new List<ReportCellProperty>();
         protected ConfiguredCellsProvider CurrentProvider;
@@ -120,6 +121,13 @@ namespace XReports.SchemaBuilders
             }
 
             this.ComplexHeadersProperties[title].AddRange(properties);
+
+            return this;
+        }
+
+        public ReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
+        {
+            this.CommonComplexHeadersProperties.AddRange(properties);
 
             return this;
         }

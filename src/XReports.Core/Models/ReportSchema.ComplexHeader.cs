@@ -96,6 +96,11 @@ namespace XReports.Models
                 ColumnSpan = columnSpan,
             };
 
+            foreach (ReportCellProperty property in this.CommonComplexHeaderProperties)
+            {
+                cell.AddProperty(property);
+            }
+
             if (this.ComplexHeaderProperties.ContainsKey(title))
             {
                 foreach (ReportCellProperty property in this.ComplexHeaderProperties[title])

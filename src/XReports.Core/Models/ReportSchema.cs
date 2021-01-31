@@ -9,13 +9,15 @@ namespace XReports.Models
         protected ReportCellProperty[] TableProperties { get; private set; }
         protected ComplexHeader[] ComplexHeaders { get; private set; }
         protected Dictionary<string, ReportCellProperty[]> ComplexHeaderProperties { get; private set; }
+        protected ReportCellProperty[] CommonComplexHeaderProperties { get; private set; }
 
 
         public static VerticalReportSchema<TSourceEntity> CreateVertical(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
             ReportCellProperty[] tableProperties,
             ComplexHeader[] complexHeaders,
-            Dictionary<string, ReportCellProperty[]> complexHeaderProperties
+            Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
+            ReportCellProperty[] commonComplexHeaderProperties
         )
         {
             return new VerticalReportSchema<TSourceEntity>()
@@ -24,6 +26,7 @@ namespace XReports.Models
                 TableProperties = tableProperties,
                 ComplexHeaders = complexHeaders,
                 ComplexHeaderProperties = complexHeaderProperties,
+                CommonComplexHeaderProperties = commonComplexHeaderProperties,
             };
         }
 
@@ -32,7 +35,8 @@ namespace XReports.Models
             ReportCellProperty[] tableProperties,
             ComplexHeader[] complexHeaders,
             Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
-            ReportSchemaCellsProvider<TSourceEntity>[] headerRows
+            ReportSchemaCellsProvider<TSourceEntity>[] headerRows,
+            ReportCellProperty[] commonComplexHeaderProperties
         )
         {
             return new HorizontalReportSchema<TSourceEntity>()
@@ -42,6 +46,7 @@ namespace XReports.Models
                 ComplexHeaders = complexHeaders,
                 ComplexHeaderProperties = complexHeaderProperties,
                 HeaderRows = headerRows,
+                CommonComplexHeaderProperties = commonComplexHeaderProperties
             };
         }
 
