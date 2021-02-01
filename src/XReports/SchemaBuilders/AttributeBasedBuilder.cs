@@ -47,10 +47,12 @@ namespace XReports.SchemaBuilders
         {
             HorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
 
-            if (reportAttribute?.PostBuilder != null)
+            if (reportAttribute?.PostBuilder != null
+                && typeof(IHorizontalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
             {
-                object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
-                (postBuilder as IHorizontalReportPostBuilder<TEntity>)?.Build(builder);
+                ((IHorizontalReportPostBuilder<TEntity>)
+                    ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+                ).Build(builder);
             }
 
             return builder;
@@ -66,8 +68,14 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
-            (postBuilder as IHorizontalReportPostBuilder<TEntity, TBuildParameter>)?.Build(builder, parameter);
+            if (!typeof(IHorizontalReportPostBuilder<TEntity, TBuildParameter>).IsAssignableFrom(reportAttribute.PostBuilder))
+            {
+                throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IHorizontalReportPostBuilder<TEntity, TBuildParameter>)}.");
+            }
+
+            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>)
+                ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+            ).Build(builder, parameter);
 
             return builder;
         }
@@ -122,10 +130,12 @@ namespace XReports.SchemaBuilders
         {
             VerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
 
-            if (reportAttribute?.PostBuilder != null)
+            if (reportAttribute?.PostBuilder != null
+                && typeof(IVerticalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
             {
-                object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
-                (postBuilder as IVerticalReportPostBuilder<TEntity>)?.Build(builder);
+                ((IVerticalReportPostBuilder<TEntity>)
+                    ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+                ).Build(builder);
             }
 
             return builder;
@@ -141,8 +151,14 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            object postBuilder = ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder);
-            (postBuilder as IVerticalReportPostBuilder<TEntity, TBuildParameter>)?.Build(builder, parameter);
+            if (!typeof(IVerticalReportPostBuilder<TEntity, TBuildParameter>).IsAssignableFrom(reportAttribute.PostBuilder))
+            {
+                throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IVerticalReportPostBuilder<TEntity, TBuildParameter>)}.");
+            }
+
+            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>)
+                ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
+            ).Build(builder, parameter);
 
             return builder;
         }
