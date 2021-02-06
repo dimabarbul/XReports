@@ -233,7 +233,57 @@ For vertical report post-builder class should implement IVerticalReportPostBuild
 
 ### Parameterized Post-Builder
 
-_TBD_
+Sometimes it might make sense to generate slightly different report based on some input information that is known during runtime. For example, You might want to display additional column to admin users, or some properties should be applied based on request.
+
+To solve this post-builder class may accept parameter to `Build` method.
+
+Let's imagine that user can enter score and we want to highlight scores that are higher than it.
+
+```c#
+[VerticalReport(PostBuilder = typeof(PostBuilder))]
+private class UserScoreModel
+{
+    [ReportVariable(1, "Name")]
+    public string Name { get; set; }
+
+    [ReportVariable(2, "Score")]
+    public decimal Score { get; set; }
+
+    // Need to implement IVerticalReportPostBuilder<TModel, TParameter> interface
+    // where TModel is your model type and TParameter is type of parameter
+    // that will be passed during building of report schema.
+    private class PostBuilder : IVerticalReportPostBuilder<UserScoreModel, decimal>
+    {
+        public void Build(VerticalReportSchemaBuilder<UserScoreModel> builder, decimal minScore)
+        {
+            builder.ForColumn(nameof(Score))
+                .AddDynamicProperty((UserScoreModel m) => m.Score > minScore ? new BoldProperty() : null);
+        }
+    }
+}
+
+ServiceCollection services = new ServiceCollection();
+services.AddAttributeBasedBuilder();
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+IAttributeBasedBuilder builder = serviceProvider.GetRequiredService<IAttributeBasedBuilder>();
+
+UserScoreModel[] data =
+{
+    new UserScoreModel() { Name = "John", Score = 90 },
+    new UserScoreModel() { Name = "Jane", Score = 100 },
+};
+
+// As we do not provide any arguments, post-builder Build method won't be called.
+builder.BuildSchema<UserScoreModel>().BuildReportTable(data);
+
+// Both rows will have BoldProperty assigned to Score cells as both scores
+// are greater than 80.
+builder.BuildSchema<UserScoreModel, decimal>(80).BuildReportTable(data);
+
+// Only Jane's score will have BoldProperty.
+builder.BuildSchema<UserScoreModel, decimal>(90).BuildReportTable(data);
+```
 
 ### Table Properties
 
