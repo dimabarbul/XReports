@@ -140,6 +140,8 @@ Built-in attributes:
 - **PercentFormat**. Has 1 required argument - decimal places count. Optionally may have PostfixText - text appended after percent value.
 - **SameColumnFormat**. No arguments. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
 
+The attributes assign corresponding properties to row or column. To get more information about built-in properties, refer to [Properties](properties.md);
+
 ### Custom Attributes
 
 Most likely you'll have your own custom properties. You can assign them in post-builder class. But it's also possible to create attribute that will assign the property.

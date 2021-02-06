@@ -20,7 +20,7 @@ XReports is a library intended to provide extendable way of building reports and
     7. [.NET Core Integration](xreports.core/net-core-integration.md)
 2. XReports
     1. [Cell types](xreports/cell-types.md)
-    2. Properties
+    2. [Properties](xreports/properties.md)
     3. [AttributeBasedBuilder](xreports/attribute-based-builder.md)
     4. StringWriter
     5. EpplusWriter
