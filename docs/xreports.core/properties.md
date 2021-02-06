@@ -151,6 +151,14 @@ admin                | ********
 */
 ```
 
+If you want to add properties to all complex header cells, you may omit its title:
+
+```c#
+builder
+    // property will be assigned to all complex header cells
+    .AddComplexHeaderProperties(new UpperCaseProperty());
+```
+
 ## Dynamic Properties
 
 Previously we assigned the same property to all cells in whole column. But what if property should depend on data.
