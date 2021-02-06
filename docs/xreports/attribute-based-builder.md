@@ -231,6 +231,64 @@ class ReportModel
 
 For vertical report post-builder class should implement IVerticalReportPostBuilder interface.
 
+### Constructor Dependencies
+
+Sometimes you will need to get external dependencies to be provided to post-builder class. IN this case you need to register dependency in DI container and accept dependencies in constructor of post-builder class.
+
+```c#
+// Service our post-builder class depends on.
+class LotteryService
+{
+    public string GetWinner()
+    {
+        return new Random().Next(1, 10) % 2 == 0 ? "John" : "Jane";
+    }
+}
+
+[VerticalReport(PostBuilder = typeof(PostBuilder))]
+class UserModel
+{
+    [ReportVariable(1, "Name")]
+    public string Name { get; set; }
+
+    private class PostBuilder : IVerticalReportPostBuilder<UserModel>
+    {
+        private readonly LotteryService lotteryService;
+
+        // Inject dependency in constructor.
+        public PostBuilder(LotteryService lotteryService)
+        {
+            this.lotteryService = lotteryService;
+        }
+
+        public void Build(VerticalReportSchemaBuilder<UserModel> builder)
+        {
+            // Use injected service.
+            string winner = this.lotteryService.GetWinner();
+            builder.ForColumn(nameof(Name))
+                .AddDynamicProperty((UserModel m) => m.Name == winner ? new BoldProperty() : null);
+        }
+    }
+}
+
+ServiceCollection services = new ServiceCollection();
+services.AddAttributeBasedBuilder()
+    // Register service class in DI container so it can be injected.
+    .AddScoped<LotteryService>();
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+IAttributeBasedBuilder builder = serviceProvider.GetRequiredService<IAttributeBasedBuilder>();
+
+UserModel[] data =
+{
+    new UserModel() { Name = "John" },
+    new UserModel() { Name = "Jane" },
+};
+
+// Depending on random number John or Jane will get BoldProperty assigned.
+builder.BuildSchema<UserModel>().BuildReportTable(data);
+```
+
 ### Parameterized Post-Builder
 
 Sometimes it might make sense to generate slightly different report based on some input information that is known during runtime. For example, You might want to display additional column to admin users, or some properties should be applied based on request.
@@ -241,7 +299,7 @@ Let's imagine that user can enter score and we want to highlight scores that are
 
 ```c#
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
-private class UserScoreModel
+class UserScoreModel
 {
     [ReportVariable(1, "Name")]
     public string Name { get; set; }
