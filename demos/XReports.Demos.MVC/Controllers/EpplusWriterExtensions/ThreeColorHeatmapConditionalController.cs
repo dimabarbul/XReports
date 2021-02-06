@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
 using XReports.Demos.MVC.XReports;
+using XReports.EpplusFormatters;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
@@ -169,19 +170,10 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             }
         }
 
-        // As there is no handler for the property, it ends up in Properties collection of Excel report cell.
-        private class ConditionalFormattingThreeColorScaleFormatter : IEpplusFormatter
+        private class ConditionalFormattingThreeColorScaleFormatter : EpplusFormatter<ThreeColorHeatmapProperty>
         {
-            public void Format(ExcelRange worksheetCell, ExcelReportCell cell)
+            protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, ThreeColorHeatmapProperty property)
             {
-                ThreeColorHeatmapProperty property = cell.GetProperty<ThreeColorHeatmapProperty>();
-
-                // continue only if property is set on cell
-                if (property == null)
-                {
-                    return;
-                }
-
                 IExcelConditionalFormattingThreeColorScale threeColorScale = worksheetCell.ConditionalFormatting.AddThreeColorScale();
                 threeColorScale.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
                 threeColorScale.LowValue.Value = (double) property.MinimumValue;

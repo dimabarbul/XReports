@@ -7,6 +7,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using XReports.Demos.MVC.XReports;
 using XReports.Enums;
+using XReports.EpplusFormatters;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
@@ -154,16 +155,10 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             }
         }
 
-        private class ExcelIndentationPropertyFormatter : IEpplusFormatter
+        private class ExcelIndentationPropertyFormatter : EpplusFormatter<IndentationProperty>
         {
-            public void Format(ExcelRange worksheetCell, ExcelReportCell cell)
+            protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, IndentationProperty property)
             {
-                IndentationProperty property = cell.GetProperty<IndentationProperty>();
-                if (property == null)
-                {
-                    return;
-                }
-
                 worksheetCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 worksheetCell.Style.Indent = property.IndentLevel;
             }

@@ -40,19 +40,10 @@
         }
     }
 
-    // As there is no Excel handler for the property, it ends up in Properties collection of Excel report cell.
-    class ConditionalFormattingThreeColorScaleFormatter : IEpplusFormatter
+    private class ConditionalFormattingThreeColorScaleFormatter : EpplusFormatter&lt;ThreeColorHeatmapProperty&gt;
     {
-        public void Format(ExcelRange worksheetCell, ExcelReportCell cell)
+        protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, ThreeColorHeatmapProperty property)
         {
-            ThreeColorHeatmapProperty property = cell.GetProperty&lt;ThreeColorHeatmapProperty&gt;();
-
-            // continue only if property is set on cell
-            if (property == null)
-            {
-                return;
-            }
-
             IExcelConditionalFormattingThreeColorScale threeColorScale = worksheetCell.ConditionalFormatting.AddThreeColorScale();
             threeColorScale.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
             threeColorScale.LowValue.Value = (double) property.MinimumValue;
