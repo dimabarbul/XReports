@@ -20,7 +20,7 @@ namespace XReports.Demos.FromDb
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -44,7 +44,6 @@ namespace XReports.Demos.FromDb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -54,6 +53,7 @@ namespace XReports.Demos.FromDb
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -77,6 +77,7 @@ namespace XReports.Demos.FromDb
             using IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
             AppDbContext context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+
             // context.Database.OpenConnection();
             // context.Database.EnsureDeleted();
             // context.Database.EnsureCreated();

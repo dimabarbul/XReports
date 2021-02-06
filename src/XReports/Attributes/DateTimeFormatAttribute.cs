@@ -4,8 +4,6 @@ namespace XReports.Attributes
 {
     public class DateTimeFormatAttribute : AttributeBase
     {
-        public string Format { get; }
-
         public DateTimeFormatAttribute(string format)
         {
             if (string.IsNullOrEmpty(format))
@@ -15,5 +13,7 @@ namespace XReports.Attributes
 
             this.Format = format;
         }
+
+        public string Format { get; }
     }
 }

@@ -9,6 +9,7 @@
         <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
         <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
         <Description>Extensible library for building reports. Includes some general properties, writers etc.</Description>
+        <CodeAnalysisRuleSet>../stylecop.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +24,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\XReports.Core\XReports.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="..\stylecop.json"/>
+      <AdditionalFiles Include="..\stylecop.ruleset"/>
     </ItemGroup>
 
 </Project>

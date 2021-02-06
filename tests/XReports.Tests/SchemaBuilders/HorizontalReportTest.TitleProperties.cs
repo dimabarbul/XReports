@@ -16,7 +16,7 @@ namespace XReports.Tests.SchemaBuilders
             reportBuilder.AddRow("Value", s => s)
                 .AddHeaderProperties(new CustomTitleProperty());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "Test",
             });

@@ -33,23 +33,23 @@ namespace XReports.Models
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
         {
             return source
-                .Select(entity => this.CellsProviders
-                    .Select(p => this.AddTableProperties(p.CreateCell(entity)))
-                );
+                .Select(
+                    entity => this.CellsProviders
+                        .Select(p => this.AddTableProperties(p.CreateCell(entity))));
         }
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IDataReader dataReader)
         {
             if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
             {
-                throw new InvalidOperationException($"Report schema should should be of IDataReader");
+                throw new InvalidOperationException("Report schema should should be of IDataReader");
             }
 
             while (dataReader.Read())
             {
                 yield return
                     this.CellsProviders
-                        .Select(p => this.AddTableProperties(p.CreateCell((TSourceEntity) dataReader)));
+                        .Select(p => this.AddTableProperties(p.CreateCell((TSourceEntity)dataReader)));
             }
 
             dataReader.Close();

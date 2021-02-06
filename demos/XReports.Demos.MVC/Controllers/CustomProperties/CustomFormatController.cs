@@ -64,7 +64,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new []
+            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new[]
             {
                 new CustomFormatPropertyExcelHandler(),
             });
@@ -77,11 +77,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             int luckyGuyIndex = new Random().Next(3, RecordsCount - 1);
@@ -92,13 +87,21 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public decimal Score { get; set; }
         }
 
-        private class CustomFormatProperty : ReportCellProperty { }
+        private class CustomFormatProperty : ReportCellProperty
+        {
+        }
 
         private class CustomFormatPropertyHtmlHandler : PropertyHandler<CustomFormatProperty, HtmlReportCell>
         {

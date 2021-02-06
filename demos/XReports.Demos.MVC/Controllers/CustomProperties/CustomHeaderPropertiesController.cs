@@ -86,11 +86,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -100,10 +95,17 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public string Email { get; set; }
+
             public decimal Score { get; set; }
         }
     }

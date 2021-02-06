@@ -16,7 +16,7 @@ namespace XReports.Tests.SchemaBuilders
             reportBuilder.AddRow("Value", s => s)
                 .AddProcessors(new CustomPropertyProcessor());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "Test",
             });
@@ -26,7 +26,7 @@ namespace XReports.Tests.SchemaBuilders
             cells[0][0].Properties.Should().BeEmpty();
             cells[0][1].Properties.Should()
                 .HaveCount(1).And
-                .ContainSingle(p => p is CustomProperty && ((CustomProperty) p).Assigned);
+                .ContainSingle(p => p is CustomProperty && ((CustomProperty)p).Assigned);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace XReports.Tests.SchemaBuilders
             reportBuilder.AddRow("Value", s => s)
                 .AddProperties(new CustomProperty());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new []
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "Test",
             });
@@ -59,12 +59,12 @@ namespace XReports.Tests.SchemaBuilders
 
         private class CustomProperty : ReportCellProperty
         {
-            public bool Assigned { get; }
-
             public CustomProperty(bool assigned = false)
             {
                 this.Assigned = assigned;
             }
+
+            public bool Assigned { get; }
         }
     }
 }

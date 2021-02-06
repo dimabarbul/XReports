@@ -147,8 +147,8 @@ namespace XReports.Models
                 return;
             }
 
-            header[rowIndex, columnIndex] = header[(int) filledRowIndex, columnIndex];
-            header[rowIndex, columnIndex].Cell.RowSpan = (int) filledRowIndex - rowIndex + 1;
+            header[rowIndex, columnIndex] = header[(int)filledRowIndex, columnIndex];
+            header[rowIndex, columnIndex].Cell.RowSpan = (int)filledRowIndex - rowIndex + 1;
 
             for (int i = rowIndex + 1; i <= filledRowIndex; i++)
             {
@@ -180,6 +180,7 @@ namespace XReports.Models
             }
 
             public ReportCell Cell { get; set; }
+
             public bool IsSpanned { get; private set; }
         }
     }

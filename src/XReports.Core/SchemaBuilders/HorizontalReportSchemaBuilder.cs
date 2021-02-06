@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
@@ -6,6 +7,8 @@ namespace XReports.SchemaBuilders
 {
     public class HorizontalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>
     {
+        private readonly List<ConfiguredCellsProvider> headerProviders = new List<ConfiguredCellsProvider>();
+
         public HorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertRow(this.CellsProviders.Count, provider);
@@ -13,38 +16,41 @@ namespace XReports.SchemaBuilders
 
         public HorizontalReportSchemaBuilder<TSourceEntity> InsertRow(int index, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.CurrentProvider = new ConfiguredCellsProvider(provider);
-
-            this.CellsProviders.Insert(index, this.CurrentProvider);
-            this.NamedProviders[this.CurrentProvider.Provider.Title] = this.CurrentProvider;
+            this.InsertCellsProvider(index, provider);
 
             return this;
         }
 
         public HorizontalReportSchemaBuilder<TSourceEntity> InsertRowBefore(string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            return this.InsertRow(this.CellsProviders.IndexOf(this.NamedProviders[title]), provider);
+            return this.InsertRow(this.GetCellsProviderIndex(title), provider);
         }
 
         public HorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title)
         {
-            this.CurrentProvider = this.NamedProviders[title];
+            this.SelectProvider(title);
 
             return this;
         }
 
         public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(IReportCellsProvider<TSourceEntity> provider)
         {
-            this.CurrentProvider = new ConfiguredCellsProvider(provider);
-            this.HeaderProviders.Add(this.CurrentProvider);
-
-            return this;
+            return this.InsertHeaderRow(this.headerProviders.Count, provider);
         }
 
         public HorizontalReportSchemaBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.CurrentProvider = new ConfiguredCellsProvider(provider);
-            this.HeaderProviders.Insert(rowIndex, this.CurrentProvider);
+            ConfiguredCellsProvider configuredCellsProvider = new ConfiguredCellsProvider(provider);
+            this.headerProviders.Insert(rowIndex, configuredCellsProvider);
+
+            this.SelectProvider(configuredCellsProvider);
+
+            return this;
+        }
+
+        public HorizontalReportSchemaBuilder<TSourceEntity> ForHeaderRow(int index)
+        {
+            this.SelectProvider(this.headerProviders[index]);
 
             return this;
         }
@@ -53,29 +59,28 @@ namespace XReports.SchemaBuilders
         {
             return ReportSchema<TSourceEntity>.CreateHorizontal(
                 this.CellsProviders
-                    .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
-                        r.Provider,
-                        r.CellProperties.ToArray(),
-                        r.HeaderProperties.ToArray(),
-                        r.CellProcessors.ToArray(),
-                        r.HeaderProcessors.ToArray()
-                    ))
+                    .Select(
+                        r => new ReportSchemaCellsProvider<TSourceEntity>(
+                            r.Provider,
+                            r.CellProperties.ToArray(),
+                            r.HeaderProperties.ToArray(),
+                            r.CellProcessors.ToArray(),
+                            r.HeaderProcessors.ToArray()))
                     .ToArray(),
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray()),
-                this.HeaderProviders
-                    .Select(r => new ReportSchemaCellsProvider<TSourceEntity>(
-                        r.Provider,
-                        r.CellProperties.ToArray(),
-                        r.HeaderProperties.ToArray(),
-                        r.CellProcessors.ToArray(),
-                        r.HeaderProcessors.ToArray()
-                    ))
+                this.headerProviders
+                    .Select(
+                        r => new ReportSchemaCellsProvider<TSourceEntity>(
+                            r.Provider,
+                            r.CellProperties.ToArray(),
+                            r.HeaderProperties.ToArray(),
+                            r.CellProcessors.ToArray(),
+                            r.HeaderProcessors.ToArray()))
                     .ToArray(),
-                this.CommonComplexHeadersProperties.ToArray()
-            );
+                this.CommonComplexHeadersProperties.ToArray());
         }
 
         // public void AddTitleProperty(string title, params ReportCellProperty[] properties)

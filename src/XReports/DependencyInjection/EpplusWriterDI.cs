@@ -29,7 +29,7 @@ namespace XReports.DependencyInjection
 
                 foreach (Type formatterType in typeof(IEpplusFormatter).GetImplementingTypes())
                 {
-                    writer.AddFormatter((IEpplusFormatter) ActivatorUtilities.GetServiceOrCreateInstance(sp, formatterType));
+                    writer.AddFormatter((IEpplusFormatter)ActivatorUtilities.GetServiceOrCreateInstance(sp, formatterType));
                 }
 
                 return writer;

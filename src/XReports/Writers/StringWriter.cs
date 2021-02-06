@@ -3,29 +3,29 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XReports.Models;
 using XReports.Interfaces;
+using XReports.Models;
 
 namespace XReports.Writers
 {
     public class StringWriter : IStringWriter
     {
         private readonly IStringCellWriter stringCellWriter;
-
         private FileStream fileStream;
         private StringBuilder stringBuilder;
-        protected delegate Task WriteTextAsyncDelegate(string text);
-        protected WriteTextAsyncDelegate WriteTextAsync;
+        private WriteTextAsyncDelegate writeTextAsync;
 
         public StringWriter(IStringCellWriter stringCellWriter)
         {
             this.stringCellWriter = stringCellWriter;
         }
 
+        private delegate Task WriteTextAsyncDelegate(string text);
+
         public async Task<string> WriteToStringAsync(IReportTable<HtmlReportCell> reportTable)
         {
             this.stringBuilder = new StringBuilder();
-            this.WriteTextAsync = this.WriteToStringBuilderAsync;
+            this.writeTextAsync = this.WriteToStringBuilderAsync;
 
             await this.WriteReportAsync(reportTable);
 
@@ -35,7 +35,7 @@ namespace XReports.Writers
         public async Task WriteToFileAsync(IReportTable<HtmlReportCell> reportTable, string fileName)
         {
             this.fileStream = File.OpenWrite(fileName);
-            this.WriteTextAsync = this.WriteToFileAsync;
+            this.writeTextAsync = this.WriteToFileAsync;
 
             await this.WriteReportAsync(reportTable);
 
@@ -68,6 +68,7 @@ namespace XReports.Writers
                 {
                     await this.WriteTextAsync(this.stringCellWriter.WriteHeaderCell(cell));
                 }
+
                 await this.EndRowAsync();
             }
 
@@ -95,6 +96,7 @@ namespace XReports.Writers
                 {
                     await this.WriteTextAsync(this.stringCellWriter.WriteBodyCell(cell));
                 }
+
                 await this.EndRowAsync();
             }
 
@@ -102,18 +104,6 @@ namespace XReports.Writers
             {
                 await this.EndBodyAsync();
             }
-        }
-
-        private async Task WriteToFileAsync(string text)
-        {
-            await this.fileStream.WriteAsync(Encoding.UTF8.GetBytes(text));
-        }
-
-        private Task WriteToStringBuilderAsync(string text)
-        {
-            this.stringBuilder.Append(text);
-
-            return Task.CompletedTask;
         }
 
         protected virtual async Task BeginHeadAsync()
@@ -154,6 +144,23 @@ namespace XReports.Writers
         protected virtual async Task EndTableAsync()
         {
             await this.WriteTextAsync("</table>");
+        }
+
+        protected Task WriteTextAsync(string text)
+        {
+            return this.writeTextAsync(text);
+        }
+
+        private async Task WriteToFileAsync(string text)
+        {
+            await this.fileStream.WriteAsync(Encoding.UTF8.GetBytes(text));
+        }
+
+        private Task WriteToStringBuilderAsync(string text)
+        {
+            this.stringBuilder.Append(text);
+
+            return Task.CompletedTask;
         }
     }
 }

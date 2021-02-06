@@ -5,8 +5,6 @@ namespace XReports.Properties
 {
     public class MaxLengthProperty : ReportCellProperty
     {
-        public int MaxLength { get; }
-
         public MaxLengthProperty(int maxLength)
         {
             if (maxLength < 0)
@@ -16,5 +14,7 @@ namespace XReports.Properties
 
             this.MaxLength = maxLength;
         }
+
+        public int MaxLength { get; }
     }
 }

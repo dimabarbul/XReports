@@ -46,7 +46,7 @@ namespace XReports.Demos.FromDb.Controllers
 
             Stream excelStream = this.excelWriter.WriteToStream(excelTable);
 
-            return File(excelStream, ExcelMimeType, "Users.xlsx");
+            return this.File(excelStream, ExcelMimeType, "Users.xlsx");
         }
 
         public async Task<IActionResult> Products()
@@ -64,7 +64,7 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
             Stream stream = this.excelWriter.WriteToStream(excelTable);
 
-            return new FileStreamResult(stream, ExcelMimeType){ FileDownloadName = "Products.xlsx" };
+            return new FileStreamResult(stream, ExcelMimeType) { FileDownloadName = "Products.xlsx" };
         }
 
         public async Task<IActionResult> OrdersDetails()
@@ -82,17 +82,17 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<ExcelReportCell> excelTable = this.excelConverter.Convert(report);
             Stream stream = this.excelWriter.WriteToStream(excelTable);
 
-            return new FileStreamResult(stream, ExcelMimeType){ FileDownloadName = "OrdersDetails.xlsx" };
+            return new FileStreamResult(stream, ExcelMimeType) { FileDownloadName = "OrdersDetails.xlsx" };
         }
 
         public class ReportViewModel
         {
-            public string ReportHtml { get; }
-
             public ReportViewModel(string reportHtml)
             {
                 this.ReportHtml = reportHtml;
             }
+
+            public string ReportHtml { get; }
         }
     }
 }

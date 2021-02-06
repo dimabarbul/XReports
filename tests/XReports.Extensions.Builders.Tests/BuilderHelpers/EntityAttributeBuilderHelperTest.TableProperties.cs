@@ -12,29 +12,20 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 {
     public partial class EntityAttributeBuilderHelperTest
     {
-        [VerticalReport]
-        [Bold]
-        private class WithTableProperties
-        {
-            [ReportVariable(1, "ID")]
-            [Alignment(AlignmentType.Center)]
-            public int Id { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_TableProperties_Applied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
-            {
-                new CommonAttributeHandler()
-            });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                Mocks.ServiceProvider,
+                new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithTableProperties> schema = helper.BuildSchema<WithTableProperties>();
 
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
-            {
-                new WithTableProperties() { Id = 1 },
-            });
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(
+                new[]
+                {
+                    new WithTableProperties() { Id = 1 },
+                });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
 
@@ -47,22 +38,12 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
                 .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).AlignmentType == AlignmentType.Center);
         }
 
-        [VerticalReport]
-        [DecimalPrecision(2)]
-        private class WithOverwrittenTableProperties
-        {
-            [ReportVariable(1, "ID")]
-            [DecimalPrecision(0)]
-            public int Id { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwritten_NotApplied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
-            {
-                new CommonAttributeHandler()
-            });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                Mocks.ServiceProvider,
+                new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenTableProperties> schema = helper.BuildSchema<WithOverwrittenTableProperties>();
 
@@ -77,29 +58,20 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
                 .And.ContainSingle(p => p is DecimalPrecisionProperty && ((DecimalPrecisionProperty)p).Precision == 0);
         }
 
-        [VerticalReport]
-        [Alignment(AlignmentType.Center)]
-        private class WithOverwrittenForHeaderTableProperties
-        {
-            [ReportVariable(1, "ID")]
-            [Alignment(AlignmentType.Right, IsHeader = true)]
-            public int Id { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_TablePropertiesWhenOverwrittenForHeader_Applied()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(Mocks.ServiceProvider, new[]
-            {
-                new CommonAttributeHandler()
-            });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                Mocks.ServiceProvider,
+                new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenForHeaderTableProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderTableProperties>();
 
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
-            {
-                new WithOverwrittenForHeaderTableProperties() { Id = 1 },
-            });
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(
+                new[]
+                {
+                    new WithOverwrittenForHeaderTableProperties() { Id = 1 },
+                });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
 
@@ -110,6 +82,33 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 
             cells[0][0].Properties.Should().HaveCount(1)
                 .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).AlignmentType == AlignmentType.Center);
+        }
+
+        [VerticalReport]
+        [Bold]
+        private class WithTableProperties
+        {
+            [ReportVariable(1, "ID")]
+            [Alignment(AlignmentType.Center)]
+            public int Id { get; set; }
+        }
+
+        [VerticalReport]
+        [DecimalPrecision(2)]
+        private class WithOverwrittenTableProperties
+        {
+            [ReportVariable(1, "ID")]
+            [DecimalPrecision(0)]
+            public int Id { get; set; }
+        }
+
+        [VerticalReport]
+        [Alignment(AlignmentType.Center)]
+        private class WithOverwrittenForHeaderTableProperties
+        {
+            [ReportVariable(1, "ID")]
+            [Alignment(AlignmentType.Right, IsHeader = true)]
+            public int Id { get; set; }
         }
     }
 }

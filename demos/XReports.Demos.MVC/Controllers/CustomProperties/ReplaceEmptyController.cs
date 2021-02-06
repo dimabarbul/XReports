@@ -68,7 +68,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new []
+            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new[]
             {
                 new CustomFormatPropertyExcelHandler(),
             });
@@ -81,11 +81,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -96,22 +91,30 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string FirstName { get; set; }
+
             public string LastName { get; set; }
+
             public string Email { get; set; }
+
             public int? Score { get; set; }
         }
 
         private class ReplaceEmptyProperty : ReportCellProperty
         {
-            public string Text { get; }
-
             public ReplaceEmptyProperty(string text)
             {
                 this.Text = text;
             }
+
+            public string Text { get; }
         }
 
         private class CustomFormatPropertyHtmlHandler : PropertyHandler<ReplaceEmptyProperty, HtmlReportCell>

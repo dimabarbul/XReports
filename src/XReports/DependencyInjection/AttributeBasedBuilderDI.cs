@@ -14,9 +14,7 @@ namespace XReports.DependencyInjection
                 sp => new AttributeBasedBuilder(
                     sp,
                     typeof(IAttributeHandler).GetImplementingTypes()
-                        .Select(t => (IAttributeHandler) ActivatorUtilities.GetServiceOrCreateInstance(sp, t))
-                )
-            );
+                        .Select(t => (IAttributeHandler)ActivatorUtilities.GetServiceOrCreateInstance(sp, t))));
 
             return services;
         }

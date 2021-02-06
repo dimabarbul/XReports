@@ -90,11 +90,6 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -104,22 +99,22 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public int LastScore { get; set; }
+
             public decimal Score { get; set; }
         }
 
         private class ThreeColorHeatmapProperty : ReportCellProperty
         {
-            public decimal MinimumValue { get; set; }
-            public Color MinimumColor { get; set; }
-            public decimal MiddleValue { get; set; }
-            public Color MiddleColor { get; set; }
-            public decimal MaximumValue { get; set; }
-            public Color MaximumColor { get; set; }
-
             public ThreeColorHeatmapProperty(decimal minimumValue, Color minimumColor, decimal middleValue, Color middleColor, decimal maximumValue, Color maximumColor)
             {
                 this.MinimumValue = minimumValue;
@@ -129,6 +124,18 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
                 this.MaximumValue = maximumValue;
                 this.MaximumColor = maximumColor;
             }
+
+            public decimal MinimumValue { get; set; }
+
+            public Color MinimumColor { get; set; }
+
+            public decimal MiddleValue { get; set; }
+
+            public Color MiddleColor { get; set; }
+
+            public decimal MaximumValue { get; set; }
+
+            public Color MaximumColor { get; set; }
 
             public Color GetColorForValue(decimal value)
             {
@@ -156,7 +163,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 
             private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
             {
-                return (byte) (min + valuePercentage * (max - min));
+                return (byte)(min + (valuePercentage * (max - min)));
             }
         }
 
@@ -176,13 +183,13 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             {
                 IExcelConditionalFormattingThreeColorScale threeColorScale = worksheetCell.ConditionalFormatting.AddThreeColorScale();
                 threeColorScale.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-                threeColorScale.LowValue.Value = (double) property.MinimumValue;
+                threeColorScale.LowValue.Value = (double)property.MinimumValue;
                 threeColorScale.LowValue.Color = property.MinimumColor;
                 threeColorScale.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-                threeColorScale.MiddleValue.Value = (double) property.MiddleValue;
+                threeColorScale.MiddleValue.Value = (double)property.MiddleValue;
                 threeColorScale.MiddleValue.Color = property.MiddleColor;
                 threeColorScale.HighValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-                threeColorScale.HighValue.Value = (double) property.MaximumValue;
+                threeColorScale.HighValue.Value = (double)property.MaximumValue;
                 threeColorScale.HighValue.Color = property.MaximumColor;
             }
         }

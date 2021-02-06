@@ -9,7 +9,9 @@ namespace XReports.DependencyInjection
         where TReportCell : BaseReportCell, new()
     {
         public string Name { get; set; }
+
         public Type PropertyHandlersInterface { get; set; }
+
         public IEnumerable<IPropertyHandler<TReportCell>> Handlers { get; set; }
     }
 }

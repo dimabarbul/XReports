@@ -15,6 +15,7 @@ namespace XReports.PropertyHandlers.Excel
 
             // if postfix text is ' percents (%) here', then it should be converted to '" percents ("%") here"'
             string postfix = $"\"{property.PostfixText}\""
+
                 // surround percent sign with double quotes so it is not part of format string
                 // and can be treated correctly by office
                 .Replace("%", "\"%\"");

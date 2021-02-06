@@ -9,8 +9,11 @@ namespace XReports.Models
         private dynamic value;
 
         public int ColumnSpan { get; set; } = 1;
+
         public int RowSpan { get; set; } = 1;
+
         public Type ValueType { get; set; } = typeof(string);
+
         public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
         public dynamic Value
@@ -64,7 +67,8 @@ namespace XReports.Models
             return this.GetValue<TValue>();
         }
 
-        public bool HasProperty<TProperty>() where TProperty : ReportCellProperty
+        public bool HasProperty<TProperty>()
+            where TProperty : ReportCellProperty
         {
             return this.Properties.OfType<TProperty>().Any();
         }
@@ -74,12 +78,14 @@ namespace XReports.Models
             return this.Properties.Any(p => p.GetType() == propertyType);
         }
 
-        public TProperty GetProperty<TProperty>() where TProperty : ReportCellProperty
+        public TProperty GetProperty<TProperty>()
+            where TProperty : ReportCellProperty
         {
             return this.Properties.OfType<TProperty>().FirstOrDefault();
         }
 
-        public void AddProperty<TProperty>(TProperty property) where TProperty : ReportCellProperty
+        public void AddProperty<TProperty>(TProperty property)
+            where TProperty : ReportCellProperty
         {
             this.Properties.Add(property);
         }

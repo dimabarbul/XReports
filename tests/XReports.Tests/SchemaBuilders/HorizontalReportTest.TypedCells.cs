@@ -84,10 +84,8 @@ namespace XReports.Tests.SchemaBuilders
         public void Build_DateTimeRowWithFormat_CorrectDisplayValue()
         {
             HorizontalReportSchemaBuilder<DateTime> reportBuilder = new HorizontalReportSchemaBuilder<DateTime>();
-            reportBuilder.AddRow("The Date", d => d);
-                // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
-            reportBuilder.AddRow("Next Day", d => d.AddDays(1));
-                // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddRow("The Date", d => d); // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddRow("Next Day", d => d.AddDays(1)); // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

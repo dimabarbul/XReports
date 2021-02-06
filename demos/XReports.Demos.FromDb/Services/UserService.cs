@@ -29,8 +29,8 @@ namespace XReports.Demos.FromDb.Services
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Email = u.Email,
-                    Age = (int) (DateTime.Now - u.DateOfBirth).TotalDays / 365,
-                    RegisteredInDays = (int) (DateTime.Now - u.CreatedOn).TotalDays,
+                    Age = (int)(DateTime.Now - u.DateOfBirth).TotalDays / 365,
+                    RegisteredInDays = (int)(DateTime.Now - u.CreatedOn).TotalDays,
                     OrdersCount = u.Orders.Count(),
                 });
 

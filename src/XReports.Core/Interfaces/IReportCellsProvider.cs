@@ -6,6 +6,7 @@ namespace XReports.Interfaces
     public interface IReportCellsProvider<in TSourceEntity>
     {
         string Title { get; }
+
         Func<TSourceEntity, ReportCell> CellSelector { get; }
     }
 }

@@ -26,7 +26,7 @@ namespace XReports.Demos.FromDb.Services
                     Id = p.Id,
                     Title = p.Title,
                     Description = p.Description,
-                    Price = p.IsActive ? p.Price : (decimal?) null,
+                    Price = p.IsActive ? p.Price : (decimal?)null,
                     IsActive = p.IsActive,
                 });
 

@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
+        <CodeAnalysisRuleSet>../../src/stylecop.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,6 +33,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="..\..\src\stylecop.json"/>
+      <AdditionalFiles Include="..\..\src\stylecop.ruleset"/>
     </ItemGroup>
 
 </Project>

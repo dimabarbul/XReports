@@ -12,33 +12,32 @@ namespace XReports.DependencyInjection
     public static class XReportsDI
     {
         public static IServiceCollection AddReportConverter<TReportCell>(
-            this IServiceCollection services, params IPropertyHandler<TReportCell>[] handlers
-        )
+            this IServiceCollection services,
+            params IPropertyHandler<TReportCell>[] handlers)
             where TReportCell : BaseReportCell, new()
         {
             services.AddScoped<IReportConverter<TReportCell>>(
-                sp => CreateReportConverter(sp, handlers)
-            );
+                sp => CreateReportConverter(sp, handlers));
 
             return services;
         }
 
         public static IServiceCollection AddReportConverter<TReportCell, TPropertyHandler>(
-            this IServiceCollection services, params IPropertyHandler<TReportCell>[] handlers
-        )
+            this IServiceCollection services,
+            params IPropertyHandler<TReportCell>[] handlers)
             where TReportCell : BaseReportCell, new()
             where TPropertyHandler : IPropertyHandler<TReportCell>
         {
             services.AddScoped<IReportConverter<TReportCell>>(
-                sp => CreateReportConverter(sp, handlers, typeof(TPropertyHandler))
-            );
+                sp => CreateReportConverter(sp, handlers, typeof(TPropertyHandler)));
 
             return services;
         }
 
         public static IServiceCollection AddReportConverter<TReportCell>(
-            this IServiceCollection services, string name, params IPropertyHandler<TReportCell>[] handlers
-        )
+            this IServiceCollection services,
+            string name,
+            params IPropertyHandler<TReportCell>[] handlers)
             where TReportCell : BaseReportCell, new()
         {
             AddFactoryRegistration(services, name, handlers);
@@ -48,8 +47,9 @@ namespace XReports.DependencyInjection
         }
 
         public static IServiceCollection AddReportConverter<TReportCell, TPropertyHandler>(
-            this IServiceCollection services, string name, params IPropertyHandler<TReportCell>[] handlers
-        )
+            this IServiceCollection services,
+            string name,
+            params IPropertyHandler<TReportCell>[] handlers)
             where TReportCell : BaseReportCell, new()
             where TPropertyHandler : IPropertyHandler<TReportCell>
         {
@@ -62,8 +62,7 @@ namespace XReports.DependencyInjection
         internal static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
             IServiceProvider sp,
             IEnumerable<IPropertyHandler<TReportCell>> handlers,
-            Type markerInterface = null
-        )
+            Type markerInterface = null)
             where TReportCell : BaseReportCell, new()
         {
             return markerInterface == null ?
@@ -71,25 +70,27 @@ namespace XReports.DependencyInjection
                 new ReportConverter<TReportCell>(
                     handlers.Concat(
                         markerInterface.GetImplementingTypes()
-                            .Select(t => (IPropertyHandler<TReportCell>) ActivatorUtilities.GetServiceOrCreateInstance(sp, t))
-                    )
-                );
+                            .Select(t => (IPropertyHandler<TReportCell>)ActivatorUtilities.GetServiceOrCreateInstance(sp, t))));
         }
 
         private static void AddFactoryRegistration<TReportCell>(
-            IServiceCollection services, string name, IPropertyHandler<TReportCell>[] handlers, Type type = null
-        )
+            IServiceCollection services,
+            string name,
+            IPropertyHandler<TReportCell>[] handlers,
+            Type type = null)
             where TReportCell : BaseReportCell, new()
         {
-            services.Configure<ReportConverterFactoryOptions<TReportCell>>(o =>
-            {
-                o.Registrations.Add(new ReportConverterRegistration<TReportCell>()
+            services.Configure<ReportConverterFactoryOptions<TReportCell>>(
+                o =>
                 {
-                    Name = name,
-                    Handlers = handlers,
-                    PropertyHandlersInterface = type,
+                    o.Registrations.Add(
+                        new ReportConverterRegistration<TReportCell>()
+                        {
+                            Name = name,
+                            Handlers = handlers,
+                            PropertyHandlersInterface = type,
+                        });
                 });
-            });
         }
 
         private static void TryRegisterFactory<TReportCell>(IServiceCollection services)

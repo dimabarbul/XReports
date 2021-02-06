@@ -4,9 +4,6 @@ namespace XReports.Attributes
 {
     public class PercentFormatAttribute : AttributeBase
     {
-        public int Precision { get; }
-        public string PostfixText { get; set; }
-
         public PercentFormatAttribute(int precision)
         {
             if (precision < 0)
@@ -16,5 +13,9 @@ namespace XReports.Attributes
 
             this.Precision = precision;
         }
+
+        public int Precision { get; }
+
+        public string PostfixText { get; set; }
     }
 }

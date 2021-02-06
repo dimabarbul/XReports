@@ -61,14 +61,18 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
         public class ViewModel
         {
             public string RegularTableHtml { get; set; }
+
             public string TableHtml { get; set; }
         }
 
         private class Entity
         {
             public string FirstName { get; set; }
+
             public string LastName { get; set; }
+
             public int Age { get; set; }
+
             public string Email { get; set; }
         }
     }

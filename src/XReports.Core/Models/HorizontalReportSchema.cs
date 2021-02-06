@@ -39,10 +39,10 @@ namespace XReports.Models
             int rowIndex = 0;
 
             return this.CellsProviders
-                .Select(row =>
-                    complexHeader[rowIndex++]
-                        .Concat(source.Select(entity => this.AddTableProperties(row.CreateCell(entity))))
-                );
+                .Select(
+                    row =>
+                        complexHeader[rowIndex++]
+                            .Concat(source.Select(entity => this.AddTableProperties(row.CreateCell(entity)))));
         }
     }
 }

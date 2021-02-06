@@ -6,19 +6,21 @@ namespace XReports.Models
     public abstract partial class ReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
     {
         protected ReportSchemaCellsProvider<TSourceEntity>[] CellsProviders { get; private set; }
-        protected ReportCellProperty[] TableProperties { get; private set; }
-        protected ComplexHeader[] ComplexHeaders { get; private set; }
-        protected Dictionary<string, ReportCellProperty[]> ComplexHeaderProperties { get; private set; }
-        protected ReportCellProperty[] CommonComplexHeaderProperties { get; private set; }
 
+        protected ReportCellProperty[] TableProperties { get; private set; }
+
+        protected ComplexHeader[] ComplexHeaders { get; private set; }
+
+        protected Dictionary<string, ReportCellProperty[]> ComplexHeaderProperties { get; private set; }
+
+        protected ReportCellProperty[] CommonComplexHeaderProperties { get; private set; }
 
         public static VerticalReportSchema<TSourceEntity> CreateVertical(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
             ReportCellProperty[] tableProperties,
             ComplexHeader[] complexHeaders,
             Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
-            ReportCellProperty[] commonComplexHeaderProperties
-        )
+            ReportCellProperty[] commonComplexHeaderProperties)
         {
             return new VerticalReportSchema<TSourceEntity>()
             {
@@ -36,8 +38,7 @@ namespace XReports.Models
             ComplexHeader[] complexHeaders,
             Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
             ReportSchemaCellsProvider<TSourceEntity>[] headerRows,
-            ReportCellProperty[] commonComplexHeaderProperties
-        )
+            ReportCellProperty[] commonComplexHeaderProperties)
         {
             return new HorizontalReportSchema<TSourceEntity>()
             {
@@ -46,7 +47,7 @@ namespace XReports.Models
                 ComplexHeaders = complexHeaders,
                 ComplexHeaderProperties = complexHeaderProperties,
                 HeaderRows = headerRows,
-                CommonComplexHeaderProperties = commonComplexHeaderProperties
+                CommonComplexHeaderProperties = commonComplexHeaderProperties,
             };
         }
 

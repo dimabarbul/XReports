@@ -4,8 +4,6 @@ namespace XReports.Attributes
 {
     public class DecimalPrecisionAttribute : AttributeBase
     {
-        public int Precision { get; }
-
         public DecimalPrecisionAttribute(int precision)
         {
             if (precision < 0)
@@ -15,5 +13,7 @@ namespace XReports.Attributes
 
             this.Precision = precision;
         }
+
+        public int Precision { get; }
     }
 }

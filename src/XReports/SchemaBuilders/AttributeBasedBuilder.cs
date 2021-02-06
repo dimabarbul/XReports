@@ -29,18 +29,18 @@ namespace XReports.SchemaBuilders
         {
             ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
 
-            return reportAttribute?.Type == ReportType.Horizontal
-                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity>(reportAttribute as HorizontalReportAttribute).BuildSchema()
-                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
+            return reportAttribute?.Type == ReportType.Horizontal ?
+                (IReportSchema<TEntity>)this.BuildHorizontalReport<TEntity>(reportAttribute as HorizontalReportAttribute).BuildSchema() :
+                (IReportSchema<TEntity>)this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
         }
 
         public IReportSchema<TEntity> BuildSchema<TEntity, TBuildParameter>(TBuildParameter parameter)
         {
             ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
 
-            return reportAttribute?.Type == ReportType.Horizontal
-                ? (IReportSchema<TEntity>) this.BuildHorizontalReport<TEntity, TBuildParameter>(reportAttribute as HorizontalReportAttribute, parameter).BuildSchema()
-                : (IReportSchema<TEntity>) this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
+            return reportAttribute?.Type == ReportType.Horizontal ?
+                (IReportSchema<TEntity>)this.BuildHorizontalReport<TEntity, TBuildParameter>(reportAttribute as HorizontalReportAttribute, parameter).BuildSchema() :
+                (IReportSchema<TEntity>)this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
         }
 
         private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute)
@@ -50,9 +50,8 @@ namespace XReports.SchemaBuilders
             if (reportAttribute?.PostBuilder != null
                 && typeof(IHorizontalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
             {
-                ((IHorizontalReportPostBuilder<TEntity>)
-                    ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-                ).Build(builder);
+                ((IHorizontalReportPostBuilder<TEntity>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
+                    .Build(builder);
             }
 
             return builder;
@@ -73,9 +72,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IHorizontalReportPostBuilder<TEntity, TBuildParameter>)}.");
             }
 
-            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>)
-                ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-            ).Build(builder, parameter);
+            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
+                .Build(builder, parameter);
 
             return builder;
         }
@@ -117,12 +115,11 @@ namespace XReports.SchemaBuilders
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
             LambdaExpression lambdaExpression = Expression.Lambda(memberExpression, parameter);
 
-            IReportCellsProvider<TEntity> instance = (IReportCellsProvider<TEntity>) Activator.CreateInstance(
+            IReportCellsProvider<TEntity> instance = (IReportCellsProvider<TEntity>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(TEntity), property.PropertyType),
                 attribute.Title,
-                lambdaExpression.Compile()
-            );
+                lambdaExpression.Compile());
             return instance;
         }
 
@@ -133,9 +130,8 @@ namespace XReports.SchemaBuilders
             if (reportAttribute?.PostBuilder != null
                 && typeof(IVerticalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
             {
-                ((IVerticalReportPostBuilder<TEntity>)
-                    ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-                ).Build(builder);
+                ((IVerticalReportPostBuilder<TEntity>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
+                    .Build(builder);
             }
 
             return builder;
@@ -156,9 +152,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IVerticalReportPostBuilder<TEntity, TBuildParameter>)}.");
             }
 
-            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>)
-                ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder)
-            ).Build(builder, parameter);
+            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
+                .Build(builder, parameter);
 
             return builder;
         }
@@ -247,17 +242,12 @@ namespace XReports.SchemaBuilders
                     .Where(ta =>
                         (
                             !(ta is AttributeBase)
-                            && propertyAttributes.All(pa => pa.GetType() != ta.GetType())
-                        )
+                            && propertyAttributes.All(pa => pa.GetType() != ta.GetType()))
                         || (
                             ta is AttributeBase
                             && propertyAttributes.All(pa =>
                                 pa.GetType() != ta.GetType()
-                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)ta).IsHeader
-                            )
-                        )
-                    )
-                )
+                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)ta).IsHeader))))
                 .ToArray();
         }
 
@@ -289,6 +279,7 @@ namespace XReports.SchemaBuilders
         private class ReportVariableData
         {
             public PropertyInfo Property { get; set; }
+
             public ReportVariableAttribute Attribute { get; set; }
         }
     }

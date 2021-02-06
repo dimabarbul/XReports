@@ -1,7 +1,7 @@
 using System;
+using XReports.Attributes;
 using XReports.Models;
 using XReports.SchemaBuilders;
-using XReports.Attributes;
 
 namespace XReports.AttributeHandlers
 {
@@ -9,7 +9,7 @@ namespace XReports.AttributeHandlers
     {
         protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, CustomPropertyAttribute attribute)
         {
-            ReportCellProperty property = (ReportCellProperty) Activator.CreateInstance(attribute.PropertyType);
+            ReportCellProperty property = (ReportCellProperty)Activator.CreateInstance(attribute.PropertyType);
 
             if (attribute.IsHeader)
             {

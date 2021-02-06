@@ -5,8 +5,6 @@ namespace XReports.Properties
 {
     public class DecimalPrecisionProperty : ReportCellProperty
     {
-        public int Precision { get; }
-
         public DecimalPrecisionProperty(int precision)
         {
             if (precision < 0)
@@ -16,5 +14,7 @@ namespace XReports.Properties
 
             this.Precision = precision;
         }
+
+        public int Precision { get; }
     }
 }

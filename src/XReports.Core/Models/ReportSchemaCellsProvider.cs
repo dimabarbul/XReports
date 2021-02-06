@@ -4,27 +4,29 @@ namespace XReports.Models
 {
     public class ReportSchemaCellsProvider<TSourceEntity>
     {
-        public readonly IReportCellsProvider<TSourceEntity> Provider;
-        public readonly ReportCellProperty[] CellProperties;
-        public readonly ReportCellProperty[] HeaderProperties;
-        public readonly IReportCellProcessor<TSourceEntity>[] CellProcessors;
-        public readonly IReportCellProcessor<TSourceEntity>[] HeaderProcessors;
+        private readonly IReportCellsProvider<TSourceEntity> provider;
+        private readonly ReportCellProperty[] cellProperties;
+        private readonly ReportCellProperty[] headerProperties;
+        private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
+        private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
 
-        public ReportSchemaCellsProvider(IReportCellsProvider<TSourceEntity> provider,
-            ReportCellProperty[] cellProperties, ReportCellProperty[] headerProperties,
+        public ReportSchemaCellsProvider(
+            IReportCellsProvider<TSourceEntity> provider,
+            ReportCellProperty[] cellProperties,
+            ReportCellProperty[] headerProperties,
             IReportCellProcessor<TSourceEntity>[] cellProcessors,
             IReportCellProcessor<TSourceEntity>[] headerProcessors)
         {
-            this.Provider = provider;
-            this.CellProperties = cellProperties;
-            this.HeaderProperties = headerProperties;
-            this.CellProcessors = cellProcessors;
-            this.HeaderProcessors = headerProcessors;
+            this.provider = provider;
+            this.cellProperties = cellProperties;
+            this.headerProperties = headerProperties;
+            this.cellProcessors = cellProcessors;
+            this.headerProcessors = headerProcessors;
         }
 
         public ReportCell CreateCell(TSourceEntity entity)
         {
-            ReportCell cell = this.Provider.CellSelector(entity);
+            ReportCell cell = this.provider.CellSelector(entity);
 
             this.AddProperties(cell);
             this.RunProcessors(cell, entity);
@@ -34,7 +36,7 @@ namespace XReports.Models
 
         public ReportCell CreateHeaderCell()
         {
-            ReportCell cell = new ReportCell<string>(this.Provider.Title);
+            ReportCell cell = new ReportCell<string>(this.provider.Title);
 
             this.AddHeaderProperties(cell);
             this.RunHeaderProcessors(cell);
@@ -44,7 +46,7 @@ namespace XReports.Models
 
         private void AddProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.CellProperties)
+            foreach (ReportCellProperty property in this.cellProperties)
             {
                 cell.AddProperty(property);
             }
@@ -52,7 +54,7 @@ namespace XReports.Models
 
         private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.CellProcessors)
+            foreach (IReportCellProcessor<TSourceEntity> processor in this.cellProcessors)
             {
                 processor.Process(cell, entity);
             }
@@ -60,7 +62,7 @@ namespace XReports.Models
 
         private void AddHeaderProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.HeaderProperties)
+            foreach (ReportCellProperty property in this.headerProperties)
             {
                 cell.AddProperty(property);
             }
@@ -68,7 +70,7 @@ namespace XReports.Models
 
         private void RunHeaderProcessors(ReportCell cell)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.HeaderProcessors)
+            foreach (IReportCellProcessor<TSourceEntity> processor in this.headerProcessors)
             {
                 processor.Process(cell, default);
             }

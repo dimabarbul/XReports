@@ -54,8 +54,7 @@ namespace XReports.Tests.SchemaBuilders
         public void Build_DecimalColumnWithoutRounding_CorrectDisplayValue()
         {
             VerticalReportSchemaBuilder<decimal> reportBuilder = new VerticalReportSchemaBuilder<decimal>();
-            reportBuilder.AddColumn("Score", d => d);
-                // .SetValueFormatter(new DecimalValueFormatter(2));
+            reportBuilder.AddColumn("Score", d => d); // .SetValueFormatter(new DecimalValueFormatter(2));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
@@ -80,8 +79,7 @@ namespace XReports.Tests.SchemaBuilders
         public void Build_DecimalColumnWithRounding_CorrectDisplayValue()
         {
             VerticalReportSchemaBuilder<decimal> reportBuilder = new VerticalReportSchemaBuilder<decimal>();
-            reportBuilder.AddColumn("Score", d => d);
-                // .SetValueFormatter(new DecimalValueFormatter(0));
+            reportBuilder.AddColumn("Score", d => d); // .SetValueFormatter(new DecimalValueFormatter(0));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
@@ -106,10 +104,8 @@ namespace XReports.Tests.SchemaBuilders
         public void Build_DateTimeColumnWithFormat_CorrectDisplayValue()
         {
             VerticalReportSchemaBuilder<DateTime> reportBuilder = new VerticalReportSchemaBuilder<DateTime>();
-            reportBuilder.AddColumn("The Date", d => d);
-                // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
-            reportBuilder.AddColumn("Next Day", d => d.AddDays(1));
-                // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddColumn("The Date", d => d); // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
+            reportBuilder.AddColumn("Next Day", d => d.AddDays(1)); // .SetValueFormatter(new DateTimeValueFormatter("MM/dd/yyyy"));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

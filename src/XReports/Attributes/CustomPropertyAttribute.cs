@@ -5,8 +5,6 @@ namespace XReports.Attributes
 {
     public class CustomPropertyAttribute : AttributeBase
     {
-        public Type PropertyType { get; }
-
         public CustomPropertyAttribute(Type type)
         {
             if (!typeof(ReportCellProperty).IsAssignableFrom(type))
@@ -16,5 +14,7 @@ namespace XReports.Attributes
 
             this.PropertyType = type;
         }
+
+        public Type PropertyType { get; }
     }
 }

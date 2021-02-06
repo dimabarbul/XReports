@@ -70,7 +70,9 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
         private class Entity
         {
             public string Name { get; set; }
+
             public int LastScore { get; set; }
+
             public decimal Score { get; set; }
         }
 

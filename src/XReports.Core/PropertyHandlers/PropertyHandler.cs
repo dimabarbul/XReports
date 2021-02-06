@@ -15,7 +15,7 @@ namespace XReports.PropertyHandlers
                 return;
             }
 
-            this.HandleProperty((TPropertyType) property, cell);
+            this.HandleProperty((TPropertyType)property, cell);
             property.Processed = true;
         }
 

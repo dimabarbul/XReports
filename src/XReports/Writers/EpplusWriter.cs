@@ -4,8 +4,8 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using XReports.Enums;
-using XReports.Models;
 using XReports.Interfaces;
+using XReports.Models;
 using XReports.Properties;
 
 namespace XReports.Writers
@@ -61,6 +61,7 @@ namespace XReports.Writers
                     {
                         this.WriteHeaderCell(worksheet.Cells[row, column], cell);
                     }
+
                     column++;
                 }
 
@@ -107,6 +108,7 @@ namespace XReports.Writers
                     {
                         this.WriteCell(worksheet.Cells[row, column], cell);
                     }
+
                     column++;
                 }
 
@@ -207,7 +209,9 @@ namespace XReports.Writers
             }
         }
 
-        protected virtual void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress,
+        protected virtual void PostCreate(
+            ExcelWorksheet worksheet,
+            ExcelAddress headerAddress,
             ExcelAddress bodyAddress)
         {
         }
@@ -229,8 +233,7 @@ namespace XReports.Writers
                 (headerAddress ?? bodyAddress).Start.Row,
                 (headerAddress ?? bodyAddress).Start.Column,
                 (bodyAddress ?? headerAddress).End.Row,
-                (bodyAddress ?? headerAddress).End.Column
-            );
+                (bodyAddress ?? headerAddress).End.Column);
         }
 
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)

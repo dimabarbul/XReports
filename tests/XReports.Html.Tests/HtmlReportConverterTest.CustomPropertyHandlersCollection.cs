@@ -21,10 +21,11 @@ namespace XReports.Html.Tests
                 },
                 Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new ReportCell[] {
+                    new ReportCell[]
+                    {
                         this.CreateReportCell("Test", new BoldProperty()),
-                    }
-                }
+                    },
+                },
             };
 
             ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(GetCustomPropertyHandlers());
@@ -50,22 +51,22 @@ namespace XReports.Html.Tests
 
         private class BoldToUpperHandler : PropertyHandler<BoldProperty, HtmlReportCell>
         {
+            public override int Priority => (int)HtmlPropertyHandlerPriority.Text;
+
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
                 cell.Value = cell.Value.ToUpperInvariant();
             }
-
-            public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
         }
 
         private class BoldMarkedWithTextHandler : PropertyHandler<BoldProperty, HtmlReportCell>
         {
+            public override int Priority => (int)HtmlPropertyHandlerPriority.Text;
+
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
                 cell.Value = "bold: " + cell.Value;
             }
-
-            public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
         }
     }
 }

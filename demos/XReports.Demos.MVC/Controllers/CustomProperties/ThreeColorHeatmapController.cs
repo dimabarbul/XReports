@@ -68,7 +68,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new []
+            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new[]
             {
                 new ThreeColorHeatmapPropertyExcelHandler(),
             });
@@ -81,11 +81,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -94,40 +89,46 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public decimal Score { get; set; }
         }
 
         private class ThreeColorHeatmapProperty : ReportCellProperty
         {
-            public decimal MinimumValue { get; set; }
-            public Color MinimumColor { get; set; }
-            public decimal MiddleValue { get; set; }
-            public Color MiddleColor { get; set; }
-            public decimal MaximumValue { get; set; }
-            public Color MaximumColor { get; set; }
+            private readonly decimal minimumValue;
+            private readonly Color minimumColor;
+            private readonly decimal middleValue;
+            private readonly Color middleColor;
+            private readonly decimal maximumValue;
+            private readonly Color maximumColor;
 
             public ThreeColorHeatmapProperty(decimal minimumValue, Color minimumColor, decimal middleValue, Color middleColor, decimal maximumValue, Color maximumColor)
             {
-                this.MinimumValue = minimumValue;
-                this.MinimumColor = minimumColor;
-                this.MiddleValue = middleValue;
-                this.MiddleColor = middleColor;
-                this.MaximumValue = maximumValue;
-                this.MaximumColor = maximumColor;
+                this.minimumValue = minimumValue;
+                this.minimumColor = minimumColor;
+                this.middleValue = middleValue;
+                this.middleColor = middleColor;
+                this.maximumValue = maximumValue;
+                this.maximumColor = maximumColor;
             }
 
             public Color GetColorForValue(decimal value)
             {
-                if (value < this.MiddleValue)
+                if (value < this.middleValue)
                 {
-                    return this.GetColorForValue(value, this.MinimumValue, this.MinimumColor, this.MiddleValue, this.MiddleColor);
+                    return this.GetColorForValue(value, this.minimumValue, this.minimumColor, this.middleValue, this.middleColor);
                 }
                 else
                 {
-                    return this.GetColorForValue(value, this.MiddleValue, this.MiddleColor, this.MaximumValue, this.MaximumColor);
+                    return this.GetColorForValue(value, this.middleValue, this.middleColor, this.maximumValue, this.maximumColor);
                 }
             }
 
@@ -145,7 +146,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
             private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
             {
-                return (byte) (min + valuePercentage * (max - min));
+                return (byte)(min + (valuePercentage * (max - min)));
             }
         }
 

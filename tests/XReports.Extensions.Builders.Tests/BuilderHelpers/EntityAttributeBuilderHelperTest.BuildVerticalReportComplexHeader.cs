@@ -30,18 +30,6 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             headerCells[1][2].GetValue<string>().Should().Be("Age");
         }
 
-        private class OneComplexHeaderClass
-        {
-            [ReportVariable(1, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(2, "Name", ComplexHeader = new[] { "Personal" })]
-            public string Name { get; set; }
-
-            [ReportVariable(3, "Age", ComplexHeader = new[] { "Personal" })]
-            public int Age { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
         {
@@ -80,6 +68,18 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             headerCells[3][3].Should().BeNull();
             headerCells[3][4].GetValue<string>().Should().Be("Salary");
             headerCells[3][5].Should().BeNull();
+        }
+
+        private class OneComplexHeaderClass
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name", ComplexHeader = new[] { "Personal" })]
+            public string Name { get; set; }
+
+            [ReportVariable(3, "Age", ComplexHeader = new[] { "Personal" })]
+            public int Age { get; set; }
         }
 
         private class SeveralLevelsOfComplexHeaderClass

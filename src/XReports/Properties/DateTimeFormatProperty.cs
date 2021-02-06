@@ -6,8 +6,6 @@ namespace XReports.Properties
 {
     public class DateTimeFormatProperty : ReportCellProperty
     {
-        public DateTimeFormatPart[] Parts { get; }
-
         public DateTimeFormatProperty(string format)
         {
             if (string.IsNullOrEmpty(format))
@@ -17,5 +15,7 @@ namespace XReports.Properties
 
             this.Parts = DateTimeParser.Parse(format);
         }
+
+        public DateTimeFormatPart[] Parts { get; }
     }
 }

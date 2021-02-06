@@ -7,14 +7,18 @@ namespace XReports.ReportCellsProviders
 {
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
-        public string Title { get; }
-        public ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
-        public ICollection<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
-
         protected ReportCellsProvider(string title)
         {
             this.Title = title;
         }
+
+        public string Title { get; }
+
+        public abstract Func<TSourceEntity, ReportCell> CellSelector { get; }
+
+        private ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
+
+        private ICollection<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
         public IReportCellsProvider<TSourceEntity> AddProcessor(IReportCellProcessor<TSourceEntity> processor)
         {
@@ -55,7 +59,5 @@ namespace XReports.ReportCellsProviders
                 processor.Process(cell, entity);
             }
         }
-
-        public abstract Func<TSourceEntity, ReportCell> CellSelector { get; }
     }
 }

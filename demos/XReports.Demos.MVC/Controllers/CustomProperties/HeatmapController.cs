@@ -67,7 +67,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new []
+            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new[]
             {
                 new HeatmapPropertyExcelHandler(),
             });
@@ -80,11 +80,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -93,42 +88,48 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public decimal Score { get; set; }
         }
 
         private class HeatmapProperty : ReportCellProperty
         {
-            public decimal MinimumValue { get; set; }
-            public Color MinimumColor { get; set; }
-            public decimal MaximumValue { get; set; }
-            public Color MaximumColor { get; set; }
+            private readonly decimal minimumValue;
+            private readonly Color minimumColor;
+            private readonly decimal maximumValue;
+            private readonly Color maximumColor;
 
             public HeatmapProperty(decimal minimumValue, Color minimumColor, decimal maximumValue, Color maximumColor)
             {
-                this.MinimumValue = minimumValue;
-                this.MinimumColor = minimumColor;
-                this.MaximumValue = maximumValue;
-                this.MaximumColor = maximumColor;
+                this.minimumValue = minimumValue;
+                this.minimumColor = minimumColor;
+                this.maximumValue = maximumValue;
+                this.maximumColor = maximumColor;
             }
 
             public Color GetColorForValue(decimal value)
             {
-                decimal heatmapValueDelta = this.MaximumValue - this.MinimumValue;
-                decimal valuePercentage = (value - this.MinimumValue) / heatmapValueDelta;
+                decimal heatmapValueDelta = this.maximumValue - this.minimumValue;
+                decimal valuePercentage = (value - this.minimumValue) / heatmapValueDelta;
 
-                byte cellRed = this.GetProportionalValue(valuePercentage, this.MinimumColor.R, this.MaximumColor.R);
-                byte cellGreen = this.GetProportionalValue(valuePercentage, this.MinimumColor.G, this.MaximumColor.G);
-                byte cellBlue = this.GetProportionalValue(valuePercentage, this.MinimumColor.B, this.MaximumColor.B);
+                byte cellRed = this.GetProportionalValue(valuePercentage, this.minimumColor.R, this.maximumColor.R);
+                byte cellGreen = this.GetProportionalValue(valuePercentage, this.minimumColor.G, this.maximumColor.G);
+                byte cellBlue = this.GetProportionalValue(valuePercentage, this.minimumColor.B, this.maximumColor.B);
 
                 return Color.FromArgb(cellRed, cellGreen, cellBlue);
             }
 
             private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
             {
-                return (byte) (min + valuePercentage * (max - min));
+                return (byte)(min + (valuePercentage * (max - min)));
             }
         }
 

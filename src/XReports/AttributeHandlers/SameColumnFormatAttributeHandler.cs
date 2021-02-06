@@ -1,6 +1,6 @@
-using XReports.SchemaBuilders;
 using XReports.Attributes;
 using XReports.Properties;
+using XReports.SchemaBuilders;
 
 namespace XReports.AttributeHandlers
 {

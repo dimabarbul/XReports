@@ -6,7 +6,7 @@ namespace XReports.PropertyHandlers.Html
 {
     public class PercentFormatPropertyHtmlHandler : PropertyHandler<PercentFormatProperty, HtmlReportCell>
     {
-        public override int Priority => (int) HtmlPropertyHandlerPriority.Text;
+        public override int Priority => (int)HtmlPropertyHandlerPriority.Text;
 
         protected override void HandleProperty(PercentFormatProperty property, HtmlReportCell cell)
         {

@@ -13,45 +13,40 @@ namespace XReports.SchemaBuilders
 
         public VerticalReportSchemaBuilder<TSourceEntity> InsertColumn(int index, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.CurrentProvider = new ConfiguredCellsProvider(provider);
-
-            this.CellsProviders.Insert(index, this.CurrentProvider);
-            this.NamedProviders[this.CurrentProvider.Provider.Title] = this.CurrentProvider;
+            this.InsertCellsProvider(index, provider);
 
             return this;
         }
 
         public VerticalReportSchemaBuilder<TSourceEntity> InsertColumnBefore(string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            return this.InsertColumn(this.CellsProviders.IndexOf(this.NamedProviders[title]), provider);
+            return this.InsertColumn(this.GetCellsProviderIndex(title), provider);
         }
 
         public VerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
         {
-            this.CurrentProvider = this.NamedProviders[title];
+            this.SelectProvider(title);
 
             return this;
         }
 
         public VerticalReportSchema<TSourceEntity> BuildSchema()
         {
-            return ReportSchema<TSourceEntity>.CreateVertical
-            (
+            return ReportSchema<TSourceEntity>.CreateVertical(
                 this.CellsProviders
-                    .Select(c => new ReportSchemaCellsProvider<TSourceEntity>(
-                        c.Provider,
-                        c.CellProperties.ToArray(),
-                        c.HeaderProperties.ToArray(),
-                        c.CellProcessors.ToArray(),
-                        c.HeaderProcessors.ToArray()
-                    ))
+                    .Select(
+                        c => new ReportSchemaCellsProvider<TSourceEntity>(
+                            c.Provider,
+                            c.CellProperties.ToArray(),
+                            c.HeaderProperties.ToArray(),
+                            c.CellProcessors.ToArray(),
+                            c.HeaderProcessors.ToArray()))
                     .ToArray(),
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray()),
-                this.CommonComplexHeadersProperties.ToArray()
-            );
+                this.CommonComplexHeadersProperties.ToArray());
         }
     }
 }

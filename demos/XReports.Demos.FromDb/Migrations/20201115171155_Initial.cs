@@ -16,7 +16,7 @@ namespace XReports.Demos.FromDb.Migrations
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false)
+                    IsActive = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -34,7 +34,7 @@ namespace XReports.Demos.FromDb.Migrations
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false)
+                    IsActive = table.Column<bool>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -48,7 +48,7 @@ namespace XReports.Demos.FromDb.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -69,7 +69,7 @@ namespace XReports.Demos.FromDb.Migrations
                     OrderId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    PriceWhenAdded = table.Column<decimal>(nullable: false)
+                    PriceWhenAdded = table.Column<decimal>(nullable: false),
                 },
                 constraints: table =>
                 {

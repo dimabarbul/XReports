@@ -1,12 +1,17 @@
 using System;
-using XReports.Extensions;
 using XReports.Enums;
+using XReports.Extensions;
 using XReports.Interfaces;
 
 namespace XReports.Attributes
 {
     public class HorizontalReportAttribute : ReportAttribute
     {
+        public HorizontalReportAttribute()
+            : base(ReportType.Horizontal)
+        {
+        }
+
         public override Type PostBuilder
         {
             get => base.PostBuilder;
@@ -20,11 +25,6 @@ namespace XReports.Attributes
 
                 base.PostBuilder = value;
             }
-        }
-
-        public HorizontalReportAttribute()
-            : base(ReportType.Horizontal)
-        {
         }
     }
 }

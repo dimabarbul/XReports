@@ -110,11 +110,6 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
@@ -127,24 +122,34 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
                 .Generate(RecordsCount);
         }
 
+        public class ViewModel
+        {
+            public string ReportTableHtml { get; set; }
+        }
+
         private class Entity
         {
             public string Name { get; set; }
+
             public decimal AverageScore { get; set; }
+
             public int MinScore { get; set; }
+
             public int MaxScore { get; set; }
+
             public int Age { get; set; }
+
             public string Email { get; set; }
         }
 
         private class IndentationProperty : ReportCellProperty
         {
-            public int IndentLevel { get; }
-
             public IndentationProperty(int indentLevel = 1)
             {
                 this.IndentLevel = indentLevel;
             }
+
+            public int IndentLevel { get; }
         }
 
         private class HtmlIndentationPropertyHandler : PropertyHandler<IndentationProperty, HtmlReportCell>

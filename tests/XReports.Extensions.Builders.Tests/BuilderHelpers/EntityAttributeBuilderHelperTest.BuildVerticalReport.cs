@@ -26,15 +26,6 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             headerCells[0][1].GetValue<string>().Should().Be("Name");
         }
 
-        private class SeveralPropertiesClass
-        {
-            [ReportVariable(1, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(2, "Name")]
-            public string Name { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
         {
@@ -49,23 +40,15 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             headerCells[0][0].GetValue<string>().Should().Be("Name");
         }
 
-        private class SomePropertiesWithoutAttribute
-        {
-            public int Id { get; set; }
-
-            [ReportVariable(1, "Name")]
-            public string Name { get; set; }
-        }
-
         [Fact]
         public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
             IReportSchema<PropertiesWithAttributes> schema = builderHelper.BuildSchema<PropertiesWithAttributes>();
 
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new []
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
             {
-                new PropertiesWithAttributes(){ Id = 1, Name = "John Doe", Salary = 1000m, DateOfBirth = new DateTime(2000, 4, 7)},
+                new PropertiesWithAttributes() { Id = 1, Name = "John Doe", Salary = 1000m, DateOfBirth = new DateTime(2000, 4, 7) },
             });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.Rows);
@@ -75,6 +58,23 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             headerCells[0][1].ValueType.Should().Be(typeof(string));
             headerCells[0][2].ValueType.Should().Be(typeof(decimal));
             headerCells[0][3].ValueType.Should().Be(typeof(DateTime));
+        }
+
+        private class SeveralPropertiesClass
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name")]
+            public string Name { get; set; }
+        }
+
+        private class SomePropertiesWithoutAttribute
+        {
+            public int Id { get; set; }
+
+            [ReportVariable(1, "Name")]
+            public string Name { get; set; }
         }
 
         private class PropertiesWithAttributes

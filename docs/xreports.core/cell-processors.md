@@ -75,7 +75,7 @@ CustomerInfo[] customers = new CustomerInfo[]
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(customers);
 
 // Convert report. This will run property handlers.
-IReportConverter<ReportCell> converter = new ReportConverter<ReportCell>(new []
+IReportConverter<ReportCell> converter = new ReportConverter<ReportCell>(new[]
 {
     new HighlightPropertyHandler(),
 });

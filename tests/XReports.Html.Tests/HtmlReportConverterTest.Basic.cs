@@ -20,8 +20,8 @@ namespace XReports.Html.Tests
                 },
                 Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new ReportCell[] { new ReportCell<string>("Test"), }
-                }
+                    new ReportCell[] { new ReportCell<string>("Test"), },
+                },
             };
 
             ReportConverter<HtmlReportCell> converter = new ReportConverter<HtmlReportCell>(Enumerable.Empty<IPropertyHandler<HtmlReportCell>>());

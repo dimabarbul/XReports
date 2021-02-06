@@ -4,9 +4,6 @@ namespace XReports.Attributes
 {
     public class ColorAttribute : AttributeBase
     {
-        public Color? FontColor { get; }
-        public Color? BackgroundColor { get; }
-
         public ColorAttribute(Color fontColor)
             : this(fontColor, null)
         {
@@ -17,5 +14,9 @@ namespace XReports.Attributes
             this.FontColor = fontColor;
             this.BackgroundColor = backgroundColor;
         }
+
+        public Color? FontColor { get; }
+
+        public Color? BackgroundColor { get; }
     }
 }

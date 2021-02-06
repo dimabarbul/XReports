@@ -34,14 +34,14 @@ namespace XReports.Demos.FromDb.ReportModels
         [Alignment(AlignmentType.Center, IsHeader = true)]
         [CustomProperty(typeof(YesNoProperty))]
         public bool IsActive { get; set; }
-    }
 
-    public class ProductListReportPostBuilder : IVerticalReportPostBuilder<ProductListReport>
-    {
-        public void Build(VerticalReportSchemaBuilder<ProductListReport> builder)
+        private class ProductListReportPostBuilder : IVerticalReportPostBuilder<ProductListReport>
         {
-            builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
-                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
+            public void Build(VerticalReportSchemaBuilder<ProductListReport> builder)
+            {
+                builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
+                    .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
+            }
         }
     }
 }

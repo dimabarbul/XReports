@@ -4,9 +4,6 @@ namespace XReports.Models
 {
     public class DateTimeFormatPart
     {
-        public DateTimeFormatPartType Type { get; set; }
-        public string Text { get; set; }
-
         public DateTimeFormatPart(DateTimeFormatPartType type)
         {
             this.Type = type;
@@ -16,5 +13,9 @@ namespace XReports.Models
         {
             this.Text = text;
         }
+
+        public DateTimeFormatPartType Type { get; set; }
+
+        public string Text { get; set; }
     }
 }

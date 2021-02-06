@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Web;
-using XReports.Models;
 using XReports.Interfaces;
+using XReports.Models;
 
 namespace XReports.Writers
 {
@@ -59,9 +59,7 @@ namespace XReports.Writers
                 string.Join(
                     " ",
                     cell.Styles
-                        .Select(x => $"{x.Key}: {x.Value};")
-                )
-            );
+                        .Select(x => $"{x.Key}: {x.Value};")));
 
             foreach ((string name, string value) in cell.Attributes)
             {

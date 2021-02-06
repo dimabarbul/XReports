@@ -4,8 +4,6 @@ namespace XReports.Attributes
 {
     public class MaxLengthAttribute : AttributeBase
     {
-        public int MaxLength { get; }
-
         public MaxLengthAttribute(int maxLength)
         {
             if (maxLength < 0)
@@ -15,5 +13,7 @@ namespace XReports.Attributes
 
             this.MaxLength = maxLength;
         }
+
+        public int MaxLength { get; }
     }
 }
