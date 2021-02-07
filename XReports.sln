@@ -41,6 +41,7 @@ ProjectSection(SolutionItems) = preProject
 	docs\xreports\attribute-based-builder.md = docs\xreports\attribute-based-builder.md
 	docs\xreports\cell-types.md = docs\xreports\cell-types.md
 	docs\xreports\properties.md = docs\xreports\properties.md
+	docs\xreports\epplus-writer.md = docs\xreports\epplus-writer.md
 EndProjectSection
 EndProject
 Global

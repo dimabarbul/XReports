@@ -23,4 +23,4 @@ XReports is a library intended to provide extendable way of building reports and
     2. [Properties](xreports/properties.md)
     3. [AttributeBasedBuilder](xreports/attribute-based-builder.md)
     4. StringWriter
-    5. EpplusWriter
+    5. [EpplusWriter](xreports/epplus-writer.md)
