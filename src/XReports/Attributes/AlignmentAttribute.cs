@@ -6,16 +6,16 @@ namespace XReports.Attributes
 {
     public class AlignmentAttribute : AttributeBase
     {
-        public AlignmentAttribute(AlignmentType alignment)
+        public AlignmentAttribute(Alignment alignment)
         {
-            if (!Enum.IsDefined(typeof(AlignmentType), alignment))
+            if (!Enum.IsDefined(typeof(Alignment), alignment))
             {
-                throw new InvalidEnumArgumentException(nameof(alignment), (int)alignment, typeof(AlignmentType));
+                throw new InvalidEnumArgumentException(nameof(alignment), (int)alignment, typeof(Alignment));
             }
 
             this.Alignment = alignment;
         }
 
-        public AlignmentType Alignment { get; }
+        public Alignment Alignment { get; }
     }
 }

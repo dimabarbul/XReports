@@ -9,17 +9,17 @@ namespace XReports.PropertyHandlers.Excel
     {
         protected override void HandleProperty(AlignmentProperty property, ExcelReportCell cell)
         {
-            cell.AlignmentType = this.GetAlignment(property.AlignmentType);
+            cell.HorizontalAlignment = this.GetHorizontalAlignment(property.Alignment);
         }
 
-        private AlignmentType GetAlignment(AlignmentType alignmentType)
+        private Alignment GetHorizontalAlignment(Alignment alignment)
         {
-            return alignmentType switch
+            return alignment switch
             {
-                AlignmentType.Center => AlignmentType.Center,
-                AlignmentType.Left => AlignmentType.Left,
-                AlignmentType.Right => AlignmentType.Right,
-                _ => throw new ArgumentOutOfRangeException(nameof(alignmentType)),
+                Alignment.Center => Alignment.Center,
+                Alignment.Left => Alignment.Left,
+                Alignment.Right => Alignment.Right,
+                _ => throw new ArgumentOutOfRangeException(nameof(alignment)),
             };
         }
     }

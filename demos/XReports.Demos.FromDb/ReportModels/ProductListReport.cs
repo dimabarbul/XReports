@@ -13,25 +13,25 @@ namespace XReports.Demos.FromDb.ReportModels
     public class ProductListReport
     {
         [ReportVariable(1, "ID")]
-        [Alignment(AlignmentType.Center, IsHeader = true)]
+        [Alignment(Alignment.Center, IsHeader = true)]
         public int Id { get; set; }
 
         [ReportVariable(2, "Title")]
-        [Alignment(AlignmentType.Center, IsHeader = true)]
+        [Alignment(Alignment.Center, IsHeader = true)]
         public string Title { get; set; }
 
         [ReportVariable(3, "Description")]
-        [Alignment(AlignmentType.Center, IsHeader = true)]
+        [Alignment(Alignment.Center, IsHeader = true)]
         public string Description { get; set; }
 
         [ReportVariable(4, "Price")]
-        [Alignment(AlignmentType.Center, IsHeader = true)]
+        [Alignment(Alignment.Center, IsHeader = true)]
         [DecimalPrecision(2)]
-        [Alignment(AlignmentType.Center)]
+        [Alignment(Alignment.Center)]
         public decimal? Price { get; set; }
 
         [ReportVariable(5, "Active")]
-        [Alignment(AlignmentType.Center, IsHeader = true)]
+        [Alignment(Alignment.Center, IsHeader = true)]
         [CustomProperty(typeof(YesNoProperty))]
         public bool IsActive { get; set; }
 
@@ -40,7 +40,7 @@ namespace XReports.Demos.FromDb.ReportModels
             public void Build(VerticalReportSchemaBuilder<ProductListReport> builder)
             {
                 builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
-                    .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
+                    .AddHeaderProperties(new AlignmentProperty(Alignment.Center));
             }
         }
     }

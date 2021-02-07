@@ -49,11 +49,11 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name)
-                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Right));
+                .AddHeaderProperties(new AlignmentProperty(Alignment.Right));
             reportBuilder.AddColumn("Email", e => e.Email)
                 .AddHeaderProperties(new ColorProperty(Color.Blue));
             reportBuilder.AddColumn("Score", e => e.Score)
-                .AddHeaderProperties(new AlignmentProperty(AlignmentType.Center));
+                .AddHeaderProperties(new AlignmentProperty(Alignment.Center));
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;

@@ -1,6 +1,6 @@
 namespace XReports.Enums
 {
-    public enum AlignmentType
+    public enum Alignment
     {
         Center,
         Left,

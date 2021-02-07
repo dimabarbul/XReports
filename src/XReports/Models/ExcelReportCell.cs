@@ -5,7 +5,7 @@ namespace XReports.Models
 {
     public class ExcelReportCell : BaseReportCell
     {
-        public AlignmentType? AlignmentType { get; set; }
+        public Alignment? HorizontalAlignment { get; set; }
 
         public string NumberFormat { get; set; }
 

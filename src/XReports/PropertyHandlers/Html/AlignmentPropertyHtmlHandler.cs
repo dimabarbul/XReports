@@ -8,12 +8,12 @@ namespace XReports.PropertyHandlers.Html
     {
         protected override void HandleProperty(AlignmentProperty property, HtmlReportCell cell)
         {
-            cell.Styles.Add("text-align", this.GetAlignmentString(property.AlignmentType));
+            cell.Styles.Add("text-align", this.GetAlignmentString(property.Alignment));
         }
 
-        private string GetAlignmentString(AlignmentType alignmentType)
+        private string GetAlignmentString(Alignment alignment)
         {
-            return alignmentType.ToString().ToLowerInvariant();
+            return alignment.ToString().ToLowerInvariant();
         }
     }
 }

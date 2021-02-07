@@ -35,7 +35,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 
             cells[0][0].Properties.Should().HaveCount(2)
                 .And.ContainSingle(p => p is BoldProperty)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).AlignmentType == AlignmentType.Center);
+                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Center);
         }
 
         [Fact]
@@ -76,12 +76,12 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
 
             headerCells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).AlignmentType == AlignmentType.Right);
+                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Right);
 
             ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
 
             cells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).AlignmentType == AlignmentType.Center);
+                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Center);
         }
 
         [VerticalReport]
@@ -89,7 +89,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         private class WithTableProperties
         {
             [ReportVariable(1, "ID")]
-            [Alignment(AlignmentType.Center)]
+            [Alignment(Alignment.Center)]
             public int Id { get; set; }
         }
 
@@ -103,11 +103,11 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [VerticalReport]
-        [Alignment(AlignmentType.Center)]
+        [Alignment(Alignment.Center)]
         private class WithOverwrittenForHeaderTableProperties
         {
             [ReportVariable(1, "ID")]
-            [Alignment(AlignmentType.Right, IsHeader = true)]
+            [Alignment(Alignment.Right, IsHeader = true)]
             public int Id { get; set; }
         }
     }

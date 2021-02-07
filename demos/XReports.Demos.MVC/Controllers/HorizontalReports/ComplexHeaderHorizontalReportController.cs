@@ -47,7 +47,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
 
         private IReportTable<ReportCell> BuildReport()
         {
-            ReportCellProperty centerAlignment = new AlignmentProperty(AlignmentType.Center);
+            ReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
             BoldProperty bold = new BoldProperty();
 
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();

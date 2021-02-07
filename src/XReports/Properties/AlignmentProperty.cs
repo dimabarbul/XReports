@@ -7,16 +7,16 @@ namespace XReports.Properties
 {
     public class AlignmentProperty : ReportCellProperty
     {
-        public AlignmentProperty(AlignmentType alignmentType)
+        public AlignmentProperty(Alignment alignment)
         {
-            if (!Enum.IsDefined(typeof(AlignmentType), alignmentType))
+            if (!Enum.IsDefined(typeof(Alignment), alignment))
             {
-                throw new InvalidEnumArgumentException(nameof(alignmentType), (int)alignmentType, typeof(AlignmentType));
+                throw new InvalidEnumArgumentException(nameof(alignment), (int)alignment, typeof(Alignment));
             }
 
-            this.AlignmentType = alignmentType;
+            this.Alignment = alignment;
         }
 
-        public AlignmentType AlignmentType { get; }
+        public Alignment Alignment { get; }
     }
 }

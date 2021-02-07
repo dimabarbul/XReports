@@ -177,9 +177,9 @@ namespace XReports.Writers
 
         protected virtual void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
-            if (cell.AlignmentType != null)
+            if (cell.HorizontalAlignment != null)
             {
-                worksheetCell.Style.HorizontalAlignment = this.GetAlignment(cell.AlignmentType.Value);
+                worksheetCell.Style.HorizontalAlignment = this.GetAlignment(cell.HorizontalAlignment.Value);
             }
 
             if (!string.IsNullOrEmpty(cell.NumberFormat))
@@ -243,14 +243,14 @@ namespace XReports.Writers
             this.WriteReportToWorksheet(table, worksheet, 1, 1);
         }
 
-        private ExcelHorizontalAlignment GetAlignment(AlignmentType alignmentType)
+        private ExcelHorizontalAlignment GetAlignment(Alignment alignment)
         {
-            return alignmentType switch
+            return alignment switch
             {
-                AlignmentType.Center => ExcelHorizontalAlignment.Center,
-                AlignmentType.Left => ExcelHorizontalAlignment.Left,
-                AlignmentType.Right => ExcelHorizontalAlignment.Right,
-                _ => throw new ArgumentOutOfRangeException(nameof(alignmentType)),
+                Alignment.Center => ExcelHorizontalAlignment.Center,
+                Alignment.Left => ExcelHorizontalAlignment.Left,
+                Alignment.Right => ExcelHorizontalAlignment.Right,
+                _ => throw new ArgumentOutOfRangeException(nameof(alignment)),
             };
         }
     }
