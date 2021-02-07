@@ -44,6 +44,8 @@ ProjectSection(SolutionItems) = preProject
 	docs\xreports\epplus-writer.md = docs\xreports\epplus-writer.md
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Core.Tests", "tests\XReports.Core.Tests\XReports.Core.Tests.csproj", "{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{B7B563B3-D050-4221-B6EE-3ADC1711A229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7B563B3-D050-4221-B6EE-3ADC1711A229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7B563B3-D050-4221-B6EE-3ADC1711A229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B2E04F07-6B8C-4522-8799-8F5619875BD5} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -89,5 +95,6 @@ Global
 		{B7B563B3-D050-4221-B6EE-3ADC1711A229} = {26DBFC2D-CE5F-488B-BC42-230CFA1DABBB}
 		{1DA9AC59-265A-49D0-9524-3DBB76EAECB5} = {2979B4B0-E5A0-4819-9A27-A25B02A4B15B}
 		{89A33C19-AC55-40F3-9392-11CF17EB04B7} = {2979B4B0-E5A0-4819-9A27-A25B02A4B15B}
+		{E3DDD5DB-6CD7-46AD-9DCA-F6D1D36E7714} = {F9E94722-061B-4A10-896F-880442F76D1F}
 	EndGlobalSection
 EndGlobal

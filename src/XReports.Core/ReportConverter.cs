@@ -8,12 +8,12 @@ namespace XReports
     public class ReportConverter<TResultReportCell> : IReportConverter<TResultReportCell>
         where TResultReportCell : BaseReportCell, new()
     {
-        private readonly IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers;
-
         public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers = null)
         {
-            this.propertyHandlers = propertyHandlers ?? Enumerable.Empty<IPropertyHandler<TResultReportCell>>();
+            this.Handlers = propertyHandlers ?? Enumerable.Empty<IPropertyHandler<TResultReportCell>>();
         }
+
+        public IEnumerable<IPropertyHandler<TResultReportCell>> Handlers { get; }
 
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
         {
@@ -55,7 +55,7 @@ namespace XReports
 
         private void ProcessProperties(List<ReportCellProperty> cellProperties, TResultReportCell convertedCell)
         {
-            foreach (IPropertyHandler<TResultReportCell> handler in this.propertyHandlers
+            foreach (IPropertyHandler<TResultReportCell> handler in this.Handlers
                 .OrderBy(h => h.Priority))
             {
                 foreach (ReportCellProperty property in cellProperties)
