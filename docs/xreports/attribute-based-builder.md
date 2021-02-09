@@ -52,7 +52,7 @@ For report to have column for class property, ReportVariableAttribute should be 
 ```c#
 class User
 {
-    [ReportVariable(1, "Name")]
+    [ReportVariable(1, "User Name")]
     public string Name { get; set; }
 
     [ReportVariable(2, "Email")]
@@ -63,7 +63,17 @@ class User
 }
 ```
 
-The attribute has 2 required arguments - column order (any number, columns will be added in ascending order of this number) and column title. Building report from this model will have 3 columns: Name, Email and Age.
+The attribute has 2 required arguments - column order (any number, columns will be added in ascending order of this number) and column title. Building report from this model will have 3 columns: User Name, Email and Age.
+
+Columns/rows are added with two names: class property name and title from ReportVariable attribute. So in previous example you can work with the first column in post-builder class as:
+
+```c#
+// You can use class property name.
+builder.ForColumn(nameof(User.Name));
+
+// Or you can you title.
+builder.ForColumn("User Name");
+```
 
 ### Complex Header
 
@@ -165,7 +175,14 @@ class MyAttributeHandler : AttributeHandler<MyAttribute>
     protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, MyAttribute attribute)
     {
         // Current builder column/row is the one having our MyAttribute.
-        builder.AddProperties(new MyProperty());
+        if (attribute.IsHeader)
+        {
+            builder.AddHeaderProperties(new MyProperty());
+        }
+        eles
+        {
+            builder.AddProperties(new MyProperty());
+        }
     }
 }
 
@@ -205,6 +222,8 @@ Sometimes using property attributes is not enough. For example, when you're maki
 [HorizontalReport(PostBuilder = typeof(PostBuilder))]
 class ReportModel
 {
+    // Name will not be a row in the report as it does not have
+    // ReportVariable attribute. But it will be used in post-builder.
     public string Name { get; set; }
 
     [ReportVariable(1, "Email")]
@@ -233,7 +252,7 @@ For vertical report post-builder class should implement IVerticalReportPostBuild
 
 ### Constructor Dependencies
 
-Sometimes you will need to get external dependencies to be provided to post-builder class. IN this case you need to register dependency in DI container and accept dependencies in constructor of post-builder class.
+Sometimes you will need to get external dependencies to be provided to post-builder class. In this case you need to register dependency in DI container and accept dependencies in constructor of post-builder class.
 
 ```c#
 // Service our post-builder class depends on.

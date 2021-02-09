@@ -108,6 +108,23 @@ ADMIN                | ********
 */
 ```
 
+Please, note that AddProperties method does not specify which column should get the properties. This is because builder "remembers" column that was added last.
+
+```c#
+// You can use fluent syntax.
+builder.AddColumn("Username", u => u.Username)
+    .AddProperties(new UpperCaseProperty());
+
+// Or add properties later.
+builder.AddColumn("Username", u => u.Username);
+builder.AddProperties(new UpperCaseProperty());
+
+// If you want to switch builder to work with another column.
+// Username column in example below should have been added earlier.
+builder.ForColumn("Username")
+    .AddProperties(new UpperCaseProperty());
+```
+
 ## Header Properties
 
 Note that in previous example header of column Username was not converted to uppercase and Password was not hidden. That's because properties were applied to body cells. If we need to apply property to header cell, we need to:
