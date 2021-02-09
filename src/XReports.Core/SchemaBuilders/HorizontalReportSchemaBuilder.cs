@@ -5,40 +5,40 @@ using XReports.Models;
 
 namespace XReports.SchemaBuilders
 {
-    public class HorizontalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>
+    public class HorizontalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>, IHorizontalReportSchemaBuilder<TSourceEntity>
     {
         private readonly List<ConfiguredCellsProvider> headerProviders = new List<ConfiguredCellsProvider>();
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertRow(this.CellsProviders.Count, provider);
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> InsertRow(int index, IReportCellsProvider<TSourceEntity> provider)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> InsertRow(int index, IReportCellsProvider<TSourceEntity> provider)
         {
             this.InsertCellsProvider(index, provider);
 
             return this;
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> InsertRowBefore(string title, IReportCellsProvider<TSourceEntity> provider)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> InsertRowBefore(string title, IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertRow(this.GetCellsProviderIndex(title), provider);
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title)
         {
             this.SelectProvider(title);
 
             return this;
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(IReportCellsProvider<TSourceEntity> provider)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertHeaderRow(this.headerProviders.Count, provider);
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider)
         {
             ConfiguredCellsProvider configuredCellsProvider = new ConfiguredCellsProvider(provider);
             this.headerProviders.Insert(rowIndex, configuredCellsProvider);
@@ -48,7 +48,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public HorizontalReportSchemaBuilder<TSourceEntity> ForHeaderRow(int index)
+        public IHorizontalReportSchemaBuilder<TSourceEntity> ForHeaderRow(int index)
         {
             this.SelectProvider(this.headerProviders[index]);
 

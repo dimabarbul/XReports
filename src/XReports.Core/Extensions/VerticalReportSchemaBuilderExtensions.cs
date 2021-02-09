@@ -7,8 +7,8 @@ namespace XReports.Extensions
 {
     public static class VerticalReportSchemaBuilderExtensions
     {
-        public static VerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
@@ -17,8 +17,8 @@ namespace XReports.Extensions
             return builder.AddColumn(provider);
         }
 
-        public static VerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             string title,
             IValueProvider<TValue> valueProvider)
         {
@@ -27,8 +27,8 @@ namespace XReports.Extensions
             return builder.AddColumn(provider);
         }
 
-        public static VerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -38,8 +38,8 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, provider);
         }
 
-        public static VerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             IValueProvider<TValue> valueProvider)
@@ -49,8 +49,8 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, provider);
         }
 
-        public static VerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -60,8 +60,8 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeTitle, provider);
         }
 
-        public static VerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
-            this VerticalReportSchemaBuilder<TEntity> builder,
+        public static IVerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+            this IVerticalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             IValueProvider<TValue> valueProvider)

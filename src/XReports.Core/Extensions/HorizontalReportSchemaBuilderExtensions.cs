@@ -7,8 +7,8 @@ namespace XReports.Extensions
 {
     public static class HorizontalReportSchemaBuilderExtensions
     {
-        public static HorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
@@ -17,8 +17,8 @@ namespace XReports.Extensions
             return builder.AddRow(provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             IValueProvider<TValue> valueProvider)
         {
@@ -27,8 +27,8 @@ namespace XReports.Extensions
             return builder.AddRow(provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -38,8 +38,8 @@ namespace XReports.Extensions
             return builder.InsertRow(index, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             IValueProvider<TValue> valueProvider)
@@ -49,8 +49,8 @@ namespace XReports.Extensions
             return builder.InsertRow(index, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -60,8 +60,8 @@ namespace XReports.Extensions
             return builder.InsertRowBefore(beforeTitle, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             IValueProvider<TValue> valueProvider)
@@ -71,8 +71,8 @@ namespace XReports.Extensions
             return builder.InsertRowBefore(beforeTitle, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             int rowIndex,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -83,8 +83,8 @@ namespace XReports.Extensions
             return builder.InsertHeaderRow(rowIndex, provider);
         }
 
-        public static HorizontalReportSchemaBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
-            this HorizontalReportSchemaBuilder<TEntity> builder,
+        public static IHorizontalReportSchemaBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {

@@ -6,7 +6,7 @@ using XReports.ReportCellProcessors;
 
 namespace XReports.SchemaBuilders
 {
-    public abstract class ReportSchemaBuilder<TSourceEntity>
+    public abstract class ReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
     {
         private ConfiguredCellsProvider currentProvider;
 
@@ -22,63 +22,63 @@ namespace XReports.SchemaBuilders
 
         protected List<ReportCellProperty> TableProperties { get; } = new List<ReportCellProperty>();
 
-        public ReportSchemaBuilder<TSourceEntity> AddAlias(string alias)
+        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias)
         {
             this.NamedProviders[alias] = this.currentProvider;
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target)
+        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target)
         {
             this.NamedProviders[alias] = this.NamedProviders[target];
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportCellProperty[] properties)
         {
             this.TableProperties.AddRange(properties);
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
         {
             this.currentProvider.CellProperties.AddRange(properties);
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddDynamicProperty(Func<TSourceEntity, ReportCellProperty> propertySelector)
+        public IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(Func<TSourceEntity, ReportCellProperty> propertySelector)
         {
             this.currentProvider.CellProcessors.Add(new DynamicPropertiesCellProcessor<TSourceEntity>(propertySelector));
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
         {
             this.currentProvider.HeaderProperties.AddRange(properties);
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
+        public IReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
         {
             this.currentProvider.CellProcessors.AddRange(processors);
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
+        public IReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
         {
             this.currentProvider.HeaderProcessors.AddRange(processors);
 
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, int fromColumn, int? toColumn = null)
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, int fromColumn, int? toColumn = null)
         {
             this.ComplexHeaders.Add(
                 new ComplexHeader()
@@ -92,7 +92,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
             this.ComplexHeaders.Add(
                 new ComplexHeader()
@@ -106,7 +106,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(string title, params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(string title, params ReportCellProperty[] properties)
         {
             if (!this.ComplexHeadersProperties.ContainsKey(title))
             {
@@ -118,7 +118,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public ReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
             this.CommonComplexHeadersProperties.AddRange(properties);
 

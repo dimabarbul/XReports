@@ -4,26 +4,26 @@ using XReports.Models;
 
 namespace XReports.SchemaBuilders
 {
-    public class VerticalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>
+    public class VerticalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>, IVerticalReportSchemaBuilder<TSourceEntity>
     {
-        public VerticalReportSchemaBuilder<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
+        public IVerticalReportSchemaBuilder<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertColumn(this.CellsProviders.Count, provider);
         }
 
-        public VerticalReportSchemaBuilder<TSourceEntity> InsertColumn(int index, IReportCellsProvider<TSourceEntity> provider)
+        public IVerticalReportSchemaBuilder<TSourceEntity> InsertColumn(int index, IReportCellsProvider<TSourceEntity> provider)
         {
             this.InsertCellsProvider(index, provider);
 
             return this;
         }
 
-        public VerticalReportSchemaBuilder<TSourceEntity> InsertColumnBefore(string title, IReportCellsProvider<TSourceEntity> provider)
+        public IVerticalReportSchemaBuilder<TSourceEntity> InsertColumnBefore(string title, IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertColumn(this.GetCellsProviderIndex(title), provider);
         }
 
-        public VerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
+        public IVerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
         {
             this.SelectProvider(title);
 
