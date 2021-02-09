@@ -10,7 +10,7 @@
 @section Description
 {
     <p>Conditional formatting capability (as many other Excel features) is not provided out-of-the-box. But to improve Excel report quality, you may extend EpplusWriter.</p>
-    <p>In current implementation we highlight values closer to 0 in red, to 50 - in yellow, closer to 100 - green. And this is done using conditional formatting in Excel. Which means that if you change cell value, its color will change as well.</p>
+    <p>In current implementation we use two heatmaps: for Last Score column we highlight values closer to 0 in red, to 5 - in yellow, to 10 - green, for Score column - 0, 50 and 100 respectively. And this is done using conditional formatting in Excel. Which means that if you change cell value in exported document, its color will change as well.</p>
 }
 
 @section ReportTable
@@ -56,4 +56,15 @@
             threeColorScale.HighValue.Color = property.MaximumColor;
         }
     }
+
+    ThreeColorHeatmapProperty scoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 50, Color.Yellow, 100, Color.Lime);
+    ThreeColorHeatmapProperty lastScoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 5, Color.Yellow, 10, Color.Lime);
+
+    VerticalReportSchemaBuilder&lt;Entity&gt; reportBuilder = new VerticalReportSchemaBuilder&lt;Entity&gt;();
+    reportBuilder
+        .AddColumn("Name", e => e.Name)
+        .AddColumn("Last Score", e => e.LastScore)
+        .AddProperties(lastScoreHeatmapProperty);
+    reportBuilder.AddColumn("Score", e => e.Score)
+        .AddProperties(scoreHeatmapProperty);
 }

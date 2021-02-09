@@ -26,6 +26,6 @@ reportBuilder.AddColumn("Email", e => e.Email);
 reportBuilder.AddColumn("Score", e => e.Score);
 
 reportBuilder.AddHeaderProperty("Name", new AlignmentProperty(AlignmentType.Right));
-reportBuilder.AddHeaderProperty("Email", new ColorProperty(Color.Blue, null));
+reportBuilder.AddHeaderProperty("Email", new ColorProperty(Color.Blue));
 reportBuilder.AddHeaderProperty("Score", new AlignmentProperty(AlignmentType.Center));
 }

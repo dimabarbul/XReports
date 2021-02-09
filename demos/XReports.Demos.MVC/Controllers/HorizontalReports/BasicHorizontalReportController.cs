@@ -57,23 +57,23 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             IndentationProperty indentation = new IndentationProperty();
 
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
+
+            reportBuilder.AddTableProperties(centerAlignment);
+
             reportBuilder
                 .AddHeaderRow(string.Empty, e => e.Name)
                 .AddProperties(centerAlignment);
             reportBuilder.AddRow("Age", e => e.Age)
-                .AddHeaderProperties(bold)
-                .AddProperties(centerAlignment);
+                .AddHeaderProperties(bold);
             reportBuilder.AddRow(new EmptyCellsProvider<Entity>("Score"))
                 .AddHeaderProperties(bold);
             reportBuilder.AddRow("Min. Score", e => e.MinScore)
-                .AddHeaderProperties(indentation)
-                .AddProperties(centerAlignment);
+                .AddHeaderProperties(indentation);
             reportBuilder.AddRow("Max. Score", e => e.MaxScore)
-                .AddHeaderProperties(indentation)
-                .AddProperties(centerAlignment);
+                .AddHeaderProperties(indentation);
             reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
                 .AddHeaderProperties(indentation)
-                .AddProperties(new DecimalPrecisionProperty(2), centerAlignment);
+                .AddProperties(new DecimalPrecisionProperty(2));
 
             return reportBuilder.BuildSchema().BuildReportTable(this.GetData());
         }

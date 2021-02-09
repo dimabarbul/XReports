@@ -50,4 +50,13 @@
             }
         }
     }
+
+    VerticalReportBuilder&lt;Entity&gt; reportBuilder = new VerticalReportBuilder&lt;Entity&gt;();
+    reportBuilder
+        .AddColumn("First Name", e => e.FirstName)
+        .AddColumn("Last Name", e => e.LastName)
+        .AddColumn("Email", e => e.Email)
+        .AddProperties(new ReplaceEmptyProperty("-"));
+    reportBuilder.AddColumn("Score", e => e.Score)
+        .AddProperties(new ReplaceEmptyProperty("(no score)"));
 }

@@ -82,10 +82,12 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             {
                 base.PostCreate(worksheet, headerAddress, bodyAddress);
 
+                // Border around each header cell.
                 Border headerBorder = worksheet.Cells[headerAddress.Address].Style.Border;
                 headerBorder.Bottom.Style = headerBorder.Left.Style =
                     headerBorder.Top.Style = headerBorder.Right.Style = ExcelBorderStyle.Thin;
 
+                // Border around all body cells.
                 worksheet.Cells[bodyAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }

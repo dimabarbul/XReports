@@ -51,19 +51,17 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             BoldProperty bold = new BoldProperty();
 
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
+            reportBuilder.AddTableProperties(centerAlignment);
             reportBuilder
                 .AddHeaderRow("Metrics", e => e.Name)
                 .AddProperties(centerAlignment)
                 .AddHeaderProperties(centerAlignment);
             reportBuilder.AddRow("Age", e => e.Age)
-                .AddHeaderProperties(bold)
-                .AddProperties(centerAlignment);
-            reportBuilder.AddRow("Min. Score", e => e.MinScore)
-                .AddProperties(centerAlignment);
-            reportBuilder.AddRow("Max. Score", e => e.MaxScore)
-                .AddProperties(centerAlignment);
+                .AddHeaderProperties(bold);
+            reportBuilder.AddRow("Min. Score", e => e.MinScore);
+            reportBuilder.AddRow("Max. Score", e => e.MaxScore);
             reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
-                .AddProperties(new DecimalPrecisionProperty(2), centerAlignment);
+                .AddProperties(new DecimalPrecisionProperty(2));
 
             reportBuilder.AddComplexHeader(0, "Score", "Min. Score", "Avg. Score");
             reportBuilder.AddComplexHeaderProperties("Score", new ColorProperty(Color.Blue));

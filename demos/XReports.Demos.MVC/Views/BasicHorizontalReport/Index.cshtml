@@ -22,27 +22,26 @@
     private IReportTable&lt;ReportCell&gt; BuildReport()
     {
         ReportCellProperty centerAlignment = new AlignmentProperty(AlignmentType.Center);
+        IndentationProperty indentation = new IndentationProperty();
 
         HorizontalReportBuilder&lt;Entity&gt; reportBuilder = new HorizontalReportBuilder&lt;Entity&gt;();
-        reportBuilder.AddHeaderRow(string.Empty, e =&gt; e.Name)
-            .AddProperty(centerAlignment);
-        reportBuilder.AddRow("Age", e =&gt; e.Age)
-            .AddProperty(centerAlignment);
 
-        reportBuilder.AddRow(new NullCellsProvider&lt;Entity&gt;("Score"));
-        reportBuilder.AddRow("Min. Score", e =&gt; e.MinScore)
-            .AddProperty(centerAlignment);
-        reportBuilder.AddRow("Max. Score", e =&gt; e.MaxScore)
-            .AddProperty(centerAlignment);
-        reportBuilder.AddRow("Avg. Score", e =&gt; e.AverageScore)
-            .AddProperty(new DecimalPrecisionProperty(2))
-            .AddProperty(centerAlignment);
+        reportBuilder.AddTableProperties(centerAlignment);
 
-        reportBuilder.AddTitleProperty("Age", new BoldProperty());
-        reportBuilder.AddTitleProperty("Score", new BoldProperty());
-        reportBuilder.AddTitleProperty("Min. Score", new IndentationProperty());
-        reportBuilder.AddTitleProperty("Max. Score", new IndentationProperty());
-        reportBuilder.AddTitleProperty("Avg. Score", new IndentationProperty());
+        reportBuilder
+            .AddHeaderRow(string.Empty, e => e.Name)
+            .AddProperties(centerAlignment);
+        reportBuilder.AddRow("Age", e => e.Age)
+            .AddHeaderProperties(bold);
+        reportBuilder.AddRow(new EmptyCellsProvider&lt;Entity&gt;("Score"))
+            .AddHeaderProperties(bold);
+        reportBuilder.AddRow("Min. Score", e => e.MinScore)
+            .AddHeaderProperties(indentation);
+        reportBuilder.AddRow("Max. Score", e => e.MaxScore)
+            .AddHeaderProperties(indentation);
+        reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
+            .AddHeaderProperties(indentation)
+            .AddProperties(new DecimalPrecisionProperty(2));
 
         return reportBuilder.Build(this.GetData());
     }
