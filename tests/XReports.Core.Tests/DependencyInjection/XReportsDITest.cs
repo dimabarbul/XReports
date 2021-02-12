@@ -3,7 +3,7 @@ using XReports.Models;
 
 namespace XReports.Core.Tests.DependencyInjection
 {
-    public partial class XReportsDI
+    public partial class XReportsDITest
     {
         private class HtmlCell : BaseReportCell
         {

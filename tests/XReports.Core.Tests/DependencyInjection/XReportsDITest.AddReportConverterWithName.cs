@@ -6,7 +6,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.DependencyInjection
 {
-    public partial class XReportsDI
+    public partial class XReportsDITest
     {
         [Fact]
         public void ConverterWithName()
