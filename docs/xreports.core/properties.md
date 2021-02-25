@@ -219,4 +219,20 @@ builder.AddGlobalProperties(new UpperCaseProperty());
 
 ## Table Properties
 
-_TBD_
+Sometimes you may need to add properties to table itself, for example, it may be report title or author information.
+
+```c#
+class TitleProperty : ReportTableProperty
+{
+    public TitleProperty(string title)
+    {
+        this.Title = title;
+    }
+
+    public string Title { get; }
+}
+
+builder.AddTableProperties(new TitleProperty("The report title"));
+```
+
+Unlike cell properties, there are no handlers for table properties, the only way to process table properties is code in writer class. During report conversion all table properties are simply copied.

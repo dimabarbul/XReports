@@ -404,4 +404,48 @@ class ReportModel
 
 ## Table Properties
 
-_TBD_
+You may add table properties using attributes.
+
+```c#
+class TitleProperty : ReportTableProperty
+{
+    public TitleProperty(string title)
+    {
+        this.Title = title;
+    }
+
+    public string Title { get; }
+}
+
+// Inherit TablePropertyAttribute class.
+class TitlePropertyAttribute : TablePropertyAttribute
+{
+    public TitlePropertyAttribute(string title)
+    {
+        this.Title = title;
+    }
+
+    public string Title { get; }
+}
+
+// Need to implement IAttributeHandler.
+class TitlePropertyAttributeHandler : AttributeHandler<TitlePropertyAttribute>
+{
+    protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, TitlePropertyAttribute attribute)
+    {
+        builder.AddTableProperties(new TitleProperty(attribute.Title));
+    }
+}
+
+[TitleProperty("User Report")]
+class User
+{
+    [ReportVariable(1, "First Name")]
+    public string FirstName { get; set; }
+    
+    [ReportVariable(2, "Last Name")]
+    public string LastName { get; set; }
+}
+```
+
+Report built by this model will contain TitleProperty with Title equal to "User Report". You can use it in your writer class.
