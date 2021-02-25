@@ -161,9 +161,9 @@
     </Rules>
 
     <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers.DocumentationRules">
-        <Rule Id="SA1600"  Action="Error" />          <!-- Elements should be documented -->
-        <Rule Id="SA1601"  Action="Error" />          <!-- Partial elements should be documented -->
-        <Rule Id="SA1602"  Action="Error" />          <!-- Enumeration items should be documented -->
+        <Rule Id="SA1600"  Action="None" />          <!-- Elements should be documented -->
+        <Rule Id="SA1601"  Action="None" />          <!-- Partial elements should be documented -->
+        <Rule Id="SA1602"  Action="None" />          <!-- Enumeration items should be documented -->
         <Rule Id="SA1603"  Action="None" />             <!-- Documentation should contain valid XML -->
         <Rule Id="SA1604"  Action="Error" />          <!-- Element documentation should have summary -->
         <Rule Id="SA1605"  Action="Error" />          <!-- Partial element documentation should have summary -->
