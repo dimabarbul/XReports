@@ -208,11 +208,15 @@ admin                | ********
 */
 ```
 
-## Table Properties
+## Global Properties
 
-To assign property to all columns/rows you may use AddTableProperties method.
+To assign property to all columns/rows you may use AddGlobalProperties method.
 
 ```c#
 // All columns/rows (including added later) will have this property(-ies) assigned.
-builder.AddTableProperties(new UpperCaseProperty());
+builder.AddGlobalProperties(new UpperCaseProperty());
 ```
+
+## Table Properties
+
+_TBD_

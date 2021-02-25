@@ -20,7 +20,9 @@ namespace XReports.SchemaBuilders
 
         protected List<ReportCellProperty> CommonComplexHeadersProperties { get; } = new List<ReportCellProperty>();
 
-        protected List<ReportCellProperty> TableProperties { get; } = new List<ReportCellProperty>();
+        protected List<ReportCellProperty> GlobalProperties { get; } = new List<ReportCellProperty>();
+
+        protected List<ReportTableProperty> TableProperties { get; } = new List<ReportTableProperty>();
 
         public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias)
         {
@@ -36,7 +38,14 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties)
+        {
+            this.GlobalProperties.AddRange(properties);
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties)
         {
             this.TableProperties.AddRange(properties);
 

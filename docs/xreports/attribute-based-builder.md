@@ -401,3 +401,7 @@ class ReportModel
 ```
 
 **Important note:** any columns/rows added in post-builder **will not** have the attribute applied.
+
+## Table Properties
+
+_TBD_

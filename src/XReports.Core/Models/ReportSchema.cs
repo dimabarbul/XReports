@@ -7,7 +7,9 @@ namespace XReports.Models
     {
         protected ReportSchemaCellsProvider<TSourceEntity>[] CellsProviders { get; private set; }
 
-        protected ReportCellProperty[] TableProperties { get; private set; }
+        protected ReportCellProperty[] GlobalProperties { get; private set; }
+
+        protected ReportTableProperty[] TableProperties { get; private set; }
 
         protected ComplexHeader[] ComplexHeaders { get; private set; }
 
@@ -17,7 +19,8 @@ namespace XReports.Models
 
         public static VerticalReportSchema<TSourceEntity> CreateVertical(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
-            ReportCellProperty[] tableProperties,
+            ReportCellProperty[] globalProperties,
+            ReportTableProperty[] tableProperties,
             ComplexHeader[] complexHeaders,
             Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
             ReportCellProperty[] commonComplexHeaderProperties)
@@ -25,6 +28,7 @@ namespace XReports.Models
             return new VerticalReportSchema<TSourceEntity>()
             {
                 CellsProviders = cellsProviders,
+                GlobalProperties = globalProperties,
                 TableProperties = tableProperties,
                 ComplexHeaders = complexHeaders,
                 ComplexHeaderProperties = complexHeaderProperties,
@@ -34,7 +38,8 @@ namespace XReports.Models
 
         public static HorizontalReportSchema<TSourceEntity> CreateHorizontal(
             ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders,
-            ReportCellProperty[] tableProperties,
+            ReportCellProperty[] globalProperties,
+            ReportTableProperty[] tableProperties,
             ComplexHeader[] complexHeaders,
             Dictionary<string, ReportCellProperty[]> complexHeaderProperties,
             ReportSchemaCellsProvider<TSourceEntity>[] headerRows,
@@ -43,6 +48,7 @@ namespace XReports.Models
             return new HorizontalReportSchema<TSourceEntity>()
             {
                 CellsProviders = cellsProviders,
+                GlobalProperties = globalProperties,
                 TableProperties = tableProperties,
                 ComplexHeaders = complexHeaders,
                 ComplexHeaderProperties = complexHeaderProperties,
@@ -53,13 +59,13 @@ namespace XReports.Models
 
         public abstract IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source);
 
-        protected ReportCell AddTableProperties(ReportCell cell)
+        protected ReportCell AddGlobalProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty tableProperty in this.TableProperties)
+            foreach (ReportCellProperty property in this.GlobalProperties)
             {
-                if (!cell.HasProperty(tableProperty.GetType()))
+                if (!cell.HasProperty(property.GetType()))
                 {
-                    cell.AddProperty(tableProperty);
+                    cell.AddProperty(property);
                 }
             }
 

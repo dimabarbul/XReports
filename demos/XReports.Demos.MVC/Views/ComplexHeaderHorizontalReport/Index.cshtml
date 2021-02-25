@@ -23,7 +23,7 @@
     BoldProperty bold = new BoldProperty();
 
     HorizontalReportSchemaBuilder&lt;Entity&gt; reportBuilder = new HorizontalReportSchemaBuilder&lt;Entity&gt;();
-    reportBuilder.AddTableProperties(centerAlignment);
+    reportBuilder.AddGlobalProperties(centerAlignment);
     reportBuilder
         .AddHeaderRow("Metrics", e => e.Name)
         .AddProperties(centerAlignment)

@@ -9,7 +9,9 @@ namespace XReports.Interfaces
 
         public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target);
 
-        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportCellProperty[] properties);
+        public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties);
+
+        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties);
 
         public IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties);
 

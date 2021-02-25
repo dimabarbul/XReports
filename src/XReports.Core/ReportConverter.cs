@@ -19,6 +19,7 @@ namespace XReports
         {
             return new ReportTable<TResultReportCell>
             {
+                Properties = table.Properties,
                 HeaderRows = this.ConvertHeader(table),
                 Rows = this.ConvertBody(table),
             };

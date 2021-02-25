@@ -83,30 +83,30 @@ namespace XReports.SchemaBuilders
             HorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
             ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
-            Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();
+            Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
 
-            this.AddRows(builder, reportVariables, tableAttributes);
+            this.AddRows(builder, reportVariables, globalAttributes);
             this.AddComplexHeader(builder, reportVariables);
 
             return builder;
         }
 
-        private void AddRows<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] tableAttributes)
+        private void AddRows<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] globalAttributes)
         {
             foreach (ReportVariableData x in reportVariables)
             {
-                this.AddRow(builder, x.Property, x.Attribute, tableAttributes);
+                this.AddRow(builder, x.Property, x.Attribute, globalAttributes);
             }
         }
 
-        private void AddRow<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] tableAttributes)
+        private void AddRow<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddRow(instance);
             builder.AddAlias(property.Name);
 
-            this.ApplyAttributes(builder, property, tableAttributes);
+            this.ApplyAttributes(builder, property, globalAttributes);
         }
 
         private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property, ReportVariableAttribute attribute)
@@ -161,20 +161,22 @@ namespace XReports.SchemaBuilders
         private VerticalReportSchemaBuilder<TEntity> BuildVerticalReportNoPostBuild<TEntity>()
         {
             VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
-            Attribute[] tableAttributes = this.GetTableAttributes<TEntity>();
+            Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
             ReportVariableData[] properties = this.GetProperties<TEntity>();
 
-            this.AddColumns(builder, properties, tableAttributes);
+            this.AddColumns(builder, properties, globalAttributes);
             this.AddComplexHeader(builder, properties);
+
+            this.ProcessTablePropertyAttributes<TEntity>(builder);
 
             return builder;
         }
 
-        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] tableAttributes)
+        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] globalAttributes)
         {
             foreach (ReportVariableData x in properties)
             {
-                this.AddColumn(builder, x.Property, x.Attribute, tableAttributes);
+                this.AddColumn(builder, x.Property, x.Attribute, globalAttributes);
             }
         }
 
@@ -211,20 +213,33 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] tableAttributes)
+        private void ProcessTablePropertyAttributes<TEntity>(VerticalReportSchemaBuilder<TEntity> builder)
+        {
+            IEnumerable<TablePropertyAttribute> attributes = typeof(TEntity)
+                .GetCustomAttributes<TablePropertyAttribute>();
+            foreach (TablePropertyAttribute attribute in attributes)
+            {
+                foreach (IAttributeHandler handler in this.attributeHandlers)
+                {
+                    handler.Handle(builder, attribute);
+                }
+            }
+        }
+
+        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
             IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
 
             builder.AddColumn(instance);
             builder.AddAlias(property.Name);
 
-            this.ApplyAttributes(builder, property, tableAttributes);
+            this.ApplyAttributes(builder, property, globalAttributes);
         }
 
-        private void ApplyAttributes<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property, Attribute[] tableAttributes)
+        private void ApplyAttributes<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property, Attribute[] globalAttributes)
         {
             Attribute[] propertyAttributes = property.GetCustomAttributes().ToArray();
-            Attribute[] attributes = this.MergeTableAttributes(propertyAttributes, tableAttributes);
+            Attribute[] attributes = this.MergeGlobalAttributes(propertyAttributes, globalAttributes);
 
             foreach (Attribute attribute in attributes)
             {
@@ -235,19 +250,20 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private Attribute[] MergeTableAttributes(Attribute[] propertyAttributes, Attribute[] tableAttributes)
+        private Attribute[] MergeGlobalAttributes(Attribute[] propertyAttributes, Attribute[] globalAttributes)
         {
             return propertyAttributes
-                .Concat(tableAttributes
-                    .Where(ta =>
+                .Concat(globalAttributes
+                    .Where(a => !(a is TablePropertyAttribute))
+                    .Where(a =>
                         (
-                            !(ta is AttributeBase)
-                            && propertyAttributes.All(pa => pa.GetType() != ta.GetType()))
+                            !(a is AttributeBase)
+                            && propertyAttributes.All(pa => pa.GetType() != a.GetType()))
                         || (
-                            ta is AttributeBase
+                            a is AttributeBase
                             && propertyAttributes.All(pa =>
-                                pa.GetType() != ta.GetType()
-                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)ta).IsHeader))))
+                                pa.GetType() != a.GetType()
+                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)a).IsHeader))))
                 .ToArray();
         }
 
@@ -269,7 +285,7 @@ namespace XReports.SchemaBuilders
                 .ToArray();
         }
 
-        private Attribute[] GetTableAttributes<TEntity>()
+        private Attribute[] GetGlobalAttributes<TEntity>()
         {
             return typeof(TEntity).GetCustomAttributes()
                 .Where(a => !(a is ReportAttribute))

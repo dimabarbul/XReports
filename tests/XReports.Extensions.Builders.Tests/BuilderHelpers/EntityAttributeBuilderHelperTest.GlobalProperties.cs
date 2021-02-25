@@ -13,18 +13,18 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
     public partial class EntityAttributeBuilderHelperTest
     {
         [Fact]
-        public void BuildVerticalReport_TableProperties_Applied()
+        public void BuildVerticalReport_GlobalProperties_Applied()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
                 Mocks.ServiceProvider,
                 new[] { new CommonAttributeHandler() });
 
-            IReportSchema<WithTableProperties> schema = helper.BuildSchema<WithTableProperties>();
+            IReportSchema<WithGlobalProperties> schema = helper.BuildSchema<WithGlobalProperties>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(
                 new[]
                 {
-                    new WithTableProperties() { Id = 1 },
+                    new WithGlobalProperties() { Id = 1 },
                 });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
@@ -39,17 +39,17 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_TablePropertiesWhenOverwritten_NotApplied()
+        public void BuildVerticalReport_GlobalPropertiesWhenOverwritten_NotApplied()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
                 Mocks.ServiceProvider,
                 new[] { new CommonAttributeHandler() });
 
-            IReportSchema<WithOverwrittenTableProperties> schema = helper.BuildSchema<WithOverwrittenTableProperties>();
+            IReportSchema<WithOverwrittenGlobalProperties> schema = helper.BuildSchema<WithOverwrittenGlobalProperties>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
             {
-                new WithOverwrittenTableProperties() { Id = 1 },
+                new WithOverwrittenGlobalProperties() { Id = 1 },
             });
 
             ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
@@ -59,18 +59,18 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_TablePropertiesWhenOverwrittenForHeader_Applied()
+        public void BuildVerticalReport_GlobalPropertiesWhenOverwrittenForHeader_Applied()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
                 Mocks.ServiceProvider,
                 new[] { new CommonAttributeHandler() });
 
-            IReportSchema<WithOverwrittenForHeaderTableProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderTableProperties>();
+            IReportSchema<WithOverwrittenForHeaderGlobalProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderGlobalProperties>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(
                 new[]
                 {
-                    new WithOverwrittenForHeaderTableProperties() { Id = 1 },
+                    new WithOverwrittenForHeaderGlobalProperties() { Id = 1 },
                 });
 
             ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
@@ -86,7 +86,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 
         [VerticalReport]
         [Bold]
-        private class WithTableProperties
+        private class WithGlobalProperties
         {
             [ReportVariable(1, "ID")]
             [Alignment(Alignment.Center)]
@@ -95,7 +95,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 
         [VerticalReport]
         [DecimalPrecision(2)]
-        private class WithOverwrittenTableProperties
+        private class WithOverwrittenGlobalProperties
         {
             [ReportVariable(1, "ID")]
             [DecimalPrecision(0)]
@@ -104,7 +104,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
 
         [VerticalReport]
         [Alignment(Alignment.Center)]
-        private class WithOverwrittenForHeaderTableProperties
+        private class WithOverwrittenForHeaderGlobalProperties
         {
             [ReportVariable(1, "ID")]
             [Alignment(Alignment.Right, IsHeader = true)]

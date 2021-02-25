@@ -14,6 +14,7 @@ namespace XReports.Models
 
             return new ReportTable<ReportCell>
             {
+                Properties = this.TableProperties,
                 HeaderRows = this.GetHeaderRows(source, complexHeader),
                 Rows = this.GetRows(source, complexHeader),
             };
@@ -42,7 +43,7 @@ namespace XReports.Models
                 .Select(
                     row =>
                         complexHeader[rowIndex++]
-                            .Concat(source.Select(entity => this.AddTableProperties(row.CreateCell(entity)))));
+                            .Concat(source.Select(entity => this.AddGlobalProperties(row.CreateCell(entity)))));
         }
     }
 }

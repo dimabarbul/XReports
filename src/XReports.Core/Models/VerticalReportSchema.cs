@@ -12,6 +12,7 @@ namespace XReports.Models
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
+                Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
                 Rows = this.GetRows(source),
             };
@@ -23,6 +24,7 @@ namespace XReports.Models
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
+                Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
                 Rows = this.GetRows(dataReader),
             };
@@ -35,7 +37,7 @@ namespace XReports.Models
             return source
                 .Select(
                     entity => this.CellsProviders
-                        .Select(p => this.AddTableProperties(p.CreateCell(entity))));
+                        .Select(p => this.AddGlobalProperties(p.CreateCell(entity))));
         }
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IDataReader dataReader)
@@ -49,7 +51,7 @@ namespace XReports.Models
             {
                 yield return
                     this.CellsProviders
-                        .Select(p => this.AddTableProperties(p.CreateCell((TSourceEntity)dataReader)));
+                        .Select(p => this.AddGlobalProperties(p.CreateCell((TSourceEntity)dataReader)));
             }
 
             dataReader.Close();

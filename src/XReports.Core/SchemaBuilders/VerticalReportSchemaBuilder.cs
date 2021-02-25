@@ -42,6 +42,7 @@ namespace XReports.SchemaBuilders
                             c.CellProcessors.ToArray(),
                             c.HeaderProcessors.ToArray()))
                     .ToArray(),
+                this.GlobalProperties.ToArray(),
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties

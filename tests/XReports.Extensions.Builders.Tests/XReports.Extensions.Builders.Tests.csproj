@@ -25,7 +25,7 @@
       <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.AttributeHandler.cs">
         <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
       </Compile>
-      <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.TableProperties.cs">
+      <Compile Update="BuilderHelpers\EntityAttributeBuilderHelperTest.GlobalProperties.cs">
         <DependentUpon>EntityAttributeBuilderHelperTest.cs</DependentUpon>
       </Compile>
     </ItemGroup>

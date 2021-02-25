@@ -51,7 +51,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             BoldProperty bold = new BoldProperty();
 
             HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
-            reportBuilder.AddTableProperties(centerAlignment);
+            reportBuilder.AddGlobalProperties(centerAlignment);
             reportBuilder
                 .AddHeaderRow("Metrics", e => e.Name)
                 .AddProperties(centerAlignment)
