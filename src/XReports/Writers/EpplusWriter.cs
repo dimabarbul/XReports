@@ -12,10 +12,14 @@ namespace XReports.Writers
 {
     public class EpplusWriter : IEpplusWriter
     {
-        private const string WorksheetName = "Data";
-
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
         private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
+
+        protected string WorksheetName { get; set; } = "Data";
+
+        protected int StartRow { get; set; } = 1;
+
+        protected int StartColumn { get; set; } = 1;
 
         public IEpplusWriter AddFormatter(IEpplusFormatter formatter)
         {
@@ -238,9 +242,9 @@ namespace XReports.Writers
 
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
         {
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(WorksheetName);
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(this.WorksheetName);
 
-            this.WriteReportToWorksheet(table, worksheet, 1, 1);
+            this.WriteReportToWorksheet(table, worksheet, this.StartRow, this.StartColumn);
         }
 
         private ExcelHorizontalAlignment GetAlignment(Alignment alignment)
