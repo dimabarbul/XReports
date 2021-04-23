@@ -235,4 +235,4 @@ class TitleProperty : ReportTableProperty
 builder.AddTableProperties(new TitleProperty("The report title"));
 ```
 
-Unlike cell properties, there are no handlers for table properties, the only way to process table properties is code in writer class. During report conversion all table properties are simply copied.
+Unlike cell properties, there are no [handlers](using-report-converter.md) for table properties, the only way to process table properties is code in writer class. During report conversion all table properties are simply copied.

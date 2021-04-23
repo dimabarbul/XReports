@@ -176,7 +176,7 @@ And we get our report.
 
 ## Property Handler Priority
 
-Every property handler has priority. By default it's 0 and does not guarantee order in which handler will be called. If it's important to run one handlers before others, you can use Priority getter to control execution order. Priority is set for handler class which means that all instances of the same handler will have the same priority.
+Every property handler has priority. By default it's 0 and does not guarantee order in which handler will be called (the lower priority is, the earlier handler is called). If it's important to run one handlers before others, you can use Priority getter to control execution order. Priority is set for handler class which means that all instances of the same handler will have the same priority.
 
 ```c#
 public class ShouldBeCalledFirstPropertyHandler : PropertyHandler<SomeProperty, ReportCell>
