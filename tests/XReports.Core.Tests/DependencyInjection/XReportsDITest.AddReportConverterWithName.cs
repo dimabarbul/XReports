@@ -10,7 +10,7 @@ namespace XReports.Core.Tests.DependencyInjection
     public partial class XReportsDITest
     {
         [Fact]
-        public void ConverterWithName()
+        public void AddReportConverter_ConverterWithName_CanBeRequested()
         {
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddReportConverter<HtmlCell>("name")
@@ -26,7 +26,7 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         [Fact]
-        public void ConverterWithHandlerAndName()
+        public void AddReportConverter_ConverterWithHandlerAndName_HasHandler()
         {
             HtmlCellHandler cellHandler = new HtmlCellHandler();
 
@@ -44,7 +44,7 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         [Fact]
-        public void ConverterWithInterfaceAndName()
+        public void AddReportConverter_ConverterWithInterfaceAndName_HasHandlersImplementingInterface()
         {
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddReportConverter<HtmlCell, IHtmlPropertyHandler>("name")
@@ -56,12 +56,12 @@ namespace XReports.Core.Tests.DependencyInjection
             converterFactory.Should().NotBeNull();
             IReportConverter<HtmlCell> converter = converterFactory.Get("name");
             (converter as ReportConverter<HtmlCell>)?.Handlers.Should()
-                .HaveCount(1)
+                .HaveCount(2)
                 .And.AllBeAssignableTo<IHtmlPropertyHandler>();
         }
 
         [Fact]
-        public void ConverterWithHandlerAndInterfaceAndName()
+        public void AddReportConverter_ConverterWithHandlerAndInterfaceAndName_HasHandlerAndAllHandlersImplementingInterface()
         {
             HtmlCellHandler cellHandler = new HtmlCellHandler();
 
@@ -75,13 +75,14 @@ namespace XReports.Core.Tests.DependencyInjection
             converterFactory.Should().NotBeNull();
             IReportConverter<HtmlCell> converter = converterFactory.Get("name");
             (converter as ReportConverter<HtmlCell>)?.Handlers.Should()
-                .HaveCount(2)
-                .And.Contain(cellHandler)
-                .And.ContainSingle(h => h is IHtmlPropertyHandler);
+                .HaveCount(3)
+                .And.Contain(h =>
+                    h == cellHandler
+                    || h is IHtmlPropertyHandler);
         }
 
         [Fact]
-        public void ConverterWithWrongName()
+        public void AddReportConverter_ConverterWithWrongName_ThrowsException()
         {
             const string correctName = "name";
             const string wrongName = "another";
@@ -98,7 +99,7 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         [Fact]
-        public void ConverterWithNameRequestedTwice()
+        public void AddReportConverter_ConverterWithNameRequestedTwice_ReturnsSameConverter()
         {
             const string name = "name";
 

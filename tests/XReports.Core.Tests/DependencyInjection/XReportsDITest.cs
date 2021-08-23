@@ -30,5 +30,14 @@ namespace XReports.Core.Tests.DependencyInjection
             {
             }
         }
+
+        private class HtmlCellAnotherHandlerCustomInterface : IHtmlPropertyHandler
+        {
+            public int Priority => 0;
+
+            public void Handle(ReportCellProperty property, HtmlCell cell)
+            {
+            }
+        }
     }
 }
