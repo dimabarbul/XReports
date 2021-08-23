@@ -26,6 +26,12 @@
     <Compile Update="DependencyInjection\XReportsDI.AddReportConverterWithName.cs">
       <DependentUpon>XReportsDI.cs</DependentUpon>
     </Compile>
+    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverter.cs">
+      <DependentUpon>XReportsDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverterWithName.cs">
+      <DependentUpon>XReportsDITest.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

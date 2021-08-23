@@ -35,7 +35,7 @@ namespace XReports
 
             if (registration == null)
             {
-                throw new ArgumentException($"Report converter with name {name} is not registered.");
+                throw new ArgumentException($"Report converter with name \"{name}\" is not registered.");
             }
 
             IReportConverter<TReportCell> converter = XReportsDI.CreateReportConverter(this.serviceProvider, registration.Handlers, registration.PropertyHandlersInterface);

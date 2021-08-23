@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XReports.DependencyInjection;
@@ -77,6 +78,41 @@ namespace XReports.Core.Tests.DependencyInjection
                 .HaveCount(2)
                 .And.Contain(cellHandler)
                 .And.ContainSingle(h => h is IHtmlPropertyHandler);
+        }
+
+        [Fact]
+        public void ConverterWithWrongName()
+        {
+            const string correctName = "name";
+            const string wrongName = "another";
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddReportConverter<HtmlCell>(correctName)
+                .BuildServiceProvider();
+
+            IReportConverterFactory<HtmlCell> converterFactory =
+                serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
+
+            converterFactory.Should().NotBeNull();
+            Action action = () => converterFactory.Get(wrongName);
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void ConverterWithNameRequestedTwice()
+        {
+            const string name = "name";
+
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddReportConverter<HtmlCell>(name)
+                .BuildServiceProvider();
+
+            IReportConverterFactory<HtmlCell> converterFactory =
+                serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
+
+            IReportConverter<HtmlCell> firstConverter = converterFactory.Get(name);
+            IReportConverter<HtmlCell> secondConverter = converterFactory.Get(name);
+
+            firstConverter.Should().BeSameAs(secondConverter);
         }
     }
 }

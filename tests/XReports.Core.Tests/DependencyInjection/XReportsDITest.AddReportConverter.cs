@@ -32,8 +32,9 @@ namespace XReports.Core.Tests.DependencyInjection
 
             IReportConverter<HtmlCell> converter = serviceProvider.GetService<IReportConverter<HtmlCell>>();
 
-            converter.Should().NotBeNull();
-            (converter as ReportConverter<HtmlCell>)?.Handlers.Should()
+            converter.Should().NotBeNull()
+                .And.BeOfType<ReportConverter<HtmlCell>>();
+            ((ReportConverter<HtmlCell>)converter).Handlers.Should()
                 .Equal(cellHandler);
         }
 
@@ -46,8 +47,9 @@ namespace XReports.Core.Tests.DependencyInjection
 
             IReportConverter<HtmlCell> converter = serviceProvider.GetService<IReportConverter<HtmlCell>>();
 
-            converter.Should().NotBeNull();
-            (converter as ReportConverter<HtmlCell>)?.Handlers.Should()
+            converter.Should().NotBeNull()
+                .And.BeOfType<ReportConverter<HtmlCell>>();
+            ((ReportConverter<HtmlCell>)converter).Handlers.Should()
                 .HaveCount(1)
                 .And.AllBeAssignableTo<IHtmlPropertyHandler>();
         }
@@ -63,11 +65,25 @@ namespace XReports.Core.Tests.DependencyInjection
 
             IReportConverter<HtmlCell> converter = serviceProvider.GetService<IReportConverter<HtmlCell>>();
 
-            converter.Should().NotBeNull();
-            (converter as ReportConverter<HtmlCell>)?.Handlers.Should()
+            converter.Should().NotBeNull()
+                .And.BeOfType<ReportConverter<HtmlCell>>();
+            ((ReportConverter<HtmlCell>)converter).Handlers.Should()
                 .HaveCount(2)
                 .And.Contain(cellHandler)
                 .And.ContainSingle(h => h is IHtmlPropertyHandler);
+        }
+
+        [Fact]
+        public void ConverterWithoutNameThroughFactory()
+        {
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>()
+                .BuildServiceProvider();
+
+            IReportConverterFactory<HtmlCell> converterFactory =
+                serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
+
+            converterFactory.Should().BeNull();
         }
     }
 }
