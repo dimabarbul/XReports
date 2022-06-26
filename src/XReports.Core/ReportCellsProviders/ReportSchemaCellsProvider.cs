@@ -1,6 +1,8 @@
 using XReports.Interfaces;
+using XReports.Models;
+using XReports.Utils;
 
-namespace XReports.Models
+namespace XReports.ReportCellsProviders
 {
     public class ReportSchemaCellsProvider<TSourceEntity>
     {
@@ -9,6 +11,7 @@ namespace XReports.Models
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
+        private readonly ReportCellsPool pool = new ReportCellsPool();
 
         public ReportSchemaCellsProvider(
             IReportCellsProvider<TSourceEntity> provider,
@@ -36,10 +39,15 @@ namespace XReports.Models
 
         public ReportCell CreateHeaderCell()
         {
-            ReportCell cell = new ReportCell<string>(this.provider.Title);
+            // ReportCell cell = new ReportCell<string>(this.provider.Title);
+            ReportCell cell = this.pool.GetOrCreate(
+                () => new ReportCell<string>(this.provider.Title),
+                c => c.Value = this.provider.Title);
 
             this.AddHeaderProperties(cell);
             this.RunHeaderProcessors(cell);
+
+            this.pool.Release(cell);
 
             return cell;
         }

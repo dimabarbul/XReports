@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {

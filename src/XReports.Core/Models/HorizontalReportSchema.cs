@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
+using XReports.ReportCellsProviders;
 
 namespace XReports.Models
 {

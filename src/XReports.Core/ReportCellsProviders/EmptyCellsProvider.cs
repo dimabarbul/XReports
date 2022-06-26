@@ -10,6 +10,6 @@ namespace XReports.ReportCellsProviders
         {
         }
 
-        public override Func<TSourceEntity, ReportCell> CellSelector => _ => new ReportCell<string>(string.Empty);
+        public override Func<TSourceEntity, ReportCell> CellSelector => _ => ReportCell.EmptyCell;
     }
 }

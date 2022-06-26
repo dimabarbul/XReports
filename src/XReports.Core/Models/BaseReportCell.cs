@@ -89,5 +89,14 @@ namespace XReports.Models
         {
             this.Properties.Add(property);
         }
+
+        public virtual void Reset()
+        {
+            this.ColumnSpan = 1;
+            this.RowSpan = 1;
+            this.ValueType = typeof(string);
+            this.value = null;
+            this.Properties.Clear();
+        }
     }
 }

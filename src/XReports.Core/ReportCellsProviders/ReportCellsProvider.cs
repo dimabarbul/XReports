@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.Utils;
 
 namespace XReports.ReportCellsProviders
 {
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
+        private readonly ReportCellsPool pool = new ReportCellsPool();
+
         protected ReportCellsProvider(string title)
         {
             this.Title = title;
@@ -36,10 +39,15 @@ namespace XReports.ReportCellsProviders
 
         protected ReportCell<TValue> CreateCell(TValue value, TSourceEntity entity)
         {
-            ReportCell<TValue> cell = new ReportCell<TValue>(value);
+            // ReportCell<TValue> cell = new ReportCell<TValue>(value);
+            ReportCell<TValue> cell = this.pool.GetOrCreate(
+                () => new ReportCell<TValue>(value),
+                c => c.Value = value);
 
             this.AddProperties(cell);
             this.RunProcessors(cell, entity);
+
+            this.pool.Release(cell);
 
             return cell;
         }

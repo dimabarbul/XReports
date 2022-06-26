@@ -16,7 +16,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 {
     public class CustomFormatController : Controller
     {
-        private const int RecordsCount = 10;
+        private const int RecordsCount = 100000;
 
         public async Task<IActionResult> Index()
         {
@@ -43,10 +43,18 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
+            CustomFormatProperty customFormatProperty = new CustomFormatProperty();
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
+            reportBuilder.AddColumn("Full Name", e => e.Name);
             reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperties(new CustomFormatProperty());
+                .AddProperties(customFormatProperty);
+            reportBuilder.AddColumn("Average Score", e => e.Score)
+                .AddProperties(customFormatProperty);
+            reportBuilder.AddColumn("Minimum Score", e => e.Score)
+                .AddProperties(customFormatProperty);
+            reportBuilder.AddColumn("Maximum Score", e => e.Score)
+                .AddProperties(customFormatProperty);
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
             return reportTable;
