@@ -149,7 +149,7 @@ namespace XReports.Writers
 
         protected virtual void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
         {
-            worksheetCell.Value = cell.Value;
+            worksheetCell.Value = cell.GetUnderlyingValue();
 
             if (cell.ColumnSpan > 1 || cell.RowSpan > 1)
             {

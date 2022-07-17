@@ -10,7 +10,7 @@ namespace XReports.PropertyHandlers.Html
 
         protected override void HandleProperty(PercentFormatProperty property, HtmlReportCell cell)
         {
-            cell.Value = (cell.GetNullableValue<decimal>() * 100)?.ToString($"F{property.Precision}") + property.PostfixText;
+            cell.SetValue((cell.GetNullableValue<decimal>() * 100)?.ToString($"F{property.Precision}") + property.PostfixText);
         }
     }
 }

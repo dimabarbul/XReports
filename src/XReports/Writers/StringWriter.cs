@@ -64,8 +64,13 @@ namespace XReports.Writers
                 }
 
                 await this.BeginRowAsync();
-                foreach (HtmlReportCell cell in row.Where(c => c != null))
+                foreach (HtmlReportCell cell in row)
                 {
+                    if (cell == null)
+                    {
+                        continue;
+                    }
+
                     await this.WriteTextAsync(this.stringCellWriter.WriteHeaderCell(cell));
                 }
 
@@ -92,8 +97,13 @@ namespace XReports.Writers
                 }
 
                 await this.BeginRowAsync();
-                foreach (HtmlReportCell cell in row.Where(c => c != null))
+                foreach (HtmlReportCell cell in row)
                 {
+                    if (cell == null)
+                    {
+                        continue;
+                    }
+
                     await this.WriteTextAsync(this.stringCellWriter.WriteBodyCell(cell));
                 }
 

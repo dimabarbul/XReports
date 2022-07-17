@@ -8,7 +8,7 @@ namespace XReports.ReportCellsProviders
 {
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
-        private readonly ReportCellsPool pool = new ReportCellsPool();
+        private readonly ReportCellsPool<ReportCell> pool = new ReportCellsPool<ReportCell>();
 
         protected ReportCellsProvider(string title)
         {
@@ -19,7 +19,7 @@ namespace XReports.ReportCellsProviders
 
         public abstract Func<TSourceEntity, ReportCell> CellSelector { get; }
 
-        private ICollection<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
+        private List<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
 
         private ICollection<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
@@ -37,34 +37,31 @@ namespace XReports.ReportCellsProviders
             return this;
         }
 
-        protected ReportCell<TValue> CreateCell(TValue value, TSourceEntity entity)
+        protected ReportCell CreateCell(TValue value, TSourceEntity entity)
         {
-            // ReportCell<TValue> cell = new ReportCell<TValue>(value);
-            ReportCell<TValue> cell = this.pool.GetOrCreate(
-                () => new ReportCell<TValue>(value),
-                c => c.Value = value);
+            ReportCell cell = ReportCell.FromValue(value);
+            //// ReportCell cell = this.pool.GetOrCreate(
+            ////     () => new ReportCell { Value = value },
+            ////     c => c.Value = value);
 
             this.AddProperties(cell);
             this.RunProcessors(cell, entity);
 
-            this.pool.Release(cell);
+            //// this.pool.Release(cell);
 
             return cell;
         }
 
-        private void AddProperties(ReportCell<TValue> cell)
+        private void AddProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.Properties)
-            {
-                cell.AddProperty(property);
-            }
+            cell.AddProperties(this.Properties);
         }
 
-        private void RunProcessors(ReportCell<TValue> cell, TSourceEntity entity)
+        private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.Processors)
+            for (int i = 0; i < this.Processors.Count; i++)
             {
-                processor.Process(cell, entity);
+                this.Processors[i].Process(cell, entity);
             }
         }
     }

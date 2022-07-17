@@ -10,7 +10,7 @@ namespace XReports.PropertyHandlers.Html
     {
         protected override void HandleProperty(DateTimeFormatProperty property, HtmlReportCell cell)
         {
-            cell.Value = cell.GetNullableValue<DateTime>()?.ToString(this.GetFormatString(property));
+            cell.SetValue(cell.GetNullableValue<DateTime>()?.ToString(this.GetFormatString(property)));
         }
 
         private string GetFormatString(DateTimeFormatProperty property)

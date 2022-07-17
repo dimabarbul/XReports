@@ -123,7 +123,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             {
                 if (string.IsNullOrEmpty(cell.GetValue<string>()))
                 {
-                    cell.Value = property.Text;
+                    cell.SetValue(property.Text);
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             {
                 if (string.IsNullOrEmpty(cell.GetValue<string>()))
                 {
-                    cell.Value = property.Text;
+                    cell.SetValue(property.Text);
                 }
             }
         }

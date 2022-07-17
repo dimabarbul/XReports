@@ -1,59 +1,47 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace XReports.Models
 {
     public abstract class BaseReportCell
     {
-        private dynamic value;
+        private object value;
 
         public int ColumnSpan { get; set; } = 1;
 
         public int RowSpan { get; set; } = 1;
 
-        public Type ValueType { get; set; } = typeof(string);
+        public Type ValueType { get; private set; } = typeof(string);
 
         public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
-
-        public dynamic Value
-        {
-            get => this.value;
-            set
-            {
-                this.value = value;
-
-                if (value != null)
-                {
-                    this.ValueType = value.GetType();
-                }
-                else
-                {
-                    bool isCurrentTypeAllowsNull = !this.ValueType.IsValueType || (Nullable.GetUnderlyingType(this.ValueType) != null);
-                    if (!isCurrentTypeAllowsNull)
-                    {
-                        this.ValueType = typeof(string);
-                    }
-                }
-            }
-        }
 
         public virtual void CopyFrom(BaseReportCell reportCell)
         {
             this.ColumnSpan = reportCell.ColumnSpan;
             this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
-            this.value = reportCell.Value;
+            this.value = reportCell.value;
+        }
+
+        public object GetUnderlyingValue()
+        {
+            return this.value;
         }
 
         public TValue GetValue<TValue>()
         {
             if (this.ValueType == typeof(TValue))
             {
-                return this.value;
+                return (TValue)this.value;
             }
 
-            return Convert.ChangeType(this.value, typeof(TValue));
+            return (TValue)Convert.ChangeType(this.value, typeof(TValue));
+        }
+
+        public void SetValue<TValue>(TValue value)
+        {
+            this.ValueType = typeof(TValue);
+            this.value = value;
         }
 
         public TValue? GetNullableValue<TValue>()
@@ -70,33 +58,52 @@ namespace XReports.Models
         public bool HasProperty<TProperty>()
             where TProperty : ReportCellProperty
         {
-            return this.Properties.OfType<TProperty>().Any();
+            for (int i = 0; i < this.Properties.Count; i++)
+            {
+                if (this.Properties[i] is TProperty)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool HasProperty(Type propertyType)
         {
-            return this.Properties.Any(p => p.GetType() == propertyType);
+            for (int i = 0; i < this.Properties.Count; i++)
+            {
+                if (this.Properties[i].GetType() == propertyType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public TProperty GetProperty<TProperty>()
             where TProperty : ReportCellProperty
         {
-            return this.Properties.OfType<TProperty>().FirstOrDefault();
+            for (int i = 0; i < this.Properties.Count; i++)
+            {
+                if (this.Properties[i] is TProperty cellProperty)
+                {
+                    return cellProperty;
+                }
+            }
+
+            return null;
         }
 
-        public void AddProperty<TProperty>(TProperty property)
-            where TProperty : ReportCellProperty
+        public void AddProperty(ReportCellProperty property)
         {
             this.Properties.Add(property);
         }
 
-        public virtual void Reset()
+        public void AddProperties(IEnumerable<ReportCellProperty> properties)
         {
-            this.ColumnSpan = 1;
-            this.RowSpan = 1;
-            this.ValueType = typeof(string);
-            this.value = null;
-            this.Properties.Clear();
+            this.Properties.AddRange(properties);
         }
     }
 }

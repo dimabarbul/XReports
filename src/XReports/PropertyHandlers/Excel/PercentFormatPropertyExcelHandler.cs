@@ -10,7 +10,7 @@ namespace XReports.PropertyHandlers.Excel
         {
             if (!(property.PostfixText ?? string.Empty).Contains('%'))
             {
-                cell.Value = cell.GetNullableValue<decimal>() * 100;
+                cell.SetValue(cell.GetNullableValue<decimal>() * 100);
             }
 
             // if postfix text is ' percents (%) here', then it should be converted to '" percents ("%") here"'

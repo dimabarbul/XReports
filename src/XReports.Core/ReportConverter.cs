@@ -18,7 +18,7 @@ namespace XReports
                 .ToArray();
         }
 
-        public IEnumerable<IPropertyHandler<TResultReportCell>> Handlers { get; }
+        public IPropertyHandler<TResultReportCell>[] Handlers { get; }
 
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
         {
@@ -34,7 +34,15 @@ namespace XReports
         {
             foreach (IEnumerable<ReportCell> row in table.HeaderRows)
             {
-                yield return row.Select(this.ConvertCell);
+                yield return this.GetRow(row);
+            }
+        }
+
+        private IEnumerable<TResultReportCell> GetRow(IEnumerable<ReportCell> row)
+        {
+            foreach (ReportCell cell in row)
+            {
+                yield return this.ConvertCell(cell);
             }
         }
 
@@ -42,7 +50,7 @@ namespace XReports
         {
             foreach (IEnumerable<ReportCell> row in table.Rows)
             {
-                yield return row.Select(this.ConvertCell);
+                yield return this.GetRow(row);
             }
         }
 
@@ -59,12 +67,11 @@ namespace XReports
 
             this.ProcessProperties(cell.Properties, convertedCell);
 
-            // convertedCell.Properties.AddRange(cell.Properties.Where(p => !p.Processed));
-            foreach (ReportCellProperty property in cell.Properties)
+            for (int i = 0; i < cell.Properties.Count; i++)
             {
-                if (!property.Processed)
+                if (!cell.Properties[i].Processed)
                 {
-                    convertedCell.Properties.Add(property);
+                    convertedCell.Properties.Add(cell.Properties[i]);
                 }
             }
 
@@ -73,11 +80,11 @@ namespace XReports
 
         private void ProcessProperties(List<ReportCellProperty> cellProperties, TResultReportCell convertedCell)
         {
-            foreach (IPropertyHandler<TResultReportCell> handler in this.Handlers)
+            for (int i = 0; i < this.Handlers.Length; i++)
             {
-                foreach (ReportCellProperty property in cellProperties)
+                for (int j = 0; j < cellProperties.Count; j++)
                 {
-                    handler.Handle(property, convertedCell);
+                    this.Handlers[i].Handle(cellProperties[j], convertedCell);
                 }
             }
         }

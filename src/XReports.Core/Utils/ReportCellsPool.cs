@@ -4,51 +4,25 @@ using XReports.Models;
 
 namespace XReports.Utils
 {
-    public class ReportCellsPool
+    public class ReportCellsPool<TReportCell>
+        where TReportCell : BaseReportCell
     {
-        private readonly List<BaseReportCell> items = new List<BaseReportCell>();
-        private readonly List<bool> reservations = new List<bool>();
+        private readonly Stack<TReportCell> available = new Stack<TReportCell>();
 
-        public TReportCell GetOrCreate<TReportCell>(Func<TReportCell> create, Action<TReportCell> update, bool isReserved = true)
-            where TReportCell : BaseReportCell
+        public TReportCell GetOrCreate(Func<TReportCell> create, Action<TReportCell> update)
         {
-            TReportCell result = null;
-
-            for (int i = 0; i < this.items.Count; i++)
+            if (this.available.TryPop(out TReportCell result))
             {
-                if (!this.reservations[i] && this.items[i] is TReportCell typedReportCell)
-                {
-                    this.reservations[i] = isReserved;
-                    result = typedReportCell;
-                    result.Reset();
-                    update?.Invoke(result);
-
-                    break;
-                }
+                update(result);
+                return result;
             }
 
-            if (result == null)
-            {
-                result = create();
-                this.items.Add(result);
-                this.reservations.Add(true);
-            }
-
-            return result;
+            return create();
         }
 
-        public void Release<TReportCell>(TReportCell reportCell)
-            where TReportCell : BaseReportCell
+        public void Release(TReportCell reportCell)
         {
-            for (int i = 0; i < this.items.Count; i++)
-            {
-                if (this.items[i] == reportCell)
-                {
-                    this.reservations[i] = false;
-
-                    break;
-                }
-            }
+            this.available.Push(reportCell);
         }
     }
 }

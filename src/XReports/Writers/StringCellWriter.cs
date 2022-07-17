@@ -52,14 +52,22 @@ namespace XReports.Writers
         {
             this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString(), "1");
             this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString(), "1");
-            this.WriteAttribute(stringBuilder, "class", string.Join(" ", cell.CssClasses));
-            this.WriteAttribute(
-                stringBuilder,
-                "style",
-                string.Join(
-                    " ",
-                    cell.Styles
-                        .Select(x => $"{x.Key}: {x.Value};")));
+
+            if (cell.CssClasses.Count > 0)
+            {
+                this.WriteAttribute(stringBuilder, "class", string.Join(" ", cell.CssClasses));
+            }
+
+            if (cell.Styles.Count > 0)
+            {
+                this.WriteAttribute(
+                    stringBuilder,
+                    "style",
+                    string.Join(
+                        " ",
+                        cell.Styles
+                            .Select(x => $"{x.Key}: {x.Value};")));
+            }
 
             foreach ((string name, string value) in cell.Attributes)
             {

@@ -11,7 +11,7 @@ namespace XReports.ReportCellsProviders
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
-        private readonly ReportCellsPool pool = new ReportCellsPool();
+        private readonly ReportCellsPool<ReportCell> pool = new ReportCellsPool<ReportCell>();
 
         public ReportSchemaCellsProvider(
             IReportCellsProvider<TSourceEntity> provider,
@@ -39,48 +39,42 @@ namespace XReports.ReportCellsProviders
 
         public ReportCell CreateHeaderCell()
         {
-            // ReportCell cell = new ReportCell<string>(this.provider.Title);
-            ReportCell cell = this.pool.GetOrCreate(
-                () => new ReportCell<string>(this.provider.Title),
-                c => c.Value = this.provider.Title);
+            ReportCell cell = ReportCell.FromValue(this.provider.Title);
+            ////ReportCell cell = this.pool.GetOrCreate(
+            ////    () => new ReportCell { Value = this.provider.Title },
+            ////    c => c.Value = this.provider.Title);
 
             this.AddHeaderProperties(cell);
             this.RunHeaderProcessors(cell);
 
-            this.pool.Release(cell);
+            //// this.pool.Release(cell);
 
             return cell;
         }
 
         private void AddProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.cellProperties)
-            {
-                cell.AddProperty(property);
-            }
+            cell.AddProperties(this.cellProperties);
         }
 
         private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.cellProcessors)
+            for (int i = 0; i < this.cellProcessors.Length; i++)
             {
-                processor.Process(cell, entity);
+                this.cellProcessors[i].Process(cell, entity);
             }
         }
 
         private void AddHeaderProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.headerProperties)
-            {
-                cell.AddProperty(property);
-            }
+            cell.AddProperties(this.headerProperties);
         }
 
         private void RunHeaderProcessors(ReportCell cell)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.headerProcessors)
+            for (int i = 0; i < this.headerProcessors.Length; i++)
             {
-                processor.Process(cell, default);
+                this.headerProcessors[i].Process(cell, default);
             }
         }
     }

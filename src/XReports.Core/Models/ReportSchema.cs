@@ -62,11 +62,11 @@ namespace XReports.Models
 
         protected ReportCell AddGlobalProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.GlobalProperties)
+            for (int i = 0; i < this.GlobalProperties.Length; i++)
             {
-                if (!cell.HasProperty(property.GetType()))
+                if (!cell.HasProperty(this.GlobalProperties[i].GetType()))
                 {
-                    cell.AddProperty(property);
+                    cell.AddProperty(this.GlobalProperties[i]);
                 }
             }
 

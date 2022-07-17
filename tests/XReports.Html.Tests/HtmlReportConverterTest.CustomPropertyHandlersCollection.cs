@@ -17,7 +17,7 @@ namespace XReports.Html.Tests
             {
                 HeaderRows = new List<IEnumerable<ReportCell>>()
                 {
-                    new ReportCell[] { new ReportCell<string>("Value"), },
+                    new ReportCell[] { ReportCell.FromValue("Value"), },
                 },
                 Rows = new List<IEnumerable<ReportCell>>()
                 {
@@ -55,7 +55,8 @@ namespace XReports.Html.Tests
 
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
-                cell.Value = cell.Value.ToUpperInvariant();
+                string value = cell.GetValue<string>();
+                cell.SetValue(value.ToUpperInvariant());
             }
         }
 
@@ -65,7 +66,8 @@ namespace XReports.Html.Tests
 
             protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
             {
-                cell.Value = "bold: " + cell.Value;
+                string value = cell.GetValue<string>();
+                cell.SetValue($"bold: {value}");
             }
         }
     }

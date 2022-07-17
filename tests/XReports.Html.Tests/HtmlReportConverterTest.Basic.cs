@@ -16,11 +16,11 @@ namespace XReports.Html.Tests
             {
                 HeaderRows = new List<IEnumerable<ReportCell>>()
                 {
-                    new ReportCell[] { new ReportCell<string>("Value"), },
+                    new ReportCell[] { ReportCell.FromValue("Value"), },
                 },
                 Rows = new List<IEnumerable<ReportCell>>()
                 {
-                    new ReportCell[] { new ReportCell<string>("Test"), },
+                    new ReportCell[] { ReportCell.FromValue("Test"), },
                 },
             };
 
