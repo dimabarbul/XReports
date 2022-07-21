@@ -5,15 +5,15 @@ using XReports.Models;
 
 namespace XReports.Writers
 {
-    public class StringWriter : IStringWriter
+    public class HtmlStringWriter : IHtmlStringWriter
     {
         protected StringBuilder stringBuilder;
 
-        private readonly IStringCellWriter stringCellWriter;
+        private readonly IHtmlStringCellWriter htmlStringCellWriter;
 
-        public StringWriter(IStringCellWriter stringCellWriter)
+        public HtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
         {
-            this.stringCellWriter = stringCellWriter;
+            this.htmlStringCellWriter = htmlStringCellWriter;
         }
 
         public string WriteToString(IReportTable<HtmlReportCell> reportTable)
@@ -47,7 +47,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.stringCellWriter.WriteHeaderCell(this.stringBuilder, cell);
+                    this.htmlStringCellWriter.WriteHeaderCell(this.stringBuilder, cell);
                 }
 
                 this.EndRow();
@@ -70,7 +70,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.stringCellWriter.WriteBodyCell(this.stringBuilder, cell);
+                    this.htmlStringCellWriter.WriteBodyCell(this.stringBuilder, cell);
                 }
 
                 this.EndRow();

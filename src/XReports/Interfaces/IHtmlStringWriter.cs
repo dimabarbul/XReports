@@ -2,7 +2,7 @@ using XReports.Models;
 
 namespace XReports.Interfaces
 {
-    public interface IStringWriter
+    public interface IHtmlStringWriter
     {
         string WriteToString(IReportTable<HtmlReportCell> reportTable);
     }

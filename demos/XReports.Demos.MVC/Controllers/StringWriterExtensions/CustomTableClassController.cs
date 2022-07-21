@@ -19,13 +19,13 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReport = this.Convert(reportTable);
-            StringWriter bootstrapStringWriter = new BootstrapStringWriter(new StringCellWriter());
-            StringWriter stringWriter = new StringWriter(new StringCellWriter());
+            HtmlStringWriter bootstrapHtmlStringWriter = new BootstrapHtmlStringWriter(new HtmlStringCellWriter());
+            HtmlStringWriter htmlStringWriter = new HtmlStringWriter(new HtmlStringCellWriter());
 
             ViewModel vm = new ViewModel()
             {
-                RegularTableHtml = stringWriter.WriteToString(htmlReport),
-                TableHtml = bootstrapStringWriter.WriteToString(htmlReport),
+                RegularTableHtml = htmlStringWriter.WriteToString(htmlReport),
+                TableHtml = bootstrapHtmlStringWriter.WriteToString(htmlReport),
             };
             return this.View(vm);
         }

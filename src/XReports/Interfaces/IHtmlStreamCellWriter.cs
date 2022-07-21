@@ -4,7 +4,7 @@ using XReports.Models;
 
 namespace XReports.Interfaces
 {
-    public interface IStreamCellWriter
+    public interface IHtmlStreamCellWriter
     {
         Task WriteHeaderCellAsync(StreamWriter streamWriter, HtmlReportCell cell);
 

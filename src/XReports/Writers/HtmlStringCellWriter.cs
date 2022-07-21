@@ -6,7 +6,7 @@ using XReports.Models;
 
 namespace XReports.Writers
 {
-    public class StringCellWriter : IStringCellWriter
+    public class HtmlStringCellWriter : IHtmlStringCellWriter
     {
         public void WriteHeaderCell(StringBuilder stringBuilder, HtmlReportCell cell)
         {

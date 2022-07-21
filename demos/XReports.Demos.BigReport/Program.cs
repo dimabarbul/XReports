@@ -13,19 +13,21 @@ internal static class Program
 {
     public static async Task Main()
     {
-        ReportBuilder builder = new(1_000_000);
+        ReportBuilder builder = new(100_000);
 
-        Stream stream = new MemoryStream();
+        StreamWriter stream = File.CreateText("/tmp/report.html");
 
         Stopwatch sw = Stopwatch.StartNew();
         await builder.ToStreamAsync(stream);
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
 
-        stream.Seek(0, SeekOrigin.Begin);
-        FileStream fileStream = File.OpenWrite("/tmp/report.html");
-        await stream.CopyToAsync(fileStream);
-        fileStream.Close();
+        stream.Close();
+
+        // stream.Seek(0, SeekOrigin.Begin);
+        // FileStream fileStream = File.OpenWrite("/tmp/report.html");
+        // await stream.CopyToAsync(fileStream);
+        // fileStream.Close();
     }
 }
 
@@ -77,6 +79,13 @@ public class ReportBuilder
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
         return this.WriteReportToStreamAsync(htmlReportTable, stream);
+    }
+
+    public Task ToStreamAsync(StreamWriter streamWriter)
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        return this.WriteReportToStreamAsync(htmlReportTable, streamWriter);
     }
 
     public async Task ToFileAsync()
@@ -138,22 +147,27 @@ public class ReportBuilder
 
     private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
     {
-        return new Writers.StringWriter(new StringCellWriter()).WriteToString(htmlReportTable);
+        return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
     }
 
     private Task WriteReportToStreamAsync(IReportTable<HtmlReportCell> htmlReportTable, Stream stream)
     {
-        return new Writers.StreamWriter(new StreamCellWriter()).WriteAsync(htmlReportTable, stream);
+        return new HtmlStreamWriter(new HtmlStreamCellWriter()).WriteAsync(htmlReportTable, stream);
+    }
+
+    private Task WriteReportToStreamAsync(IReportTable<HtmlReportCell> htmlReportTable, StreamWriter streamWriter)
+    {
+        return new HtmlStreamWriter(new HtmlStreamCellWriter()).WriteAsync(htmlReportTable, streamWriter);
     }
 
     private IEnumerable<Entity> GetData()
     {
-        int luckyGuyIndex = new Random().Next(3, recordsCount - 1);
+        int luckyGuyIndex = new Random().Next(3, this.recordsCount - 1);
 
         return new Faker<Entity>()
             .RuleFor(e => e.Name, f => f.Name.FullName())
             .RuleFor(e => e.Score, f => f.IndexFaker % luckyGuyIndex == 0 ? 100m : f.Random.Decimal(80, 100))
-            .Generate(recordsCount);
+            .Generate(this.recordsCount);
     }
 
     public class ViewModel

@@ -14,12 +14,12 @@ namespace XReports.Demos.FromDb.Controllers
     public class GenericController : Controller
     {
         private readonly IReportConverter<HtmlReportCell> htmlConverter;
-        private readonly IStringWriter stringWriter;
+        private readonly IHtmlStringWriter htmlStringWriter;
 
-        public GenericController(IReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter)
+        public GenericController(IReportConverter<HtmlReportCell> htmlConverter, IHtmlStringWriter htmlStringWriter)
         {
             this.htmlConverter = htmlConverter;
-            this.stringWriter = stringWriter;
+            this.htmlStringWriter = htmlStringWriter;
         }
 
         public async Task<IActionResult> Index()
@@ -30,7 +30,7 @@ namespace XReports.Demos.FromDb.Controllers
             builder.AddColumn("ID", x => x.GetInt32(0));
             builder.AddColumn("Title", x => x.GetString(1));
             IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildSchema().BuildReportTable(dataReader));
-            string tableHtml = this.stringWriter.WriteToString(reportTable);
+            string tableHtml = this.htmlStringWriter.WriteToString(reportTable);
 
             return this.View(new IndexViewModel()
             {

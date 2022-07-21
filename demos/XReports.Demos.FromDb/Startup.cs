@@ -93,7 +93,7 @@ namespace XReports.Demos.FromDb
         {
             services
                 .AddStringCellWriter()
-                .AddStringWriter<MyStringWriter>()
+                .AddHtmlStringWriter<MyHtmlStringWriter>()
                 .AddEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell, IHtmlHandler>(
                     new AlignmentPropertyHtmlHandler(),

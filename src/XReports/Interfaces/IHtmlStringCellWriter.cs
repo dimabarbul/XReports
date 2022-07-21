@@ -3,7 +3,7 @@ using XReports.Models;
 
 namespace XReports.Interfaces
 {
-    public interface IStringCellWriter
+    public interface IHtmlStringCellWriter
     {
         void WriteHeaderCell(StringBuilder stringBuilder, HtmlReportCell cell);
 

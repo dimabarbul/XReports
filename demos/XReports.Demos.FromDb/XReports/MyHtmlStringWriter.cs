@@ -4,10 +4,10 @@ using XReports.Writers;
 
 namespace XReports.Demos.FromDb.XReports
 {
-    public class MyStringWriter : StringWriter
+    public class MyHtmlStringWriter : HtmlStringWriter
     {
-        public MyStringWriter(IStringCellWriter stringCellWriter)
-            : base(stringCellWriter)
+        public MyHtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
+            : base(htmlStringCellWriter)
         {
         }
 

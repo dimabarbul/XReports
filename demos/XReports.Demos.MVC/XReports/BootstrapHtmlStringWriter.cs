@@ -3,10 +3,10 @@ using XReports.Writers;
 
 namespace XReports.Demos.MVC.XReports
 {
-    public class BootstrapStringWriter : StringWriter
+    public class BootstrapHtmlStringWriter : HtmlStringWriter
     {
-        public BootstrapStringWriter(IStringCellWriter stringCellWriter)
-            : base(stringCellWriter)
+        public BootstrapHtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
+            : base(htmlStringCellWriter)
         {
         }
 

@@ -6,23 +6,23 @@ using XReports.Models;
 
 namespace XReports.Writers
 {
-    public class StreamWriter : IStreamWriter
+    public class HtmlStreamWriter : IHtmlStreamWriter
     {
-        private readonly IStreamCellWriter streamCellWriter;
-        private System.IO.StreamWriter streamWriter;
+        private readonly IHtmlStreamCellWriter htmlStreamCellWriter;
+        private StreamWriter streamWriter;
 
-        public StreamWriter(IStreamCellWriter streamCellWriter)
+        public HtmlStreamWriter(IHtmlStreamCellWriter htmlStreamCellWriter)
         {
-            this.streamCellWriter = streamCellWriter;
+            this.htmlStreamCellWriter = htmlStreamCellWriter;
         }
 
         public async Task WriteAsync(IReportTable<HtmlReportCell> reportTable, Stream stream)
         {
-            await using System.IO.StreamWriter writer = new System.IO.StreamWriter(stream, leaveOpen: true);
+            await using StreamWriter writer = new StreamWriter(stream, leaveOpen: true);
             await this.WriteAsync(reportTable, writer);
         }
 
-        public Task WriteAsync(IReportTable<HtmlReportCell> reportTable, System.IO.StreamWriter streamWriter)
+        public Task WriteAsync(IReportTable<HtmlReportCell> reportTable, StreamWriter streamWriter)
         {
             this.streamWriter = streamWriter;
 
@@ -54,7 +54,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.streamCellWriter.WriteHeaderCellAsync(this.streamWriter, cell);
+                    await this.htmlStreamCellWriter.WriteHeaderCellAsync(this.streamWriter, cell);
                 }
 
                 await this.EndRowAsync();
@@ -78,7 +78,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.streamCellWriter.WriteBodyCellAsync(this.streamWriter, cell);
+                    await this.htmlStreamCellWriter.WriteBodyCellAsync(this.streamWriter, cell);
                 }
 
                 await this.EndRowAsync();

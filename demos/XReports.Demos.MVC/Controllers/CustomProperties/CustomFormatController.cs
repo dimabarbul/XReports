@@ -81,7 +81,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return new BootstrapStringWriter(new StringCellWriter()).WriteToString(htmlReportTable);
+            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
         }
 
         private IEnumerable<Entity> GetData()

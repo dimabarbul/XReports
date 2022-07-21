@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -6,26 +7,26 @@ using XReports.Models;
 
 namespace XReports.Writers
 {
-    public class StreamCellWriter : IStreamCellWriter
+    public class HtmlStreamCellWriter : IHtmlStreamCellWriter
     {
-        public Task WriteHeaderCellAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell)
+        public Task WriteHeaderCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             return this.WriteCellAsync(streamWriter, cell, "th");
         }
 
-        public Task WriteBodyCellAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell)
+        public Task WriteBodyCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             return this.WriteCellAsync(streamWriter, cell, "td");
         }
 
-        protected virtual async Task WriteCellAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+        protected virtual async Task WriteCellAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
         {
             await this.BeginWrappingElementAsync(streamWriter, cell, tableCellTagName);
             await this.WriteContentAsync(streamWriter, cell);
             await this.EndWrappingElementAsync(streamWriter, tableCellTagName);
         }
 
-        protected virtual async Task BeginWrappingElementAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+        protected virtual async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
         {
             await streamWriter.WriteAsync("<");
             await streamWriter.WriteAsync(tableCellTagName);
@@ -34,14 +35,14 @@ namespace XReports.Writers
             await streamWriter.WriteAsync(">");
         }
 
-        protected virtual async Task EndWrappingElementAsync(System.IO.StreamWriter streamWriter, string tableCellTagName)
+        protected virtual async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
         {
             await streamWriter.WriteAsync("</");
             await streamWriter.WriteAsync(tableCellTagName);
             await streamWriter.WriteAsync(">");
         }
 
-        protected async Task WriteAttributesAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell)
+        protected async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             if (cell.RowSpan != 1)
             {
@@ -75,7 +76,7 @@ namespace XReports.Writers
             }
         }
 
-        protected Task WriteContentAsync(System.IO.StreamWriter streamWriter, HtmlReportCell cell)
+        protected Task WriteContentAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             string value = cell.GetValue<string>();
             if (!cell.IsHtml)
@@ -86,7 +87,7 @@ namespace XReports.Writers
             return streamWriter.WriteAsync(value);
         }
 
-        protected async Task WriteAttributeAsync(System.IO.StreamWriter streamWriter, string name, string value)
+        protected async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
         {
             await streamWriter.WriteAsync(name);
             await streamWriter.WriteAsync(@"=""");
