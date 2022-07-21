@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -9,22 +8,14 @@ namespace XReports.Writers
 {
     public class StringCellWriter : IStringCellWriter
     {
-        public string WriteHeaderCell(HtmlReportCell cell)
+        public void WriteHeaderCell(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-
             this.WriteCell(stringBuilder, cell, "th");
-
-            return stringBuilder.ToString();
         }
 
-        public string WriteBodyCell(HtmlReportCell cell)
+        public void WriteBodyCell(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-
             this.WriteCell(stringBuilder, cell, "td");
-
-            return stringBuilder.ToString();
         }
 
         protected virtual void WriteCell(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
@@ -50,8 +41,15 @@ namespace XReports.Writers
 
         protected void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString(), "1");
-            this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString(), "1");
+            if (cell.RowSpan > 1)
+            {
+                this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString());
+            }
+
+            if (cell.ColumnSpan > 1)
+            {
+                this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString());
+            }
 
             if (cell.CssClasses.Count > 0)
             {
@@ -86,13 +84,8 @@ namespace XReports.Writers
             stringBuilder.Append(value);
         }
 
-        protected void WriteAttribute(StringBuilder stringBuilder, string name, string value, string defaultValue = "")
+        protected void WriteAttribute(StringBuilder stringBuilder, string name, string value)
         {
-            if (value.Equals(defaultValue, StringComparison.Ordinal))
-            {
-                return;
-            }
-
             stringBuilder.Append(name).Append(@"=""").Append(HttpUtility.HtmlAttributeEncode(value)).Append(@""" ");
         }
     }

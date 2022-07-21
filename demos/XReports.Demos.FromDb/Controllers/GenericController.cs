@@ -30,7 +30,7 @@ namespace XReports.Demos.FromDb.Controllers
             builder.AddColumn("ID", x => x.GetInt32(0));
             builder.AddColumn("Title", x => x.GetString(1));
             IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildSchema().BuildReportTable(dataReader));
-            string tableHtml = await this.stringWriter.WriteToStringAsync(reportTable);
+            string tableHtml = this.stringWriter.WriteToString(reportTable);
 
             return this.View(new IndexViewModel()
             {

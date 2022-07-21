@@ -34,7 +34,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.userService.GetActiveUsersAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.stringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }
@@ -53,7 +53,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetAllAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.stringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }
@@ -71,7 +71,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetOrdersDetailsAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.stringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }

@@ -1,11 +1,12 @@
+using System.Text;
 using XReports.Models;
 
 namespace XReports.Interfaces
 {
     public interface IStringCellWriter
     {
-        string WriteHeaderCell(HtmlReportCell cell);
+        void WriteHeaderCell(StringBuilder stringBuilder, HtmlReportCell cell);
 
-        string WriteBodyCell(HtmlReportCell cell);
+        void WriteBodyCell(StringBuilder stringBuilder, HtmlReportCell cell);
     }
 }

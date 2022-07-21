@@ -13,10 +13,10 @@ internal static class Program
 {
     public static async Task Main()
     {
-        ReportBuilder builder = new(100_000);
+        ReportBuilder builder = new(1_000_000);
 
         Stopwatch sw = Stopwatch.StartNew();
-        await builder.EnumAsync();
+        builder.ToString();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
     }
@@ -58,7 +58,7 @@ public class ReportBuilder
         return Task.CompletedTask;
     }
 
-    public Task<string> ToStringAsync()
+    public string ToString()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
@@ -122,9 +122,9 @@ public class ReportBuilder
         return excelConverter.Convert(reportTable);
     }
 
-    private async Task<string> WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+    private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
     {
-        return await new Writers.StringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
+        return new Writers.StringWriter(new StringCellWriter()).WriteToString(htmlReportTable);
     }
 
     private IEnumerable<Entity> GetData()

@@ -11,9 +11,9 @@ namespace XReports.Demos.FromDb.XReports
         {
         }
 
-        protected override async Task BeginTableAsync()
+        protected override void BeginTable()
         {
-            await this.WriteTextAsync(@"<table class=""table table-sm"">");
+            this.stringBuilder.Append(@"<table class=""table table-sm"">");
         }
     }
 }

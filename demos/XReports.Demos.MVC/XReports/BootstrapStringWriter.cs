@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using XReports.Interfaces;
 using XReports.Writers;
 
@@ -11,14 +10,14 @@ namespace XReports.Demos.MVC.XReports
         {
         }
 
-        protected override async Task BeginTableAsync()
+        protected override void BeginTable()
         {
-            await this.WriteTextAsync(@"<table class=""table table-sm"">");
+            this.stringBuilder.Append(@"<table class=""table table-sm"">");
         }
 
-        protected override async Task BeginHeadAsync()
+        protected override void BeginHead()
         {
-            await this.WriteTextAsync(@"<thead class=""thead-dark"">");
+            this.stringBuilder.Append(@"<thead class=""thead-dark"">");
         }
     }
 }
