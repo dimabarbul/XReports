@@ -8,7 +8,7 @@ namespace XReports.DependencyInjection
     {
         public static IServiceCollection AddStringWriter(this IServiceCollection services)
         {
-            return services.AddStringWriter<StringWriter>();
+            return services.AddStringWriter<IStringWriter, StringWriter>();
         }
 
         public static IServiceCollection AddStringWriter<TStringWriter>(this IServiceCollection services)

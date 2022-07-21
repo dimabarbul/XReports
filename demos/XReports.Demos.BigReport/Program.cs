@@ -15,10 +15,17 @@ internal static class Program
     {
         ReportBuilder builder = new(1_000_000);
 
+        Stream stream = new MemoryStream();
+
         Stopwatch sw = Stopwatch.StartNew();
-        builder.ToString();
+        await builder.ToStreamAsync(stream);
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
+
+        stream.Seek(0, SeekOrigin.Begin);
+        FileStream fileStream = File.OpenWrite("/tmp/report.html");
+        await stream.CopyToAsync(fileStream);
+        fileStream.Close();
     }
 }
 
@@ -63,6 +70,13 @@ public class ReportBuilder
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
         return this.WriteReportToString(htmlReportTable);
+    }
+
+    public Task ToStreamAsync(Stream stream)
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        return this.WriteReportToStreamAsync(htmlReportTable, stream);
     }
 
     public async Task ToFileAsync()
@@ -125,6 +139,11 @@ public class ReportBuilder
     private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
     {
         return new Writers.StringWriter(new StringCellWriter()).WriteToString(htmlReportTable);
+    }
+
+    private Task WriteReportToStreamAsync(IReportTable<HtmlReportCell> htmlReportTable, Stream stream)
+    {
+        return new Writers.StreamWriter(new StreamCellWriter()).WriteAsync(htmlReportTable, stream);
     }
 
     private IEnumerable<Entity> GetData()
