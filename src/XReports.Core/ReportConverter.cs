@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
@@ -25,8 +26,10 @@ namespace XReports
             return new ReportTable<TResultReportCell>
             {
                 Properties = table.Properties,
-                HeaderRows = this.ConvertHeader(table),
-                Rows = this.ConvertBody(table),
+                HeaderRows = new ReportHeaderRows(table, this),
+                Rows = new ReportBodyRows(table, this),
+                //// HeaderRows = this.ConvertHeader(table),
+                //// Rows = this.ConvertBody(table),
             };
         }
 
@@ -67,25 +70,161 @@ namespace XReports
 
             this.ProcessProperties(cell.Properties, convertedCell);
 
-            for (int i = 0; i < cell.Properties.Count; i++)
-            {
-                if (!cell.Properties[i].Processed)
-                {
-                    convertedCell.Properties.Add(cell.Properties[i]);
-                }
-            }
-
             return convertedCell;
         }
 
         private void ProcessProperties(List<ReportCellProperty> cellProperties, TResultReportCell convertedCell)
         {
-            for (int i = 0; i < this.Handlers.Length; i++)
+            for (int i = 0; i < cellProperties.Count; i++)
             {
-                for (int j = 0; j < cellProperties.Count; j++)
+                for (int j = 0; j < this.Handlers.Length; j++)
                 {
-                    this.Handlers[i].Handle(cellProperties[j], convertedCell);
+                    this.Handlers[j].Handle(cellProperties[i], convertedCell);
                 }
+
+                if (!cellProperties[i].Processed)
+                {
+                    convertedCell.Properties.Add(cellProperties[i]);
+                }
+            }
+        }
+
+        private class ReportHeaderRows : IEnumerable<IEnumerable<TResultReportCell>>
+        {
+            private readonly ReportRowEnumerator enumerator;
+
+            public ReportHeaderRows(IReportTable<ReportCell> reportTable, ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.enumerator = new ReportRowEnumerator(reportTable.HeaderRows.GetEnumerator(), reportConverter);
+            }
+
+            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
+            {
+                return this.enumerator;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        private class ReportBodyRows : IEnumerable<IEnumerable<TResultReportCell>>
+        {
+            private readonly ReportRowEnumerator enumerator;
+
+            public ReportBodyRows(IReportTable<ReportCell> reportTable, ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.enumerator = new ReportRowEnumerator(reportTable.Rows.GetEnumerator(), reportConverter);
+            }
+
+            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
+            {
+                return this.enumerator;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        private class ReportRowEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
+        {
+            private readonly IEnumerator<IEnumerable<ReportCell>> enumerator;
+            private readonly ReportRow row;
+
+            public ReportRowEnumerator(IEnumerator<IEnumerable<ReportCell>> enumerator, ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.enumerator = enumerator;
+                this.row = new ReportRow(reportConverter);
+            }
+
+            public IEnumerable<TResultReportCell> Current
+            {
+                get
+                {
+                    this.row.SetRow(this.enumerator.Current);
+
+                    return this.row;
+                }
+            }
+
+            object IEnumerator.Current => this.Current;
+
+            public bool MoveNext()
+            {
+                return this.enumerator.MoveNext();
+            }
+
+            public void Reset()
+            {
+                this.enumerator.Reset();
+            }
+
+            public void Dispose()
+            {
+                this.enumerator.Dispose();
+            }
+        }
+
+        private class ReportRow : IEnumerable<TResultReportCell>
+        {
+            private readonly ReportCellsEnumerator enumerator;
+
+            public ReportRow(ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.enumerator = new ReportCellsEnumerator(reportConverter);
+            }
+
+            public void SetRow(IEnumerable<ReportCell> row)
+            {
+                this.enumerator.SetRow(row);
+            }
+
+            public IEnumerator<TResultReportCell> GetEnumerator()
+            {
+                return this.enumerator;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        private class ReportCellsEnumerator : IEnumerator<TResultReportCell>
+        {
+            private readonly ReportConverter<TResultReportCell> reportConverter;
+            private IEnumerator<ReportCell> enumerator;
+
+            public ReportCellsEnumerator(ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.reportConverter = reportConverter;
+            }
+
+            public TResultReportCell Current => this.reportConverter.ConvertCell(this.enumerator.Current);
+
+            object IEnumerator.Current => this.Current;
+
+            public bool MoveNext()
+            {
+                return this.enumerator.MoveNext();
+            }
+
+            public void SetRow(IEnumerable<ReportCell> row)
+            {
+                this.enumerator = row.GetEnumerator();
+            }
+
+            public void Reset()
+            {
+                this.enumerator.Reset();
+            }
+
+            public void Dispose()
+            {
+                this.enumerator.Dispose();
             }
         }
     }

@@ -3,6 +3,7 @@ using Bogus;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.Properties;
 using XReports.PropertyHandlers;
 using XReports.SchemaBuilders;
 using XReports.Writers;
@@ -13,21 +14,12 @@ internal static class Program
 {
     public static async Task Main()
     {
-        ReportBuilder builder = new(100_000);
-
-        StreamWriter stream = File.CreateText("/tmp/report.html");
+        ReportBuilder builder = new(1_000_000);
 
         Stopwatch sw = Stopwatch.StartNew();
-        await builder.ToStreamAsync(stream);
+        await builder.EnumAsync();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
-
-        stream.Close();
-
-        // stream.Seek(0, SeekOrigin.Begin);
-        // FileStream fileStream = File.OpenWrite("/tmp/report.html");
-        // await stream.CopyToAsync(fileStream);
-        // fileStream.Close();
     }
 }
 
@@ -88,22 +80,41 @@ public class ReportBuilder
         return this.WriteReportToStreamAsync(htmlReportTable, streamWriter);
     }
 
-    public async Task ToFileAsync()
+    public async Task ToFileStreamAsync()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
         Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
 
-        FileStream fileStream = File.OpenWrite("/tmp/File.xlsx");
+        FileStream fileStream = File.OpenWrite("/tmp/report.xlsx");
 
         await excelStream.CopyToAsync(fileStream);
         fileStream.Close();
     }
 
+    public void ToFile()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        this.WriteExcelReportToFile(excelReportTable);
+    }
+
     private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
     {
         return new EpplusWriter().WriteToStream(reportTable);
+    }
+
+    private void WriteExcelReportToFile(IReportTable<ExcelReportCell> reportTable)
+    {
+        const string fileName = "/tmp/report.xlsx";
+        if (File.Exists(fileName))
+        {
+            File.Delete(fileName);
+        }
+
+        new EpplusWriter().WriteToFile(reportTable, fileName);
     }
 
     private IReportTable<ReportCell> BuildReport()
@@ -120,6 +131,8 @@ public class ReportBuilder
             .AddProperties(customFormatProperty);
         reportBuilder.AddColumn("Maximum Score", e => e.Score)
             .AddProperties(customFormatProperty);
+
+        reportBuilder.AddGlobalProperties(new SameColumnFormatProperty());
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
         return reportTable;

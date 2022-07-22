@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.Utils;
 
 namespace XReports.ReportCellsProviders
 {
     public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
     {
-        private readonly ReportCellsPool<ReportCell> pool = new ReportCellsPool<ReportCell>();
+        private readonly ReportCell reportCell = new ReportCell();
 
         protected ReportCellsProvider(string title)
         {
@@ -16,8 +14,6 @@ namespace XReports.ReportCellsProviders
         }
 
         public string Title { get; }
-
-        public abstract Func<TSourceEntity, ReportCell> CellSelector { get; }
 
         private List<IReportCellProcessor<TSourceEntity>> Processors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
 
@@ -37,31 +33,36 @@ namespace XReports.ReportCellsProviders
             return this;
         }
 
+        public abstract ReportCell GetCell(TSourceEntity entity);
+
         protected ReportCell CreateCell(TValue value, TSourceEntity entity)
         {
-            ReportCell cell = ReportCell.FromValue(value);
+            // ReportCell cell = ReportCell.FromValue(value);
+            this.reportCell.Clear();
+            this.reportCell.SetValue(value);
+
             //// ReportCell cell = this.pool.GetOrCreate(
             ////     () => new ReportCell { Value = value },
             ////     c => c.Value = value);
 
-            this.AddProperties(cell);
-            this.RunProcessors(cell, entity);
+            this.AddProperties();
+            this.RunProcessors(entity);
 
             //// this.pool.Release(cell);
 
-            return cell;
+            return this.reportCell;
         }
 
-        private void AddProperties(ReportCell cell)
+        private void AddProperties()
         {
-            cell.AddProperties(this.Properties);
+            this.reportCell.AddProperties(this.Properties);
         }
 
-        private void RunProcessors(ReportCell cell, TSourceEntity entity)
+        private void RunProcessors(TSourceEntity entity)
         {
             for (int i = 0; i < this.Processors.Count; i++)
             {
-                this.Processors[i].Process(cell, entity);
+                this.Processors[i].Process(this.reportCell, entity);
             }
         }
     }

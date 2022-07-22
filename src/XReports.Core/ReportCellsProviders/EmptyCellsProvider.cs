@@ -1,4 +1,3 @@
-using System;
 using XReports.Models;
 
 namespace XReports.ReportCellsProviders
@@ -10,6 +9,9 @@ namespace XReports.ReportCellsProviders
         {
         }
 
-        public override Func<TSourceEntity, ReportCell> CellSelector => _ => ReportCell.EmptyCell;
+        public override ReportCell GetCell(TSourceEntity entity)
+        {
+            return ReportCell.EmptyCell;
+        }
     }
 }

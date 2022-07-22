@@ -29,7 +29,7 @@ namespace XReports.ReportCellsProviders
 
         public ReportCell CreateCell(TSourceEntity entity)
         {
-            ReportCell cell = this.provider.CellSelector(entity);
+            ReportCell cell = this.provider.GetCell(entity);
 
             this.AddProperties(cell);
             this.RunProcessors(cell, entity);

@@ -13,12 +13,9 @@ namespace XReports.ReportCellsProviders
             this.valueSelector = valueSelector;
         }
 
-        public override Func<TSourceEntity, ReportCell> CellSelector
+        public override ReportCell GetCell(TSourceEntity entity)
         {
-            get
-            {
-                return entity => this.CreateCell(this.valueSelector(entity), entity);
-            }
+            return this.CreateCell(this.valueSelector(entity), entity);
         }
     }
 }

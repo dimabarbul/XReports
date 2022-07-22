@@ -21,6 +21,7 @@ namespace XReports.Models
             this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
             this.value = reportCell.value;
+            this.Properties.Clear();
         }
 
         public object GetUnderlyingValue()
@@ -104,6 +105,15 @@ namespace XReports.Models
         public void AddProperties(IEnumerable<ReportCellProperty> properties)
         {
             this.Properties.AddRange(properties);
+        }
+
+        public void Clear()
+        {
+            this.value = string.Empty;
+            this.ValueType = typeof(string);
+            this.RowSpan = 1;
+            this.ColumnSpan = 1;
+            this.Properties.Clear();
         }
     }
 }
