@@ -115,5 +115,10 @@ namespace XReports.Models
             this.ColumnSpan = 1;
             this.Properties.Clear();
         }
+
+        public BaseReportCell Clone()
+        {
+            return (BaseReportCell)this.MemberwiseClone();
+        }
     }
 }
