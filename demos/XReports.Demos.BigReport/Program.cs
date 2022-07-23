@@ -17,7 +17,7 @@ internal static class Program
         ReportBuilder builder = new(1_000_000);
 
         Stopwatch sw = Stopwatch.StartNew();
-        await builder.EnumAsync();
+        builder.ToExcelFileAsFileStream();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
     }
@@ -80,20 +80,31 @@ public class ReportBuilder
         return this.WriteReportToStreamAsync(htmlReportTable, streamWriter);
     }
 
-    public async Task ToFileStreamAsync()
+    public async Task ToExcelFileAsStreamAsync()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
         Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
 
-        FileStream fileStream = File.OpenWrite("/tmp/report.xlsx");
+        FileStream fileStream = File.Create("/tmp/report.xlsx");
 
         await excelStream.CopyToAsync(fileStream);
         fileStream.Close();
     }
 
-    public void ToFile()
+    public void ToExcelFileAsFileStream()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        FileStream fileStream = File.Create("/tmp/report.xlsx");
+        this.WriteExcelReportToStream(excelReportTable, fileStream);
+
+        fileStream.Close();
+    }
+
+    public void ToExcelFile()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
@@ -104,6 +115,11 @@ public class ReportBuilder
     private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
     {
         return new EpplusWriter().WriteToStream(reportTable);
+    }
+
+    private void WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable, Stream stream)
+    {
+        new EpplusWriter().WriteToStream(reportTable, stream);
     }
 
     private void WriteExcelReportToFile(IReportTable<ExcelReportCell> reportTable)

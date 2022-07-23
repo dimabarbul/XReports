@@ -10,5 +10,7 @@ namespace XReports.Interfaces
         void WriteToFile(IReportTable<ExcelReportCell> table, string fileName);
 
         Stream WriteToStream(IReportTable<ExcelReportCell> table);
+
+        void WriteToStream(IReportTable<ExcelReportCell> table, Stream stream);
     }
 }

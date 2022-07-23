@@ -14,5 +14,16 @@ namespace XReports.Models
         public Color? BackgroundColor { get; set; }
 
         public Color? FontColor { get; set; }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            this.HorizontalAlignment = null;
+            this.NumberFormat = null;
+            this.IsBold = false;
+            this.BackgroundColor = null;
+            this.FontColor = null;
+        }
     }
 }

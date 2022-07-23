@@ -15,13 +15,13 @@ namespace XReports.Models
 
         public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
 
-        public virtual void CopyFrom(BaseReportCell reportCell)
+        public void CopyFrom(BaseReportCell reportCell)
         {
+            this.Clear();
             this.ColumnSpan = reportCell.ColumnSpan;
             this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
             this.value = reportCell.value;
-            this.Properties.Clear();
         }
 
         public object GetUnderlyingValue()
@@ -107,7 +107,7 @@ namespace XReports.Models
             this.Properties.AddRange(properties);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             this.value = string.Empty;
             this.ValueType = typeof(string);
