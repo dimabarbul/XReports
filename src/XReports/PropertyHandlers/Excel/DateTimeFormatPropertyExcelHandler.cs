@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using XReports.Enums;
 using XReports.Models;
@@ -8,6 +9,25 @@ namespace XReports.PropertyHandlers.Excel
 {
     public class DateTimeFormatPropertyExcelHandler : PropertyHandler<DateTimeFormatProperty, ExcelReportCell>
     {
+        private const string FormatDayWithLeadingZero = "dd";
+        private const string FormatDay = "d";
+        private const string FormatMonthWithLeadingZero = "MM";
+        private const string FormatMonth = "M";
+        private const string FormatYearFull = "yyyy";
+        private const string FormatYearShort = "yy";
+        private const string FormatMonthName = "MMMM";
+        private const string FormatHourWithLeadingZero = "HH";
+        private const string FormatHour = "H";
+        private const string FormatHour12WithLeadingZero = "hh";
+        private const string FormatHour12 = "h";
+        private const string FormatMinuteWithLeadingZero = "mm";
+        private const string FormatMinute = "m";
+        private const string FormatSecondWithLeadingZero = "ss";
+        private const string FormatSecond = "s";
+        private const string FormatAmPm = "AM/PM";
+
+        private readonly Dictionary<DateTimeFormatProperty, string> formatCache = new Dictionary<DateTimeFormatProperty, string>();
+
         protected override void HandleProperty(DateTimeFormatProperty property, ExcelReportCell cell)
         {
             this.ValidateFormat(property.Parts);
@@ -17,14 +37,9 @@ namespace XReports.PropertyHandlers.Excel
 
         private void ValidateFormat(DateTimeFormatPart[] propertyParts)
         {
-            bool has12HourPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.Hour12
-                    || p.Type == DateTimeFormatPartType.Hour12WithLeadingZero);
-            bool has24HourPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.Hour
-                    || p.Type == DateTimeFormatPartType.HourWithLeadingZero);
-            bool hasAmPmPart = propertyParts.Any(
-                p => p.Type == DateTimeFormatPartType.AmPm);
+            bool has12HourPart = this.Has12HourPart(propertyParts);
+            bool has24HourPart = this.Has24HourPart(propertyParts);
+            bool hasAmPmPart = this.HasAmPmPart(propertyParts);
 
             if (has12HourPart && !hasAmPmPart)
             {
@@ -37,9 +52,55 @@ namespace XReports.PropertyHandlers.Excel
             }
         }
 
+        private bool HasAmPmPart(DateTimeFormatPart[] propertyParts)
+        {
+            for (int i = 0; i < propertyParts.Length; i++)
+            {
+                if (propertyParts[i].Type == DateTimeFormatPartType.AmPm)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool Has24HourPart(DateTimeFormatPart[] propertyParts)
+        {
+            for (int i = 0; i < propertyParts.Length; i++)
+            {
+                if (propertyParts[i].Type == DateTimeFormatPartType.Hour
+                    || propertyParts[i].Type == DateTimeFormatPartType.HourWithLeadingZero)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool Has12HourPart(DateTimeFormatPart[] propertyParts)
+        {
+            for (int i = 0; i < propertyParts.Length; i++)
+            {
+                if (propertyParts[i].Type == DateTimeFormatPartType.Hour12
+                    || propertyParts[i].Type == DateTimeFormatPartType.Hour12WithLeadingZero)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private string GetFormatString(DateTimeFormatProperty property)
         {
-            return string.Concat(property.Parts.Select(this.GetFormatPartString));
+            if (!this.formatCache.ContainsKey(property))
+            {
+                this.formatCache[property] = string.Concat(property.Parts.Select(this.GetFormatPartString));
+            }
+
+            return this.formatCache[property];
         }
 
         private string GetFormatPartString(DateTimeFormatPart formatPart)
@@ -47,22 +108,22 @@ namespace XReports.PropertyHandlers.Excel
             return formatPart.Type switch
             {
                 DateTimeFormatPartType.FreeText => formatPart.Text,
-                DateTimeFormatPartType.DayWithLeadingZero => "dd",
-                DateTimeFormatPartType.Day => "d",
-                DateTimeFormatPartType.MonthWithLeadingZero => "MM",
-                DateTimeFormatPartType.Month => "M",
-                DateTimeFormatPartType.YearFull => "yyyy",
-                DateTimeFormatPartType.YearShort => "yy",
-                DateTimeFormatPartType.MonthName => "MMMM",
-                DateTimeFormatPartType.HourWithLeadingZero => "HH",
-                DateTimeFormatPartType.Hour => "H",
-                DateTimeFormatPartType.Hour12WithLeadingZero => "hh",
-                DateTimeFormatPartType.Hour12 => "h",
-                DateTimeFormatPartType.MinuteWithLeadingZero => "mm",
-                DateTimeFormatPartType.Minute => "m",
-                DateTimeFormatPartType.SecondWithLeadingZero => "ss",
-                DateTimeFormatPartType.Second => "s",
-                DateTimeFormatPartType.AmPm => "AM/PM",
+                DateTimeFormatPartType.DayWithLeadingZero => FormatDayWithLeadingZero,
+                DateTimeFormatPartType.Day => FormatDay,
+                DateTimeFormatPartType.MonthWithLeadingZero => FormatMonthWithLeadingZero,
+                DateTimeFormatPartType.Month => FormatMonth,
+                DateTimeFormatPartType.YearFull => FormatYearFull,
+                DateTimeFormatPartType.YearShort => FormatYearShort,
+                DateTimeFormatPartType.MonthName => FormatMonthName,
+                DateTimeFormatPartType.HourWithLeadingZero => FormatHourWithLeadingZero,
+                DateTimeFormatPartType.Hour => FormatHour,
+                DateTimeFormatPartType.Hour12WithLeadingZero => FormatHour12WithLeadingZero,
+                DateTimeFormatPartType.Hour12 => FormatHour12,
+                DateTimeFormatPartType.MinuteWithLeadingZero => FormatMinuteWithLeadingZero,
+                DateTimeFormatPartType.Minute => FormatMinute,
+                DateTimeFormatPartType.SecondWithLeadingZero => FormatSecondWithLeadingZero,
+                DateTimeFormatPartType.Second => FormatSecond,
+                DateTimeFormatPartType.AmPm => FormatAmPm,
                 _ => throw new ArgumentOutOfRangeException(nameof(formatPart)),
             };
         }
