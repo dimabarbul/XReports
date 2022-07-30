@@ -1,6 +1,5 @@
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.Utils;
 
 namespace XReports.ReportCellsProviders
 {
@@ -11,7 +10,6 @@ namespace XReports.ReportCellsProviders
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
-        private readonly ReportCellsPool<ReportCell> pool = new ReportCellsPool<ReportCell>();
 
         public ReportSchemaCellsProvider(
             IReportCellsProvider<TSourceEntity> provider,
