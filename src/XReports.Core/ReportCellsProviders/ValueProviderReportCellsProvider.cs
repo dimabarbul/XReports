@@ -15,7 +15,7 @@ namespace XReports.ReportCellsProviders
 
         public override ReportCell GetCell(TSourceEntity entity)
         {
-            return this.CreateCell(this.provider.GetValue(), entity);
+            return this.CreateCell(this.provider.GetValue());
         }
     }
 }

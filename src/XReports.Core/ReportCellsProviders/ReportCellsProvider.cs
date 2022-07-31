@@ -16,7 +16,7 @@ namespace XReports.ReportCellsProviders
 
         public abstract ReportCell GetCell(TSourceEntity entity);
 
-        protected ReportCell CreateCell(TValue value, TSourceEntity entity)
+        protected ReportCell CreateCell(TValue value)
         {
             this.reportCell.Clear();
             this.reportCell.SetValue(value);

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using XReports.Interfaces;
 using XReports.Models;
 
@@ -10,6 +11,8 @@ namespace XReports.ReportCellsProviders
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
+
+        private readonly ReportCell headerCell = new ReportCell();
 
         public ReportSchemaCellsProvider(
             IReportCellsProvider<TSourceEntity> provider,
@@ -37,24 +40,25 @@ namespace XReports.ReportCellsProviders
 
         public ReportCell CreateHeaderCell()
         {
-            ReportCell cell = ReportCell.FromValue(this.provider.Title);
-            ////ReportCell cell = this.pool.GetOrCreate(
-            ////    () => new ReportCell { Value = this.provider.Title },
-            ////    c => c.Value = this.provider.Title);
+            this.headerCell.Clear();
+            this.headerCell.SetValue(this.provider.Title);
 
-            this.AddHeaderProperties(cell);
-            this.RunHeaderProcessors(cell);
+            this.AddHeaderProperties(this.headerCell);
+            this.RunHeaderProcessors(this.headerCell);
 
-            //// this.pool.Release(cell);
-
-            return cell;
+            return this.headerCell;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddProperties(ReportCell cell)
         {
-            cell.AddProperties(this.cellProperties);
+            if (this.cellProperties.Length > 0)
+            {
+                cell.AddProperties(this.cellProperties);
+            }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
             for (int i = 0; i < this.cellProcessors.Length; i++)
@@ -63,11 +67,16 @@ namespace XReports.ReportCellsProviders
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddHeaderProperties(ReportCell cell)
         {
-            cell.AddProperties(this.headerProperties);
+            if (this.headerProperties.Length > 0)
+            {
+                cell.AddProperties(this.headerProperties);
+            }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunHeaderProcessors(ReportCell cell)
         {
             for (int i = 0; i < this.headerProcessors.Length; i++)

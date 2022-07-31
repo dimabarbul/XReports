@@ -65,26 +65,25 @@ namespace XReports
             }
 
             // TResultReportCell convertedCell = new TResultReportCell();
-            TResultReportCell convertedCell = this.resultCell;
-            convertedCell.CopyFrom(cell);
+            this.resultCell.CopyFrom(cell);
 
-            this.ProcessProperties(cell.Properties, convertedCell);
+            this.ProcessProperties(cell.Properties);
 
-            return convertedCell;
+            return this.resultCell;
         }
 
-        private void ProcessProperties(List<ReportCellProperty> cellProperties, TResultReportCell convertedCell)
+        private void ProcessProperties(IReadOnlyList<ReportCellProperty> cellProperties)
         {
             for (int i = 0; i < cellProperties.Count; i++)
             {
                 for (int j = 0; j < this.Handlers.Length; j++)
                 {
-                    this.Handlers[j].Handle(cellProperties[i], convertedCell);
+                    this.Handlers[j].Handle(cellProperties[i], this.resultCell);
                 }
 
                 if (!cellProperties[i].Processed)
                 {
-                    convertedCell.Properties.Add(cellProperties[i]);
+                    this.resultCell.Properties.Add(cellProperties[i]);
                 }
             }
         }

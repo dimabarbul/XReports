@@ -50,15 +50,17 @@ internal static class Program
             .Build();
 
         ReportBuilder builder = new(
-            1_00_000,
+            1_000_000,
             host.Services.GetRequiredService<IReportConverter<HtmlReportCell>>(),
             host.Services.GetRequiredService<IEpplusWriter>(),
             host.Services.GetRequiredService<IReportConverter<ExcelReportCell>>(),
             host.Services.GetRequiredService<IHtmlStringWriter>(),
             host.Services.GetRequiredService<IHtmlStreamWriter>());
 
+        // FileStream fileStream = File.Create("/tmp/report.html");
         Stopwatch sw = Stopwatch.StartNew();
-        builder.ToString();
+        await builder.EnumExcelAsync();
+        // fileStream.Close();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
     }
@@ -84,7 +86,7 @@ public class ReportBuilder
         this.htmlStreamWriter = htmlStreamWriter;
     }
 
-    public Task EnumAsync()
+    public Task EnumHtmlAsync()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
@@ -103,6 +105,32 @@ public class ReportBuilder
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
             foreach (HtmlReportCell cell in row)
+            {
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task EnumExcelAsync()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        foreach (ReportTableProperty _ in excelReportTable.Properties)
+        {
+        }
+
+        foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
+        {
+            foreach (ExcelReportCell cell in row)
+            {
+            }
+        }
+
+        foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
+        {
+            foreach (ExcelReportCell cell in row)
             {
             }
         }
@@ -195,8 +223,8 @@ public class ReportBuilder
         DateTimeFormatProperty dateTimeFormatProperty = new("yyyy/MM/dd HH:mm:ss");
         DecimalPrecisionProperty accountAmountPrecisionProperty = new(2);
         DecimalPrecisionProperty cryptoAmountPrecisionProperty = new(8);
-
         ColorProperty highlighted = new(Color.Blue);
+
         VerticalReportSchemaBuilder<Person> reportBuilder = new();
         reportBuilder.AddColumn("FirstName", e => e.FirstName)
             .AddProperties(boldProperty);
