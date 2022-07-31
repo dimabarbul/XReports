@@ -51,7 +51,7 @@ public class ReportService : IReportService
         });
     }
 
-    public Task EnumAsync()
+    public Task EnumHtmlAsync()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
@@ -77,7 +77,33 @@ public class ReportService : IReportService
         return Task.CompletedTask;
     }
 
-    public Task<string> ToStringAsync()
+    public Task EnumExcelAsync()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        foreach (ReportTableProperty _ in excelReportTable.Properties)
+        {
+        }
+
+        foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
+        {
+            foreach (ExcelReportCell cell in row)
+            {
+            }
+        }
+
+        foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
+        {
+            foreach (ExcelReportCell cell in row)
+            {
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task<string> ToHtmlStringAsync()
     {
         IReportTable<ReportCell> reportTable = this.BuildReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);

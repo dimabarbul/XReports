@@ -6,16 +6,22 @@ namespace XReports.NewVersion;
 [MemoryDiagnoser]
 public class Benchmarks : BenchmarksBase
 {
-    [Benchmark(Description = "Enumerate report without saving anywhere")]
-    public async Task EnumAsync()
+    [Benchmark(Description = "Enumerate HTML report without saving anywhere")]
+    public async Task EnumHtmlAsync()
     {
-        await this.CreateReportService().EnumAsync();
+        await this.CreateReportService().EnumHtmlAsync();
     }
 
-    [Benchmark(Description = "Save to string using StringBuilder")]
-    public async Task ToStringAsync()
+    [Benchmark(Description = "Enumerate XLSX report without saving anywhere")]
+    public async Task EnumExcelAsync()
     {
-        await this.CreateReportService().ToStringAsync();
+        await this.CreateReportService().EnumExcelAsync();
+    }
+
+    [Benchmark(Description = "Save HTML report to string using StringBuilder")]
+    public async Task ToHtmlStringAsync()
+    {
+        await this.CreateReportService().ToHtmlStringAsync();
     }
 
     [Benchmark(Description = "Save to XLSX file")]

@@ -2,8 +2,9 @@ namespace XReports.BenchmarksCore.Interfaces;
 
 public interface IReportService
 {
-    Task EnumAsync();
-    Task<string> ToStringAsync();
+    Task EnumHtmlAsync();
+    Task EnumExcelAsync();
+    Task<string> ToHtmlStringAsync();
     Task ToHtmlFileAsync(string fileName);
     Task ToExcelFileAsync(string fileName);
     Task<Stream> ToExcelStreamAsync();
