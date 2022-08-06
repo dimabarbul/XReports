@@ -32,29 +32,6 @@ namespace XReports.Models
             return table;
         }
 
-        private IEnumerable<IEnumerable<ReportCell>> GetRows(IDataReader dataReader)
-        {
-            if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
-            {
-                throw new InvalidOperationException("Report schema should should be of IDataReader");
-            }
-
-            while (dataReader.Read())
-            {
-                yield return this.GetRow(dataReader);
-            }
-
-            dataReader.Close();
-        }
-
-        private IEnumerable<ReportCell> GetRow(IDataReader dataReader)
-        {
-            for (int i = 0; i < this.CellsProviders.Length; i++)
-            {
-                yield return this.AddGlobalProperties(this.CellsProviders[i].CreateCell((TSourceEntity)dataReader));
-            }
-        }
-
         private class RowsFromEntityEnumerator : IEnumerator<IEnumerable<ReportCell>>, IEnumerable<IEnumerable<ReportCell>>
         {
             private readonly IEnumerator<TSourceEntity> enumerator;

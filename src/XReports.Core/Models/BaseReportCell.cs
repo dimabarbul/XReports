@@ -61,7 +61,7 @@ namespace XReports.Models
         {
             for (int i = 0; i < this.Properties.Count; i++)
             {
-                if (this.Properties[i] is TProperty)
+                if (this.Properties[i].GetType() == typeof(TProperty))
                 {
                     return true;
                 }

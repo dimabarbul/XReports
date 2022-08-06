@@ -10,15 +10,17 @@ internal static class Program
 {
     public static async Task Main()
     {
-        Person[] data = DataProvider.GetData(1_000);
+        Person[] data = DataProvider.GetData(1_00_000);
         DataTable dataTable = DataProvider.CreateDataTable(data);
 
         ReportService reportService = new(data, dataTable);
 
-        File.Delete("/tmp/report.xlsx");
+        const string fileName = "/tmp/report";
+
+        File.Delete(fileName);
 
         Stopwatch sw = Stopwatch.StartNew();
-        await reportService.VerticalFromDataReaderExcelToFileAsync("/tmp/report.xlsx");
+        await reportService.VerticalFromDataReaderExcelEnumAsync();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
     }
