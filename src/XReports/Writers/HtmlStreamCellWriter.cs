@@ -39,7 +39,7 @@ namespace XReports.Writers
         {
             await streamWriter.WriteAsync("</").ConfigureAwait(false);
             await streamWriter.WriteAsync(tableCellTagName).ConfigureAwait(false);
-            await streamWriter.WriteAsync(">").ConfigureAwait(false);
+            await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
 
         protected async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
@@ -56,7 +56,7 @@ namespace XReports.Writers
 
             if (cell.CssClasses.Count > 0)
             {
-                await this.WriteAttributeAsync(streamWriter, "class", string.Join(" ", cell.CssClasses)).ConfigureAwait(false);
+                await this.WriteAttributeAsync(streamWriter, "class", string.Join(' ', cell.CssClasses)).ConfigureAwait(false);
             }
 
             if (cell.Styles.Count > 0)
@@ -65,7 +65,7 @@ namespace XReports.Writers
                     streamWriter,
                     "style",
                     string.Join(
-                        " ",
+                        ' ',
                         cell.Styles
                             .Select(x => $"{x.Key}: {x.Value};"))).ConfigureAwait(false);
             }

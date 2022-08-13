@@ -29,14 +29,14 @@ namespace XReports.Writers
 
         protected virtual void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
         {
-            stringBuilder.Append("<").Append(tableCellTagName).Append(" ");
+            stringBuilder.Append('<').Append(tableCellTagName).Append(' ');
             this.WriteAttributes(stringBuilder, cell);
-            stringBuilder.Append(">");
+            stringBuilder.Append('>');
         }
 
         protected virtual void EndWrappingElement(StringBuilder stringBuilder, string tableCellTagName)
         {
-            stringBuilder.Append("</").Append(tableCellTagName).Append(">");
+            stringBuilder.Append("</").Append(tableCellTagName).Append('>');
         }
 
         protected void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
@@ -53,7 +53,7 @@ namespace XReports.Writers
 
             if (cell.CssClasses.Count > 0)
             {
-                this.WriteAttribute(stringBuilder, "class", string.Join(" ", cell.CssClasses));
+                this.WriteAttribute(stringBuilder, "class", string.Join(' ', cell.CssClasses));
             }
 
             if (cell.Styles.Count > 0)
@@ -62,7 +62,7 @@ namespace XReports.Writers
                     stringBuilder,
                     "style",
                     string.Join(
-                        " ",
+                        ' ',
                         cell.Styles
                             .Select(x => $"{x.Key}: {x.Value};")));
             }
