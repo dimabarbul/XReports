@@ -19,7 +19,7 @@ namespace XReports.Writers
         public async Task WriteAsync(IReportTable<HtmlReportCell> reportTable, Stream stream)
         {
             await using StreamWriter writer = new StreamWriter(stream, leaveOpen: true);
-            await this.WriteAsync(reportTable, writer);
+            await this.WriteAsync(reportTable, writer).ConfigureAwait(false);
         }
 
         public Task WriteAsync(IReportTable<HtmlReportCell> reportTable, StreamWriter streamWriter)
@@ -31,21 +31,21 @@ namespace XReports.Writers
 
         protected virtual async Task WriteReportAsync(IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginTableAsync();
-            await this.WriteHeaderAsync(reportTable);
-            await this.WriteBodyAsync(reportTable);
-            await this.EndTableAsync();
+            await this.BeginTableAsync().ConfigureAwait(false);
+            await this.WriteHeaderAsync(reportTable).ConfigureAwait(false);
+            await this.WriteBodyAsync(reportTable).ConfigureAwait(false);
+            await this.EndTableAsync().ConfigureAwait(false);
 
-            await this.streamWriter.FlushAsync();
+            await this.streamWriter.FlushAsync().ConfigureAwait(false);
         }
 
         protected virtual async Task WriteHeaderAsync(IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginHeadAsync();
+            await this.BeginHeadAsync().ConfigureAwait(false);
 
             foreach (IEnumerable<HtmlReportCell> row in reportTable.HeaderRows)
             {
-                await this.BeginRowAsync();
+                await this.BeginRowAsync().ConfigureAwait(false);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -54,22 +54,22 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.htmlStreamCellWriter.WriteHeaderCellAsync(this.streamWriter, cell);
+                    await this.htmlStreamCellWriter.WriteHeaderCellAsync(this.streamWriter, cell).ConfigureAwait(false);
                 }
 
-                await this.EndRowAsync();
+                await this.EndRowAsync().ConfigureAwait(false);
             }
 
-            await this.EndHeadAsync();
+            await this.EndHeadAsync().ConfigureAwait(false);
         }
 
         protected virtual async Task WriteBodyAsync(IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginBodyAsync();
+            await this.BeginBodyAsync().ConfigureAwait(false);
 
             foreach (IEnumerable<HtmlReportCell> row in reportTable.Rows)
             {
-                await this.BeginRowAsync();
+                await this.BeginRowAsync().ConfigureAwait(false);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -78,13 +78,13 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.htmlStreamCellWriter.WriteBodyCellAsync(this.streamWriter, cell);
+                    await this.htmlStreamCellWriter.WriteBodyCellAsync(this.streamWriter, cell).ConfigureAwait(false);
                 }
 
-                await this.EndRowAsync();
+                await this.EndRowAsync().ConfigureAwait(false);
             }
 
-            await this.EndBodyAsync();
+            await this.EndBodyAsync().ConfigureAwait(false);
         }
 
         protected virtual Task BeginHeadAsync()
