@@ -44,7 +44,7 @@ namespace XReports.Models
                 .Select(
                     row =>
                         complexHeader[rowIndex++]
-                            .Concat(source.Select(entity => this.AddGlobalProperties(row.CreateCell(entity)))));
+                            .Concat(source.Select(row.CreateCell)));
         }
     }
 }

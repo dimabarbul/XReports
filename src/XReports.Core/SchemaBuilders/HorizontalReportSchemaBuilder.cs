@@ -63,12 +63,11 @@ namespace XReports.SchemaBuilders
                     .Select(
                         r => new ReportSchemaCellsProvider<TSourceEntity>(
                             r.Provider,
-                            r.CellProperties.ToArray(),
+                            this.AddGlobalProperties(r.CellProperties),
                             r.HeaderProperties.ToArray(),
                             r.CellProcessors.ToArray(),
                             r.HeaderProcessors.ToArray()))
                     .ToArray(),
-                this.GlobalProperties.ToArray(),
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties

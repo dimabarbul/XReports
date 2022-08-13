@@ -91,7 +91,7 @@ namespace XReports.Models
                 this.schema = schema;
             }
 
-            public ReportCell Current => this.schema.AddGlobalProperties(this.schema.CellsProviders[this.index].CreateCell(this.entity));
+            public ReportCell Current => this.schema.CellsProviders[this.index].CreateCell(this.entity);
 
             object IEnumerator.Current => this.Current;
 
@@ -190,7 +190,7 @@ namespace XReports.Models
                 this.schema = schema;
             }
 
-            public ReportCell Current => this.schema.AddGlobalProperties(this.schema.CellsProviders[this.index].CreateCell((TSourceEntity)this.dataReader));
+            public ReportCell Current => this.schema.CellsProviders[this.index].CreateCell((TSourceEntity)this.dataReader);
 
             object IEnumerator.Current => this.Current;
 

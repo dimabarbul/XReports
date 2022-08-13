@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.ReportCellProcessors;
@@ -168,6 +169,20 @@ namespace XReports.SchemaBuilders
         protected int GetCellsProviderIndex(string title)
         {
             return this.CellsProviders.IndexOf(this.NamedProviders[title]);
+        }
+
+        protected ReportCellProperty[] AddGlobalProperties(List<ReportCellProperty> cellProperties)
+        {
+            List<ReportCellProperty> result = new List<ReportCellProperty>(cellProperties);
+            for (int i = 0; i < this.GlobalProperties.Count; i++)
+            {
+                if (!result.Any(p => p.GetType() == this.GlobalProperties[i].GetType()))
+                {
+                    result.Add(this.GlobalProperties[i]);
+                }
+            }
+
+            return result.ToArray();
         }
 
         protected class ConfiguredCellsProvider
