@@ -14,7 +14,7 @@ namespace XReports.Models
             {
                 Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
-                Rows = new RowsFromEntityEnumerator(this, source),
+                Rows = new RowsFromEntityCollection(this, source),
             };
 
             return table;
@@ -26,13 +26,29 @@ namespace XReports.Models
             {
                 Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
-                Rows = new RowsFromDataReaderEnumerator(this, dataReader),
+                Rows = new RowsFromDataReaderCollection(this, dataReader),
             };
 
             return table;
         }
 
-        private class RowsFromEntityEnumerator : IEnumerator<IEnumerable<ReportCell>>, IEnumerable<IEnumerable<ReportCell>>
+        private class RowsFromEntityCollection : IEnumerable<IEnumerable<ReportCell>>
+        {
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private readonly IEnumerable<TSourceEntity> source;
+
+            public RowsFromEntityCollection(VerticalReportSchema<TSourceEntity> schema, IEnumerable<TSourceEntity> source)
+            {
+                this.schema = schema;
+                this.source = source;
+            }
+
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromEntityEnumerator(this.schema, this.source);
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        }
+
+        private class RowsFromEntityEnumerator : IEnumerator<IEnumerable<ReportCell>>
         {
             private readonly IEnumerator<TSourceEntity> enumerator;
             private readonly CellsFromEntityEnumerator cellsEnumerator;
@@ -47,10 +63,6 @@ namespace XReports.Models
 
             object IEnumerator.Current => this.Current;
 
-            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => this;
-
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
-
             public bool MoveNext()
             {
                 return this.enumerator.MoveNext();
@@ -59,6 +71,7 @@ namespace XReports.Models
             public void Reset()
             {
                 this.enumerator.Reset();
+                this.cellsEnumerator.Reset();
             }
 
             public void Dispose()
@@ -109,7 +122,28 @@ namespace XReports.Models
             IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
 
-        private class RowsFromDataReaderEnumerator : IEnumerator<IEnumerable<ReportCell>>, IEnumerable<IEnumerable<ReportCell>>
+        private class RowsFromDataReaderCollection : IEnumerable<IEnumerable<ReportCell>>
+        {
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private readonly IDataReader dataReader;
+
+            public RowsFromDataReaderCollection(VerticalReportSchema<TSourceEntity> schema, IDataReader dataReader)
+            {
+                if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+                {
+                    throw new InvalidOperationException("Report schema should should be of IDataReader");
+                }
+
+                this.schema = schema;
+                this.dataReader = dataReader;
+            }
+
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromDataReaderEnumerator(this.schema, this.dataReader);
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        }
+
+        private class RowsFromDataReaderEnumerator : IEnumerator<IEnumerable<ReportCell>>
         {
             private readonly IDataReader dataReader;
             private readonly CellsFromDataReaderEnumerator cellsEnumerator;
@@ -128,10 +162,6 @@ namespace XReports.Models
             public IEnumerable<ReportCell> Current => this.cellsEnumerator.WithDataReader(this.dataReader);
 
             object IEnumerator.Current => this.Current;
-
-            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => this;
-
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
             public bool MoveNext()
             {

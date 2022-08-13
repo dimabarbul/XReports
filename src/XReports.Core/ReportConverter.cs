@@ -26,8 +26,8 @@ namespace XReports
             return new ReportTable<TResultReportCell>
             {
                 Properties = table.Properties,
-                HeaderRows = new HeaderRowsEnumerator(table, this),
-                Rows = new RowsEnumerator(table, this),
+                HeaderRows = new HeaderRowsCollection(table, this),
+                Rows = new RowsCollection(table, this),
             };
         }
 
@@ -61,7 +61,23 @@ namespace XReports
             }
         }
 
-        private class HeaderRowsEnumerator : IEnumerable<IEnumerable<TResultReportCell>>, IEnumerator<IEnumerable<TResultReportCell>>
+        private class HeaderRowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
+        {
+            private readonly IReportTable<ReportCell> reportTable;
+            private readonly ReportConverter<TResultReportCell> reportConverter;
+
+            public HeaderRowsCollection(IReportTable<ReportCell> reportTable, ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.reportTable = reportTable;
+                this.reportConverter = reportConverter;
+            }
+
+            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator() => new HeaderRowsEnumerator(this.reportTable, this.reportConverter);
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        }
+
+        private class HeaderRowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
         {
             private readonly IEnumerator<IEnumerable<ReportCell>> tableRowsEnumerator;
             private readonly CellsEnumerator cellsEnumerator;
@@ -75,16 +91,6 @@ namespace XReports
             public IEnumerable<TResultReportCell> Current => this.cellsEnumerator.WithRow(this.tableRowsEnumerator.Current);
 
             object IEnumerator.Current => this.Current;
-
-            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
-            {
-                return this;
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
 
             public bool MoveNext()
             {
@@ -103,7 +109,29 @@ namespace XReports
             }
         }
 
-        private class RowsEnumerator : IEnumerable<IEnumerable<TResultReportCell>>, IEnumerator<IEnumerable<TResultReportCell>>
+        private class RowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
+        {
+            private readonly IReportTable<ReportCell> reportTable;
+            private readonly ReportConverter<TResultReportCell> reportConverter;
+
+            public RowsCollection(IReportTable<ReportCell> reportTable, ReportConverter<TResultReportCell> reportConverter)
+            {
+                this.reportTable = reportTable;
+                this.reportConverter = reportConverter;
+            }
+
+            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
+            {
+                return new RowsEnumerator(this.reportTable, this.reportConverter);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        private class RowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
         {
             private readonly IEnumerator<IEnumerable<ReportCell>> tableRowsEnumerator;
             private readonly CellsEnumerator cellsEnumerator;
@@ -117,16 +145,6 @@ namespace XReports
             public IEnumerable<TResultReportCell> Current => this.cellsEnumerator.WithRow(this.tableRowsEnumerator.Current);
 
             object IEnumerator.Current => this.Current;
-
-            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
-            {
-                return this;
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
 
             public bool MoveNext()
             {
