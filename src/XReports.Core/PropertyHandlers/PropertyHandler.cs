@@ -8,15 +8,16 @@ namespace XReports.PropertyHandlers
     {
         public virtual int Priority => 0;
 
-        public void Handle(ReportCellProperty property, TReportCell cell)
+        public bool Handle(ReportCellProperty property, TReportCell cell)
         {
             if (property.GetType() != typeof(TPropertyType))
             {
-                return;
+                return false;
             }
 
             this.HandleProperty((TPropertyType)property, cell);
-            property.Processed = true;
+
+            return true;
         }
 
         protected abstract void HandleProperty(TPropertyType property, TReportCell cell);

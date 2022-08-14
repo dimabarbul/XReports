@@ -49,12 +49,18 @@ namespace XReports
         {
             for (int i = 0; i < cellProperties.Count; i++)
             {
+                bool processed = false;
+
                 for (int j = 0; j < this.Handlers.Length; j++)
                 {
-                    this.Handlers[j].Handle(cellProperties[i], this.resultCell);
+                    if (this.Handlers[j].Handle(cellProperties[i], this.resultCell))
+                    {
+                        processed = true;
+                        break;
+                    }
                 }
 
-                if (!cellProperties[i].Processed)
+                if (!processed)
                 {
                     this.resultCell.AddProperty(cellProperties[i]);
                 }

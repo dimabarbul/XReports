@@ -6,6 +6,6 @@ namespace XReports.Interfaces
     {
         int Priority { get; }
 
-        void Handle(ReportCellProperty property, TResultReportCell cell);
+        bool Handle(ReportCellProperty property, TResultReportCell cell);
     }
 }
