@@ -10,7 +10,7 @@ namespace XReports.Html.Tests
 {
     public partial class HtmlReportConverterTest
     {
-        [Fact]
+        [Fact(Skip = "Incorrect test: 1) handlers priority is the same; 2) if property is processed by first handler, the second won't get it")]
         public void Build_SeveralHandlers_BothApplied()
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>()
