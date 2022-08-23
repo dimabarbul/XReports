@@ -1,7 +1,10 @@
 using System.Data;
-using System.Drawing;
+using System.Reflection;
 using XReports.BenchmarksCore.Interfaces;
 using XReports.BenchmarksCore.Models;
+using XReports.BenchmarksCore.ReportStructure;
+using XReports.BenchmarksCore.ReportStructure.Models;
+using XReports.BenchmarksCore.Utils;
 using XReports.Enums;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -10,8 +13,11 @@ using XReports.NewVersion.XReportsProperties;
 using XReports.Properties;
 using XReports.PropertyHandlers.Excel;
 using XReports.PropertyHandlers.Html;
+using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Writers;
+using Source = XReports.BenchmarksCore.ReportStructure.Models.Properties;
+using SourceEnums = XReports.BenchmarksCore.ReportStructure.Enums;
 
 namespace XReports.NewVersion;
 
@@ -24,6 +30,9 @@ public class ReportService : IReportService
     private readonly IReportConverter<ExcelReportCell> excelConverter;
     private readonly IHtmlStringWriter htmlStringWriter;
     private readonly IHtmlStreamWriter htmlStreamWriter;
+
+    private readonly Dictionary<Source.ReportCellsSourceProperty, ReportCellProperty> mappedProperties = new();
+    private readonly ReportStructureProvider reportStructureProvider = new();
 
     public ReportService(IEnumerable<Person> data, DataTable dataTable)
     {
@@ -300,91 +309,23 @@ public class ReportService : IReportService
 
     private IReportTable<ReportCell> BuildVerticalReportFromEntities()
     {
-        CustomFormatProperty customFormatProperty = new();
-        BoldProperty boldProperty = new();
-        AlignmentProperty leftAlignment = new(Alignment.Left);
-        AlignmentProperty rightAlignment = new(Alignment.Right);
-        AlignmentProperty centerAlignment = new(Alignment.Center);
-        DateTimeFormatProperty dateOfBirthFormatProperty = new("MMM d, yyyy");
-        DateTimeFormatProperty dateTimeFormatProperty = new("yyyy/MM/dd HH:mm:ss");
-        DecimalPrecisionProperty accountAmountPrecisionProperty = new(2);
-        DecimalPrecisionProperty cryptoAmountPrecisionProperty = new(8);
-
-        ColorProperty highlighted = new(Color.Blue);
         VerticalReportSchemaBuilder<Person> reportBuilder = new();
-        reportBuilder.AddColumn("FirstName", e => e.FirstName)
-            .AddProperties(boldProperty);
-        reportBuilder.AddColumn("LastName", e => e.LastName)
-            .AddProperties(boldProperty);
-        reportBuilder.AddColumn("Email", e => e.Email)
-            .AddProperties(highlighted);
-        reportBuilder.AddColumn("Score", e => e.Score)
-            .AddProperties(customFormatProperty, centerAlignment);
-        reportBuilder.AddColumn("Account Number", e => e.AccountNumber)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Btc Wallet", e => e.BtcAddress)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Eth Wallet", e => e.EthAddress)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Account #", e => e.AccountAmount)
-            .AddProperties(rightAlignment, accountAmountPrecisionProperty);
-        reportBuilder.AddColumn("Btc #", e => e.BtcAmount)
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddColumn("Eth #", e => e.EthAmount)
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddColumn("Bio", e => e.Bio)
-            .AddProperties();
-        reportBuilder.AddColumn("DOB", e => e.DateOfBirth)
-            .AddProperties(dateOfBirthFormatProperty);
-        reportBuilder.AddColumn("Company Name", e => e.CompanyName)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("Preferred Color", e => e.PreferredColor);
-        reportBuilder.AddColumn("Avatar", e => e.Avatar)
-            .AddProperties();
-        reportBuilder.AddColumn("Password", e => e.Password)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("Username", e => e.UserName)
-            .AddProperties();
-        reportBuilder.AddColumn("Home Page", e => e.HomePage)
-            .AddProperties();
-        reportBuilder.AddColumn("Last IP", e => e.LastIpAddress)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("User Agent", e => e.BrowserUserAgent)
-            .AddProperties();
-        reportBuilder.AddColumn("Lorem Ipsum", e => e.Text)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Registered", e => e.RegisteredAt)
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddColumn("Last Visited", e => e.LastVisitedAt)
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddColumn("Home Phone", e => e.HomePhone)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Work Phone", e => e.WorkPhone)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Locale", e => e.Locale)
-            .AddProperties();
-        reportBuilder.AddColumn("Country", e => e.Address.Country)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("City", e => e.Address.City)
-            .AddProperties();
-        reportBuilder.AddColumn("Zip", e => e.Address.ZipCode)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Address", e => e.Address.StreetAddress1)
-            .AddProperties();
-        reportBuilder.AddColumn("Second Address Line", e => e.Address.StreetAddress2)
-            .AddProperties();
-        reportBuilder.AddColumn("Manufacturer", e => e.Vehicle.Manufacturer)
-            .AddProperties();
-        reportBuilder.AddColumn("Model", e => e.Vehicle.Model)
-            .AddProperties();
-        reportBuilder.AddColumn("Vin", e => e.Vehicle.Vin)
-            .AddProperties(highlighted);
-        reportBuilder.AddColumn("Fuel Type", e => e.Vehicle.FuelType)
-            .AddProperties();
-        reportBuilder.AddColumn("Type", e => e.Vehicle.Type)
-            .AddProperties();
 
-        reportBuilder.AddGlobalProperties(new SameColumnFormatProperty());
+        foreach (BaseReportCellsSourceFromEntities source in this.reportStructureProvider.GetEntitiesCellsSources())
+        {
+            Type valueType = source.GetValueType();
+            IReportCellsProvider<Person> x = (IReportCellsProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellsProvider<,>)
+                    .MakeGenericType(typeof(Person), valueType),
+                source.Title,
+                TypeUtils.InvokeGenericMethod(source, nameof(source.GetValueSelector), valueType)
+            );
+
+            reportBuilder.AddColumn(x)
+                .AddProperties(this.MapProperties(source.Properties));
+        }
+
+        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
 
@@ -393,91 +334,15 @@ public class ReportService : IReportService
 
     private IReportTable<ReportCell> BuildVerticalReportFromDataReader()
     {
-        CustomFormatProperty customFormatProperty = new();
-        BoldProperty boldProperty = new();
-        AlignmentProperty leftAlignment = new(Alignment.Left);
-        AlignmentProperty rightAlignment = new(Alignment.Right);
-        AlignmentProperty centerAlignment = new(Alignment.Center);
-        DateTimeFormatProperty dateOfBirthFormatProperty = new("MMM d, yyyy");
-        DateTimeFormatProperty dateTimeFormatProperty = new("yyyy/MM/dd HH:mm:ss");
-        DecimalPrecisionProperty accountAmountPrecisionProperty = new(2);
-        DecimalPrecisionProperty cryptoAmountPrecisionProperty = new(8);
-
-        ColorProperty highlighted = new(Color.Blue);
         VerticalReportSchemaBuilder<IDataReader> reportBuilder = new();
-        reportBuilder.AddColumn("FirstName", e => e.GetString(0))
-            .AddProperties(boldProperty);
-        reportBuilder.AddColumn("LastName", e => e.GetString(1))
-            .AddProperties(boldProperty);
-        reportBuilder.AddColumn("Email", e => e.GetString(2))
-            .AddProperties(highlighted);
-        reportBuilder.AddColumn("Score", e => e.GetDecimal(3))
-            .AddProperties(customFormatProperty, centerAlignment);
-        reportBuilder.AddColumn("Account Number", e => e.GetString(4))
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Btc Wallet", e => e.GetString(5))
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Eth Wallet", e => e.GetString(6))
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Account #", e => e.GetDecimal(7))
-            .AddProperties(rightAlignment, accountAmountPrecisionProperty);
-        reportBuilder.AddColumn("Btc #", e => e.GetDecimal(8))
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddColumn("Eth #", e => e.GetDecimal(9))
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddColumn("Bio", e => e.GetString(10))
-            .AddProperties();
-        reportBuilder.AddColumn("DOB", e => e.GetDateTime(11))
-            .AddProperties(dateOfBirthFormatProperty);
-        reportBuilder.AddColumn("Company Name", e => e.GetString(12))
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("Preferred Color", e => e.GetString(13));
-        reportBuilder.AddColumn("Avatar", e => e.GetString(14))
-            .AddProperties();
-        reportBuilder.AddColumn("Password", e => e.GetString(15))
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("Username", e => e.GetString(16))
-            .AddProperties();
-        reportBuilder.AddColumn("Home Page", e => e.GetString(17))
-            .AddProperties();
-        reportBuilder.AddColumn("Last IP", e => e.GetString(18))
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("User Agent", e => e.GetString(19))
-            .AddProperties();
-        reportBuilder.AddColumn("Lorem Ipsum", e => e.GetString(20))
-            .AddProperties(leftAlignment);
-        reportBuilder.AddColumn("Registered", e => e.GetDateTime(21))
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddColumn("Last Visited", e => e.GetDateTime(22))
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddColumn("Home Phone", e => e.GetString(23))
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Work Phone", e => e.GetString(24))
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Locale", e => e.GetString(25))
-            .AddProperties();
-        reportBuilder.AddColumn("Country", e => e.GetString(26))
-            .AddProperties(centerAlignment);
-        reportBuilder.AddColumn("City", e => e.GetString(27))
-            .AddProperties();
-        reportBuilder.AddColumn("Zip", e => e.GetString(28))
-            .AddProperties(rightAlignment);
-        reportBuilder.AddColumn("Address", e => e.GetString(29))
-            .AddProperties();
-        reportBuilder.AddColumn("Second Address Line", e => e.GetString(30))
-            .AddProperties();
-        reportBuilder.AddColumn("Manufacturer", e => e.GetString(31))
-            .AddProperties();
-        reportBuilder.AddColumn("Model", e => e.GetString(32))
-            .AddProperties();
-        reportBuilder.AddColumn("Vin", e => e.GetString(33))
-            .AddProperties(highlighted);
-        reportBuilder.AddColumn("Fuel Type", e => e.GetString(34))
-            .AddProperties();
-        reportBuilder.AddColumn("Type", e => e.GetString(35))
-            .AddProperties();
 
-        reportBuilder.AddGlobalProperties(new SameColumnFormatProperty());
+        foreach (ReportCellsSourceFromDataReader source in this.reportStructureProvider.GetDataReaderCellsSources())
+        {
+            reportBuilder.AddColumn(source.Title, source.ValueSelector)
+                .AddProperties(this.MapProperties(source.Properties));
+        }
+
+        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(new DataTableReader(this.dataTable));
 
@@ -486,91 +351,24 @@ public class ReportService : IReportService
 
     private IReportTable<ReportCell> BuildHorizontalReport()
     {
-        CustomFormatProperty customFormatProperty = new();
-        BoldProperty boldProperty = new();
-        AlignmentProperty leftAlignment = new(Alignment.Left);
-        AlignmentProperty rightAlignment = new(Alignment.Right);
-        AlignmentProperty centerAlignment = new(Alignment.Center);
-        DateTimeFormatProperty dateOfBirthFormatProperty = new("MMM d, yyyy");
-        DateTimeFormatProperty dateTimeFormatProperty = new("yyyy/MM/dd HH:mm:ss");
-        DecimalPrecisionProperty accountAmountPrecisionProperty = new(2);
-        DecimalPrecisionProperty cryptoAmountPrecisionProperty = new(8);
-
-        ColorProperty highlighted = new(Color.Blue);
         HorizontalReportSchemaBuilder<Person> reportBuilder = new();
-        reportBuilder.AddRow("FirstName", e => e.FirstName)
-            .AddProperties(boldProperty);
-        reportBuilder.AddRow("LastName", e => e.LastName)
-            .AddProperties(boldProperty);
-        reportBuilder.AddRow("Email", e => e.Email)
-            .AddProperties(highlighted);
-        reportBuilder.AddRow("Score", e => e.Score)
-            .AddProperties(customFormatProperty, centerAlignment);
-        reportBuilder.AddRow("Account Number", e => e.AccountNumber)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddRow("Btc Wallet", e => e.BtcAddress)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddRow("Eth Wallet", e => e.EthAddress)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddRow("Account #", e => e.AccountAmount)
-            .AddProperties(rightAlignment, accountAmountPrecisionProperty);
-        reportBuilder.AddRow("Btc #", e => e.BtcAmount)
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddRow("Eth #", e => e.EthAmount)
-            .AddProperties(rightAlignment, cryptoAmountPrecisionProperty);
-        reportBuilder.AddRow("Bio", e => e.Bio)
-            .AddProperties();
-        reportBuilder.AddRow("DOB", e => e.DateOfBirth)
-            .AddProperties(dateOfBirthFormatProperty);
-        reportBuilder.AddRow("Company Name", e => e.CompanyName)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddRow("Preferred Color", e => e.PreferredColor);
-        reportBuilder.AddRow("Avatar", e => e.Avatar)
-            .AddProperties();
-        reportBuilder.AddRow("Password", e => e.Password)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddRow("Username", e => e.UserName)
-            .AddProperties();
-        reportBuilder.AddRow("Home Page", e => e.HomePage)
-            .AddProperties();
-        reportBuilder.AddRow("Last IP", e => e.LastIpAddress)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddRow("User Agent", e => e.BrowserUserAgent)
-            .AddProperties();
-        reportBuilder.AddRow("Lorem Ipsum", e => e.Text)
-            .AddProperties(leftAlignment);
-        reportBuilder.AddRow("Registered", e => e.RegisteredAt)
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddRow("Last Visited", e => e.LastVisitedAt)
-            .AddProperties(dateTimeFormatProperty);
-        reportBuilder.AddRow("Home Phone", e => e.HomePhone)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddRow("Work Phone", e => e.WorkPhone)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddRow("Locale", e => e.Locale)
-            .AddProperties();
-        reportBuilder.AddRow("Country", e => e.Address.Country)
-            .AddProperties(centerAlignment);
-        reportBuilder.AddRow("City", e => e.Address.City)
-            .AddProperties();
-        reportBuilder.AddRow("Zip", e => e.Address.ZipCode)
-            .AddProperties(rightAlignment);
-        reportBuilder.AddRow("Address", e => e.Address.StreetAddress1)
-            .AddProperties();
-        reportBuilder.AddRow("Second Address Line", e => e.Address.StreetAddress2)
-            .AddProperties();
-        reportBuilder.AddRow("Manufacturer", e => e.Vehicle.Manufacturer)
-            .AddProperties();
-        reportBuilder.AddRow("Model", e => e.Vehicle.Model)
-            .AddProperties();
-        reportBuilder.AddRow("Vin", e => e.Vehicle.Vin)
-            .AddProperties(highlighted);
-        reportBuilder.AddRow("Fuel Type", e => e.Vehicle.FuelType)
-            .AddProperties();
-        reportBuilder.AddRow("Type", e => e.Vehicle.Type)
-            .AddProperties();
 
-        reportBuilder.AddGlobalProperties(new SameColumnFormatProperty());
+        foreach (BaseReportCellsSourceFromEntities source in this.reportStructureProvider.GetEntitiesCellsSources())
+        {
+            Type valueType = source.GetValueType();
+            MethodInfo getValueSelectorMethod = source.GetType().GetMethod(nameof(source.GetValueSelector))
+                .MakeGenericMethod(valueType);
+            IReportCellsProvider<Person> x = (IReportCellsProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellsProvider<,>)
+                    .MakeGenericType(typeof(Person), valueType),
+                source.Title,
+                getValueSelectorMethod.Invoke(source, Array.Empty<object?>())
+            );
+            reportBuilder.AddRow(x)
+                .AddProperties(this.MapProperties(source.Properties));
+        }
+
+        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
 
@@ -585,5 +383,37 @@ public class ReportService : IReportService
     private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
     {
         return this.excelConverter.Convert(reportTable);
+    }
+
+    private ReportCellProperty[] MapProperties(IEnumerable<Source.ReportCellsSourceProperty> sourceProperties)
+    {
+        return sourceProperties.Select(this.MapProperty).ToArray();
+    }
+
+    private ReportCellProperty MapProperty(Source.ReportCellsSourceProperty sourceProperty)
+    {
+        if (!this.mappedProperties.ContainsKey(sourceProperty))
+        {
+            this.mappedProperties[sourceProperty] = sourceProperty switch
+            {
+                Source.AlignmentProperty alignmentProperty => new AlignmentProperty(
+                    alignmentProperty.Alignment switch
+                    {
+                        SourceEnums.Alignment.Left => Alignment.Left,
+                        SourceEnums.Alignment.Right => Alignment.Right,
+                        SourceEnums.Alignment.Center => Alignment.Center,
+                        _ => throw new ArgumentOutOfRangeException(nameof(sourceProperty), $"Invalid alignment {alignmentProperty.Alignment}"),
+                    }),
+                Source.BoldProperty => new BoldProperty(),
+                Source.ColorProperty colorProperty => new ColorProperty(colorProperty.ForegroundColor, colorProperty.BackgroundColor),
+                Source.CustomFormatProperty => new CustomFormatProperty(),
+                Source.DecimalPrecisionProperty decimalPrecisionProperty => new DecimalPrecisionProperty(decimalPrecisionProperty.Precision),
+                Source.DateTimeFormatProperty dateTimeFormatProperty => new DateTimeFormatProperty(dateTimeFormatProperty.Format),
+                Source.SameColumnFormatProperty => new SameColumnFormatProperty(),
+                _ => throw new ArgumentOutOfRangeException(nameof(sourceProperty)),
+            };
+        }
+
+        return this.mappedProperties[sourceProperty];
     }
 }

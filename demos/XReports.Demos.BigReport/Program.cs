@@ -10,7 +10,7 @@ internal static class Program
 {
     public static async Task Main()
     {
-        Person[] data = DataProvider.GetData(1_00_000);
+        Person[] data = DataProvider.GetData(10_000);
         DataTable dataTable = DataProvider.CreateDataTable(data);
 
         ReportService reportService = new(data, dataTable);
@@ -20,7 +20,7 @@ internal static class Program
         File.Delete(fileName);
 
         Stopwatch sw = Stopwatch.StartNew();
-        await reportService.VerticalFromDataReaderExcelEnumAsync();
+        await reportService.VerticalFromEntitiesHtmlEnumAsync();
         sw.Stop();
         Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds} ms");
     }

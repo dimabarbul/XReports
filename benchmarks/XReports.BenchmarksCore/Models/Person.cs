@@ -24,7 +24,7 @@ public class Person
     public string Password { get; set; }
     public string UserName { get; set; }
     public string HomePage { get; set; }
-    public object LastIpAddress { get; set; }
+    public string LastIpAddress { get; set; }
     public string BrowserUserAgent { get; set; }
     public string Text { get; set; }
     public DateTime RegisteredAt { get; set; }
