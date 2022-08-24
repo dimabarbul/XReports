@@ -31,18 +31,18 @@ namespace XReports.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddStreamCellWriter(this IServiceCollection services)
+        public static IServiceCollection AddHtmlStreamCellWriter(this IServiceCollection services)
         {
-            return services.AddStreamCellWriter<IHtmlStreamCellWriter, HtmlStreamCellWriter>();
+            return services.AddHtmlStreamCellWriter<IHtmlStreamCellWriter, HtmlStreamCellWriter>();
         }
 
-        public static IServiceCollection AddStreamCellWriter<TStreamCellWriter>(this IServiceCollection services)
+        public static IServiceCollection AddHtmlStreamCellWriter<TStreamCellWriter>(this IServiceCollection services)
             where TStreamCellWriter : HtmlStreamCellWriter
         {
-            return services.AddStreamCellWriter<IHtmlStreamCellWriter, TStreamCellWriter>();
+            return services.AddHtmlStreamCellWriter<IHtmlStreamCellWriter, TStreamCellWriter>();
         }
 
-        public static IServiceCollection AddStreamCellWriter<TIStreamCellWriter, TStreamCellWriter>(this IServiceCollection services)
+        public static IServiceCollection AddHtmlStreamCellWriter<TIStreamCellWriter, TStreamCellWriter>(this IServiceCollection services)
             where TIStreamCellWriter : class, IHtmlStreamCellWriter
             where TStreamCellWriter : class, TIStreamCellWriter
         {
