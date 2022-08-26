@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.2.0
+## NEXT
 
 Released on: *YYYY-MM-DD*
 
@@ -87,7 +87,7 @@ IterationCount=10  RunStrategy=Monitoring
 |                 'Enumerate horizontal XLSX report without saving anywhere' |   100000 | 10.318 s | 0.1331 s | 0.0881 s | 2748000.0000 |   1000.0000 |         - |  4,111 MB |
 ```
 
-Version 0.2.0:
+Version NEXT
 
 ```
 BenchmarkDotNet=v0.13.1, OS=gentoo
