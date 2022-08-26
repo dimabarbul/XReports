@@ -1,4 +1,3 @@
-using System;
 using XReports.Interfaces;
 using XReports.Models;
 
@@ -14,12 +13,9 @@ namespace XReports.ReportCellsProviders
             this.provider = provider;
         }
 
-        public override Func<TSourceEntity, ReportCell> CellSelector
+        public override ReportCell GetCell(TSourceEntity entity)
         {
-            get
-            {
-                return entity => this.CreateCell(this.provider.GetValue(), entity);
-            }
+            return this.CreateCell(this.provider.GetValue());
         }
     }
 }

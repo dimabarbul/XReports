@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
+using XReports.ReportCellsProviders;
 
 namespace XReports.Models
 {
@@ -43,7 +44,7 @@ namespace XReports.Models
                 .Select(
                     row =>
                         complexHeader[rowIndex++]
-                            .Concat(source.Select(entity => this.AddGlobalProperties(row.CreateCell(entity)))));
+                            .Concat(source.Select(row.CreateCell)));
         }
     }
 }

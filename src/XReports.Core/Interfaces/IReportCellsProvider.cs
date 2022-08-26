@@ -1,4 +1,3 @@
-using System;
 using XReports.Models;
 
 namespace XReports.Interfaces
@@ -7,6 +6,6 @@ namespace XReports.Interfaces
     {
         string Title { get; }
 
-        Func<TSourceEntity, ReportCell> CellSelector { get; }
+        ReportCell GetCell(TSourceEntity entity);
     }
 }

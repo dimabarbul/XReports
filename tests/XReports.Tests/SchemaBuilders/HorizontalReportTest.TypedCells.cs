@@ -94,13 +94,13 @@ namespace XReports.Tests.SchemaBuilders
 
             ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
             cells.Should().HaveCount(2);
-            cells[0][0].Value.Should().Be("The Date");
+            cells[0][0].GetUnderlyingValue().Should().Be("The Date");
             cells[0][0].ValueType.Should().Be(typeof(string));
-            cells[0][1].Value.Should().Be("10/24/2020");
+            cells[0][1].GetUnderlyingValue().Should().Be("10/24/2020");
             cells[0][1].ValueType.Should().Be(typeof(DateTime));
-            cells[1][0].Value.Should().Be("Next Day");
+            cells[1][0].GetUnderlyingValue().Should().Be("Next Day");
             cells[1][0].ValueType.Should().Be(typeof(string));
-            cells[1][1].Value.Should().Be("10/25/2020");
+            cells[1][1].GetUnderlyingValue().Should().Be("10/25/2020");
             cells[1][1].ValueType.Should().Be(typeof(DateTime));
         }
     }

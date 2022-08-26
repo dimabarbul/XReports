@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -25,11 +24,11 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
     {
         private const int RecordsCount = 10;
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = await this.WriteReportToString(htmlReportTable);
+            string tableHtml = this.WriteReportToString(htmlReportTable);
 
             return this.View(new ViewModel() { ReportTableHtml = tableHtml });
         }
@@ -105,9 +104,9 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             return excelConverter.Convert(reportTable);
         }
 
-        private async Task<string> WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+        private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
+            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
         }
 
         private IEnumerable<Entity> GetData()

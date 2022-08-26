@@ -10,7 +10,8 @@ namespace XReports.PropertyHandlers.Html
 
         protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
         {
-            cell.Value = $"<strong>{cell.Value}</strong>";
+            string value = cell.GetValue<string>();
+            cell.SetValue($"<strong>{value}</strong>");
             cell.IsHtml = true;
         }
     }

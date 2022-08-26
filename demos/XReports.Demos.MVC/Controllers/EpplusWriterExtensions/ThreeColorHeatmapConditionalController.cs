@@ -23,11 +23,11 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
     {
         private const int RecordsCount = 20;
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = await this.WriteReportToString(htmlReportTable);
+            string tableHtml = this.WriteReportToString(htmlReportTable);
 
             return this.View(new ViewModel() { ReportTableHtml = tableHtml });
         }
@@ -85,9 +85,9 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             return excelConverter.Convert(reportTable);
         }
 
-        private async Task<string> WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+        private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return await new BootstrapStringWriter(new StringCellWriter()).WriteToStringAsync(htmlReportTable);
+            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
         }
 
         private IEnumerable<Entity> GetData()

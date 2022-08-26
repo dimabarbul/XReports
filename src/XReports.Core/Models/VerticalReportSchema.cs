@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using XReports.Interfaces;
 
 namespace XReports.Models
@@ -14,7 +14,7 @@ namespace XReports.Models
             {
                 Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
-                Rows = this.GetRows(source),
+                Rows = new RowsFromEntityCollection(this, source),
             };
 
             return table;
@@ -26,35 +26,199 @@ namespace XReports.Models
             {
                 Properties = this.TableProperties,
                 HeaderRows = this.CreateComplexHeader(),
-                Rows = this.GetRows(dataReader),
+                Rows = new RowsFromDataReaderCollection(this, dataReader),
             };
 
             return table;
         }
 
-        private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source)
+        private class RowsFromEntityCollection : IEnumerable<IEnumerable<ReportCell>>
         {
-            return source
-                .Select(
-                    entity => this.CellsProviders
-                        .Select(p => this.AddGlobalProperties(p.CreateCell(entity))));
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private readonly IEnumerable<TSourceEntity> source;
+
+            public RowsFromEntityCollection(VerticalReportSchema<TSourceEntity> schema, IEnumerable<TSourceEntity> source)
+            {
+                this.schema = schema;
+                this.source = source;
+            }
+
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromEntityEnumerator(this.schema, this.source);
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
 
-        private IEnumerable<IEnumerable<ReportCell>> GetRows(IDataReader dataReader)
+        private class RowsFromEntityEnumerator : IEnumerator<IEnumerable<ReportCell>>
         {
-            if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+            private readonly IEnumerator<TSourceEntity> enumerator;
+            private readonly CellsFromEntityEnumerator cellsEnumerator;
+
+            public RowsFromEntityEnumerator(VerticalReportSchema<TSourceEntity> schema, IEnumerable<TSourceEntity> source)
             {
-                throw new InvalidOperationException("Report schema should should be of IDataReader");
+                this.enumerator = source.GetEnumerator();
+                this.cellsEnumerator = new CellsFromEntityEnumerator(schema);
             }
 
-            while (dataReader.Read())
+            public IEnumerable<ReportCell> Current => this.cellsEnumerator.WithEntity(this.enumerator.Current);
+
+            object IEnumerator.Current => this.Current;
+
+            public bool MoveNext()
             {
-                yield return
-                    this.CellsProviders
-                        .Select(p => this.AddGlobalProperties(p.CreateCell((TSourceEntity)dataReader)));
+                return this.enumerator.MoveNext();
             }
 
-            dataReader.Close();
+            public void Reset()
+            {
+                this.enumerator.Reset();
+                this.cellsEnumerator.Reset();
+            }
+
+            public void Dispose()
+            {
+                this.enumerator.Dispose();
+            }
+        }
+
+        private class CellsFromEntityEnumerator : IEnumerator<ReportCell>, IEnumerable<ReportCell>
+        {
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private TSourceEntity entity;
+            private int index = -1;
+
+            public CellsFromEntityEnumerator(VerticalReportSchema<TSourceEntity> schema)
+            {
+                this.schema = schema;
+            }
+
+            public ReportCell Current => this.schema.CellsProviders[this.index].CreateCell(this.entity);
+
+            object IEnumerator.Current => this.Current;
+
+            public IEnumerable<ReportCell> WithEntity(TSourceEntity entity)
+            {
+                this.entity = entity;
+                this.Reset();
+
+                return this;
+            }
+
+            public bool MoveNext()
+            {
+                return ++this.index < this.schema.CellsProviders.Length;
+            }
+
+            public void Reset()
+            {
+                this.index = -1;
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public IEnumerator<ReportCell> GetEnumerator() => this;
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        }
+
+        private class RowsFromDataReaderCollection : IEnumerable<IEnumerable<ReportCell>>
+        {
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private readonly IDataReader dataReader;
+
+            public RowsFromDataReaderCollection(VerticalReportSchema<TSourceEntity> schema, IDataReader dataReader)
+            {
+                if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+                {
+                    throw new InvalidOperationException("Report schema should should be of IDataReader");
+                }
+
+                this.schema = schema;
+                this.dataReader = dataReader;
+            }
+
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromDataReaderEnumerator(this.schema, this.dataReader);
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        }
+
+        private class RowsFromDataReaderEnumerator : IEnumerator<IEnumerable<ReportCell>>
+        {
+            private readonly IDataReader dataReader;
+            private readonly CellsFromDataReaderEnumerator cellsEnumerator;
+
+            public RowsFromDataReaderEnumerator(VerticalReportSchema<TSourceEntity> schema, IDataReader dataReader)
+            {
+                if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+                {
+                    throw new InvalidOperationException("Report schema should should be of IDataReader");
+                }
+
+                this.dataReader = dataReader;
+                this.cellsEnumerator = new CellsFromDataReaderEnumerator(schema);
+            }
+
+            public IEnumerable<ReportCell> Current => this.cellsEnumerator.WithDataReader(this.dataReader);
+
+            object IEnumerator.Current => this.Current;
+
+            public bool MoveNext()
+            {
+                return this.dataReader.Read();
+            }
+
+            public void Reset()
+            {
+                throw new InvalidOperationException("Data reader cannot be reset");
+            }
+
+            public void Dispose()
+            {
+                this.cellsEnumerator.Dispose();
+            }
+        }
+
+        private class CellsFromDataReaderEnumerator : IEnumerator<ReportCell>, IEnumerable<ReportCell>
+        {
+            private readonly VerticalReportSchema<TSourceEntity> schema;
+            private int index = -1;
+            private IDataReader dataReader;
+
+            public CellsFromDataReaderEnumerator(VerticalReportSchema<TSourceEntity> schema)
+            {
+                this.schema = schema;
+            }
+
+            public ReportCell Current => this.schema.CellsProviders[this.index].CreateCell((TSourceEntity)this.dataReader);
+
+            object IEnumerator.Current => this.Current;
+
+            public IEnumerable<ReportCell> WithDataReader(IDataReader dataReader)
+            {
+                this.Reset();
+                this.dataReader = dataReader;
+
+                return this;
+            }
+
+            public bool MoveNext()
+            {
+                return ++this.index < this.schema.CellsProviders.Length;
+            }
+
+            public void Reset()
+            {
+                this.index = -1;
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public IEnumerator<ReportCell> GetEnumerator() => this;
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
     }
 }

@@ -16,14 +16,14 @@ namespace XReports.Demos.FromDb.Controllers
         private readonly UserService userService;
         private readonly IReportConverter<HtmlReportCell> htmlConverter;
         private readonly IReportConverter<ExcelReportCell> excelConverter;
-        private readonly IStringWriter stringWriter;
+        private readonly IHtmlStringWriter htmlStringWriter;
         private readonly IEpplusWriter excelWriter;
 
-        public ModelBasedReportController(ReportService reportService, IReportConverter<HtmlReportCell> htmlConverter, IStringWriter stringWriter, IReportConverter<ExcelReportCell> excelConverter, IEpplusWriter excelWriter, ProductService productService, UserService userService)
+        public ModelBasedReportController(ReportService reportService, IReportConverter<HtmlReportCell> htmlConverter, IHtmlStringWriter htmlStringWriter, IReportConverter<ExcelReportCell> excelConverter, IEpplusWriter excelWriter, ProductService productService, UserService userService)
         {
             this.reportService = reportService;
             this.htmlConverter = htmlConverter;
-            this.stringWriter = stringWriter;
+            this.htmlStringWriter = htmlStringWriter;
             this.excelConverter = excelConverter;
             this.excelWriter = excelWriter;
             this.productService = productService;
@@ -34,7 +34,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.userService.GetActiveUsersAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }
@@ -53,7 +53,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetAllAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }
@@ -71,7 +71,7 @@ namespace XReports.Demos.FromDb.Controllers
         {
             IReportTable<ReportCell> report = this.reportService.GetReport(await this.productService.GetOrdersDetailsAsync(50));
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
-            string reportHtml = await this.stringWriter.WriteToStringAsync(htmlTable);
+            string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
             return this.View(new ReportViewModel(reportHtml));
         }

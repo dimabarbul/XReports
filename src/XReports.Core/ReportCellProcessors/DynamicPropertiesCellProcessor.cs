@@ -22,10 +22,7 @@ namespace XReports.ReportCellProcessors
 
         public void Process(ReportCell cell, TSourceEntity entity)
         {
-            foreach (ReportCellProperty property in this.propertySelector(entity).Where(p => p != null))
-            {
-                cell.AddProperty(property);
-            }
+            cell.AddProperties(this.propertySelector(entity).Where(p => p != null));
         }
     }
 }

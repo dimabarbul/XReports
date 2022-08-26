@@ -91,10 +91,8 @@ namespace XReports.Models
 
         private ReportCell CreateComplexHeaderCell(string title, int columnSpan)
         {
-            ReportCell cell = new ReportCell<string>(title)
-            {
-                ColumnSpan = columnSpan,
-            };
+            ReportCell cell = ReportCell.FromValue(title);
+            cell.ColumnSpan = columnSpan;
 
             foreach (ReportCellProperty property in this.CommonComplexHeaderProperties)
             {

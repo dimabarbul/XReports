@@ -10,17 +10,18 @@ namespace XReports.PropertyHandlers.Html
 
         protected override void HandleProperty(MaxLengthProperty property, HtmlReportCell cell)
         {
-            if (string.IsNullOrEmpty(cell.Value))
+            string value = cell.GetValue<string>();
+            if (string.IsNullOrEmpty(value))
             {
                 return;
             }
 
-            if (cell.Value.Length <= property.MaxLength)
+            if (value.Length <= property.MaxLength)
             {
                 return;
             }
 
-            cell.Value = cell.Value.Substring(0, property.MaxLength - 1) + "…";
+            cell.SetValue(value.Substring(0, property.MaxLength - 1) + '…');
         }
     }
 }

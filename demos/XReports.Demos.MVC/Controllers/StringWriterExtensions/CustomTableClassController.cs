@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using XReports.Demos.MVC.XReports;
@@ -16,17 +15,17 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
     {
         private const int RecordsCount = 10;
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReport = this.Convert(reportTable);
-            StringWriter bootstrapStringWriter = new BootstrapStringWriter(new StringCellWriter());
-            StringWriter stringWriter = new StringWriter(new StringCellWriter());
+            HtmlStringWriter bootstrapHtmlStringWriter = new BootstrapHtmlStringWriter(new HtmlStringCellWriter());
+            HtmlStringWriter htmlStringWriter = new HtmlStringWriter(new HtmlStringCellWriter());
 
             ViewModel vm = new ViewModel()
             {
-                RegularTableHtml = await stringWriter.WriteToStringAsync(htmlReport),
-                TableHtml = await bootstrapStringWriter.WriteToStringAsync(htmlReport),
+                RegularTableHtml = htmlStringWriter.WriteToString(htmlReport),
+                TableHtml = bootstrapHtmlStringWriter.WriteToString(htmlReport),
             };
             return this.View(vm);
         }

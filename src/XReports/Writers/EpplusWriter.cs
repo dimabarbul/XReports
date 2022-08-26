@@ -40,15 +40,21 @@ namespace XReports.Writers
         public Stream WriteToStream(IReportTable<ExcelReportCell> table)
         {
             Stream stream = new MemoryStream();
+
+            this.WriteToStream(table, stream);
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return stream;
+        }
+
+        public void WriteToStream(IReportTable<ExcelReportCell> table, Stream stream)
+        {
             using ExcelPackage excelPackage = new ExcelPackage(stream);
 
             this.WriteReport(table, excelPackage);
 
             excelPackage.Save();
-
-            stream.Seek(0, SeekOrigin.Begin);
-
-            return stream;
         }
 
         protected virtual ExcelAddress WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table, int startRow, int startColumn)
@@ -63,7 +69,7 @@ namespace XReports.Writers
                 {
                     if (cell != null)
                     {
-                        this.WriteHeaderCell(worksheet.Cells[row, column], cell);
+                        this.WriteHeaderCell(worksheet, row, column, cell);
                     }
 
                     column++;
@@ -110,7 +116,7 @@ namespace XReports.Writers
                 {
                     if (cell != null)
                     {
-                        this.WriteCell(worksheet.Cells[row, column], cell);
+                        this.WriteCell(worksheet, row, column, cell);
                     }
 
                     column++;
@@ -142,21 +148,19 @@ namespace XReports.Writers
             }
         }
 
-        protected virtual void WriteHeaderCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        protected virtual void WriteHeaderCell(ExcelWorksheet worksheet, int row, int col, ExcelReportCell cell)
         {
-            this.WriteCell(worksheetCell, cell);
+            this.WriteCell(worksheet, row, col, cell);
         }
 
-        protected virtual void WriteCell(ExcelRange worksheetCell, ExcelReportCell cell)
+        protected virtual void WriteCell(ExcelWorksheet worksheet, int row, int col, ExcelReportCell cell)
         {
-            worksheetCell.Value = cell.Value;
+            worksheet.SetValue(row, col, cell.GetUnderlyingValue());
 
             if (cell.ColumnSpan > 1 || cell.RowSpan > 1)
             {
-                int startRow = worksheetCell.Start.Row;
-                int startColumn = worksheetCell.Start.Column;
-                ExcelRange excelRange = worksheetCell.Worksheet
-                    .Cells[startRow, startColumn, startRow + cell.RowSpan - 1, startColumn + cell.ColumnSpan - 1];
+                ExcelRange excelRange = worksheet
+                    .Cells[row, col, row + cell.RowSpan - 1, col + cell.ColumnSpan - 1];
                 excelRange.Merge = true;
 
                 if (cell.RowSpan > 1)
@@ -167,16 +171,20 @@ namespace XReports.Writers
 
             if (cell.HasProperty<SameColumnFormatProperty>())
             {
-                int column = worksheetCell.Start.Column;
-                if (!this.columnFormatCells.ContainsKey(column))
+                if (!this.columnFormatCells.ContainsKey(col))
                 {
-                    this.columnFormatCells.Add(column, cell);
+                    this.columnFormatCells.Add(col, (ExcelReportCell)cell.Clone());
                 }
 
                 return;
             }
 
-            this.FormatCell(worksheetCell, cell);
+            this.FormatCell(worksheet, row, col, cell);
+        }
+
+        protected void FormatCell(ExcelWorksheet worksheet, int row, int col, ExcelReportCell cell)
+        {
+            this.FormatCell(worksheet.Cells[row, col], cell);
         }
 
         protected virtual void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)

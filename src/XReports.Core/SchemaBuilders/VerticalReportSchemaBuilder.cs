@@ -1,6 +1,7 @@
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {
@@ -37,12 +38,11 @@ namespace XReports.SchemaBuilders
                     .Select(
                         c => new ReportSchemaCellsProvider<TSourceEntity>(
                             c.Provider,
-                            c.CellProperties.ToArray(),
+                            this.AddGlobalProperties(c.CellProperties),
                             c.HeaderProperties.ToArray(),
                             c.CellProcessors.ToArray(),
                             c.HeaderProcessors.ToArray()))
                     .ToArray(),
-                this.GlobalProperties.ToArray(),
                 this.TableProperties.ToArray(),
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties

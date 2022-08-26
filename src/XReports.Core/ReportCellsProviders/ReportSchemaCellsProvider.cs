@@ -1,6 +1,8 @@
+using System.Runtime.CompilerServices;
 using XReports.Interfaces;
+using XReports.Models;
 
-namespace XReports.Models
+namespace XReports.ReportCellsProviders
 {
     public class ReportSchemaCellsProvider<TSourceEntity>
     {
@@ -9,6 +11,8 @@ namespace XReports.Models
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
+
+        private readonly ReportCell headerCell = new ReportCell();
 
         public ReportSchemaCellsProvider(
             IReportCellsProvider<TSourceEntity> provider,
@@ -26,7 +30,7 @@ namespace XReports.Models
 
         public ReportCell CreateCell(TSourceEntity entity)
         {
-            ReportCell cell = this.provider.CellSelector(entity);
+            ReportCell cell = this.provider.GetCell(entity);
 
             this.AddProperties(cell);
             this.RunProcessors(cell, entity);
@@ -36,43 +40,48 @@ namespace XReports.Models
 
         public ReportCell CreateHeaderCell()
         {
-            ReportCell cell = new ReportCell<string>(this.provider.Title);
+            this.headerCell.Clear();
+            this.headerCell.SetValue(this.provider.Title);
 
-            this.AddHeaderProperties(cell);
-            this.RunHeaderProcessors(cell);
+            this.AddHeaderProperties(this.headerCell);
+            this.RunHeaderProcessors(this.headerCell);
 
-            return cell;
+            return this.headerCell;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.cellProperties)
+            if (this.cellProperties.Length > 0)
             {
-                cell.AddProperty(property);
+                cell.AddProperties(this.cellProperties);
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.cellProcessors)
+            for (int i = 0; i < this.cellProcessors.Length; i++)
             {
-                processor.Process(cell, entity);
+                this.cellProcessors[i].Process(cell, entity);
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddHeaderProperties(ReportCell cell)
         {
-            foreach (ReportCellProperty property in this.headerProperties)
+            if (this.headerProperties.Length > 0)
             {
-                cell.AddProperty(property);
+                cell.AddProperties(this.headerProperties);
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunHeaderProcessors(ReportCell cell)
         {
-            foreach (IReportCellProcessor<TSourceEntity> processor in this.headerProcessors)
+            for (int i = 0; i < this.headerProcessors.Length; i++)
             {
-                processor.Process(cell, default);
+                this.headerProcessors[i].Process(cell, default);
             }
         }
     }

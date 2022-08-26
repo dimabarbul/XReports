@@ -111,7 +111,7 @@ namespace XReports.SchemaBuilders
 
         private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property, ReportVariableAttribute attribute)
         {
-            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
+            ParameterExpression parameter = Expression.Parameter(typeof(TEntity));
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
             LambdaExpression lambdaExpression = Expression.Lambda(memberExpression, parameter);
 

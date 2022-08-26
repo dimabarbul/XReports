@@ -12,5 +12,15 @@ namespace XReports.Models
         public Dictionary<string, string> Styles { get; set; } = new Dictionary<string, string>();
 
         public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            this.IsHtml = false;
+            this.CssClasses.Clear();
+            this.Styles.Clear();
+            this.Attributes.Clear();
+        }
     }
 }

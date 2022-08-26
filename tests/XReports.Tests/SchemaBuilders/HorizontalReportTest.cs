@@ -8,7 +8,7 @@ namespace XReports.Tests.SchemaBuilders
     {
         private ReportCell[][] GetCellsAsArray(IEnumerable<IEnumerable<ReportCell>> cells)
         {
-            return cells.Select(row => row.ToArray()).ToArray();
+            return cells.Select(row => row.Select(c => c?.Clone() as ReportCell).ToArray()).ToArray();
         }
     }
 }

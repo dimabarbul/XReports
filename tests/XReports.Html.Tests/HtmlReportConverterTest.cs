@@ -18,7 +18,7 @@ namespace XReports.Html.Tests
 
         private ReportCell CreateReportCell<TValue>(TValue title, params ReportCellProperty[] properties)
         {
-            ReportCell<TValue> cell = new ReportCell<TValue>(title);
+            ReportCell cell = ReportCell.FromValue(title);
 
             foreach (ReportCellProperty property in properties)
             {
