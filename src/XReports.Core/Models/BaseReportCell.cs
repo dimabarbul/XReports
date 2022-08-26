@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace XReports.Models
 {
@@ -36,7 +37,7 @@ namespace XReports.Models
                 return (TValue)this.value;
             }
 
-            return (TValue)Convert.ChangeType(this.value, typeof(TValue));
+            return (TValue)Convert.ChangeType(this.value, typeof(TValue), CultureInfo.InvariantCulture);
         }
 
         public void SetValue<TValue>(TValue value)

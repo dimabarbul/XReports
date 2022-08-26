@@ -1,3 +1,4 @@
+using System;
 using XReports.Enums;
 using XReports.Models;
 using XReports.Properties;
@@ -21,7 +22,7 @@ namespace XReports.PropertyHandlers.Html
                 return;
             }
 
-            cell.SetValue(value.Substring(0, property.MaxLength - 1) + '…');
+            cell.SetValue(string.Concat(value.AsSpan(0, property.MaxLength - 1), "…"));
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -16,7 +17,7 @@ namespace XReports.Tests.SchemaBuilders
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new (string, string)[] { });
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
 
             ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
             headerCells.Should().HaveCount(1);

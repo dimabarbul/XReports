@@ -1,3 +1,4 @@
+using System.Globalization;
 using XReports.Models;
 using XReports.PropertyHandlers;
 
@@ -10,6 +11,6 @@ public class CustomFormatPropertyHtmlHandler : PropertyHandler<CustomFormatPrope
         decimal value = cell.GetValue<decimal>();
         string format = value == 100m ? "F0" : "F2";
 
-        cell.Value = value.ToString(format);
+        cell.Value = value.ToString(format, CultureInfo.CurrentCulture);
     }
 }

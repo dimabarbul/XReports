@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
@@ -109,7 +110,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 decimal value = cell.GetValue<decimal>();
                 string format = value == 100m ? "F0" : "F2";
 
-                cell.SetValue(value.ToString(format));
+                cell.SetValue(value.ToString(format, CultureInfo.CurrentCulture));
             }
         }
 

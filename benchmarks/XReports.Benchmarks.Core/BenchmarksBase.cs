@@ -8,8 +8,8 @@ namespace XReports.Benchmarks.Core;
 [MemoryDiagnoser]
 public abstract class BenchmarksBase
 {
-    protected Person[]? data;
-    protected DataTable? dataTable;
+    protected Person[] Data { get; private set; }
+    protected DataTable Table { get; private set; }
 
     [ParamsSource(nameof(GetRowCounts))]
     public int RowCount { get; set; }
@@ -26,8 +26,8 @@ public abstract class BenchmarksBase
     [GlobalSetup]
     public void GlobalSetup()
     {
-        this.data = DataProvider.GetData(this.RowCount).ToArray();
-        this.dataTable = DataProvider.CreateDataTable(this.data);
+        this.Data = DataProvider.GetData(this.RowCount).ToArray();
+        this.Table = DataProvider.CreateDataTable(this.Data);
     }
 
     [Benchmark(Description = "Enumerate vertical HTML report from entities without saving anywhere")]

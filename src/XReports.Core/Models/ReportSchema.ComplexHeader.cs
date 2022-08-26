@@ -48,9 +48,8 @@ namespace XReports.Models
 
                     if (row[rowIndex] != null)
                     {
-                        int span = row[rowIndex].ColumnSpan;
-                        row[rowIndex].ColumnSpan = row[rowIndex].RowSpan;
-                        row[rowIndex].RowSpan = span;
+                        (row[rowIndex].ColumnSpan, row[rowIndex].RowSpan) =
+                            (row[rowIndex].RowSpan, row[rowIndex].ColumnSpan);
                     }
                 }
 

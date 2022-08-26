@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using XReports.Enums;
 using XReports.Models;
@@ -15,7 +16,7 @@ namespace XReports.PropertyHandlers.Html
         protected override void HandleProperty(PercentFormatProperty property, HtmlReportCell cell)
         {
             string format = this.GetFormat(property.Precision);
-            cell.SetValue((cell.GetNullableValue<decimal>() * 100)?.ToString(format) + property.PostfixText);
+            cell.SetValue((cell.GetNullableValue<decimal>() * 100)?.ToString(format, CultureInfo.CurrentCulture) + property.PostfixText);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

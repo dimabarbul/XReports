@@ -28,11 +28,9 @@ namespace XReports.PropertyHandlers.Excel
             if (!this.formatCache.ContainsKey(property))
             {
                 // if postfix text is ' percents (%) here', then it should be converted to '" percents ("%") here"'
-                string postfix = $"\"{property.PostfixText}\""
-
-                    // surround percent sign with double quotes so it is not part of format string
-                    // and can be treated correctly by office
-                    .Replace("%", "\"%\"");
+                // surround percent sign with double quotes so it is not part of format string
+                // and can be treated correctly by office
+                string postfix = $"\"{property.PostfixText}\"".Replace("%", "\"%\"");
 
                 this.formatCache[property] = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))}{postfix}";
             }

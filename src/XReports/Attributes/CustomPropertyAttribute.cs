@@ -3,7 +3,7 @@ using XReports.Models;
 
 namespace XReports.Attributes
 {
-    public class CustomPropertyAttribute : AttributeBase
+    public class CustomPropertyAttribute : BasePropertyAttribute
     {
         public CustomPropertyAttribute(Type type)
         {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using XReports.Models;
 using XReports.Properties;
@@ -12,7 +13,7 @@ namespace XReports.PropertyHandlers.Html
         protected override void HandleProperty(DecimalPrecisionProperty property, HtmlReportCell cell)
         {
             string format = this.GetFormat(property.Precision);
-            cell.SetValue(cell.GetNullableValue<decimal>()?.ToString(format));
+            cell.SetValue(cell.GetNullableValue<decimal>()?.ToString(format, CultureInfo.CurrentCulture));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

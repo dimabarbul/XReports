@@ -11,7 +11,7 @@ public class AlignmentProperty : ReportCellsSourceProperty
 
     public Alignment Alignment { get; }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         return obj is AlignmentProperty alignmentProperty
             && this.Alignment == alignmentProperty.Alignment;

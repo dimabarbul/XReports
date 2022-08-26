@@ -7,8 +7,6 @@ namespace XReports.Writers
 {
     public class HtmlStringWriter : IHtmlStringWriter
     {
-        protected StringBuilder stringBuilder;
-
         private readonly IHtmlStringCellWriter htmlStringCellWriter;
 
         public HtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
@@ -16,13 +14,15 @@ namespace XReports.Writers
             this.htmlStringCellWriter = htmlStringCellWriter;
         }
 
+        protected StringBuilder StringBuilder { get; private set; }
+
         public string WriteToString(IReportTable<HtmlReportCell> reportTable)
         {
-            this.stringBuilder = new StringBuilder();
+            this.StringBuilder = new StringBuilder();
 
             this.WriteReport(reportTable);
 
-            return this.stringBuilder.ToString();
+            return this.StringBuilder.ToString();
         }
 
         protected virtual void WriteReport(IReportTable<HtmlReportCell> reportTable)
@@ -47,7 +47,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.htmlStringCellWriter.WriteHeaderCell(this.stringBuilder, cell);
+                    this.htmlStringCellWriter.WriteHeaderCell(this.StringBuilder, cell);
                 }
 
                 this.EndRow();
@@ -70,7 +70,7 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.htmlStringCellWriter.WriteBodyCell(this.stringBuilder, cell);
+                    this.htmlStringCellWriter.WriteBodyCell(this.StringBuilder, cell);
                 }
 
                 this.EndRow();
@@ -81,42 +81,42 @@ namespace XReports.Writers
 
         protected virtual void BeginHead()
         {
-            this.stringBuilder.Append("<thead>");
+            this.StringBuilder.Append("<thead>");
         }
 
         protected virtual void EndHead()
         {
-            this.stringBuilder.Append("</thead>");
+            this.StringBuilder.Append("</thead>");
         }
 
         protected virtual void BeginBody()
         {
-            this.stringBuilder.Append("<tbody>");
+            this.StringBuilder.Append("<tbody>");
         }
 
         protected virtual void EndBody()
         {
-            this.stringBuilder.Append("</tbody>");
+            this.StringBuilder.Append("</tbody>");
         }
 
         protected virtual void BeginRow()
         {
-            this.stringBuilder.Append("<tr>");
+            this.StringBuilder.Append("<tr>");
         }
 
         protected virtual void EndRow()
         {
-            this.stringBuilder.Append("</tr>");
+            this.StringBuilder.Append("</tr>");
         }
 
         protected virtual void BeginTable()
         {
-            this.stringBuilder.Append("<table>");
+            this.StringBuilder.Append("<table>");
         }
 
         protected virtual void EndTable()
         {
-            this.stringBuilder.Append("</table>");
+            this.StringBuilder.Append("</table>");
         }
     }
 }

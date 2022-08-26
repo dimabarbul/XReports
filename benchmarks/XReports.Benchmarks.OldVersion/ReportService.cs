@@ -72,14 +72,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -98,14 +98,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
@@ -158,14 +158,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -184,14 +184,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
@@ -244,14 +244,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -270,14 +270,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }

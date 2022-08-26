@@ -78,9 +78,15 @@ namespace XReports
                 this.reportConverter = reportConverter;
             }
 
-            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator() => new HeaderRowsEnumerator(this.reportTable, this.reportConverter);
+            public IEnumerator<IEnumerable<TResultReportCell>> GetEnumerator()
+            {
+                return new HeaderRowsEnumerator(this.reportTable, this.reportConverter);
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
 
         private class HeaderRowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>

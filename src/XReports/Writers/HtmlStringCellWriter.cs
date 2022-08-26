@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -43,12 +44,12 @@ namespace XReports.Writers
         {
             if (cell.RowSpan > 1)
             {
-                this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString());
+                this.WriteAttribute(stringBuilder, "rowSpan", cell.RowSpan.ToString(CultureInfo.InvariantCulture));
             }
 
             if (cell.ColumnSpan > 1)
             {
-                this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString());
+                this.WriteAttribute(stringBuilder, "colSpan", cell.ColumnSpan.ToString(CultureInfo.InvariantCulture));
             }
 
             if (cell.CssClasses.Count > 0)

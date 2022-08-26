@@ -43,7 +43,7 @@ namespace XReports.Helpers
                 token = orderedTokens.FirstOrDefault(t => toParse.StartsWith(t, StringComparison.Ordinal));
                 if (token == null)
                 {
-                    token = toParse.Substring(0, 1);
+                    token = toParse[..1];
                     lastFreeTextToken = (lastFreeTextToken ?? string.Empty) + token;
                 }
                 else

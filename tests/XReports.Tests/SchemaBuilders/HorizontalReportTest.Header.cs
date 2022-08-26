@@ -33,7 +33,7 @@ namespace XReports.Tests.SchemaBuilders
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(string.Empty, s => s.Length);
-            reportBuilder.AddHeaderRow(string.Empty, s => s.Substring(0, 1));
+            reportBuilder.AddHeaderRow(string.Empty, s => s[..1]);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

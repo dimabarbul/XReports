@@ -13,7 +13,7 @@ namespace XReports.Demos.FromDb.XReports
 
         protected override void BeginTable()
         {
-            this.stringBuilder.Append(@"<table class=""table table-sm"">");
+            this.StringBuilder.Append(@"<table class=""table table-sm"">");
         }
     }
 }

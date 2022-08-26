@@ -1,3 +1,4 @@
+using System;
 using XReports.Models;
 using XReports.Properties;
 
@@ -19,7 +20,7 @@ namespace XReports.PropertyHandlers.Excel
                 return;
             }
 
-            cell.SetValue(text.Substring(0, property.MaxLength - 1) + '…');
+            cell.SetValue(string.Concat(text.AsSpan(0, property.MaxLength - 1), "…"));
         }
     }
 }
