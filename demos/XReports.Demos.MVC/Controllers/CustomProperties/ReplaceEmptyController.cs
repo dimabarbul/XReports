@@ -3,6 +3,7 @@ using System.IO;
 using Bogus;
 using Bogus.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -23,7 +24,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
             string tableHtml = this.WriteReportToString(htmlReportTable);
 
-            return this.View(new ViewModel() { ReportTableHtml = tableHtml });
+            return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
 
         public IActionResult Download()
@@ -88,11 +89,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.FirstName, e.LastName).OrNull(f))
                 .RuleFor(e => e.Score, f => f.Random.Int(1, 10).OrNull(f))
                 .Generate(RecordsCount);
-        }
-
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
         }
 
         private class Entity

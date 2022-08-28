@@ -33,7 +33,7 @@ namespace XReports.SchemaBuilders
 
         public VerticalReportSchema<TSourceEntity> BuildSchema()
         {
-            return ReportSchema<TSourceEntity>.CreateVertical(
+            return new VerticalReportSchema<TSourceEntity>(
                 this.CellsProviders
                     .Select(
                         c => new ReportSchemaCellsProvider<TSourceEntity>(

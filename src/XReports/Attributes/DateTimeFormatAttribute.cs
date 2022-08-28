@@ -2,7 +2,7 @@ using System;
 
 namespace XReports.Attributes
 {
-    public class DateTimeFormatAttribute : BasePropertyAttribute
+    public sealed class DateTimeFormatAttribute : BasePropertyAttribute
     {
         public DateTimeFormatAttribute(string format)
         {

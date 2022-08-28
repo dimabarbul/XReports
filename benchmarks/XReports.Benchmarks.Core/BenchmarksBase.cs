@@ -8,7 +8,7 @@ namespace XReports.Benchmarks.Core;
 [MemoryDiagnoser]
 public abstract class BenchmarksBase
 {
-    protected Person[] Data { get; private set; }
+    protected IReadOnlyList<Person> Data { get; private set; }
     protected DataTable Table { get; private set; }
 
     [ParamsSource(nameof(GetRowCounts))]

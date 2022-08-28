@@ -10,16 +10,15 @@ namespace XReports
         where TResultReportCell : BaseReportCell, new()
     {
         private readonly TResultReportCell resultCell = new TResultReportCell();
+        private readonly IPropertyHandler<TResultReportCell>[] handlers;
 
         public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers = null)
         {
-            this.Handlers = (
+            this.handlers = (
                 propertyHandlers?.OrderBy(h => h.Priority) ??
                 Enumerable.Empty<IPropertyHandler<TResultReportCell>>())
                 .ToArray();
         }
-
-        public IPropertyHandler<TResultReportCell>[] Handlers { get; }
 
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
         {
@@ -51,9 +50,9 @@ namespace XReports
             {
                 bool processed = false;
 
-                for (int j = 0; j < this.Handlers.Length; j++)
+                for (int j = 0; j < this.handlers.Length; j++)
                 {
-                    if (this.Handlers[j].Handle(cellProperties[i], this.resultCell))
+                    if (this.handlers[j].Handle(cellProperties[i], this.resultCell))
                     {
                         processed = true;
                         break;

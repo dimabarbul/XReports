@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XReports.Demos.FromDb.Services;
+using XReports.Demos.FromDb.ViewModels;
 using XReports.Interfaces;
 using XReports.Models;
 
@@ -36,7 +37,7 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
-            return this.View(new ReportViewModel(reportHtml));
+            return this.View(new ReportViewModel() { ReportHtml = reportHtml });
         }
 
         public async Task<IActionResult> DownloadUsers()
@@ -55,7 +56,7 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
-            return this.View(new ReportViewModel(reportHtml));
+            return this.View(new ReportViewModel() { ReportHtml = reportHtml });
         }
 
         public async Task<IActionResult> DownloadProducts()
@@ -73,7 +74,7 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<HtmlReportCell> htmlTable = this.htmlConverter.Convert(report);
             string reportHtml = this.htmlStringWriter.WriteToString(htmlTable);
 
-            return this.View(new ReportViewModel(reportHtml));
+            return this.View(new ReportViewModel() { ReportHtml = reportHtml });
         }
 
         public async Task<IActionResult> DownloadOrdersDetails()
@@ -83,16 +84,6 @@ namespace XReports.Demos.FromDb.Controllers
             Stream stream = this.excelWriter.WriteToStream(excelTable);
 
             return new FileStreamResult(stream, ExcelMimeType) { FileDownloadName = "OrdersDetails.xlsx" };
-        }
-
-        public class ReportViewModel
-        {
-            public ReportViewModel(string reportHtml)
-            {
-                this.ReportHtml = reportHtml;
-            }
-
-            public string ReportHtml { get; }
         }
     }
 }

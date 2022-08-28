@@ -6,7 +6,7 @@ namespace XReports.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public abstract class ReportAttribute : Attribute
     {
-        public ReportAttribute(ReportType type)
+        protected ReportAttribute(ReportType type)
         {
             this.Type = type;
         }

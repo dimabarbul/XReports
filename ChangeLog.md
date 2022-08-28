@@ -17,7 +17,9 @@ Released on: *YYYY-MM-DD*
 - Properties now are processed by the first property handler that marks them processed, i.e., the property is not processed after it's been marked as processed
 - Replaced `BaseReportCell.Value` setter with `BaseReportCell.SetValue<TValue>` method, getter – with `BaseReportCell.GetUnderlyingValue` method
 - `IPropertyHandler.Handle` method is now `bool`: it should return `true` if the property has been processed, `false` otherwise
+- All attributes are sealed now
 - Renamed classes and interfaces:
+  - AttributeBase ⇒ BasePropertyAttribute
   - IStringWriter ⇒ IHtmlStringWriter
     - WriteToStringAsync ⇒ WriteToString
     - removed method `WriteToFileAsync`, `IHtmlStreamWriter` should be used instead
@@ -37,6 +39,7 @@ Released on: *YYYY-MM-DD*
 
 **Removed:**
 - `ReportCellProperty.Processed` property
+- `ReportSchema<>.CreateVertical` and `ReportSchema<>.CreateHorizontal` methods, constructors of `VerticalReportSchema<>` and `HorizontalReportSchema<>` should be used instead
 
 **Performance and Memory Consumption Benchmarks**
 

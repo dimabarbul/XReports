@@ -14,7 +14,7 @@ public class TypedReportCellsSource<TSourceEntity, TValue> : ReportCellsSource<T
 
     public override Type ValueType => typeof(TValue);
 
-    public override Func<TSourceEntity, TRequestedValue> GetValueSelector<TRequestedValue>()
+    public override Func<TSourceEntity, TRequestedValue> ConvertValueSelector<TRequestedValue>()
     {
         if (typeof(TValue) != typeof(TRequestedValue))
         {

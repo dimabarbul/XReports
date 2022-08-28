@@ -7,6 +7,7 @@ namespace XReports.Models
     public abstract class BaseReportCell
     {
         private object value;
+        private readonly List<ReportCellProperty> properties = new List<ReportCellProperty>();
 
         public int ColumnSpan { get; set; } = 1;
 
@@ -14,7 +15,7 @@ namespace XReports.Models
 
         public Type ValueType { get; private set; } = typeof(string);
 
-        public List<ReportCellProperty> Properties { get; } = new List<ReportCellProperty>();
+        public IReadOnlyList<ReportCellProperty> Properties => this.properties;
 
         public void CopyFrom(BaseReportCell reportCell)
         {
@@ -100,12 +101,12 @@ namespace XReports.Models
 
         public void AddProperty(ReportCellProperty property)
         {
-            this.Properties.Add(property);
+            this.properties.Add(property);
         }
 
         public void AddProperties(IEnumerable<ReportCellProperty> properties)
         {
-            this.Properties.AddRange(properties);
+            this.properties.AddRange(properties);
         }
 
         public virtual void Clear()
@@ -114,7 +115,7 @@ namespace XReports.Models
             this.ValueType = typeof(string);
             this.RowSpan = 1;
             this.ColumnSpan = 1;
-            this.Properties.Clear();
+            this.properties.Clear();
         }
 
         public BaseReportCell Clone()

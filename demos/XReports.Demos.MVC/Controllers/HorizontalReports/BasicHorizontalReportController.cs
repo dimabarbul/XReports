@@ -4,6 +4,7 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Enums;
 using XReports.EpplusFormatters;
@@ -30,7 +31,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
             string tableHtml = this.WriteReportToString(htmlReportTable);
 
-            return this.View(new ViewModel() { ReportTableHtml = tableHtml });
+            return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
 
         public IActionResult Download()
@@ -119,11 +120,6 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
                 .RuleFor(e => e.Age, f => f.Random.Int(18, 63))
                 .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.Name))
                 .Generate(RecordsCount);
-        }
-
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
         }
 
         private class Entity

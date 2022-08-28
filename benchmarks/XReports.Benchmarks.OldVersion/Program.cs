@@ -9,4 +9,4 @@ Job job = Job.Default
     .WithIterationCount(1)
     .AsDefault();
 IConfig config = DefaultConfig.Instance.AddJob(job);
-BenchmarkRunner.Run<Benchmarks>(config, args);
+BenchmarkRunner.Run<ReportServiceBenchmarks>(config, args);

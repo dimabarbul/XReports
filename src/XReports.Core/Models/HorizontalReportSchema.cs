@@ -7,7 +7,13 @@ namespace XReports.Models
 {
     public class HorizontalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>
     {
-        public ReportSchemaCellsProvider<TSourceEntity>[] HeaderRows { get; protected internal set; }
+        private readonly ReportSchemaCellsProvider<TSourceEntity>[] headerRows;
+
+        public HorizontalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] headerRows, ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeader[] complexHeaders, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
+            : base(cellsProviders, tableProperties, complexHeaders, complexHeaderProperties, commonComplexHeaderProperties)
+        {
+            this.headerRows = headerRows;
+        }
 
         public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
@@ -23,7 +29,7 @@ namespace XReports.Models
 
         private IEnumerable<IEnumerable<ReportCell>> GetHeaderRows(IEnumerable<TSourceEntity> source, ReportCell[][] complexHeader)
         {
-            return this.HeaderRows
+            return this.headerRows
                 .Select(row =>
                 {
                     ReportCell headerCell = row.CreateHeaderCell();

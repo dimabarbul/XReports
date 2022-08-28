@@ -1,8 +1,8 @@
 using XReports.Benchmarks.Core;
 
-namespace XReports.Benchmarks.NewVersion;
+namespace XReports.Benchmarks.OldVersion;
 
-public class Benchmarks : BenchmarksBase
+public class ReportServiceBenchmarks : BenchmarksBase
 {
     protected override ReportService CreateReportService()
     {

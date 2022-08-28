@@ -7,11 +7,11 @@ namespace XReports.Models
         // True if cell content should not be escaped.
         public bool IsHtml { get; set; }
 
-        public HashSet<string> CssClasses { get; set; } = new HashSet<string>();
+        public HashSet<string> CssClasses { get; } = new HashSet<string>();
 
-        public Dictionary<string, string> Styles { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Styles { get; } = new Dictionary<string, string>();
 
-        public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Attributes { get; } = new Dictionary<string, string>();
 
         public override void Clear()
         {

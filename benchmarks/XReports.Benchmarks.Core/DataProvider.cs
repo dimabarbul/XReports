@@ -67,7 +67,7 @@ public static class DataProvider
             .ToArray();
     }
 
-    public static DataTable CreateDataTable(Person[] people)
+    public static DataTable CreateDataTable(IReadOnlyList<Person> people)
     {
         DataTable dataTable = new();
 
@@ -111,7 +111,7 @@ public static class DataProvider
             new DataColumn("Type"),
         });
 
-        for (int i = 0; i < people.Length; i++)
+        for (int i = 0; i < people.Count; i++)
         {
             DataRow dataRow = dataTable.NewRow();
 

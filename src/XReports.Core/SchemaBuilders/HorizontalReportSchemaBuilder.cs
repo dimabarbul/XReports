@@ -58,7 +58,16 @@ namespace XReports.SchemaBuilders
 
         public HorizontalReportSchema<TSourceEntity> BuildSchema()
         {
-            return ReportSchema<TSourceEntity>.CreateHorizontal(
+            return new HorizontalReportSchema<TSourceEntity>(
+                this.headerProviders
+                    .Select(
+                        r => new ReportSchemaCellsProvider<TSourceEntity>(
+                            r.Provider,
+                            r.CellProperties.ToArray(),
+                            r.HeaderProperties.ToArray(),
+                            r.CellProcessors.ToArray(),
+                            r.HeaderProcessors.ToArray()))
+                    .ToArray(),
                 this.CellsProviders
                     .Select(
                         r => new ReportSchemaCellsProvider<TSourceEntity>(
@@ -72,15 +81,6 @@ namespace XReports.SchemaBuilders
                 this.ComplexHeaders.ToArray(),
                 this.ComplexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray()),
-                this.headerProviders
-                    .Select(
-                        r => new ReportSchemaCellsProvider<TSourceEntity>(
-                            r.Provider,
-                            r.CellProperties.ToArray(),
-                            r.HeaderProperties.ToArray(),
-                            r.CellProcessors.ToArray(),
-                            r.HeaderProcessors.ToArray()))
-                    .ToArray(),
                 this.CommonComplexHeadersProperties.ToArray());
         }
 

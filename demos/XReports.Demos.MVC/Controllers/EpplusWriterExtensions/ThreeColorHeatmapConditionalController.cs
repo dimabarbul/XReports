@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
+using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.EpplusFormatters;
 using XReports.Extensions;
@@ -29,7 +30,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
             string tableHtml = this.WriteReportToString(htmlReportTable);
 
-            return this.View(new ViewModel() { ReportTableHtml = tableHtml });
+            return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
 
         public IActionResult Download()
@@ -95,11 +96,6 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
                 .RuleFor(e => e.LastScore, f => f.Random.Int(1, 10))
                 .RuleFor(e => e.Score, f => Math.Round(f.Random.Decimal(0, 100), 2))
                 .Generate(RecordsCount);
-        }
-
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
         }
 
         private class Entity

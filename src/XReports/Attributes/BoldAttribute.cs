@@ -1,6 +1,6 @@
 namespace XReports.Attributes
 {
-    public class BoldAttribute : BasePropertyAttribute
+    public sealed class BoldAttribute : BasePropertyAttribute
     {
     }
 }

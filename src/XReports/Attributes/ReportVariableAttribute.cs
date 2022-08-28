@@ -3,7 +3,7 @@ using System;
 namespace XReports.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ReportVariableAttribute : Attribute
+    public sealed class ReportVariableAttribute : Attribute
     {
         public ReportVariableAttribute(int order, string title)
         {

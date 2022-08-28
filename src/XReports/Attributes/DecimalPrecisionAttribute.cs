@@ -2,7 +2,7 @@ using System;
 
 namespace XReports.Attributes
 {
-    public class DecimalPrecisionAttribute : BasePropertyAttribute
+    public sealed class DecimalPrecisionAttribute : BasePropertyAttribute
     {
         public DecimalPrecisionAttribute(int precision)
         {

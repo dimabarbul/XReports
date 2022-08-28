@@ -18,7 +18,7 @@ indent_size = 4
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = true
 
 #### .NET Coding Conventions ####
@@ -376,8 +376,17 @@ dotnet_analyzer_diagnostic.category-Usage.severity = warning
 dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning
 
 dotnet_diagnostic.CA1000.severity = none
+dotnet_diagnostic.CA1002.severity = none
+dotnet_diagnostic.CA1014.severity = none
+dotnet_diagnostic.CA1024.severity = none
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA1814.severity = none
 dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA5394.severity = none
 
 dotnet_diagnostic.IDE0046.severity = none
 dotnet_diagnostic.IDE0058.severity = none

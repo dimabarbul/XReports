@@ -19,6 +19,8 @@ namespace XReports.Demos.FromDb.Models
 
         public bool IsActive { get; set; }
 
+#pragma warning disable CA2227
         public ICollection<Order> Orders { get; set; }
+#pragma warning restore CA2227
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace XReports.Attributes
 {
-    public class PercentFormatAttribute : BasePropertyAttribute
+    public sealed class PercentFormatAttribute : BasePropertyAttribute
     {
         public PercentFormatAttribute(int precision)
         {

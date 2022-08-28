@@ -3,16 +3,16 @@ using XReports.Models;
 
 namespace XReports.Attributes
 {
-    public class CustomPropertyAttribute : BasePropertyAttribute
+    public sealed class CustomPropertyAttribute : BasePropertyAttribute
     {
-        public CustomPropertyAttribute(Type type)
+        public CustomPropertyAttribute(Type propertyType)
         {
-            if (!typeof(ReportCellProperty).IsAssignableFrom(type))
+            if (!typeof(ReportCellProperty).IsAssignableFrom(propertyType))
             {
-                throw new ArgumentException($"Type {type} should derive from {typeof(ReportCellProperty)}");
+                throw new ArgumentException($"Type {propertyType} should derive from {typeof(ReportCellProperty)}");
             }
 
-            this.PropertyType = type;
+            this.PropertyType = propertyType;
         }
 
         public Type PropertyType { get; }

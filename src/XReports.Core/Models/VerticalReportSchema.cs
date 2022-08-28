@@ -3,11 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using XReports.Interfaces;
+using XReports.ReportCellsProviders;
 
 namespace XReports.Models
 {
     public class VerticalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>
     {
+        public VerticalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeader[] complexHeaders, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
+            : base(cellsProviders, tableProperties, complexHeaders, complexHeaderProperties, commonComplexHeaderProperties)
+        {
+        }
+
         public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
@@ -83,6 +89,7 @@ namespace XReports.Models
             public void Dispose()
             {
                 this.enumerator.Dispose();
+                this.cellsEnumerator.Dispose();
             }
         }
 
@@ -111,7 +118,7 @@ namespace XReports.Models
 
             public bool MoveNext()
             {
-                return ++this.index < this.schema.CellsProviders.Length;
+                return ++this.index < this.schema.CellsProviders.Count;
             }
 
             public void Reset()
@@ -222,7 +229,7 @@ namespace XReports.Models
 
             public bool MoveNext()
             {
-                return ++this.index < this.schema.CellsProviders.Length;
+                return ++this.index < this.schema.CellsProviders.Count;
             }
 
             public void Reset()

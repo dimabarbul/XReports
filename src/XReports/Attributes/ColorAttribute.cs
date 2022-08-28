@@ -2,7 +2,7 @@ using System.Drawing;
 
 namespace XReports.Attributes
 {
-    public class ColorAttribute : BasePropertyAttribute
+    public sealed class ColorAttribute : BasePropertyAttribute
     {
         public ColorAttribute(Color fontColor)
             : this(fontColor, null)

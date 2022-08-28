@@ -39,7 +39,7 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-        private class CustomAttribute : Attribute
+        private sealed class CustomAttribute : Attribute
         {
         }
 
