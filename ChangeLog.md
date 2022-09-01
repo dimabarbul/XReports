@@ -11,6 +11,7 @@ Released on: *YYYY-MM-DD*
 - New method `BaseReportCell.Clear` resets report cell to initial state, it should be overriden in derived classes
 
 **Changed:**
+- XReports and XReports.Core libraries are now targeting netstandard2.0 and netstandard2.1
 - Improved performance and memory consumption
 - Aligned versions of XReports.Core and XReports libraries
 - Report cells are now cached and reused, so reference to cell should not be persisted anywhere; if copy of cell is needed, one can use `BaseReportCell.Clone` method to create shallow copy

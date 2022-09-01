@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using XReports.Interfaces;
 using XReports.Models;
@@ -8,6 +9,9 @@ namespace XReports.Writers
 {
     public class HtmlStreamWriter : IHtmlStreamWriter
     {
+        private const int StreamWriterBufferSize = 4096;
+        private static readonly Encoding StreamWriterEncoding = Encoding.UTF8;
+
         private readonly IHtmlStreamCellWriter htmlStreamCellWriter;
         private StreamWriter streamWriter;
 
@@ -18,11 +22,10 @@ namespace XReports.Writers
 
         public async Task WriteAsync(IReportTable<HtmlReportCell> reportTable, Stream stream)
         {
-#pragma warning disable CA2007
-            // false positive
-            await using StreamWriter writer = new StreamWriter(stream, leaveOpen: true);
-#pragma warning restore CA2007
-            await this.WriteAsync(reportTable, writer).ConfigureAwait(false);
+            using (StreamWriter writer = new StreamWriter(stream, StreamWriterEncoding, StreamWriterBufferSize, true))
+            {
+                await this.WriteAsync(reportTable, writer).ConfigureAwait(false);
+            }
         }
 
         public Task WriteAsync(IReportTable<HtmlReportCell> reportTable, StreamWriter streamWriter)

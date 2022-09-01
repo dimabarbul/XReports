@@ -5,35 +5,35 @@ namespace XReports.Interfaces
 {
     public interface IReportSchemaBuilder<out TSourceEntity>
     {
-        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias);
+        IReportSchemaBuilder<TSourceEntity> AddAlias(string alias);
 
-        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target);
+        IReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target);
 
-        public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties);
 
-        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties);
+        IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties);
 
-        public IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties);
 
-        public IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(
+        IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(
             Func<TSourceEntity, ReportCellProperty> propertySelector);
 
-        public IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties);
 
-        public IReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors);
+        IReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors);
 
-        public IReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(
+        IReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(
             params IReportCellProcessor<TSourceEntity>[] processors);
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
             int rowIndex, string title, int fromColumn, int? toColumn = null);
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
             int rowIndex, string title, string fromColumn, string toColumn = null);
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(
             string title, params ReportCellProperty[] properties);
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties);
     }
 }

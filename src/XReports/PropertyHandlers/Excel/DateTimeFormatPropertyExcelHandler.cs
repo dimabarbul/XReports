@@ -105,27 +105,45 @@ namespace XReports.PropertyHandlers.Excel
 
         private string GetFormatPartString(DateTimeFormatPart formatPart)
         {
-            return formatPart.Type switch
+            switch (formatPart.Type)
             {
-                DateTimeFormatPartType.FreeText => formatPart.Text,
-                DateTimeFormatPartType.DayWithLeadingZero => FormatDayWithLeadingZero,
-                DateTimeFormatPartType.Day => FormatDay,
-                DateTimeFormatPartType.MonthWithLeadingZero => FormatMonthWithLeadingZero,
-                DateTimeFormatPartType.Month => FormatMonth,
-                DateTimeFormatPartType.YearFull => FormatYearFull,
-                DateTimeFormatPartType.YearShort => FormatYearShort,
-                DateTimeFormatPartType.MonthName => FormatMonthName,
-                DateTimeFormatPartType.HourWithLeadingZero => FormatHourWithLeadingZero,
-                DateTimeFormatPartType.Hour => FormatHour,
-                DateTimeFormatPartType.Hour12WithLeadingZero => FormatHour12WithLeadingZero,
-                DateTimeFormatPartType.Hour12 => FormatHour12,
-                DateTimeFormatPartType.MinuteWithLeadingZero => FormatMinuteWithLeadingZero,
-                DateTimeFormatPartType.Minute => FormatMinute,
-                DateTimeFormatPartType.SecondWithLeadingZero => FormatSecondWithLeadingZero,
-                DateTimeFormatPartType.Second => FormatSecond,
-                DateTimeFormatPartType.AmPm => FormatAmPm,
-                _ => throw new ArgumentOutOfRangeException(nameof(formatPart)),
-            };
+                case DateTimeFormatPartType.FreeText:
+                    return formatPart.Text;
+                case DateTimeFormatPartType.DayWithLeadingZero:
+                    return FormatDayWithLeadingZero;
+                case DateTimeFormatPartType.Day:
+                    return FormatDay;
+                case DateTimeFormatPartType.MonthWithLeadingZero:
+                    return FormatMonthWithLeadingZero;
+                case DateTimeFormatPartType.Month:
+                    return FormatMonth;
+                case DateTimeFormatPartType.YearFull:
+                    return FormatYearFull;
+                case DateTimeFormatPartType.YearShort:
+                    return FormatYearShort;
+                case DateTimeFormatPartType.MonthName:
+                    return FormatMonthName;
+                case DateTimeFormatPartType.HourWithLeadingZero:
+                    return FormatHourWithLeadingZero;
+                case DateTimeFormatPartType.Hour:
+                    return FormatHour;
+                case DateTimeFormatPartType.Hour12WithLeadingZero:
+                    return FormatHour12WithLeadingZero;
+                case DateTimeFormatPartType.Hour12:
+                    return FormatHour12;
+                case DateTimeFormatPartType.MinuteWithLeadingZero:
+                    return FormatMinuteWithLeadingZero;
+                case DateTimeFormatPartType.Minute:
+                    return FormatMinute;
+                case DateTimeFormatPartType.SecondWithLeadingZero:
+                    return FormatSecondWithLeadingZero;
+                case DateTimeFormatPartType.Second:
+                    return FormatSecond;
+                case DateTimeFormatPartType.AmPm:
+                    return FormatAmPm;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(formatPart));
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 # C# files
 [*.cs]
 
-# add ConfigureAwait(false)
+dotnet_diagnostic.CA1307.severity = none
 dotnet_diagnostic.CA2007.severity = error
