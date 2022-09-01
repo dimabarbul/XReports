@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Diagnostics;
 using XReports.Benchmarks.Core;
 using XReports.Benchmarks.Core.Models;
