@@ -13,6 +13,8 @@ namespace XReports.Demos.FromDb.Models
 
         public User User { get; set; }
 
+#pragma warning disable CA2227
         public ICollection<OrderLineItem> LineItems { get; set; }
+#pragma warning restore CA2227
     }
 }

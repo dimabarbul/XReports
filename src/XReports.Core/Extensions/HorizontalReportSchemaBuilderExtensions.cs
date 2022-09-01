@@ -1,7 +1,6 @@
 using System;
 using XReports.Interfaces;
 using XReports.ReportCellsProviders;
-using XReports.SchemaBuilders;
 
 namespace XReports.Extensions
 {

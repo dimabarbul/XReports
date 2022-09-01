@@ -1,0 +1,5 @@
+# C# files
+[*.cs]
+
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.xUnit1004.severity = none

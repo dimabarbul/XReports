@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using XReports.Helpers;
 using XReports.Models;
 
@@ -16,6 +17,6 @@ namespace XReports.Properties
             this.Parts = DateTimeParser.Parse(format);
         }
 
-        public DateTimeFormatPart[] Parts { get; }
+        public IReadOnlyList<DateTimeFormatPart> Parts { get; }
     }
 }

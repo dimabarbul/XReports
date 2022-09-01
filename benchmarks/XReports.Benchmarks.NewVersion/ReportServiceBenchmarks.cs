@@ -1,16 +1,16 @@
 using XReports.Benchmarks.Core;
 
-namespace XReports.Benchmarks.OldVersion;
+namespace XReports.Benchmarks.NewVersion;
 
-public class Benchmarks : BenchmarksBase
+public class ReportServiceBenchmarks : BenchmarksBase
 {
     protected override ReportService CreateReportService()
     {
-        if (this.data is null || this.dataTable is null)
+        if (this.Data is null || this.Table is null)
         {
             throw new InvalidOperationException("Data or data reader is not initialized.");
         }
 
-        return new ReportService(this.data, this.dataTable);
+        return new ReportService(this.Data, this.Table);
     }
 }

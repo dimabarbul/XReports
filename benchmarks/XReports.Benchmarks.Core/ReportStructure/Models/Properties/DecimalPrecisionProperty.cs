@@ -9,7 +9,7 @@ public class DecimalPrecisionProperty : ReportCellsSourceProperty
         this.Precision = precision;
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         return obj is DecimalPrecisionProperty decimalPrecisionProperty
             && this.Precision == decimalPrecisionProperty.Precision;

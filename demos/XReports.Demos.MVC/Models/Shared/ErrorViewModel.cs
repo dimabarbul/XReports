@@ -1,4 +1,4 @@
-namespace XReports.Demos.MVC.Models
+namespace XReports.Demos.MVC.Models.Shared
 {
     public class ErrorViewModel
     {

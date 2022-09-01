@@ -5,7 +5,7 @@ using XReports.Interfaces;
 
 namespace XReports.Attributes
 {
-    public class HorizontalReportAttribute : ReportAttribute
+    public sealed class HorizontalReportAttribute : ReportAttribute
     {
         public HorizontalReportAttribute()
             : base(ReportType.Horizontal)

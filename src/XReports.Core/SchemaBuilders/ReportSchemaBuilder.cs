@@ -192,15 +192,15 @@ namespace XReports.SchemaBuilders
                 this.Provider = provider;
             }
 
-            public IReportCellsProvider<TSourceEntity> Provider { get; set; }
+            public IReportCellsProvider<TSourceEntity> Provider { get; }
 
-            public List<ReportCellProperty> CellProperties { get; set; } = new List<ReportCellProperty>();
+            public List<ReportCellProperty> CellProperties { get; } = new List<ReportCellProperty>();
 
-            public List<ReportCellProperty> HeaderProperties { get; set; } = new List<ReportCellProperty>();
+            public List<ReportCellProperty> HeaderProperties { get; } = new List<ReportCellProperty>();
 
-            public List<IReportCellProcessor<TSourceEntity>> CellProcessors { get; set; } = new List<IReportCellProcessor<TSourceEntity>>();
+            public List<IReportCellProcessor<TSourceEntity>> CellProcessors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
 
-            public List<IReportCellProcessor<TSourceEntity>> HeaderProcessors { get; set; } = new List<IReportCellProcessor<TSourceEntity>>();
+            public List<IReportCellProcessor<TSourceEntity>> HeaderProcessors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -16,7 +17,7 @@ namespace XReports.Tests.SchemaBuilders
             VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("#", i => i);
             reportBuilder.AddColumn("Today", new CallbackValueProvider<DateTime>(() => DateTime.Today));
-            reportBuilder.AddColumn("ToString()", i => i.ToString());
+            reportBuilder.AddColumn("ToString()", i => i.ToString(CultureInfo.CurrentCulture));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

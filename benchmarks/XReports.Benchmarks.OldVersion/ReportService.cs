@@ -20,7 +20,7 @@ using StringWriter = XReports.Writers.StringWriter;
 
 namespace XReports.Benchmarks.OldVersion;
 
-public class ReportService : IReportService
+public class ReportService : IReportService, IDisposable
 {
     private readonly IEnumerable<Person> data;
     private readonly DataTable dataTable;
@@ -31,6 +31,8 @@ public class ReportService : IReportService
 
     private readonly Dictionary<Source.ReportCellsSourceProperty, ReportCellProperty> mappedProperties = new();
     private readonly ReportStructureProvider reportStructureProvider = new();
+
+    private IDataReader dataReader;
 
     public ReportService(IEnumerable<Person> data, DataTable dataTable)
     {
@@ -72,14 +74,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -98,14 +100,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
@@ -158,14 +160,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -184,14 +186,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
@@ -244,14 +246,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.HeaderRows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<HtmlReportCell> row in htmlReportTable.Rows)
         {
-            foreach (HtmlReportCell cell in row)
+            foreach (HtmlReportCell _ in row)
             {
             }
         }
@@ -270,14 +272,14 @@ public class ReportService : IReportService
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.HeaderRows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
 
         foreach (IEnumerable<ExcelReportCell> row in excelReportTable.Rows)
         {
-            foreach (ExcelReportCell cell in row)
+            foreach (ExcelReportCell _ in row)
             {
             }
         }
@@ -311,7 +313,7 @@ public class ReportService : IReportService
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 source.Title,
-                TypeUtils.InvokeGenericMethod(source, nameof(source.GetValueSelector), valueType)
+                TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
             reportBuilder.AddColumn(column).AddProperties(this.MapProperties(source.Properties));
@@ -335,7 +337,7 @@ public class ReportService : IReportService
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(IDataReader), valueType),
                 source.Title,
-                TypeUtils.InvokeGenericMethod(source, nameof(source.GetValueSelector), valueType)
+                TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
             reportBuilder.AddColumn(column).AddProperties(this.MapProperties(source.Properties));
@@ -343,7 +345,8 @@ public class ReportService : IReportService
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(new DataTableReader(this.dataTable));
+        this.dataReader = new DataTableReader(this.dataTable);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.dataReader);
 
         return reportTable;
     }
@@ -359,7 +362,7 @@ public class ReportService : IReportService
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 source.Title,
-                TypeUtils.InvokeGenericMethod(source, nameof(source.GetValueSelector), valueType)
+                TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
             reportBuilder.AddRow(row).AddProperties(this.MapProperties(source.Properties));
@@ -412,5 +415,20 @@ public class ReportService : IReportService
         }
 
         return this.mappedProperties[sourceProperty];
+    }
+
+    public void Dispose()
+    {
+        this.Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            this.dataTable?.Dispose();
+            this.dataReader?.Dispose();
+        }
     }
 }

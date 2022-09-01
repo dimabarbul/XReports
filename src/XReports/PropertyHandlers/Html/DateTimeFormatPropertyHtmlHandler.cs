@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using XReports.Enums;
 using XReports.Models;
@@ -30,7 +31,7 @@ namespace XReports.PropertyHandlers.Html
 
         protected override void HandleProperty(DateTimeFormatProperty property, HtmlReportCell cell)
         {
-            cell.SetValue(cell.GetNullableValue<DateTime>()?.ToString(this.GetFormatString(property)));
+            cell.SetValue(cell.GetNullableValue<DateTime>()?.ToString(this.GetFormatString(property), CultureInfo.CurrentCulture));
         }
 
         private string GetFormatString(DateTimeFormatProperty property)

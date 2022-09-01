@@ -51,9 +51,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
-            {
-            });
+            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(Array.Empty<IPropertyHandler<ExcelReportCell>>());
 
             return excelConverter.Convert(reportTable);
         }

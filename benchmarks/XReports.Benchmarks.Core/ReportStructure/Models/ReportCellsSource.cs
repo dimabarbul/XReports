@@ -15,5 +15,5 @@ public abstract class ReportCellsSource<TSourceEntity>
     public IEnumerable<ReportCellsSourceProperty> Properties { get; }
 
     public abstract Type ValueType { get; }
-    public abstract Func<TSourceEntity, TValue> GetValueSelector<TValue>();
+    public abstract Func<TSourceEntity, TValue> ConvertValueSelector<TValue>();
 }

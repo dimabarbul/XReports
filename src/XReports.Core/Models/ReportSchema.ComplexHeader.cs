@@ -48,9 +48,8 @@ namespace XReports.Models
 
                     if (row[rowIndex] != null)
                     {
-                        int span = row[rowIndex].ColumnSpan;
-                        row[rowIndex].ColumnSpan = row[rowIndex].RowSpan;
-                        row[rowIndex].RowSpan = span;
+                        (row[rowIndex].ColumnSpan, row[rowIndex].RowSpan) =
+                            (row[rowIndex].RowSpan, row[rowIndex].ColumnSpan);
                     }
                 }
 
@@ -66,7 +65,7 @@ namespace XReports.Models
                 this.ComplexHeaders.Any() ?
                 this.ComplexHeaders.Max(h => h.RowIndex) + 1 :
                 0;
-            SpannableHeader[,] headerCells = new SpannableHeader[complexHeaderRowsCount + 1, this.CellsProviders.Length];
+            SpannableHeader[,] headerCells = new SpannableHeader[complexHeaderRowsCount + 1, this.CellsProviders.Count];
 
             this.AddComplexHeaderCells(headerCells);
             this.AddRegularHeaderCells(headerCells);
@@ -113,7 +112,7 @@ namespace XReports.Models
         private void AddRegularHeaderCells(SpannableHeader[,] headerCells)
         {
             int lastHeaderRowIndex = headerCells.GetLength(0) - 1;
-            for (int i = 0; i < this.CellsProviders.Length; i++)
+            for (int i = 0; i < this.CellsProviders.Count; i++)
             {
                 headerCells[lastHeaderRowIndex, i] = new SpannableHeader(this.CellsProviders[i].CreateHeaderCell());
             }

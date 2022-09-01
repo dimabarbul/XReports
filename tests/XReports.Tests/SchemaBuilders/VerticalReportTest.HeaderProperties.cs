@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -36,7 +37,7 @@ namespace XReports.Tests.SchemaBuilders
             reportBuilder.AddComplexHeader(0, "Complex", "Value");
             reportBuilder.AddComplexHeaderProperties("Complex", new CustomHeaderProperty());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new string[] { });
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<string>());
 
             ReportCell[][] cells = this.GetCellsAsArray(table.HeaderRows);
             cells.Should().HaveCount(2);

@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using XReports.Demos.MVC.Models;
+using XReports.Demos.MVC.Models.Shared;
 
 namespace XReports.Demos.MVC.Controllers
 {

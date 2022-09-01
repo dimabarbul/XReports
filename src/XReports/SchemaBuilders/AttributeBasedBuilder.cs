@@ -31,7 +31,7 @@ namespace XReports.SchemaBuilders
 
             return reportAttribute?.Type == ReportType.Horizontal ?
                 (IReportSchema<TEntity>)this.BuildHorizontalReport<TEntity>(reportAttribute as HorizontalReportAttribute).BuildSchema() :
-                (IReportSchema<TEntity>)this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
+                this.BuildVerticalReport<TEntity>(reportAttribute as VerticalReportAttribute).BuildSchema();
         }
 
         public IReportSchema<TEntity> BuildSchema<TEntity, TBuildParameter>(TBuildParameter parameter)
@@ -40,7 +40,7 @@ namespace XReports.SchemaBuilders
 
             return reportAttribute?.Type == ReportType.Horizontal ?
                 (IReportSchema<TEntity>)this.BuildHorizontalReport<TEntity, TBuildParameter>(reportAttribute as HorizontalReportAttribute, parameter).BuildSchema() :
-                (IReportSchema<TEntity>)this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
+                this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
         }
 
         private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute)
@@ -257,13 +257,13 @@ namespace XReports.SchemaBuilders
                     .Where(a => !(a is TablePropertyAttribute))
                     .Where(a =>
                         (
-                            !(a is AttributeBase)
+                            !(a is BasePropertyAttribute)
                             && propertyAttributes.All(pa => pa.GetType() != a.GetType()))
                         || (
-                            a is AttributeBase
+                            a is BasePropertyAttribute
                             && propertyAttributes.All(pa =>
                                 pa.GetType() != a.GetType()
-                                || ((AttributeBase)pa).IsHeader != ((AttributeBase)a).IsHeader))))
+                                || ((BasePropertyAttribute)pa).IsHeader != ((BasePropertyAttribute)a).IsHeader))))
                 .ToArray();
         }
 

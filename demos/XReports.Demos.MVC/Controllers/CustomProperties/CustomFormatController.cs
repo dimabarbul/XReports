@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -23,7 +25,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
             string tableHtml = this.WriteReportToString(htmlReportTable);
 
-            return this.View(new ViewModel() { ReportTableHtml = tableHtml });
+            return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
 
         public IActionResult Download()
@@ -86,11 +88,6 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 .Generate(RecordsCount);
         }
 
-        public class ViewModel
-        {
-            public string ReportTableHtml { get; set; }
-        }
-
         private class Entity
         {
             public string Name { get; set; }
@@ -109,7 +106,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
                 decimal value = cell.GetValue<decimal>();
                 string format = value == 100m ? "F0" : "F2";
 
-                cell.SetValue(value.ToString(format));
+                cell.SetValue(value.ToString(format, CultureInfo.CurrentCulture));
             }
         }
 

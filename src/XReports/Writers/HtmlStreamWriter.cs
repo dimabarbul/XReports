@@ -18,7 +18,10 @@ namespace XReports.Writers
 
         public async Task WriteAsync(IReportTable<HtmlReportCell> reportTable, Stream stream)
         {
+#pragma warning disable CA2007
+            // false positive
             await using StreamWriter writer = new StreamWriter(stream, leaveOpen: true);
+#pragma warning restore CA2007
             await this.WriteAsync(reportTable, writer).ConfigureAwait(false);
         }
 

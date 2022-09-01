@@ -9,7 +9,7 @@ public class DateTimeFormatProperty : ReportCellsSourceProperty
         this.Format = format;
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         return obj is DateTimeFormatProperty dateTimeFormatProperty
             && this.Format == dateTimeFormatProperty.Format;

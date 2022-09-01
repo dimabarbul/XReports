@@ -38,7 +38,8 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
             public string Title { get; set; }
         }
 
-        private class CustomAttribute : Attribute
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+        private sealed class CustomAttribute : Attribute
         {
         }
 

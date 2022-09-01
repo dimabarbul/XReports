@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Demos.MVC.Models.StringWriterExtensions.CustomTableClass;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -22,7 +23,7 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
             HtmlStringWriter bootstrapHtmlStringWriter = new BootstrapHtmlStringWriter(new HtmlStringCellWriter());
             HtmlStringWriter htmlStringWriter = new HtmlStringWriter(new HtmlStringCellWriter());
 
-            ViewModel vm = new ViewModel()
+            IndexViewModel vm = new IndexViewModel()
             {
                 RegularTableHtml = htmlStringWriter.WriteToString(htmlReport),
                 TableHtml = bootstrapHtmlStringWriter.WriteToString(htmlReport),
@@ -55,13 +56,6 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
         {
             return new ReportConverter<HtmlReportCell>(Enumerable.Empty<IPropertyHandler<HtmlReportCell>>())
                 .Convert(reportTable);
-        }
-
-        public class ViewModel
-        {
-            public string RegularTableHtml { get; set; }
-
-            public string TableHtml { get; set; }
         }
 
         private class Entity

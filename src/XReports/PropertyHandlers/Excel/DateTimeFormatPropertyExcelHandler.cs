@@ -35,7 +35,7 @@ namespace XReports.PropertyHandlers.Excel
             cell.NumberFormat = this.GetFormatString(property);
         }
 
-        private void ValidateFormat(DateTimeFormatPart[] propertyParts)
+        private void ValidateFormat(IReadOnlyList<DateTimeFormatPart> propertyParts)
         {
             bool has12HourPart = this.Has12HourPart(propertyParts);
             bool has24HourPart = this.Has24HourPart(propertyParts);
@@ -52,9 +52,9 @@ namespace XReports.PropertyHandlers.Excel
             }
         }
 
-        private bool HasAmPmPart(DateTimeFormatPart[] propertyParts)
+        private bool HasAmPmPart(IReadOnlyList<DateTimeFormatPart> propertyParts)
         {
-            for (int i = 0; i < propertyParts.Length; i++)
+            for (int i = 0; i < propertyParts.Count; i++)
             {
                 if (propertyParts[i].Type == DateTimeFormatPartType.AmPm)
                 {
@@ -65,9 +65,9 @@ namespace XReports.PropertyHandlers.Excel
             return false;
         }
 
-        private bool Has24HourPart(DateTimeFormatPart[] propertyParts)
+        private bool Has24HourPart(IReadOnlyList<DateTimeFormatPart> propertyParts)
         {
-            for (int i = 0; i < propertyParts.Length; i++)
+            for (int i = 0; i < propertyParts.Count; i++)
             {
                 if (propertyParts[i].Type == DateTimeFormatPartType.Hour
                     || propertyParts[i].Type == DateTimeFormatPartType.HourWithLeadingZero)
@@ -79,9 +79,9 @@ namespace XReports.PropertyHandlers.Excel
             return false;
         }
 
-        private bool Has12HourPart(DateTimeFormatPart[] propertyParts)
+        private bool Has12HourPart(IReadOnlyList<DateTimeFormatPart> propertyParts)
         {
-            for (int i = 0; i < propertyParts.Length; i++)
+            for (int i = 0; i < propertyParts.Count; i++)
             {
                 if (propertyParts[i].Type == DateTimeFormatPartType.Hour12
                     || propertyParts[i].Type == DateTimeFormatPartType.Hour12WithLeadingZero)

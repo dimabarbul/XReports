@@ -13,7 +13,7 @@ public class ColorProperty : ReportCellsSourceProperty
         this.BackgroundColor = backgroundColor;
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         return obj is ColorProperty colorProperty
             && this.ForegroundColor == colorProperty.ForegroundColor

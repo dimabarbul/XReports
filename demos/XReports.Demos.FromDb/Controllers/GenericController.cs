@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using XReports.Demos.FromDb.ViewModels;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
@@ -32,15 +33,10 @@ namespace XReports.Demos.FromDb.Controllers
             IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildSchema().BuildReportTable(dataReader));
             string tableHtml = this.htmlStringWriter.WriteToString(reportTable);
 
-            return this.View(new IndexViewModel()
+            return this.View(new ReportViewModel()
             {
                 ReportHtml = tableHtml,
             });
-        }
-
-        public class IndexViewModel
-        {
-            public string ReportHtml { get; set; }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace XReports.Tests.SchemaBuilders
             builder.AddColumn("Name", x => x.GetString(0));
             builder.AddColumn("Age", x => x.GetInt32(1));
 
-            DataTable dataTable = new DataTable();
+            using DataTable dataTable = new DataTable();
             dataTable.Columns.AddRange(new[]
             {
                 new DataColumn("Name", typeof(string)),
@@ -26,7 +26,7 @@ namespace XReports.Tests.SchemaBuilders
             });
             dataTable.Rows.Add("John", 23);
             dataTable.Rows.Add("Jane", 22);
-            IDataReader dataReader = new DataTableReader(dataTable);
+            using IDataReader dataReader = new DataTableReader(dataTable);
             IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
 
             ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);

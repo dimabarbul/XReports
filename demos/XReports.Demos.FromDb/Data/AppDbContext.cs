@@ -18,21 +18,21 @@ namespace XReports.Demos.FromDb.Data
 
         public DbSet<Product> Products { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            builder.Entity<User>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.Orders)
                 .WithOne(o => o.User)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<Order>()
+            modelBuilder.Entity<Order>()
                 .HasMany(o => o.LineItems)
                 .WithOne(li => li.Order)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<OrderLineItem>()
+            modelBuilder.Entity<OrderLineItem>()
                 .HasOne(li => li.Product)
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);

@@ -5,9 +5,9 @@ using XReports.SchemaBuilders;
 
 namespace XReports.AttributeHandlers
 {
-    public class CommonAttributeHandler : AttributeHandler<AttributeBase>
+    public class CommonAttributeHandler : AttributeHandler<BasePropertyAttribute>
     {
-        protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, AttributeBase attribute)
+        protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, BasePropertyAttribute attribute)
         {
             ReportCellProperty property = this.GetCellProperty(attribute);
             if (property == null)
@@ -25,7 +25,7 @@ namespace XReports.AttributeHandlers
             }
         }
 
-        private ReportCellProperty GetCellProperty(AttributeBase attribute)
+        private ReportCellProperty GetCellProperty(BasePropertyAttribute attribute)
         {
             ReportCellProperty property = null;
 
@@ -54,6 +54,10 @@ namespace XReports.AttributeHandlers
                     {
                         PostfixText = percentFormatAttribute.PostfixText,
                     };
+                    break;
+                default:
+                    // only predefined list of attributes is processed
+                    // others will be processed separately
                     break;
             }
 

@@ -2,7 +2,7 @@ using System;
 
 namespace XReports.Attributes
 {
-    public class MaxLengthAttribute : AttributeBase
+    public sealed class MaxLengthAttribute : BasePropertyAttribute
     {
         public MaxLengthAttribute(int maxLength)
         {

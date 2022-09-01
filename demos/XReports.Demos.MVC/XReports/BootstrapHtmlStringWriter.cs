@@ -12,12 +12,12 @@ namespace XReports.Demos.MVC.XReports
 
         protected override void BeginTable()
         {
-            this.stringBuilder.Append(@"<table class=""table table-sm"">");
+            this.StringBuilder.Append(@"<table class=""table table-sm"">");
         }
 
         protected override void BeginHead()
         {
-            this.stringBuilder.Append(@"<thead class=""thead-dark"">");
+            this.StringBuilder.Append(@"<thead class=""thead-dark"">");
         }
     }
 }

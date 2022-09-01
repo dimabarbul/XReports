@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,7 +15,7 @@ namespace XReports.PropertyHandlers.Excel
         {
             // if format contains percent sign (%), the value will be automatically
             // multiplied by xlsx viewer, otherwise we need to do it by ourselves
-            if (property.PostfixText == null || !property.PostfixText.Contains('%'))
+            if (property.PostfixText == null || !property.PostfixText.Contains('%', StringComparison.Ordinal))
             {
                 cell.SetValue(cell.GetNullableValue<decimal>() * 100);
             }
@@ -28,11 +29,9 @@ namespace XReports.PropertyHandlers.Excel
             if (!this.formatCache.ContainsKey(property))
             {
                 // if postfix text is ' percents (%) here', then it should be converted to '" percents ("%") here"'
-                string postfix = $"\"{property.PostfixText}\""
-
-                    // surround percent sign with double quotes so it is not part of format string
-                    // and can be treated correctly by office
-                    .Replace("%", "\"%\"");
+                // surround percent sign with double quotes so it is not part of format string
+                // and can be treated correctly by office
+                string postfix = $"\"{property.PostfixText}\"".Replace("%", "\"%\"", StringComparison.Ordinal);
 
                 this.formatCache[property] = $"0.{string.Concat(Enumerable.Repeat('0', property.Precision))}{postfix}";
             }

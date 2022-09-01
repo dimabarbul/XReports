@@ -3,11 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using XReports.Interfaces;
+using XReports.ReportCellsProviders;
 
 namespace XReports.Models
 {
     public class VerticalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>
     {
+        public VerticalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeader[] complexHeaders, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
+            : base(cellsProviders, tableProperties, complexHeaders, complexHeaderProperties, commonComplexHeaderProperties)
+        {
+        }
+
         public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
@@ -43,9 +49,15 @@ namespace XReports.Models
                 this.source = source;
             }
 
-            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromEntityEnumerator(this.schema, this.source);
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator()
+            {
+                return new RowsFromEntityEnumerator(this.schema, this.source);
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
 
         private class RowsFromEntityEnumerator : IEnumerator<IEnumerable<ReportCell>>
@@ -77,6 +89,7 @@ namespace XReports.Models
             public void Dispose()
             {
                 this.enumerator.Dispose();
+                this.cellsEnumerator.Dispose();
             }
         }
 
@@ -105,7 +118,7 @@ namespace XReports.Models
 
             public bool MoveNext()
             {
-                return ++this.index < this.schema.CellsProviders.Length;
+                return ++this.index < this.schema.CellsProviders.Count;
             }
 
             public void Reset()
@@ -117,9 +130,15 @@ namespace XReports.Models
             {
             }
 
-            public IEnumerator<ReportCell> GetEnumerator() => this;
+            public IEnumerator<ReportCell> GetEnumerator()
+            {
+                return this;
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
 
         private class RowsFromDataReaderCollection : IEnumerable<IEnumerable<ReportCell>>
@@ -138,9 +157,15 @@ namespace XReports.Models
                 this.dataReader = dataReader;
             }
 
-            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator() => new RowsFromDataReaderEnumerator(this.schema, this.dataReader);
+            public IEnumerator<IEnumerable<ReportCell>> GetEnumerator()
+            {
+                return new RowsFromDataReaderEnumerator(this.schema, this.dataReader);
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
 
         private class RowsFromDataReaderEnumerator : IEnumerator<IEnumerable<ReportCell>>
@@ -204,7 +229,7 @@ namespace XReports.Models
 
             public bool MoveNext()
             {
-                return ++this.index < this.schema.CellsProviders.Length;
+                return ++this.index < this.schema.CellsProviders.Count;
             }
 
             public void Reset()
@@ -216,9 +241,15 @@ namespace XReports.Models
             {
             }
 
-            public IEnumerator<ReportCell> GetEnumerator() => this;
+            public IEnumerator<ReportCell> GetEnumerator()
+            {
+                return this;
+            }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,12 +47,12 @@ namespace XReports.Writers
         {
             if (cell.RowSpan != 1)
             {
-                await this.WriteAttributeAsync(streamWriter, "rowSpan", cell.RowSpan.ToString()).ConfigureAwait(false);
+                await this.WriteAttributeAsync(streamWriter, "rowSpan", cell.RowSpan.ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
             }
 
             if (cell.ColumnSpan != 1)
             {
-                await this.WriteAttributeAsync(streamWriter, "colSpan", cell.ColumnSpan.ToString()).ConfigureAwait(false);
+                await this.WriteAttributeAsync(streamWriter, "colSpan", cell.ColumnSpan.ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
             }
 
             if (cell.CssClasses.Count > 0)

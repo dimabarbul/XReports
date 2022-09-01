@@ -4,7 +4,7 @@ using XReports.Enums;
 
 namespace XReports.Attributes
 {
-    public class AlignmentAttribute : AttributeBase
+    public sealed class AlignmentAttribute : BasePropertyAttribute
     {
         public AlignmentAttribute(Alignment alignment)
         {

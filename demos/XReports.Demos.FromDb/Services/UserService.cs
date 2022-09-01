@@ -31,7 +31,7 @@ namespace XReports.Demos.FromDb.Services
                     Email = u.Email,
                     Age = (int)(DateTime.Now - u.DateOfBirth).TotalDays / 365,
                     RegisteredInDays = (int)(DateTime.Now - u.CreatedOn).TotalDays,
-                    OrdersCount = u.Orders.Count(),
+                    OrdersCount = u.Orders.Count,
                 });
 
             if (limit.HasValue)

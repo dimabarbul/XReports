@@ -20,7 +20,8 @@ namespace XReports
         public ReportConverterFactory(IServiceProvider serviceProvider, IOptions<ReportConverterFactoryOptions<TReportCell>> options)
         {
             this.serviceProvider = serviceProvider;
-            this.options = options.Value;
+            this.options = options?.Value ??
+                throw new ArgumentNullException(nameof(options));
         }
 
         public IReportConverter<TReportCell> Get(string name)
