@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -54,7 +55,7 @@ namespace XReports.Writers
 
             if (cell.CssClasses.Count > 0)
             {
-                this.WriteAttribute(stringBuilder, "class", string.Join(' ', cell.CssClasses));
+                this.WriteAttribute(stringBuilder, "class", string.Join(" ", cell.CssClasses));
             }
 
             if (cell.Styles.Count > 0)
@@ -63,14 +64,14 @@ namespace XReports.Writers
                     stringBuilder,
                     "style",
                     string.Join(
-                        ' ',
+                        " ",
                         cell.Styles
                             .Select(x => $"{x.Key}: {x.Value};")));
             }
 
-            foreach ((string name, string value) in cell.Attributes)
+            foreach (KeyValuePair<string, string> attribute in cell.Attributes)
             {
-                this.WriteAttribute(stringBuilder, name, value);
+                this.WriteAttribute(stringBuilder, attribute.Key, attribute.Value);
             }
         }
 

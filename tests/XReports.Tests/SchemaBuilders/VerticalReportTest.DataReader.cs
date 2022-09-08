@@ -18,23 +18,26 @@ namespace XReports.Tests.SchemaBuilders
             builder.AddColumn("Name", x => x.GetString(0));
             builder.AddColumn("Age", x => x.GetInt32(1));
 
-            using DataTable dataTable = new DataTable();
-            dataTable.Columns.AddRange(new[]
+            using (DataTable dataTable = new DataTable())
             {
-                new DataColumn("Name", typeof(string)),
-                new DataColumn("Age", typeof(int)),
-            });
-            dataTable.Rows.Add("John", 23);
-            dataTable.Rows.Add("Jane", 22);
-            using IDataReader dataReader = new DataTableReader(dataTable);
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
+                dataTable.Columns.AddRange(new[]
+                {
+                    new DataColumn("Name", typeof(string)), new DataColumn("Age", typeof(int)),
+                });
+                dataTable.Rows.Add("John", 23);
+                dataTable.Rows.Add("Jane", 22);
+                using (IDataReader dataReader = new DataTableReader(dataTable))
+                {
+                    IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
 
-            ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
+                    ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
 
-            cells[0][0].GetValue<string>().Should().Be("John");
-            cells[0][1].GetValue<int>().Should().Be(23);
-            cells[1][0].GetValue<string>().Should().Be("Jane");
-            cells[1][1].GetValue<int>().Should().Be(22);
+                    cells[0][0].GetValue<string>().Should().Be("John");
+                    cells[0][1].GetValue<int>().Should().Be(23);
+                    cells[1][0].GetValue<string>().Should().Be("Jane");
+                    cells[1][1].GetValue<int>().Should().Be(22);
+                }
+            }
         }
     }
 }

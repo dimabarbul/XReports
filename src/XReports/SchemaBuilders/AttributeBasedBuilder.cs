@@ -204,11 +204,11 @@ namespace XReports.SchemaBuilders
             }
 
             int minimumIndex = properties.Min(p => p.Attribute.Order);
-            foreach ((int index, Dictionary<string, List<int>> header) in complexHeader)
+            foreach (KeyValuePair<int, Dictionary<string, List<int>>> header in complexHeader)
             {
-                foreach ((string title, List<int> columns) in header)
+                foreach (KeyValuePair<string, List<int>> column in header.Value)
                 {
-                    builder.AddComplexHeader(index, title, columns.Min() - minimumIndex, columns.Max() - minimumIndex);
+                    builder.AddComplexHeader(header.Key, column.Key, column.Value.Min() - minimumIndex, column.Value.Max() - minimumIndex);
                 }
             }
         }

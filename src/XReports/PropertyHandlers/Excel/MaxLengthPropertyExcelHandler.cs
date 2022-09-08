@@ -20,7 +20,7 @@ namespace XReports.PropertyHandlers.Excel
                 return;
             }
 
-            cell.SetValue(string.Concat(text.AsSpan(0, property.MaxLength - 1), "…"));
+            cell.SetValue(text.Substring(0, property.MaxLength - 1) + '…');
         }
     }
 }

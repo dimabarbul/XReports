@@ -30,11 +30,12 @@ namespace XReports.Writers
 
         public void WriteToFile(IReportTable<ExcelReportCell> table, string fileName)
         {
-            using ExcelPackage excelPackage = new ExcelPackage(new FileInfo(fileName));
+            using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(fileName)))
+            {
+                this.WriteReport(table, excelPackage);
 
-            this.WriteReport(table, excelPackage);
-
-            excelPackage.Save();
+                excelPackage.Save();
+            }
         }
 
         public Stream WriteToStream(IReportTable<ExcelReportCell> table)
@@ -50,11 +51,12 @@ namespace XReports.Writers
 
         public void WriteToStream(IReportTable<ExcelReportCell> table, Stream stream)
         {
-            using ExcelPackage excelPackage = new ExcelPackage(stream);
+            using (ExcelPackage excelPackage = new ExcelPackage(stream))
+            {
+                this.WriteReport(table, excelPackage);
 
-            this.WriteReport(table, excelPackage);
-
-            excelPackage.Save();
+                excelPackage.Save();
+            }
         }
 
         protected virtual ExcelAddress WriteHeader(ExcelWorksheet worksheet, IReportTable<ExcelReportCell> table, int startRow, int startColumn)
@@ -142,9 +144,9 @@ namespace XReports.Writers
 
         protected virtual void ApplyColumnFormat(ExcelWorksheet worksheet, int startRow, int endRow)
         {
-            foreach ((int column, ExcelReportCell cell) in this.columnFormatCells)
+            foreach (KeyValuePair<int, ExcelReportCell> columnFormatCell in this.columnFormatCells)
             {
-                this.FormatCell(worksheet.Cells[startRow, column, endRow, column], cell);
+                this.FormatCell(worksheet.Cells[startRow, columnFormatCell.Key, endRow, columnFormatCell.Key], columnFormatCell.Value);
             }
         }
 
@@ -257,13 +259,17 @@ namespace XReports.Writers
 
         private ExcelHorizontalAlignment GetAlignment(Alignment alignment)
         {
-            return alignment switch
+            switch (alignment)
             {
-                Alignment.Center => ExcelHorizontalAlignment.Center,
-                Alignment.Left => ExcelHorizontalAlignment.Left,
-                Alignment.Right => ExcelHorizontalAlignment.Right,
-                _ => throw new ArgumentOutOfRangeException(nameof(alignment)),
-            };
+                case Alignment.Center:
+                    return ExcelHorizontalAlignment.Center;
+                case Alignment.Left:
+                    return ExcelHorizontalAlignment.Left;
+                case Alignment.Right:
+                    return ExcelHorizontalAlignment.Right;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(alignment));
+            }
         }
     }
 }

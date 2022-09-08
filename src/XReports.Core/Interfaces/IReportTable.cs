@@ -7,27 +7,18 @@ namespace XReports.Interfaces
 {
     public interface IReportTable<out TReportCell>
     {
-        public IEnumerable<ReportTableProperty> Properties { get; }
+        IEnumerable<ReportTableProperty> Properties { get; }
 
-        public IEnumerable<IEnumerable<TReportCell>> HeaderRows { get; }
+        IEnumerable<IEnumerable<TReportCell>> HeaderRows { get; }
 
-        public IEnumerable<IEnumerable<TReportCell>> Rows { get; }
+        IEnumerable<IEnumerable<TReportCell>> Rows { get; }
 
-        public bool HasProperty<TProperty>()
-            where TProperty : ReportTableProperty
-        {
-            return this.Properties.OfType<TProperty>().Any();
-        }
+        bool HasProperty<TProperty>()
+            where TProperty : ReportTableProperty;
 
-        public bool HasProperty(Type propertyType)
-        {
-            return this.Properties.Any(p => p.GetType() == propertyType);
-        }
+        bool HasProperty(Type propertyType);
 
-        public TProperty GetProperty<TProperty>()
-            where TProperty : ReportTableProperty
-        {
-            return this.Properties.OfType<TProperty>().FirstOrDefault();
-        }
+        TProperty GetProperty<TProperty>()
+            where TProperty : ReportTableProperty;
     }
 }

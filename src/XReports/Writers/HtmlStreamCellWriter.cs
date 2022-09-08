@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace XReports.Writers
 
             if (cell.CssClasses.Count > 0)
             {
-                await this.WriteAttributeAsync(streamWriter, "class", string.Join(' ', cell.CssClasses)).ConfigureAwait(false);
+                await this.WriteAttributeAsync(streamWriter, "class", string.Join(" ", cell.CssClasses)).ConfigureAwait(false);
             }
 
             if (cell.Styles.Count > 0)
@@ -66,14 +67,14 @@ namespace XReports.Writers
                     streamWriter,
                     "style",
                     string.Join(
-                        ' ',
+                        " ",
                         cell.Styles
                             .Select(x => $"{x.Key}: {x.Value};"))).ConfigureAwait(false);
             }
 
-            foreach ((string name, string value) in cell.Attributes)
+            foreach (KeyValuePair<string, string> attribute in cell.Attributes)
             {
-                await this.WriteAttributeAsync(streamWriter, name, value).ConfigureAwait(false);
+                await this.WriteAttributeAsync(streamWriter, attribute.Key, attribute.Value).ConfigureAwait(false);
             }
         }
 
