@@ -21,16 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="DependencyInjection\XReportsDI.AddReportConverter.cs">
-      <DependentUpon>XReportsDI.cs</DependentUpon>
+    <Compile Update="Options\ReportConverterOptionsTests.Classes.cs">
+      <DependentUpon>ReportConverterOptionsTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="DependencyInjection\XReportsDI.AddReportConverterWithName.cs">
-      <DependentUpon>XReportsDI.cs</DependentUpon>
-    </Compile>
-    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverter.cs">
-      <DependentUpon>XReportsDITest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverterWithName.cs">
+    <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
     </Compile>
   </ItemGroup>

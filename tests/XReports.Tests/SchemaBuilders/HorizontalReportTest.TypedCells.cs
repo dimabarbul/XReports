@@ -4,7 +4,6 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
-using XReports.ValueProviders;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders

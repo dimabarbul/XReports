@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;

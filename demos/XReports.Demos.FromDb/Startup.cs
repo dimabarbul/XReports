@@ -95,20 +95,16 @@ namespace XReports.Demos.FromDb
                 .AddHtmlStringCellWriter()
                 .AddHtmlStringWriter<MyHtmlStringWriter>()
                 .AddEpplusWriter<MyExcelWriter>()
-                .AddReportConverter<HtmlReportCell, IHtmlHandler>(
-                    new AlignmentPropertyHtmlHandler(),
-                    new BoldPropertyHtmlHandler(),
-                    new ColorPropertyHtmlHandler(),
-                    new DecimalPrecisionPropertyHtmlHandler(),
-                    new PercentFormatPropertyHtmlHandler(),
-                    new DateTimeFormatPropertyHtmlHandler())
-                .AddReportConverter<ExcelReportCell, IExcelHandler>(
-                    new AlignmentPropertyExcelHandler(),
-                    new BoldPropertyExcelHandler(),
-                    new ColorPropertyExcelHandler(),
-                    new DecimalPrecisionPropertyExcelHandler(),
-                    new PercentFormatPropertyExcelHandler(),
-                    new DateTimeFormatPropertyExcelHandler())
+                .AddReportConverter<HtmlReportCell>(o =>
+                {
+                    o.AddHandlersByInterface<IHtmlHandler>()
+                        .AddHandlersFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
+                })
+                .AddReportConverter<ExcelReportCell>(o =>
+                {
+                    o.AddHandlersByInterface<IExcelHandler>()
+                        .AddHandlersFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
+                })
                 .AddAttributeBasedBuilder();
         }
     }

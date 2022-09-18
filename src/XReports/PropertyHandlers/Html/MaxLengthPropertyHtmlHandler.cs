@@ -1,4 +1,3 @@
-using System;
 using XReports.Enums;
 using XReports.Models;
 using XReports.Properties;

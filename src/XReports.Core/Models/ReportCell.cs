@@ -1,5 +1,3 @@
-using System;
-
 namespace XReports.Models
 {
     public class ReportCell : BaseReportCell

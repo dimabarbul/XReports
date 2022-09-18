@@ -8,7 +8,7 @@ using XReports.Models;
 
 namespace XReports
 {
-    public class ReportConverterFactory<TReportCell> : IReportConverterFactory<TReportCell>
+    internal class ReportConverterFactory<TReportCell> : IReportConverterFactory<TReportCell>
         where TReportCell : BaseReportCell, new()
     {
         private readonly ReportConverterFactoryOptions<TReportCell> options;
@@ -39,7 +39,7 @@ namespace XReports
                 throw new ArgumentException($"Report converter with name \"{name}\" is not registered.");
             }
 
-            IReportConverter<TReportCell> converter = XReportsDI.CreateReportConverter(this.serviceProvider, registration.Handlers, registration.PropertyHandlersInterface);
+            IReportConverter<TReportCell> converter = XReportsDI.CreateReportConverter(this.serviceProvider, registration.ConfigureOptions);
 
             this.converters.Add(name, converter);
 
