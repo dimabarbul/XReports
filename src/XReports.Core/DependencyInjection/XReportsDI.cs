@@ -12,45 +12,59 @@ namespace XReports.DependencyInjection
     {
         public static IServiceCollection AddReportConverter<TReportCell>(
             this IServiceCollection services,
-            Action<ReportConverterOptions<TReportCell>> configure = null)
+            Action<ReportConverterOptions<TReportCell>> configure = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TReportCell : BaseReportCell, new()
         {
-            return services.AddScoped<IReportConverter<TReportCell>>(sp => CreateReportConverter(sp, configure));
-        }
-
-        public static IServiceCollection AddReportConverter<TReportCell, TPropertyHandler>(
-            this IServiceCollection services)
-            where TReportCell : BaseReportCell, new()
-            where TPropertyHandler : IPropertyHandler<TReportCell>
-        {
-            return services.AddReportConverter<TReportCell>(o =>
-            {
-                o.AddHandlersByInterface<TPropertyHandler>();
-            });
-        }
-
-        public static IServiceCollection AddReportConverter<TReportCell>(
-            this IServiceCollection services,
-            string name,
-            Action<ReportConverterOptions<TReportCell>> configure = null)
-            where TReportCell : BaseReportCell, new()
-        {
-            AddFactoryRegistration(services, name, configure);
-            TryRegisterFactory<TReportCell>(services);
+            services.Add(new ServiceDescriptor(
+                typeof(IReportConverter<TReportCell>),
+                sp => CreateReportConverter(sp, configure),
+                lifetime));
 
             return services;
         }
 
         public static IServiceCollection AddReportConverter<TReportCell, TPropertyHandler>(
             this IServiceCollection services,
-            string name)
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TReportCell : BaseReportCell, new()
             where TPropertyHandler : IPropertyHandler<TReportCell>
         {
-            return services.AddReportConverter<TReportCell>(name, o =>
-            {
-                o.AddHandlersByInterface<TPropertyHandler>();
-            });
+            return services.AddReportConverter<TReportCell>(
+                o =>
+                {
+                    o.AddHandlersByInterface<TPropertyHandler>();
+                },
+                lifetime);
+        }
+
+        public static IServiceCollection AddReportConverter<TReportCell>(
+            this IServiceCollection services,
+            string name,
+            Action<ReportConverterOptions<TReportCell>> configure = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where TReportCell : BaseReportCell, new()
+        {
+            TryRegisterFactory<TReportCell>(services, lifetime);
+            AddFactoryRegistration(services, name, configure);
+
+            return services;
+        }
+
+        public static IServiceCollection AddReportConverter<TReportCell, TPropertyHandler>(
+            this IServiceCollection services,
+            string name,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where TReportCell : BaseReportCell, new()
+            where TPropertyHandler : IPropertyHandler<TReportCell>
+        {
+            return services.AddReportConverter<TReportCell>(
+                name,
+                o =>
+                {
+                    o.AddHandlersByInterface<TPropertyHandler>();
+                },
+                lifetime);
         }
 
         internal static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
@@ -91,10 +105,18 @@ namespace XReports.DependencyInjection
                 });
         }
 
-        private static void TryRegisterFactory<TReportCell>(IServiceCollection services)
+        private static void TryRegisterFactory<TReportCell>(IServiceCollection services, ServiceLifetime lifetime)
             where TReportCell : BaseReportCell, new()
         {
-            services.TryAddScoped<IReportConverterFactory<TReportCell>, ReportConverterFactory<TReportCell>>();
+            if (services
+                .Any(r =>
+                    r.ServiceType == typeof(IReportConverterFactory<TReportCell>)
+                    && r.Lifetime != lifetime))
+            {
+                throw new ArgumentException("Report converter factory has already been registered with different lifetime.", nameof(lifetime));
+            }
+
+            services.TryAdd(new ServiceDescriptor(typeof(IReportConverterFactory<TReportCell>), typeof(ReportConverterFactory<TReportCell>), lifetime));
         }
     }
 }
