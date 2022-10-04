@@ -11,7 +11,7 @@ namespace XReports.Options
         where TReportCell : BaseReportCell
     {
         private readonly List<Type> types = new List<Type>();
-        private readonly List<Type> interfaces = new List<Type>();
+        private readonly List<Type> baseTypes = new List<Type>();
         private readonly List<(Assembly, Type)> assemblies = new List<(Assembly, Type)>();
 
         public IReadOnlyCollection<Type> Types => this.LoadTypes();
@@ -20,10 +20,7 @@ namespace XReports.Options
         {
             foreach (Type type in types)
             {
-                if (!this.IsTypeValid(type))
-                {
-                    throw new ArgumentException($"Type {type} is invalid. It should be non-abstract class that implements {typeof(IPropertyHandler<TReportCell>)}.", nameof(types));
-                }
+                this.ValidateHandlerType(type);
             }
 
             this.types.AddRange(types);
@@ -44,24 +41,23 @@ namespace XReports.Options
 
         public ReportConverterOptions<TReportCell> AddHandlersFromAssembly(Assembly assembly, Type handlersInterface)
         {
-            if (!typeof(IPropertyHandler<TReportCell>).IsAssignableFrom(handlersInterface))
-            {
-                throw new ArgumentException($"{handlersInterface} should be assignable to {typeof(IPropertyHandler<TReportCell>)}", nameof(handlersInterface));
-            }
+            this.ValidateBaseType(handlersInterface);
 
             this.assemblies.Add((assembly, handlersInterface));
 
             return this;
         }
 
-        public ReportConverterOptions<TReportCell> AddHandlersByInterface<TPropertyHandler>()
+        public ReportConverterOptions<TReportCell> AddHandlersByBaseType<TPropertyHandler>()
         {
-            return this.AddHandlersByInterface(typeof(TPropertyHandler));
+            return this.AddHandlersByBaseType(typeof(TPropertyHandler));
         }
 
-        public ReportConverterOptions<TReportCell> AddHandlersByInterface(Type type)
+        public ReportConverterOptions<TReportCell> AddHandlersByBaseType(Type type)
         {
-            this.interfaces.Add(type);
+            this.ValidateBaseType(type);
+
+            this.baseTypes.Add(type);
 
             return this;
         }
@@ -69,7 +65,7 @@ namespace XReports.Options
         private Type[] LoadTypes()
         {
             return this.types
-                .Concat(this.interfaces.SelectMany(this.GetImplementingTypes))
+                .Concat(this.baseTypes.SelectMany(this.GetImplementingTypes))
                 .Concat(this.assemblies.SelectMany(this.GetHandlersInAssembly))
                 .Distinct()
                 .ToArray();
@@ -80,7 +76,7 @@ namespace XReports.Options
             return AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(this.IsTypeValid)
+                .Where(this.IsHandlerTypeValid)
                 .Where(interfaceType.IsAssignableFrom)
                 .ToArray();
         }
@@ -88,13 +84,38 @@ namespace XReports.Options
         private IEnumerable<Type> GetHandlersInAssembly((Assembly, Type) assemblyLoadInfo)
         {
             return assemblyLoadInfo.Item1.GetTypes()
-                .Where(this.IsTypeValid)
+                .Where(this.IsHandlerTypeValid)
                 .Where(assemblyLoadInfo.Item2.IsAssignableFrom);
         }
 
-        private bool IsTypeValid(Type t)
+        private bool IsHandlerTypeValid(Type t)
         {
             return t.IsClass && !t.IsAbstract && typeof(IPropertyHandler<TReportCell>).IsAssignableFrom(t);
+        }
+
+        private bool IsBaseTypeValid(Type t)
+        {
+            return typeof(IPropertyHandler<TReportCell>).IsAssignableFrom(t);
+        }
+
+        private void ValidateHandlerType(Type type)
+        {
+            if (!this.IsHandlerTypeValid(type))
+            {
+                throw new ArgumentException(
+                    $"Type {type} is invalid. It should be non-abstract class that implements {typeof(IPropertyHandler<TReportCell>)}.",
+                    nameof(type));
+            }
+        }
+
+        private void ValidateBaseType(Type handlersInterface)
+        {
+            if (!this.IsBaseTypeValid(handlersInterface))
+            {
+                throw new ArgumentException(
+                    $"{handlersInterface} should be assignable to {typeof(IPropertyHandler<TReportCell>)}",
+                    nameof(handlersInterface));
+            }
         }
     }
 }

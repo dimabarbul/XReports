@@ -59,11 +59,11 @@ namespace XReports.Core.Tests.Options
             }
         }
 
-        private class MyAnotherHtmlHandler : IMyPropertyHandler
+        private class MyAnotherHtmlHandler : MyAbstractHtmlHandler
         {
-            public int Priority => 0;
+            public override int Priority => 0;
 
-            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            public override bool Handle(ReportCellProperty property, HtmlCell cell)
             {
                 throw new System.NotImplementedException();
             }

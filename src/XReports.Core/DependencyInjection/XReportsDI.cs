@@ -33,7 +33,7 @@ namespace XReports.DependencyInjection
             return services.AddReportConverter<TReportCell>(
                 o =>
                 {
-                    o.AddHandlersByInterface<TPropertyHandler>();
+                    o.AddHandlersByBaseType<TPropertyHandler>();
                 },
                 lifetime);
         }
@@ -62,7 +62,7 @@ namespace XReports.DependencyInjection
                 name,
                 o =>
                 {
-                    o.AddHandlersByInterface<TPropertyHandler>();
+                    o.AddHandlersByBaseType<TPropertyHandler>();
                 },
                 lifetime);
         }

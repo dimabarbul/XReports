@@ -11,7 +11,7 @@ namespace XReports.Core.Tests.Options
     public partial class ReportConverterOptionsTests
     {
         [Fact]
-        public void AddHandlersShouldThrowExceptionWhenTypeDoesNotImplementCorrectInterface()
+        public void AddHandlersShouldThrowExceptionWhenTypeDoesNotImplementCorrectBaseType()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
@@ -54,7 +54,7 @@ namespace XReports.Core.Tests.Options
         public void AddHandlersShouldNotAddDuplicates()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
-            options.AddHandlersByInterface<IPropertyHandler<HtmlCell>>();
+            options.AddHandlersByBaseType<IPropertyHandler<HtmlCell>>();
 
             options.AddHandlers(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
 
@@ -66,11 +66,21 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByInterfaceAsGenericArgumentShouldAddAllValidImplementations()
+        public void AddHandlersByBaseTypeAsGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
-            options.AddHandlersByInterface<IPropertyHandler<HtmlCell>>();
+            Action action = () => options.AddHandlersByBaseType<IDisposable>();
+
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void AddHandlersByBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersByBaseType<IPropertyHandler<HtmlCell>>();
 
             options.Types.Should().BeEquivalentTo(
                 typeof(HtmlHandler),
@@ -80,12 +90,22 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByInterfaceAsGenericArgumentShouldNotAddDuplicates()
+        public void AddHandlersByBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersByBaseType<MyAbstractHtmlHandler>();
+
+            options.Types.Should().BeEquivalentTo(typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersByBaseTypeAsGenericArgumentShouldNotAddDuplicates()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
             options.AddHandlers(typeof(HtmlHandler));
 
-            options.AddHandlersByInterface<IPropertyHandler<HtmlCell>>();
+            options.AddHandlersByBaseType<IPropertyHandler<HtmlCell>>();
 
             try
             {
@@ -104,11 +124,11 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByInterfaceAsNonGenericArgumentShouldAddAllValidImplementations()
+        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
-            options.AddHandlersByInterface(typeof(IPropertyHandler<HtmlCell>));
+            options.AddHandlersByBaseType(typeof(IPropertyHandler<HtmlCell>));
 
             options.Types.Should().BeEquivalentTo(
                 typeof(HtmlHandler),
@@ -118,12 +138,32 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByInterfaceAsNonGenericArgumentShouldNotAddDuplicates()
+        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersByBaseType(typeof(MyAbstractHtmlHandler));
+
+            options.Types.Should().BeEquivalentTo(typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            Action action = () => options.AddHandlersByBaseType(typeof(IDisposable));
+
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldNotAddDuplicates()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
             options.AddHandlers(typeof(HtmlHandler));
 
-            options.AddHandlersByInterface(typeof(IPropertyHandler<HtmlCell>));
+            options.AddHandlersByBaseType(typeof(IPropertyHandler<HtmlCell>));
 
             options.Types.Should().BeEquivalentTo(
                 typeof(HtmlHandler),
@@ -147,7 +187,7 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomInterfaceShouldAddAllValidImplementations()
+        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
@@ -159,7 +199,27 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomInterfaceAsGenericArgumentShouldAddAllValidImplementations()
+        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly(), typeof(MyAbstractHtmlHandler));
+
+            options.Types.Should().BeEquivalentTo(typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            Action action = () => options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly(), typeof(IDisposable));
+
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void AddHandlersFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
@@ -171,13 +231,13 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomInterfaceShouldThrowExceptionWhenInvalidInterface()
+        public void AddHandlersFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
         {
             ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
 
-            Action action = () => options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly(), typeof(IDisposable));
+            options.AddHandlersFromAssembly<MyAbstractHtmlHandler>(Assembly.GetExecutingAssembly());
 
-            action.Should().Throw<ArgumentException>();
+            options.Types.Should().BeEquivalentTo(typeof(MyAnotherHtmlHandler));
         }
 
         [Fact]

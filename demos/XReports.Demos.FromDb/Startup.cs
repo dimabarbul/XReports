@@ -97,12 +97,12 @@ namespace XReports.Demos.FromDb
                 .AddEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell>(o =>
                 {
-                    o.AddHandlersByInterface<IHtmlHandler>()
+                    o.AddHandlersByBaseType<IHtmlHandler>()
                         .AddHandlersFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
                 })
                 .AddReportConverter<ExcelReportCell>(o =>
                 {
-                    o.AddHandlersByInterface<IExcelHandler>()
+                    o.AddHandlersByBaseType<IExcelHandler>()
                         .AddHandlersFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
                 })
                 .AddAttributeBasedBuilder();
