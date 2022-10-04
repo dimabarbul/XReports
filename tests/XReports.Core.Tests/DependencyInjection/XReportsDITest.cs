@@ -301,6 +301,31 @@ namespace XReports.Core.Tests.DependencyInjection
             htmlConverter.Should().NotBe(reportConverter);
         }
 
+        [Fact]
+        public void AddReportConverterShouldThrowExceptionIfRequestedWhenHandlersHaveDependencyNotRegisteredInServiceCollection()
+        {
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddReportConverter<HtmlCell, HandlerWithDependency>()
+                .BuildServiceProvider();
+
+            Action action = () => serviceProvider.GetService<IReportConverter<HtmlCell>>();
+
+            action.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void AddReportConverterShouldResolveIfRequestedWithHandlersWhenHandlersHaveDependencyRegisteredInServiceCollection()
+        {
+            ServiceProvider serviceProvider = new ServiceCollection()
+                .AddTransient<Dependency>()
+                .AddReportConverter<HtmlCell, HandlerWithDependency>()
+                .BuildServiceProvider();
+
+            Action action = () => serviceProvider.GetService<IReportConverter<HtmlCell>>();
+
+            action.Should().NotThrow();
+        }
+
         private IPropertyHandler<TReportCell>[] GetPropertyHandlers<TReportCell>(IReportConverter<TReportCell> converter)
             where TReportCell : BaseReportCell, new()
         {
