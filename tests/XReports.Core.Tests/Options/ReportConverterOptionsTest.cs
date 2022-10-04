@@ -58,7 +58,11 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlers(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
         }
 
         [Fact]
@@ -68,7 +72,11 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlersByInterface<IPropertyHandler<HtmlCell>>();
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
         }
 
         [Fact]
@@ -81,7 +89,11 @@ namespace XReports.Core.Tests.Options
 
             try
             {
-                options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+                options.Types.Should().BeEquivalentTo(
+                    typeof(HtmlHandler),
+                    typeof(AnotherHtmlHandler),
+                    typeof(MyHtmlHandler),
+                    typeof(MyAnotherHtmlHandler));
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -98,7 +110,11 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlersByInterface(typeof(IPropertyHandler<HtmlCell>));
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
         }
 
         [Fact]
@@ -109,7 +125,11 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlersByInterface(typeof(IPropertyHandler<HtmlCell>));
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
         }
 
         [Fact]
@@ -119,7 +139,45 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersFromAssemblyWithCustomInterfaceShouldAddAllValidImplementations()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly(), typeof(IMyPropertyHandler));
+
+            options.Types.Should().BeEquivalentTo(
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersFromAssemblyWithCustomInterfaceAsGenericArgumentShouldAddAllValidImplementations()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            options.AddHandlersFromAssembly<IMyPropertyHandler>(Assembly.GetExecutingAssembly());
+
+            options.Types.Should().BeEquivalentTo(
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
+        }
+
+        [Fact]
+        public void AddHandlersFromAssemblyWithCustomInterfaceShouldThrowExceptionWhenInvalidInterface()
+        {
+            ReportConverterOptions<HtmlCell> options = new ReportConverterOptions<HtmlCell>();
+
+            Action action = () => options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly(), typeof(IDisposable));
+
+            action.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -130,7 +188,11 @@ namespace XReports.Core.Tests.Options
 
             options.AddHandlersFromAssembly(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(typeof(HtmlHandler), typeof(AnotherHtmlHandler));
+            options.Types.Should().BeEquivalentTo(
+                typeof(HtmlHandler),
+                typeof(AnotherHtmlHandler),
+                typeof(MyHtmlHandler),
+                typeof(MyAnotherHtmlHandler));
         }
     }
 }

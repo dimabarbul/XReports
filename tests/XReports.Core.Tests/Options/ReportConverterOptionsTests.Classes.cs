@@ -44,5 +44,35 @@ namespace XReports.Core.Tests.Options
                 throw new System.NotImplementedException();
             }
         }
+
+        private interface IMyPropertyHandler : IPropertyHandler<HtmlCell>
+        {
+        }
+
+        private class MyHtmlHandler : IMyPropertyHandler
+        {
+            public int Priority => 0;
+
+            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        private class MyAnotherHtmlHandler : IMyPropertyHandler
+        {
+            public int Priority => 0;
+
+            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        private abstract class MyAbstractHtmlHandler : IMyPropertyHandler
+        {
+            public abstract int Priority { get; }
+            public abstract bool Handle(ReportCellProperty property, HtmlCell cell);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace XReports.Options
     {
         private readonly List<Type> types = new List<Type>();
         private readonly List<Type> interfaces = new List<Type>();
-        private readonly List<Assembly> assemblies = new List<Assembly>();
+        private readonly List<(Assembly, Type)> assemblies = new List<(Assembly, Type)>();
 
         public IReadOnlyCollection<Type> Types => this.LoadTypes();
 
@@ -33,7 +33,23 @@ namespace XReports.Options
 
         public ReportConverterOptions<TReportCell> AddHandlersFromAssembly(Assembly assembly)
         {
-            this.assemblies.Add(assembly);
+            return this.AddHandlersFromAssembly(assembly, typeof(IPropertyHandler<TReportCell>));
+        }
+
+        public ReportConverterOptions<TReportCell> AddHandlersFromAssembly<TPropertyHandler>(Assembly assembly)
+            where TPropertyHandler : IPropertyHandler<TReportCell>
+        {
+            return this.AddHandlersFromAssembly(assembly, typeof(TPropertyHandler));
+        }
+
+        public ReportConverterOptions<TReportCell> AddHandlersFromAssembly(Assembly assembly, Type handlersInterface)
+        {
+            if (!typeof(IPropertyHandler<TReportCell>).IsAssignableFrom(handlersInterface))
+            {
+                throw new ArgumentException($"{handlersInterface} should be assignable to {typeof(IPropertyHandler<TReportCell>)}", nameof(handlersInterface));
+            }
+
+            this.assemblies.Add((assembly, handlersInterface));
 
             return this;
         }
@@ -69,10 +85,11 @@ namespace XReports.Options
                 .ToArray();
         }
 
-        private IEnumerable<Type> GetHandlersInAssembly(Assembly assembly)
+        private IEnumerable<Type> GetHandlersInAssembly((Assembly, Type) assemblyLoadInfo)
         {
-            return assembly.GetTypes()
-                .Where(this.IsTypeValid);
+            return assemblyLoadInfo.Item1.GetTypes()
+                .Where(this.IsTypeValid)
+                .Where(assemblyLoadInfo.Item2.IsAssignableFrom);
         }
 
         private bool IsTypeValid(Type t)
