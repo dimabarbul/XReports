@@ -7,8 +7,15 @@ To see it in action let's create custom cell class, custom property and writer.
 ```c#
 class HtmlReportCell : BaseReportCell
 {
-    public List<string> CssClasses { get; set; }
-    public List<string> Styles { get; set; }
+    public List<string> CssClasses { get; set; } = new List<string>();
+    public List<string> Styles { get; set; } = new List<string>();
+
+    public override void Clear()
+    {
+        base.Clear();
+        this.CssClasses.Clear();
+        this.Styles.Clear();
+    }
 }
 
 class BoldProperty : ReportCellProperty
@@ -24,8 +31,13 @@ class BoldPropertyBootstrapHandler : PropertyHandler<BoldProperty, HtmlReportCel
     }
 }
 
+// Might be used to register handlers implementing it.
+interface IHtmlReportCellHandler : IPropertyHandler<HtmlReportCell>
+{
+}
+
 // Useful when we don't have classes support, e.g., in email.
-class BoldPropertyStandardHandler : PropertyHandler<BoldProperty, HtmlReportCell>
+class BoldPropertyStandardHandler : PropertyHandler<BoldProperty, HtmlReportCell>, IHtmlReportCellHandler
 {
     protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
     {
@@ -112,12 +124,15 @@ writer.Write(htmlReportTable);
 </tbody></table>
 ```
 
-While registering converter you can pass instances of handlers to use.
+While registering converter you can pass types of handlers to use.
 
 ```c#
 ServiceCollection services = new ServiceCollection();
-// Pass instance of BoldPropertyBootstrapHandler.
-services.AddReportConverter<HtmlReportCell>(new BoldPropertyBootstrapHandler()/*, new AnotherHandler() …*/);
+// Pass type of BoldPropertyBootstrapHandler.
+services.AddReportConverter<HtmlReportCell>(o =>
+{
+    o.AddHandlers(typeof(BoldPropertyBootstrapHandler));
+});
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 IReportConverter<HtmlReportCell> converter = serviceProvider.GetRequiredService<IReportConverter<HtmlReportCell>>();
@@ -141,18 +156,18 @@ writer.Write(htmlReportTable);
 </tbody></table>
 ```
 
-Most likely you'll have more than one handler, so registering them like this might be awkward. You can use marker interface and pass it while registering converter.
+Most likely you'll have more than one handler, so registering them like this might be awkward. You can use interface or base class and pass it while registering converter.
 
 ```c#
-interface IHtmlReportCellHandler : IPropertyHandler<HtmlReportCell> {}
-
-class BoldPropertyStandardHandler : PropertyHandler<BoldProperty, HtmlReportCell>, IHtmlReportCellHandler
-{…}
-
 ServiceCollection services = new ServiceCollection();
 // Second type is marker interface, so converter will use all handlers
 // implementing this interface.
 services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>();
+// Also you can do this using configure callback:
+// services.AddReportConverter<HtmlReportCell>(o =>
+// {
+//     o.AddHandlersByBaseType<IHtmlReportCellHandler>();
+// });
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 IReportConverter<HtmlReportCell> converter = serviceProvider.GetRequiredService<IReportConverter<HtmlReportCell>>();
@@ -179,7 +194,22 @@ writer.Write(htmlReportTable);
 This 2 methods can be combined.
 
 ```c#
-services.AddReportConverter<HtmlReportCell, IMyHandler>(new AnotherHandler());
+// This is example code, it uses classes and interfaces not provided in this doc.
+services.AddReportConverter<HtmlReportCell>(o =>
+{
+    o.AddHandlers(typeof(MyHandler))
+        .AddHandlersByBaseType<IMyHandler>();
+});
+```
+
+You can add handlers from specific assembly:
+
+```c#
+// This is example code, it uses classes and interfaces not provided in this doc.
+services.AddReportConverter<HtmlReportCell>(o =>
+{
+    o.AddHandlersFromAssembly<IMyHandler>(Assembly.GetExecutingAssembly());
+});
 ```
 
 ## Named Converters
@@ -189,8 +219,13 @@ Sometimes you might want to have several converters, for example, one for displa
 ```c#
 ServiceCollection services = new ServiceCollection();
 // Name "bootstrap" will be used when we need to get this particular converter.
-services.AddReportConverter<HtmlReportCell>("bootstrap", new BoldPropertyBootstrapHandler());
-// You can pass marker interface as well.
+services.AddReportConverter<HtmlReportCell>(
+    "bootstrap",
+    o =>
+    {
+        o.AddHandlers(typeof(BoldPropertyBootstrapHandler));
+    });
+// You can pass interface as well.
 services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>("email");
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -237,4 +272,17 @@ Email
 <tr><td>6</td></tr>
 <tr><td style="font-weight: bold">7</td></tr>
 </tbody></table>
+```
+
+## Handlers with Dependencies
+
+If handler has dependency, it should be registered in service collection. Handler itself does not have to be registered.
+
+## Custom Lifetime
+
+By default converter and converter factory are registered with scoped service lifetime. It can be changed using `lifetime` argument when adding converter.
+
+```c#
+ServiceCollection services = new ServiceCollection();
+services.AddReportConverter<HtmlReportCell>(lifetime: ServiceLifetime.Singleton);
 ```
