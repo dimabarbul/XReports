@@ -29,7 +29,7 @@ class ProtectedProperty : ReportCellProperty
 // Writers do not have any interface. It's up to you to decide what method(s) it will contain.
 class ConsoleWriter
 {
-    // Method to print report to console.
+    // Method to write report to console.
     public void Write(IReportTable<ReportCell> reportTable)
     {
         this.WriteRows(reportTable.HeaderRows);
@@ -37,7 +37,7 @@ class ConsoleWriter
         this.WriteRows(reportTable.Rows);
     }
 
-    // Autxiliary method to print rows (header or body).
+    // Autxiliary method to write rows (header or body).
     private void WriteRows(IEnumerable<IEnumerable<ReportCell>> rows)
     {
         Console.WriteLine(
@@ -76,6 +76,12 @@ class ConsoleWriter
 
         return text;
     }
+}
+
+class UserInfo
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
 }
 
 VerticalReportSchemaBuilder<UserInfo> builder = new VerticalReportSchemaBuilder<UserInfo>();
@@ -171,9 +177,18 @@ admin                | ********
 If you want to add properties to all complex header cells, you may omit its title:
 
 ```c#
+builder.AddComplexHeader(0, "User Info", "Username");
+builder.AddComplexHeader(0, "Security Info", "Password");
 builder
     // property will be assigned to all complex header cells
     .AddComplexHeaderProperties(new UpperCaseProperty());
+
+/*
+USER INFO            | SECURITY INFO       
+Username             | Password            
+-------------------------------------------
+guest                | *****               
+admin                | ********            
 ```
 
 ## Dynamic Properties
@@ -185,7 +200,7 @@ Imagine that we want to highlight users with weak password. If password is less 
 ```c#
 …
 builder.AddColumn("Username", u => u.Username)
-    // using AddDynamicProperty method you can specify function returning one
+    // using AddD1ynamicProperty method you can specify function returning one
     // or several properties
     .AddDynamicProperty(u =>
     {
@@ -213,8 +228,17 @@ admin                | ********
 To assign property to all columns/rows you may use AddGlobalProperties method.
 
 ```c#
+builder.AddColumn("Username", u => u.Username);
+builder.AddColumn("Password", u => u.Password);
 // All columns/rows (including added later) will have this property(-ies) assigned.
 builder.AddGlobalProperties(new UpperCaseProperty());
+
+/*
+Username             | Password            
+-------------------------------------------
+GUEST                | *****               
+ADMIN                | ********            
+*/
 ```
 
 ## Table Properties

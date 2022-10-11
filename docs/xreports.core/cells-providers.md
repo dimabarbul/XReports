@@ -97,6 +97,10 @@ class StatusCellsProvider<TData> : IReportCellsProvider<TData>
     private const string InactiveText = "☐";
     private const string DeletedText = "☒";
 
+    private readonly ReportCell activeReportCell = ReportCell.FromValue(ActiveText);
+    private readonly ReportCell inactiveReportCell = ReportCell.FromValue(InactiveText);
+    private readonly ReportCell deletedReportCell = ReportCell.FromValue(DeletedText);
+
     // As our cells provider is generic, it does not know how to determine cell
     // status. So it's delegated to these functions.
     private readonly Func<TData, bool> isActive;
@@ -116,18 +120,16 @@ class StatusCellsProvider<TData> : IReportCellsProvider<TData>
     // horizontal.
     public string Title { get; }
 
-    // Returns callback that will be used to create cells.
-    public Func<TData, ReportCell> CellSelector => (TData data) =>
+    // Returns cell for given entity.
+    public ReportCell GetCell(TData entity)
     {
-        string value = this.isDeleted(data) ? DeletedText :
-            this.isActive(data) ? ActiveText : InactiveText;
+        return this.isDeleted(entity) ?
+            this.deletedReportCell :
+            this.isActive(entity) ?
+                this.activeReportCell :
+                this.inactiveReportCell;
+    }
 
-        // If we want, we can add some properties to the cell.
-        ReportCell<string> cell = new ReportCell<string>(value);
-
-        return cell;
-    };
-    
     #endregion
 }
 ```
@@ -156,7 +158,7 @@ Product[] products = new Product[]
     new Product() { Name = "iPhone", IsActive = false },
 };
 
-IReportTable<ReportCell> productsReport = productSchema.BuildReportTable(products);
+IReportTable<ReportCell> reportTable = productSchema.BuildReportTable(products);
 
 // Print.
 Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
@@ -200,7 +202,7 @@ User[] users = new User[]
     new User() { Username = "user2", IsBlocked = true },
 };
 
-IReportTable<ReportCell> usersReport = userSchema.BuildReportTable(users);
+IReportTable<ReportCell> reportTable = userSchema.BuildReportTable(users);
 
 // Print.
 Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>

@@ -15,6 +15,14 @@ class HtmlCell : BaseReportCell
 {
     // True if we don't want to escape cell content.
     public bool IsHtml { get; set; }
+    
+    // Clear resets cell to its initial state.
+    public override void Clear()
+    {
+        base.Clear();
+
+        this.IsHtml = false;
+    }
 }
 ```
 
@@ -97,7 +105,7 @@ Notice line
 ```c#
 IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>();
 ```
-We've created converter instance to make report cells of type HtmlCell. By default for each ReportCell it creates instance of our class (HtmlCell) and copies span and value information.
+We've created converter instance to make report cells of type HtmlCell. For each ReportCell it produces instance of our class (HtmlCell) and copies span and value information.
 
 So far so good, report is printed and username of evil user is escaped.
 
@@ -137,7 +145,7 @@ class EmailLinkPropertyHandler : PropertyHandler<EmailLinkProperty, HtmlCell>
         string email = cell.GetValue<string>();
 
         // update cell content to Html link
-        cell.Value = $"<a href=\"mailto:{email}\">{email}</a>";
+        cell.SetValue($"<a href=\"mailto:{email}\">{email}</a>");
     }
 }
 ```
@@ -146,6 +154,9 @@ In order to use this handler class during conversion it should be passed to conv
 
 ```c#
 …
+// Replace line
+// IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>();
+// with following:
 IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(new[]
 {
     new EmailLinkPropertyHandler()
@@ -157,9 +168,42 @@ So now we can assign the property to email column.
 
 ```c#
 …
+// Replace line 
+// builder.AddColumn("Email", (UserInfo u) => u.Email);
+// with following:
 builder.AddColumn("Email", (UserInfo u) => u.Email)
     .AddProperties(new EmailLinkProperty());
 …
+```
+
+The final code is:
+
+```c#
+VerticalReportSchemaBuilder<UserInfo> builder = new VerticalReportSchemaBuilder<UserInfo>();
+
+builder.AddColumn("Username", (UserInfo u) => u.Username);
+builder.AddColumn("Email", (UserInfo u) => u.Email)
+    .AddProperties(new EmailLinkProperty());
+
+VerticalReportSchema<UserInfo> schema = builder.BuildSchema();
+
+UserInfo[] users = new UserInfo[]
+{
+    new UserInfo() { Username = "guest", Email = "guest@example.com" },
+    new UserInfo() { Username = "admin", Email = "admin@gmail.com" },
+    new UserInfo() { Username = "evil <script>alert(1)</script>", Email = "evil@inter.net" },
+};
+
+IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
+
+IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(new[]
+{
+    new EmailLinkPropertyHandler()
+});
+IReportTable<HtmlCell> htmlReportTable = converter.Convert(reportTable);
+
+HtmlWriter writer = new HtmlWriter();
+writer.Write(htmlReportTable);
 ```
 
 And we get our report.
@@ -176,7 +220,7 @@ And we get our report.
 
 ## Property Handler Priority
 
-Every property handler has priority. By default it's 0 and does not guarantee order in which handler will be called (the lower priority is, the earlier handler is called). If it's important to run one handlers before others, you can use Priority getter to control execution order. Priority is set for handler class which means that all instances of the same handler will have the same priority.
+Every property handler has priority. The lower priority is, the earlier handler is called. If it's important to run one handlers before others, you can use Priority getter to control execution order.
 
 ```c#
 public class ShouldBeCalledFirstPropertyHandler : PropertyHandler<SomeProperty, ReportCell>

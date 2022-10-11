@@ -36,7 +36,7 @@ class HighlightPropertyHandler : PropertyHandler<HighlightProperty, ReportCell>
     protected override void HandleProperty(HighlightProperty property, ReportCell cell)
     {
         string value = cell.GetValue<string>();
-        cell.Value = $"{value} ({property.Symbol})";
+        cell.SetValue($"{value} ({property.Symbol})");
     }
 }
 

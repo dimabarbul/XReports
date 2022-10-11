@@ -13,6 +13,7 @@ class HtmlReportCell : BaseReportCell
     public override void Clear()
     {
         base.Clear();
+
         this.CssClasses.Clear();
         this.Styles.Clear();
     }

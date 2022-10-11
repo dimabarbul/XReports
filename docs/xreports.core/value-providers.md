@@ -63,6 +63,12 @@ builder.AddColumn("#", new SequentialNumberValueProvider(100));
 ## Creating Value Provider
 
 ```c#
+class Customer
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
 class NowValueProvider : IValueProvider<DateTime>
 {
     public DateTime GetValue()
