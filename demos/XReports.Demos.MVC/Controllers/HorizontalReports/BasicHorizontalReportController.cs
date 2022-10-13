@@ -45,8 +45,10 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            EpplusWriter writer = new EpplusWriter();
-            writer.AddFormatter(new ExcelIndentationPropertyFormatter());
+            EpplusWriter writer = new EpplusWriter(new[]
+            {
+                new ExcelIndentationPropertyFormatter(),
+            });
             return writer.WriteToStream(reportTable);
         }
 

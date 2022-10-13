@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Extensions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.Interfaces;
 using XReports.Writers;
 
@@ -8,36 +8,48 @@ namespace XReports.DependencyInjection
 {
     public static class EpplusWriterDI
     {
-        public static IServiceCollection AddEpplusWriter(this IServiceCollection services)
+        public static IServiceCollection AddEpplusWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped, Action<EpplusWriterOptions> configure = null)
         {
-            return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>();
+            return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>(lifetime, configure);
         }
 
-        public static IServiceCollection AddEpplusWriter<TEpplusWriter>(this IServiceCollection services)
-            where TEpplusWriter : class, IEpplusWriter, new()
+        public static IServiceCollection AddEpplusWriter<TEpplusWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped, Action<EpplusWriterOptions> configure = null)
+            where TEpplusWriter : class, IEpplusWriter
         {
-            return services.AddEpplusWriter<IEpplusWriter, TEpplusWriter>();
+            return services.AddEpplusWriter<IEpplusWriter, TEpplusWriter>(lifetime, configure);
         }
 
-        public static IServiceCollection AddEpplusWriter<TIEpplusWriter, TEpplusWriter>(this IServiceCollection services)
+        public static IServiceCollection AddEpplusWriter<TIEpplusWriter, TEpplusWriter>(
+            this IServiceCollection services,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped,
+            Action<EpplusWriterOptions> configure = null)
             where TIEpplusWriter : class, IEpplusWriter
-            where TEpplusWriter : class, TIEpplusWriter, new()
+            where TEpplusWriter : class, TIEpplusWriter
         {
-            services.AddScoped<TIEpplusWriter, TEpplusWriter>(sp =>
+            if (configure != null)
             {
-                TEpplusWriter writer = new TEpplusWriter();
-
-                foreach (Type formatterType in typeof(IEpplusFormatter).GetImplementingTypes())
+                EpplusWriterOptions options = new EpplusWriterOptions();
+                configure(options);
+                foreach (Type type in options.Types)
                 {
-                    writer.AddFormatter((IEpplusFormatter)ActivatorUtilities.GetServiceOrCreateInstance(sp, formatterType));
+                    services.TryAddEnumerable(new ServiceDescriptor(
+                        typeof(IEpplusFormatter),
+                        type,
+                        lifetime));
                 }
+            }
 
-                return writer;
-            });
+            services.Add(new ServiceDescriptor(
+                typeof(TIEpplusWriter),
+                typeof(TEpplusWriter),
+                lifetime));
 
             if (typeof(IEpplusWriter) != typeof(TIEpplusWriter))
             {
-                services.AddScoped<IEpplusWriter>(sp => sp.GetRequiredService<TIEpplusWriter>());
+                services.Add(new ServiceDescriptor(
+                    typeof(IEpplusWriter),
+                    sp => sp.GetService<TIEpplusWriter>(),
+                    lifetime));
             }
 
             return services;

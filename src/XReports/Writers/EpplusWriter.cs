@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using XReports.Enums;
@@ -13,20 +14,23 @@ namespace XReports.Writers
     public class EpplusWriter : IEpplusWriter
     {
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
-        private readonly List<IEpplusFormatter> formatters = new List<IEpplusFormatter>();
+        private readonly List<IEpplusFormatter> formatters;
+
+        public EpplusWriter()
+            : this(Enumerable.Empty<IEpplusFormatter>())
+        {
+        }
+
+        public EpplusWriter(IEnumerable<IEpplusFormatter> formatters)
+        {
+            this.formatters = new List<IEpplusFormatter>(formatters);
+        }
 
         protected string WorksheetName { get; set; } = "Data";
 
         protected int StartRow { get; set; } = 1;
 
         protected int StartColumn { get; set; } = 1;
-
-        public IEpplusWriter AddFormatter(IEpplusFormatter formatter)
-        {
-            this.formatters.Add(formatter);
-
-            return this;
-        }
 
         public void WriteToFile(IReportTable<ExcelReportCell> table, string fileName)
         {

@@ -43,8 +43,10 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            EpplusWriter writer = new EpplusWriter();
-            writer.AddFormatter(new ConditionalFormattingThreeColorScaleFormatter());
+            EpplusWriter writer = new EpplusWriter(new[]
+            {
+                new ConditionalFormattingThreeColorScaleFormatter(),
+            });
 
             return writer.WriteToStream(reportTable);
         }

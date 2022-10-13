@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -88,10 +89,17 @@
       <Compile Update="SchemaBuilders\HorizontalReportTest.Basic.cs">
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
+      <Compile Update="DependencyInjection\EpplusWriterDITest.Formatters.cs">
+        <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="DependencyInjection\EpplusWriterDITest.Writers.cs">
+        <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
+      <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
     </ItemGroup>
 
 </Project>
