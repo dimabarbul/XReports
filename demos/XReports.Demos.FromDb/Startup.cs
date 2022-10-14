@@ -92,7 +92,6 @@ namespace XReports.Demos.FromDb
         private void UseReports(IServiceCollection services)
         {
             services
-                .AddHtmlStringCellWriter()
                 .AddHtmlStringWriter<MyHtmlStringWriter>()
                 .AddEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell>(o =>

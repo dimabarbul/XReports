@@ -95,6 +95,9 @@
       <Compile Update="DependencyInjection\EpplusWriterDITest.Writers.cs">
         <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
       </Compile>
+      <Compile Update="DependencyInjection\HtmlStringWriterDITest.Classes.cs">
+        <DependentUpon>HtmlStringWriterDITest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
