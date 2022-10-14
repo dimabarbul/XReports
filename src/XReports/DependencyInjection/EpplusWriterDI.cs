@@ -44,14 +44,6 @@ namespace XReports.DependencyInjection
                 typeof(TEpplusWriter),
                 lifetime));
 
-            if (typeof(IEpplusWriter) != typeof(TIEpplusWriter))
-            {
-                services.Add(new ServiceDescriptor(
-                    typeof(IEpplusWriter),
-                    sp => sp.GetService<TIEpplusWriter>(),
-                    lifetime));
-            }
-
             return services;
         }
     }
