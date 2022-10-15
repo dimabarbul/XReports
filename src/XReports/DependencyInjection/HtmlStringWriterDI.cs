@@ -18,7 +18,7 @@ namespace XReports.DependencyInjection
         }
 
         public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter, THtmlStringCellWriter>(
-            this IServiceCollection services, ServiceLifetime lifetime)
+            this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where THtmlStringWriter : IHtmlStringWriter
             where THtmlStringCellWriter : IHtmlStringCellWriter
         {

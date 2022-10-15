@@ -6,52 +6,24 @@ namespace XReports.DependencyInjection
 {
     public static class HtmlStreamWriterDI
     {
-        public static IServiceCollection AddHtmlStreamWriter(this IServiceCollection services)
+        public static IServiceCollection AddHtmlStreamWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            return services.AddHtmlStreamWriter<IHtmlStreamWriter, HtmlStreamWriter>();
+            return services.AddHtmlStreamWriter<HtmlStreamWriter>(lifetime);
         }
 
-        public static IServiceCollection AddHtmlStreamWriter<TStreamWriter>(this IServiceCollection services)
-            where TStreamWriter : HtmlStreamWriter
+        public static IServiceCollection AddHtmlStreamWriter<THtmlStreamWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where THtmlStreamWriter : IHtmlStreamWriter
         {
-            return services.AddHtmlStreamWriter<IHtmlStreamWriter, TStreamWriter>();
+            return services.AddHtmlStreamWriter<THtmlStreamWriter, HtmlStreamCellWriter>(lifetime);
         }
 
-        public static IServiceCollection AddHtmlStreamWriter<TIHtmlStreamWriter, TStreamWriter>(this IServiceCollection services)
-            where TIHtmlStreamWriter : class, IHtmlStreamWriter
-            where TStreamWriter : class, TIHtmlStreamWriter
+        public static IServiceCollection AddHtmlStreamWriter<THtmlStreamWriter, THtmlStreamCellWriter>(
+            this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where THtmlStreamWriter : IHtmlStreamWriter
+            where THtmlStreamCellWriter : IHtmlStreamCellWriter
         {
-            services.AddScoped<TIHtmlStreamWriter, TStreamWriter>();
-
-            if (typeof(TIHtmlStreamWriter) != typeof(IHtmlStreamWriter))
-            {
-                services.AddScoped<IHtmlStreamWriter>(sp => sp.GetRequiredService<TIHtmlStreamWriter>());
-            }
-
-            return services;
-        }
-
-        public static IServiceCollection AddHtmlStreamCellWriter(this IServiceCollection services)
-        {
-            return services.AddHtmlStreamCellWriter<IHtmlStreamCellWriter, HtmlStreamCellWriter>();
-        }
-
-        public static IServiceCollection AddHtmlStreamCellWriter<TStreamCellWriter>(this IServiceCollection services)
-            where TStreamCellWriter : HtmlStreamCellWriter
-        {
-            return services.AddHtmlStreamCellWriter<IHtmlStreamCellWriter, TStreamCellWriter>();
-        }
-
-        public static IServiceCollection AddHtmlStreamCellWriter<TIStreamCellWriter, TStreamCellWriter>(this IServiceCollection services)
-            where TIStreamCellWriter : class, IHtmlStreamCellWriter
-            where TStreamCellWriter : class, TIStreamCellWriter
-        {
-            services.AddScoped<TIStreamCellWriter, TStreamCellWriter>();
-
-            if (typeof(TIStreamCellWriter) != typeof(IHtmlStreamCellWriter))
-            {
-                services.AddScoped<IHtmlStreamCellWriter>(sp => sp.GetRequiredService<TIStreamCellWriter>());
-            }
+            services.Add(new ServiceDescriptor(typeof(IHtmlStreamWriter), typeof(THtmlStreamWriter), lifetime));
+            services.Add(new ServiceDescriptor(typeof(IHtmlStreamCellWriter), typeof(THtmlStreamCellWriter), lifetime));
 
             return services;
         }

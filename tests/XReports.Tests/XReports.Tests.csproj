@@ -98,6 +98,9 @@
       <Compile Update="DependencyInjection\HtmlStringWriterDITest.Classes.cs">
         <DependentUpon>HtmlStringWriterDITest.cs</DependentUpon>
       </Compile>
+      <Compile Update="DependencyInjection\HtmlStreamWriterDITest.Classes.cs">
+        <DependentUpon>HtmlStreamWriterDITest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
