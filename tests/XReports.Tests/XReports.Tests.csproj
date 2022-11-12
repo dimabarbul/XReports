@@ -101,6 +101,9 @@
       <Compile Update="DependencyInjection\HtmlStreamWriterDITest.Classes.cs">
         <DependentUpon>HtmlStreamWriterDITest.cs</DependentUpon>
       </Compile>
+      <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
+        <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.Options;
 
 namespace XReports.DependencyInjection
 {
@@ -12,7 +11,7 @@ namespace XReports.DependencyInjection
     {
         public static IServiceCollection AddReportConverter<TReportCell>(
             this IServiceCollection services,
-            Action<ReportConverterOptions<TReportCell>> configure = null,
+            Action<TypesCollection<IPropertyHandler<TReportCell>>> configure = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TReportCell : BaseReportCell, new()
         {
@@ -33,7 +32,7 @@ namespace XReports.DependencyInjection
             return services.AddReportConverter<TReportCell>(
                 o =>
                 {
-                    o.AddHandlersByBaseType<TPropertyHandler>();
+                    o.AddByBaseType<TPropertyHandler>();
                 },
                 lifetime);
         }
@@ -41,7 +40,7 @@ namespace XReports.DependencyInjection
         public static IServiceCollection AddReportConverter<TReportCell>(
             this IServiceCollection services,
             string name,
-            Action<ReportConverterOptions<TReportCell>> configure = null,
+            Action<TypesCollection<IPropertyHandler<TReportCell>>> configure = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TReportCell : BaseReportCell, new()
         {
@@ -62,17 +61,17 @@ namespace XReports.DependencyInjection
                 name,
                 o =>
                 {
-                    o.AddHandlersByBaseType<TPropertyHandler>();
+                    o.AddByBaseType<TPropertyHandler>();
                 },
                 lifetime);
         }
 
         internal static IReportConverter<TReportCell> CreateReportConverter<TReportCell>(
             IServiceProvider sp,
-            Action<ReportConverterOptions<TReportCell>> configure)
+            Action<TypesCollection<IPropertyHandler<TReportCell>>> configure)
             where TReportCell : BaseReportCell, new()
         {
-            ReportConverterOptions<TReportCell> options = new ReportConverterOptions<TReportCell>();
+            TypesCollection<IPropertyHandler<TReportCell>> options = new TypesCollection<IPropertyHandler<TReportCell>>();
             configure?.Invoke(options);
 
             return new ReportConverter<TReportCell>(
@@ -84,7 +83,7 @@ namespace XReports.DependencyInjection
         private static void AddFactoryRegistration<TReportCell>(
             IServiceCollection services,
             string name,
-            Action<ReportConverterOptions<TReportCell>> configure)
+            Action<TypesCollection<IPropertyHandler<TReportCell>>> configure)
             where TReportCell : BaseReportCell, new()
         {
             services.Configure<ReportConverterFactoryOptions<TReportCell>>(

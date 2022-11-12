@@ -1,6 +1,6 @@
 using System;
+using XReports.Interfaces;
 using XReports.Models;
-using XReports.Options;
 
 namespace XReports.DependencyInjection
 {
@@ -9,6 +9,6 @@ namespace XReports.DependencyInjection
     {
         public string Name { get; set; }
 
-        public Action<ReportConverterOptions<TReportCell>> ConfigureOptions { get; set; }
+        public Action<TypesCollection<IPropertyHandler<TReportCell>>> ConfigureOptions { get; set; }
     }
 }

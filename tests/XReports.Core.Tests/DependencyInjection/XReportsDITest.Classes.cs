@@ -39,15 +39,10 @@ namespace XReports.Core.Tests.DependencyInjection
 
         private class HandlerWithDependency : IPropertyHandler<HtmlCell>
         {
-#pragma warning disable IDE0052
-            private readonly Dependency dependency;
-#pragma warning restore IDE0052
-
             public int Priority => 0;
 
-            public HandlerWithDependency(Dependency dependency)
+            public HandlerWithDependency(Dependency _)
             {
-                this.dependency = dependency;
             }
 
             public bool Handle(ReportCellProperty property, HtmlCell cell)

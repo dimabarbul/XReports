@@ -96,13 +96,13 @@ namespace XReports.Demos.FromDb
                 .AddEpplusWriter<MyExcelWriter>()
                 .AddReportConverter<HtmlReportCell>(o =>
                 {
-                    o.AddHandlersByBaseType<IHtmlHandler>()
-                        .AddHandlersFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
+                    o.AddByBaseType<IHtmlHandler>()
+                        .AddFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
                 })
                 .AddReportConverter<ExcelReportCell>(o =>
                 {
-                    o.AddHandlersByBaseType<IExcelHandler>()
-                        .AddHandlersFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
+                    o.AddByBaseType<IExcelHandler>()
+                        .AddFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
                 })
                 .AddAttributeBasedBuilder();
         }

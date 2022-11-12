@@ -32,9 +32,7 @@ namespace XReports.Tests.DependencyInjection
 
         private class EpplusWriterWithDependency : EpplusWriter
         {
-#pragma warning disable IDE0060
-            public EpplusWriterWithDependency(IEnumerable<IEpplusFormatter> formatters, Dependency dependency)
-#pragma warning restore IDE0060
+            public EpplusWriterWithDependency(IEnumerable<IEpplusFormatter> formatters, Dependency _)
                 : base(formatters)
             {
             }

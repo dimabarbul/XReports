@@ -171,7 +171,7 @@ namespace XReports.Core.Tests.DependencyInjection
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddReportConverter<HtmlCell>(o =>
                 {
-                    o.AddHandlersByBaseType<IHtmlPropertyHandler>();
+                    o.AddByBaseType<IHtmlPropertyHandler>();
                 })
                 .BuildServiceProvider();
 
@@ -224,7 +224,7 @@ namespace XReports.Core.Tests.DependencyInjection
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddReportConverter<HtmlCell>(Name, o =>
                 {
-                    o.AddHandlersByBaseType<IHtmlPropertyHandler>();
+                    o.AddByBaseType<IHtmlPropertyHandler>();
                 })
                 .BuildServiceProvider();
 

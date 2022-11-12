@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Options\ReportConverterOptionsTests.Classes.cs">
-      <DependentUpon>ReportConverterOptionsTest.cs</DependentUpon>
+    <Compile Update="Options\TypesCollectionTests.Classes.cs">
+      <DependentUpon>TypesCollectionTest.cs</DependentUpon>
     </Compile>
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>

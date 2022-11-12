@@ -22,7 +22,12 @@ public class ServiceCollectionAssertions : GenericCollectionAssertions<ServiceDe
         serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TServiceType));
 
         serviceDescriptor.Lifetime.Should().Be(lifetime);
-        serviceDescriptor.ImplementationType.Should().Be<TImplementationType>();
+
+        // When using factory, service descriptor doesn't have implementation type set.
+        if (serviceDescriptor.ImplementationFactory == null)
+        {
+            serviceDescriptor.ImplementationType.Should().Be<TImplementationType>();
+        }
 
         return new AndConstraint<ServiceCollectionAssertions>(this);
     }
