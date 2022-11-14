@@ -1,11 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace XReports.Tests.Assertions;
-
-public static class ServiceCollectionAssertionsExtensions
+namespace XReports.Tests.Assertions
 {
-    public static ServiceCollectionAssertions Should(this IServiceCollection serviceCollection)
+    public static class ServiceCollectionAssertionsExtensions
     {
-        return new ServiceCollectionAssertions(serviceCollection);
+        public static ServiceCollectionAssertions Should(this IServiceCollection serviceCollection)
+        {
+            return new ServiceCollectionAssertions(serviceCollection);
+        }
     }
 }
