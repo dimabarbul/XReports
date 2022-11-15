@@ -36,9 +36,7 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter(lifetime, o => o.AddFromAssembly(Assembly.GetExecutingAssembly()));
 
-            IEnumerable<ServiceDescriptor> formatterDescriptors = serviceCollection.Where(sd => sd.ServiceType == typeof(IEpplusFormatter));
-
-            formatterDescriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
+            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
 
         [Theory]
@@ -86,13 +84,8 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter<CustomEpplusWriter>(lifetime, configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()));
 
-            IEnumerable<ServiceDescriptor> formatterDescriptors = serviceCollection
-                .Where(sd => sd.ServiceType == typeof(IEpplusFormatter))
-                .ToArray();
-
             serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(lifetime);
-            formatterDescriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
-            formatterDescriptors.Select(d => d.ImplementationType).Should().BeEquivalentTo(typeof(Formatter), typeof(BoldFormatter));
+            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
 
         [Theory]
@@ -119,13 +112,8 @@ namespace XReports.Tests.DependencyInjection
                     lifetime,
                     o => o.AddFromAssembly(Assembly.GetExecutingAssembly()));
 
-            IEnumerable<ServiceDescriptor> formatterDescriptors = serviceCollection
-                .Where(sd => sd.ServiceType == typeof(IEpplusFormatter))
-                .ToArray();
-
             serviceCollection.Should().ContainDescriptor<IMyEpplusWriter, MyEpplusWriter>(lifetime);
-            formatterDescriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
-            formatterDescriptors.Select(d => d.ImplementationType).Should().BeEquivalentTo(typeof(Formatter), typeof(BoldFormatter));
+            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
 
         [Fact]
@@ -141,19 +129,18 @@ namespace XReports.Tests.DependencyInjection
             action.Should().NotThrow();
         }
 
-        [Fact]
-        public void AddEpplusWriterShouldRegisterCustomImplementationWithDependencyAndFormatters()
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void AddEpplusWriterShouldRegisterCustomImplementationWithDependencyAndFormatters(ServiceLifetime lifetime)
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
+            IServiceCollection serviceCollection = new ServiceCollection()
                 .AddSingleton<Dependency>()
-                .AddEpplusWriter<EpplusWriterWithDependency>(ServiceLifetime.Singleton, configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()))
-                .BuildServiceProvider(validateScopes: true);
+                .AddEpplusWriter<EpplusWriterWithDependency>(lifetime, configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()));
 
-            IEpplusWriter epplusWriter = serviceProvider.GetService<IEpplusWriter>();
-            IEnumerable<IEpplusFormatter> formatters = serviceProvider.GetServices<IEpplusFormatter>();
-
-            epplusWriter.Should().NotBeNull().And.BeOfType<EpplusWriterWithDependency>();
-            formatters.Select(f => f.GetType()).Should().BeEquivalentTo(typeof(Formatter), typeof(BoldFormatter));
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter, EpplusWriterWithDependency>(lifetime);
+            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
     }
 }

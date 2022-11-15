@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -22,12 +23,20 @@ namespace XReports.Tests.Assertions
             serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TServiceType));
 
             serviceDescriptor.Lifetime.Should().Be(lifetime);
+            serviceDescriptor.ImplementationType.Should().Be<TImplementationType>();
 
-            // When using factory, service descriptor doesn't have implementation type set.
-            if (serviceDescriptor.ImplementationFactory == null)
-            {
-                serviceDescriptor.ImplementationType.Should().Be<TImplementationType>();
-            }
+            return new AndConstraint<ServiceCollectionAssertions>(this);
+        }
+
+        public AndConstraint<ServiceCollectionAssertions> ContainDescriptors<TServiceType>(ServiceLifetime lifetime, params Type[] implementationTypes)
+        {
+            ServiceDescriptor[] descriptors = this.Subject
+                .Where(sd => sd.ServiceType == typeof(TServiceType))
+                .ToArray();
+
+            descriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
+            descriptors.Select(h => h.ImplementationType)
+                .Should().BeEquivalentTo(implementationTypes);
 
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }

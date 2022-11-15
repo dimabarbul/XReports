@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.Interfaces;
 using XReports.SchemaBuilders;
 
@@ -20,19 +20,22 @@ namespace XReports.DependencyInjection
             Action<TypesCollection<IAttributeHandler>> configure,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
+            if (configure != null)
+            {
+                TypesCollection<IAttributeHandler> options = new TypesCollection<IAttributeHandler>();
+                configure(options);
+                foreach (Type type in options.Types)
+                {
+                    services.TryAddEnumerable(new ServiceDescriptor(
+                        typeof(IAttributeHandler),
+                        type,
+                        lifetime));
+                }
+            }
+
             services.Add(new ServiceDescriptor(
                 typeof(IAttributeBasedBuilder),
-                sp =>
-                {
-                    TypesCollection<IAttributeHandler> options = new TypesCollection<IAttributeHandler>();
-                    configure?.Invoke(options);
-
-                    return new AttributeBasedBuilder(
-                        sp,
-                        options.Types
-                            .Select(t =>
-                                (IAttributeHandler)ActivatorUtilities.GetServiceOrCreateInstance(sp, t)));
-                },
+                typeof(AttributeBasedBuilder),
                 lifetime));
 
             return services;
