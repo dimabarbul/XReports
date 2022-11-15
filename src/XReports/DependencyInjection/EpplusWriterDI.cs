@@ -8,21 +8,27 @@ namespace XReports.DependencyInjection
 {
     public static class EpplusWriterDI
     {
-        public static IServiceCollection AddEpplusWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped, Action<EpplusWriterOptions> configure = null)
+        public static IServiceCollection AddEpplusWriter(
+            this IServiceCollection services,
+            Action<EpplusWriterOptions> configure = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>(lifetime, configure);
+            return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>(configure, lifetime);
         }
 
-        public static IServiceCollection AddEpplusWriter<TEpplusWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped, Action<EpplusWriterOptions> configure = null)
+        public static IServiceCollection AddEpplusWriter<TEpplusWriter>(
+            this IServiceCollection services,
+            Action<EpplusWriterOptions> configure = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TEpplusWriter : class, IEpplusWriter
         {
-            return services.AddEpplusWriter<IEpplusWriter, TEpplusWriter>(lifetime, configure);
+            return services.AddEpplusWriter<IEpplusWriter, TEpplusWriter>(configure, lifetime);
         }
 
         public static IServiceCollection AddEpplusWriter<TIEpplusWriter, TEpplusWriter>(
             this IServiceCollection services,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped,
-            Action<EpplusWriterOptions> configure = null)
+            Action<EpplusWriterOptions> configure = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TIEpplusWriter : class, IEpplusWriter
             where TEpplusWriter : class, TIEpplusWriter
         {
