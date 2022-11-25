@@ -10,7 +10,7 @@ namespace XReports.DependencyInjection
     {
         public static IServiceCollection AddEpplusWriter(
             this IServiceCollection services,
-            Action<EpplusWriterOptions> configure = null,
+            Action<TypesCollection<IEpplusFormatter>> configure = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             return services.AddEpplusWriter<IEpplusWriter, EpplusWriter>(configure, lifetime);
@@ -18,7 +18,7 @@ namespace XReports.DependencyInjection
 
         public static IServiceCollection AddEpplusWriter<TEpplusWriter>(
             this IServiceCollection services,
-            Action<EpplusWriterOptions> configure = null,
+            Action<TypesCollection<IEpplusFormatter>> configure = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TEpplusWriter : class, IEpplusWriter
         {
@@ -27,14 +27,14 @@ namespace XReports.DependencyInjection
 
         public static IServiceCollection AddEpplusWriter<TIEpplusWriter, TEpplusWriter>(
             this IServiceCollection services,
-            Action<EpplusWriterOptions> configure = null,
+            Action<TypesCollection<IEpplusFormatter>> configure = null,
             ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TIEpplusWriter : class, IEpplusWriter
             where TEpplusWriter : class, TIEpplusWriter
         {
             if (configure != null)
             {
-                EpplusWriterOptions options = new EpplusWriterOptions();
+                TypesCollection<IEpplusFormatter> options = new TypesCollection<IEpplusFormatter>();
                 configure(options);
                 foreach (Type type in options.Types)
                 {

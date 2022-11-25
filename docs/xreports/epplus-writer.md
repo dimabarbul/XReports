@@ -11,16 +11,30 @@ You need to call extension method AddEpplusWriter. There are 3 forms of this met
 services.AddEpplusWriter();
 
 class MyExcelWriter : EpplusWriter {}
-// Registers child class of EpplusWriter as implementation of IEpplusWriter.
+// Registers derived class of EpplusWriter as implementation of IEpplusWriter.
 // It may be useful if you want to extend/override EpplusWriter methods.
 services.AddEpplusWriter<MyExcelWriter>();
 
 interface IExtendedExcelWriter : IEpplusWriter {}
 class ExtendedExcelWriter : EpplusWriter, IExtendedExcelWriter {}
-// Registers child class of EpplusWriter as implementation of IEpplusWriter
+// Registers derived class of EpplusWriter as implementation of IEpplusWriter
 // and your interface inherited from IEpplusWriter.
 // It may be useful if you want to add method(s) to EpplusWriter.
 services.AddEpplusWriter<IExtendedExcelWriter, ExtendedExcelWriter>();
+```
+
+All of the forms accept 2 optional arguments:
+- configuration callback to configure EpplusWriter options
+- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback
+
+Example:
+
+```c#
+// Registers EpplusWriter along with all formatters (implementors of
+// IEpplusFormatter interface) from executing assembly as singletons.
+services.AddEpplusWriter(
+    o => o.AddFromAssembly(Assembly.GetExecutingAssembly()),
+    ServiceLifetime.Singleton);
 ```
 
 ## Public Methods

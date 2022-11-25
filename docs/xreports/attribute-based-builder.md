@@ -21,8 +21,14 @@ class ReportModel
 }
 
 ServiceCollection services = new ServiceCollection();
-// Register IAttributeBasedBuilder
 services.AddAttributeBasedBuilder();
+// You can pass optional configuration callback and service lifetime.
+// Example below registers attribute-based builder along with all
+// attribute handlers (implementors of IAttributeHandler interface) 
+// from executing assembly with singletons lifetime.
+// services.AddAttributeBasedBuilder(
+//     o => o.AddFromAssembly(Assembly.GetExecutingAssembly()),
+//     ServiceLifetime.Singleton);
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 // Get builder.
@@ -150,7 +156,7 @@ Built-in attributes:
 - **PercentFormat**. Has 1 required argument - decimal places count. Optionally may have PostfixText - text appended after percent value.
 - **SameColumnFormat**. No arguments. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
 
-The attributes assign corresponding properties to row or column. To get more information about built-in properties, refer to [Properties](properties.md);
+The attributes assign corresponding properties to row or column. To get more information about built-in properties, refer to [Properties](properties.md).
 
 ### Custom Attributes
 
@@ -194,7 +200,14 @@ class User
 }
 ```
 
-MyAttributeHandler will be picked up automatically during registering IAttributeBasedBuilder in DI container. Report created from model above will have MyProperty assigned to Name column.
+Last step is to use MyAttributeHandler in attribute-based builder. If you create AttributeBasedBuilder manually, you need to pass instance of MyAttributeHandler to its constructor. If you use DI to register AttributeBasedBuilder, use configuration callback when registering:
+
+```c#
+services.AddAttributeBasedBuilder(
+    o => o.Add(typeof(MyAttributeHandler)));
+```
+
+Report created from model above will have MyProperty assigned to Name column.
 
 ## Class attributes
 
@@ -234,7 +247,7 @@ class ReportModel
     public decimal Score { get; set; }
 
     // Post-builder class does NOT have to be nested class.
-    // It's registered in DI container, so it can have constructor with dependencies.
+    // If the class needs dependencies, they can be registered in DI container.
     private class PostBuilder : IHorizontalReportPostBuilder<ReportModel>
     {
         // This method will be called after all columns/rows are added to schema builder.
@@ -362,7 +375,7 @@ builder.BuildSchema<UserScoreModel, decimal>(80).BuildReportTable(data);
 builder.BuildSchema<UserScoreModel, decimal>(90).BuildReportTable(data);
 ```
 
-### Table Properties
+### Global Properties
 
 Often you may want all columns/rows in report to have the same attribute, for example, center alignment. To do so you may add the attribute to class.
 
@@ -446,6 +459,10 @@ class User
     [ReportVariable(2, "Last Name")]
     public string LastName { get; set; }
 }
+
+// Use the attribute handler either by providing its instance to
+// AttributeBasedBuilder class constructor or via configuration callback
+// when registering AttributeBasedBuilder in DI, depending on you scenario.
 ```
 
 Report built by this model will contain TitleProperty with Title equal to "User Report". You can use it in your writer class.
