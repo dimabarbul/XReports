@@ -132,7 +132,7 @@ ServiceCollection services = new ServiceCollection();
 // Pass type of BoldPropertyBootstrapHandler.
 services.AddReportConverter<HtmlReportCell>(o =>
 {
-    o.AddHandlers(typeof(BoldPropertyBootstrapHandler));
+    o.Add(typeof(BoldPropertyBootstrapHandler));
 });
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -167,7 +167,7 @@ services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>();
 // Also you can do this using configure callback:
 // services.AddReportConverter<HtmlReportCell>(o =>
 // {
-//     o.AddHandlersByBaseType<IHtmlReportCellHandler>();
+//     o.AddByBaseType<IHtmlReportCellHandler>();
 // });
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -198,8 +198,8 @@ This 2 methods can be combined.
 // This is example code, it uses classes and interfaces not provided in this doc.
 services.AddReportConverter<HtmlReportCell>(o =>
 {
-    o.AddHandlers(typeof(MyHandler))
-        .AddHandlersByBaseType<IMyHandler>();
+    o.Add(typeof(MyHandler))
+        .AddByBaseType<IMyHandler>();
 });
 ```
 
@@ -209,7 +209,7 @@ You can add handlers from specific assembly:
 // This is example code, it uses classes and interfaces not provided in this doc.
 services.AddReportConverter<HtmlReportCell>(o =>
 {
-    o.AddHandlersFromAssembly<IMyHandler>(Assembly.GetExecutingAssembly());
+    o.AddFromAssembly<IMyHandler>(Assembly.GetExecutingAssembly());
 });
 ```
 
@@ -224,7 +224,7 @@ services.AddReportConverter<HtmlReportCell>(
     "bootstrap",
     o =>
     {
-        o.AddHandlers(typeof(BoldPropertyBootstrapHandler));
+        o.Add(typeof(BoldPropertyBootstrapHandler));
     });
 // You can pass interface as well.
 services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>("email");
@@ -277,7 +277,7 @@ Email
 
 ## Handlers with Dependencies
 
-If handler has dependency, it should be registered in service collection. Handler itself does not have to be registered.
+If handler has dependency, the dependency should be registered in service collection. Handler itself does not have to be registered.
 
 ## Custom Lifetime
 

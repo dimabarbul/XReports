@@ -7,10 +7,10 @@ using Xunit;
 
 namespace XReports.Core.Tests.Options
 {
-    public partial class TypesCollectionTests
+    public partial class TypesCollectionTest
     {
         [Fact]
-        public void AddHandlersShouldThrowExceptionWhenTypeDoesNotImplementCorrectBaseType()
+        public void AddShouldThrowExceptionWhenTypeDoesNotImplementCorrectBaseType()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
@@ -20,7 +20,7 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersShouldThrowExceptionWhenTypeIsAbstract()
+        public void AddShouldThrowExceptionWhenTypeIsAbstract()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
@@ -30,34 +30,34 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersShouldAddTypeWhenItIsCorrect()
+        public void AddShouldAddTypeWhenItIsCorrect()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.Add(typeof(ConcreteClass));
 
-            options.Types.Should().BeEquivalentTo(typeof(ConcreteClass));
+            options.Should().BeEquivalentTo(typeof(ConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersShouldAddMultipleTypeWhenTheyAreCorrect()
+        public void AddShouldAddMultipleTypeWhenTheyAreCorrect()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.Add(typeof(ConcreteClass), typeof(AnotherConcreteClass));
 
-            options.Types.Should().BeEquivalentTo(typeof(ConcreteClass), typeof(AnotherConcreteClass));
+            options.Should().BeEquivalentTo(typeof(ConcreteClass), typeof(AnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersShouldNotAddDuplicates()
+        public void AddShouldNotAddDuplicates()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
             options.AddByBaseType<IBaseInterface>();
 
             options.Add(typeof(ConcreteClass), typeof(AnotherConcreteClass));
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),
@@ -65,7 +65,7 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
+        public void AddByBaseTypeAsGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
@@ -75,13 +75,13 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
+        public void AddByBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddByBaseType<IBaseInterface>();
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),
@@ -89,17 +89,17 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        public void AddByBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddByBaseType<MyAbstractClass>();
 
-            options.Types.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
+            options.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsGenericArgumentShouldNotAddDuplicates()
+        public void AddByBaseTypeAsGenericArgumentShouldNotAddDuplicates()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
             options.Add(typeof(ConcreteClass));
@@ -108,7 +108,7 @@ namespace XReports.Core.Tests.Options
 
             try
             {
-                options.Types.Should().BeEquivalentTo(
+                options.Should().BeEquivalentTo(
                     typeof(ConcreteClass),
                     typeof(AnotherConcreteClass),
                     typeof(MyConcreteClass),
@@ -123,13 +123,13 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
+        public void AddByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddByBaseType(typeof(IBaseInterface));
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),
@@ -137,17 +137,17 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        public void AddByBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddByBaseType(typeof(MyAbstractClass));
 
-            options.Types.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
+            options.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
+        public void AddByBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
@@ -157,14 +157,14 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersByBaseTypeAsNonGenericArgumentShouldNotAddDuplicates()
+        public void AddByBaseTypeAsNonGenericArgumentShouldNotAddDuplicates()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
             options.Add(typeof(ConcreteClass));
 
             options.AddByBaseType(typeof(IBaseInterface));
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),
@@ -172,13 +172,13 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyShouldAddAllValidImplementations()
+        public void AddFromAssemblyShouldAddAllValidImplementations()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddFromAssembly(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),
@@ -186,29 +186,29 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
+        public void AddFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementations()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddFromAssembly(Assembly.GetExecutingAssembly(), typeof(IMyInterface));
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(MyConcreteClass),
                 typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        public void AddFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddFromAssembly(Assembly.GetExecutingAssembly(), typeof(MyAbstractClass));
 
-            options.Types.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
+            options.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
+        public void AddFromAssemblyWithCustomBaseTypeAsNonGenericArgumentShouldThrowExceptionWhenInvalidBaseType()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
@@ -218,36 +218,36 @@ namespace XReports.Core.Tests.Options
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
+        public void AddFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementations()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddFromAssembly<IMyInterface>(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(MyConcreteClass),
                 typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
+        public void AddFromAssemblyWithCustomBaseTypeAsGenericArgumentShouldAddAllValidImplementationsWhenBaseTypeIsClass()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
 
             options.AddFromAssembly<MyAbstractClass>(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
+            options.Should().BeEquivalentTo(typeof(MyAnotherConcreteClass));
         }
 
         [Fact]
-        public void AddHandlersFromAssemblyShouldNotAddDuplicates()
+        public void AddFromAssemblyShouldNotAddDuplicates()
         {
             TypesCollection<IBaseInterface> options = new TypesCollection<IBaseInterface>();
             options.Add(typeof(ConcreteClass));
 
             options.AddFromAssembly(Assembly.GetExecutingAssembly());
 
-            options.Types.Should().BeEquivalentTo(
+            options.Should().BeEquivalentTo(
                 typeof(ConcreteClass),
                 typeof(AnotherConcreteClass),
                 typeof(MyConcreteClass),

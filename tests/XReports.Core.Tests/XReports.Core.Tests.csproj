@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Options\TypesCollectionTests.Classes.cs">
+    <Compile Update="Options\TypesCollectionTest.Classes.cs">
       <DependentUpon>TypesCollectionTest.cs</DependentUpon>
     </Compile>
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">

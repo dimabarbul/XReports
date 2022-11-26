@@ -1,6 +1,6 @@
 namespace XReports.Core.Tests.Options
 {
-    public partial class TypesCollectionTests
+    public partial class TypesCollectionTest
     {
         private interface IBaseInterface
         {
