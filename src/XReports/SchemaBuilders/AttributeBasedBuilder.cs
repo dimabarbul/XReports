@@ -14,14 +14,18 @@ namespace XReports.SchemaBuilders
     public class AttributeBasedBuilder : IAttributeBasedBuilder
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly List<IAttributeHandler> attributeHandlers = new List<IAttributeHandler>();
+        private readonly IAttributeHandler[] handlers;
 
         public AttributeBasedBuilder(IServiceProvider serviceProvider, IEnumerable<IAttributeHandler> handlers = null)
         {
             this.serviceProvider = serviceProvider;
             if (handlers != null)
             {
-                this.attributeHandlers.AddRange(handlers);
+                this.handlers = handlers.ToArray();
+            }
+            else
+            {
+                this.handlers = Array.Empty<IAttributeHandler>();
             }
         }
 
@@ -219,7 +223,7 @@ namespace XReports.SchemaBuilders
                 .GetCustomAttributes<TablePropertyAttribute>();
             foreach (TablePropertyAttribute attribute in attributes)
             {
-                foreach (IAttributeHandler handler in this.attributeHandlers)
+                foreach (IAttributeHandler handler in this.handlers)
                 {
                     handler.Handle(builder, attribute);
                 }
@@ -243,7 +247,7 @@ namespace XReports.SchemaBuilders
 
             foreach (Attribute attribute in attributes)
             {
-                foreach (IAttributeHandler handler in this.attributeHandlers)
+                foreach (IAttributeHandler handler in this.handlers)
                 {
                     handler.Handle(builder, attribute);
                 }

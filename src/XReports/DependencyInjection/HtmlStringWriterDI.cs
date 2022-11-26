@@ -6,52 +6,24 @@ namespace XReports.DependencyInjection
 {
     public static class HtmlStringWriterDI
     {
-        public static IServiceCollection AddHtmlStringWriter(this IServiceCollection services)
+        public static IServiceCollection AddHtmlStringWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
-            return services.AddHtmlStringWriter<IHtmlStringWriter, HtmlStringWriter>();
+            return services.AddHtmlStringWriter<HtmlStringWriter>(lifetime);
         }
 
-        public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter>(this IServiceCollection services)
-            where THtmlStringWriter : HtmlStringWriter
+        public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where THtmlStringWriter : IHtmlStringWriter
         {
-            return services.AddHtmlStringWriter<IHtmlStringWriter, THtmlStringWriter>();
+            return services.AddHtmlStringWriter<THtmlStringWriter, HtmlStringCellWriter>(lifetime);
         }
 
-        public static IServiceCollection AddHtmlStringWriter<TIHtmlStringWriter, THtmlStringWriter>(this IServiceCollection services)
-            where TIHtmlStringWriter : class, IHtmlStringWriter
-            where THtmlStringWriter : class, TIHtmlStringWriter
+        public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter, THtmlStringCellWriter>(
+            this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            where THtmlStringWriter : IHtmlStringWriter
+            where THtmlStringCellWriter : IHtmlStringCellWriter
         {
-            services.AddScoped<TIHtmlStringWriter, THtmlStringWriter>();
-
-            if (typeof(TIHtmlStringWriter) != typeof(IHtmlStringWriter))
-            {
-                services.AddScoped<IHtmlStringWriter>(sp => sp.GetRequiredService<TIHtmlStringWriter>());
-            }
-
-            return services;
-        }
-
-        public static IServiceCollection AddHtmlStringCellWriter(this IServiceCollection services)
-        {
-            return services.AddHtmlStringCellWriter<HtmlStringCellWriter>();
-        }
-
-        public static IServiceCollection AddHtmlStringCellWriter<TStringCellWriter>(this IServiceCollection services)
-            where TStringCellWriter : HtmlStringCellWriter
-        {
-            return services.AddHtmlStringCellWriter<IHtmlStringCellWriter, TStringCellWriter>();
-        }
-
-        public static IServiceCollection AddHtmlStringCellWriter<TIStringCellWriter, TStringCellWriter>(this IServiceCollection services)
-            where TIStringCellWriter : class, IHtmlStringCellWriter
-            where TStringCellWriter : class, TIStringCellWriter
-        {
-            services.AddScoped<TIStringCellWriter, TStringCellWriter>();
-
-            if (typeof(TIStringCellWriter) != typeof(IHtmlStringCellWriter))
-            {
-                services.AddScoped<IHtmlStringCellWriter>(sp => sp.GetRequiredService<TIStringCellWriter>());
-            }
+            services.Add(new ServiceDescriptor(typeof(IHtmlStringWriter), typeof(THtmlStringWriter), lifetime));
+            services.Add(new ServiceDescriptor(typeof(IHtmlStringCellWriter), typeof(THtmlStringCellWriter), lifetime));
 
             return services;
         }

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using XReports.Interfaces;
 using XReports.Writers;
 

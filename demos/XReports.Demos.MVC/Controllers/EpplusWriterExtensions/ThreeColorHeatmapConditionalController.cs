@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
@@ -44,8 +43,10 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
         {
-            EpplusWriter writer = new EpplusWriter();
-            writer.AddFormatter(new ConditionalFormattingThreeColorScaleFormatter());
+            EpplusWriter writer = new EpplusWriter(new[]
+            {
+                new ConditionalFormattingThreeColorScaleFormatter(),
+            });
 
             return writer.WriteToStream(reportTable);
         }

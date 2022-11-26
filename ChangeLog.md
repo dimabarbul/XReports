@@ -14,6 +14,7 @@ Released on: *YYYY-MM-DD*
 - XReports and XReports.Core libraries are now targeting netstandard2.0 and netstandard2.1
 - Improved performance and memory consumption
 - Aligned versions of XReports.Core and XReports libraries
+- DI refactored
 - Report cells are now cached and reused, so reference to cell should not be persisted anywhere; if copy of cell is needed, one can use `BaseReportCell.Clone` method to create shallow copy
 - Properties now are processed by the first property handler that marks them processed, i.e., the property is not processed after it's been marked as processed
 - Replaced `BaseReportCell.Value` setter with `BaseReportCell.SetValue<TValue>` method, getter – with `BaseReportCell.GetUnderlyingValue` method

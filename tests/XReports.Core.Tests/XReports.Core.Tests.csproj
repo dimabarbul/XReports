@@ -14,6 +14,7 @@
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net48'" Include="Microsoft.VisualStudio.TestPlatform.ObjectModel" Version="14.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,16 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="DependencyInjection\XReportsDI.AddReportConverter.cs">
-      <DependentUpon>XReportsDI.cs</DependentUpon>
+    <Compile Update="Options\TypesCollectionTest.Classes.cs">
+      <DependentUpon>TypesCollectionTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="DependencyInjection\XReportsDI.AddReportConverterWithName.cs">
-      <DependentUpon>XReportsDI.cs</DependentUpon>
-    </Compile>
-    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverter.cs">
-      <DependentUpon>XReportsDITest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="DependencyInjection\XReportsDITest.AddReportConverterWithName.cs">
+    <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
     </Compile>
   </ItemGroup>

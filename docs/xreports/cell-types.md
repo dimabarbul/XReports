@@ -15,16 +15,40 @@ public class HtmlReportCell : BaseReportCell
 
     public Dictionary<string, string> Attributes { get; set; } =
         new Dictionary<string, string>();
+    
+    public override void Clear()
+    {
+        base.Clear();
+
+        this.IsHtml = false;
+        this.CssClasses.Clear();
+        this.Styles.Clear();
+        this.Attributes.Clear();
+    }
 }
 
 public class ExcelReportCell : BaseReportCell
 {
-    public AlignmentType? AlignmentType { get; set; }
+    public Alignment? HorizontalAlignment { get; set; }
+
     public string NumberFormat { get; set; }
+
     public bool IsBold { get; set; }
 
     public Color? BackgroundColor { get; set; }
+
     public Color? FontColor { get; set; }
+    
+    public override void Clear()
+    {
+        base.Clear();
+
+        this.HorizontalAlignment = null;
+        this.NumberFormat = null;
+        this.IsBold = false;
+        this.BackgroundColor = null;
+        this.FontColor = null;
+    }
 }
 ```
 

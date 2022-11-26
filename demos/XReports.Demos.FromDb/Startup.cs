@@ -92,23 +92,18 @@ namespace XReports.Demos.FromDb
         private void UseReports(IServiceCollection services)
         {
             services
-                .AddHtmlStringCellWriter()
                 .AddHtmlStringWriter<MyHtmlStringWriter>()
                 .AddEpplusWriter<MyExcelWriter>()
-                .AddReportConverter<HtmlReportCell, IHtmlHandler>(
-                    new AlignmentPropertyHtmlHandler(),
-                    new BoldPropertyHtmlHandler(),
-                    new ColorPropertyHtmlHandler(),
-                    new DecimalPrecisionPropertyHtmlHandler(),
-                    new PercentFormatPropertyHtmlHandler(),
-                    new DateTimeFormatPropertyHtmlHandler())
-                .AddReportConverter<ExcelReportCell, IExcelHandler>(
-                    new AlignmentPropertyExcelHandler(),
-                    new BoldPropertyExcelHandler(),
-                    new ColorPropertyExcelHandler(),
-                    new DecimalPrecisionPropertyExcelHandler(),
-                    new PercentFormatPropertyExcelHandler(),
-                    new DateTimeFormatPropertyExcelHandler())
+                .AddReportConverter<HtmlReportCell>(o =>
+                {
+                    o.AddByBaseType<IHtmlHandler>()
+                        .AddFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
+                })
+                .AddReportConverter<ExcelReportCell>(o =>
+                {
+                    o.AddByBaseType<IExcelHandler>()
+                        .AddFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
+                })
                 .AddAttributeBasedBuilder();
         }
     }
