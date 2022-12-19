@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
-using XReports.DependencyInjection;
 using XReports.Interfaces;
 using XReports.Models;
 
-namespace XReports
+namespace XReports.DependencyInjection
 {
     internal class ReportConverterFactory<TReportCell> : IReportConverterFactory<TReportCell>
         where TReportCell : BaseReportCell, new()

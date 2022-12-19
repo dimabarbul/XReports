@@ -8,15 +8,15 @@ using XReports.Properties;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Extensions.Builders.Tests.BuilderHelpers
+namespace XReports.Tests.SchemaBuilders
 {
-    public partial class EntityAttributeBuilderHelperTest
+    public partial class AttributeBasedBuilderTest
     {
         [Fact]
-        public void BuildVerticalReport_GlobalProperties_Applied()
+        public void BuildVerticalReportShouldApplyGlobalProperties()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
-                Mocks.ServiceProvider,
+                this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithGlobalProperties> schema = helper.BuildSchema<WithGlobalProperties>();
@@ -39,10 +39,10 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_GlobalPropertiesWhenOverwritten_NotApplied()
+        public void BuildVerticalReportShouldNotApplyGlobalPropertiesWhenOverwritten()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
-                Mocks.ServiceProvider,
+                this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenGlobalProperties> schema = helper.BuildSchema<WithOverwrittenGlobalProperties>();
@@ -59,10 +59,10 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_GlobalPropertiesWhenOverwrittenForHeader_Applied()
+        public void BuildVerticalReportShouldApplyGlobalPropertiesWhenOverwrittenForHeader()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
-                Mocks.ServiceProvider,
+                this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenForHeaderGlobalProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderGlobalProperties>();

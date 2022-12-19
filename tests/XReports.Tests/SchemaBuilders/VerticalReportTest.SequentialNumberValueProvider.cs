@@ -11,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_SequentialNumberValueProviderWithDefaultStartValue_CorrectValues()
+        public void BuildShouldSupportSequentialNumberValueProviderWithDefaultStartValue()
         {
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
@@ -33,7 +33,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_SequentialNumberValueProviderWithNonDefaultStartValue_CorrectValues()
+        public void BuildShouldSupportSequentialNumberValueProviderWithNonDefaultStartValue()
         {
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider(15));

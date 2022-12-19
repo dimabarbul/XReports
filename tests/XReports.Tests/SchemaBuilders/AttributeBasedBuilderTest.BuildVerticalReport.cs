@@ -7,14 +7,14 @@ using XReports.Models;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Extensions.Builders.Tests.BuilderHelpers
+namespace XReports.Tests.SchemaBuilders
 {
-    public partial class EntityAttributeBuilderHelperTest
+    public partial class AttributeBasedBuilderTest
     {
         [Fact]
-        public void BuildVerticalReport_SeveralProperties_CorrectOrder()
+        public void BuildVerticalReportShouldAddPropertiesInCorrectOrder()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SeveralPropertiesClass> schema = builderHelper.BuildSchema<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
@@ -27,9 +27,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_PropertiesWithoutAttribute_Ignored()
+        public void BuildVerticalReportShouldIgnorePropertiesWithoutAttribute()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SomePropertiesWithoutAttribute> schema = builderHelper.BuildSchema<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
@@ -41,9 +41,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_PropertiesWithAttribute_CorrectValueType()
+        public void BuildVerticalReportShouldSetCorrectValueTypeForPropertiesWithAttribute()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<PropertiesWithAttributes> schema = builderHelper.BuildSchema<PropertiesWithAttributes>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]

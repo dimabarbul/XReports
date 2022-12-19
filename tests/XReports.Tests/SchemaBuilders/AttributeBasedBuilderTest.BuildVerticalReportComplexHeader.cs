@@ -6,14 +6,14 @@ using XReports.Models;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Extensions.Builders.Tests.BuilderHelpers
+namespace XReports.Tests.SchemaBuilders
 {
-    public partial class EntityAttributeBuilderHelperTest
+    public partial class AttributeBasedBuilderTest
     {
         [Fact]
-        public void BuildVerticalReport_OneComplexHeader_CorrectTable()
+        public void BuildVerticalReportShouldSupportOneComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<OneComplexHeaderClass> schema = builderHelper.BuildSchema<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
@@ -31,9 +31,9 @@ namespace XReports.Extensions.Builders.Tests.BuilderHelpers
         }
 
         [Fact]
-        public void BuildVerticalReport_SeveralLevelsOfComplexHeader_CorrectTable()
+        public void BuildVerticalReportShouldSupportSeveralLevelsOfComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Mocks.ServiceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SeveralLevelsOfComplexHeaderClass> schema = builderHelper.BuildSchema<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());

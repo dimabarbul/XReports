@@ -11,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_FromDataReader_Correct()
+        public void BuildShouldSupportDataReaderAsDataSource()
         {
             VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
 

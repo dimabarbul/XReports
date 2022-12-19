@@ -104,11 +104,33 @@
       <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
         <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
       </Compile>
+      <Compile Update="SchemaBuilders\VerticalReportTest.Basic.cs">
+        <DependentUpon>VerticalReportTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SchemaBuilders\VerticalReportTest.DataReader.cs">
+        <DependentUpon>VerticalReportTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.AttributeHandler.cs">
+        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReport.cs">
+        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReportComplexHeader.cs">
+        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.GlobalProperties.cs">
+        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
       <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
+      <ProjectReference Include="..\XReports.Tests.Analyzers\XReports.Tests.Analyzers.csproj">
+        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        <OutputItemType>Analyzer</OutputItemType>
+      </ProjectReference>
     </ItemGroup>
 
 </Project>

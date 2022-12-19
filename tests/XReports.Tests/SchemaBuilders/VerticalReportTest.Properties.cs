@@ -10,7 +10,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_CustomPropertyUsingProcessor_CorrectProperties()
+        public void BuildShouldApplyCustomPropertyUsingProcessor()
         {
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
@@ -29,7 +29,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_CustomPropertyUsingAddProperty_CorrectProperties()
+        public void BuildShouldApplyCustomPropertyUsingAddPropertiesMethod()
         {
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)

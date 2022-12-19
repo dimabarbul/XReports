@@ -10,7 +10,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class HorizontalReportTest
     {
         [Fact]
-        public void Build_WithHeader_CorrectValues()
+        public void BuildShouldSupportHeader()
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
@@ -28,7 +28,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_WithSeveralHeaders_CorrectValues()
+        public void BuildShouldSupportMultipleHeaderRows()
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);

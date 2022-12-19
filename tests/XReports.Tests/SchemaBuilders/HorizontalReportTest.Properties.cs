@@ -10,7 +10,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class HorizontalReportTest
     {
         [Fact]
-        public void Build_WithCustomProperty_CorrectProperties()
+        public void BuildShouldApplyCustomPropertyWithProcessor()
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)
@@ -30,7 +30,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_CustomPropertyWithoutProcessor_CorrectProperties()
+        public void BuildShouldApplyCustomPropertyWithoutProcessor()
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)

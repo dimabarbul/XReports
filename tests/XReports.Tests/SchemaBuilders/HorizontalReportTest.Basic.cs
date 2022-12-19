@@ -10,7 +10,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class HorizontalReportTest
     {
         [Fact]
-        public void Build_TwoRows_CorrectCells()
+        public void BuildShouldSupportMultipleRows()
         {
             HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new HorizontalReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddRow("First name", x => x.FirstName);

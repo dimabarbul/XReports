@@ -7,15 +7,15 @@ using XReports.Models;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Extensions.Builders.Tests.BuilderHelpers
+namespace XReports.Tests.SchemaBuilders
 {
-    public partial class EntityAttributeBuilderHelperTest
+    public partial class AttributeBasedBuilderTest
     {
         [Fact]
-        public void BuildVerticalReport_CustomAttributeHandler_Applied()
+        public void BuildVerticalReportShouldApplyCustomAttributeHandler()
         {
             AttributeBasedBuilder helper = new AttributeBasedBuilder(
-                Mocks.ServiceProvider,
+                this.serviceProvider,
                 new[] { new CustomAttributeHandler() });
 
             IReportSchema<EntityWithCustomAttribute> schema = helper.BuildSchema<EntityWithCustomAttribute>();

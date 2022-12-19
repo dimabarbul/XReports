@@ -11,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class VerticalReportTest
     {
         [Fact]
-        public void Build_OneColumnTwoHeaderRows_CorrectCells()
+        public void BuildShouldSupportOneComplexHeaderRow()
         {
             VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("Value", i => i);
@@ -30,7 +30,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_TwoColumnsTwoHeaderRowsByColumnName_CorrectCells()
+        public void BuildShouldSupportComplexHeaderRowsByColumnNames()
         {
             VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age)>();
             reportBuilder.AddColumn("Name", x => x.Name);
@@ -63,7 +63,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_ThreeColumnsTwoHeaderRowsByColumnIndexes_CorrectCells()
+        public void BuildShouldSupportComplexHeaderRowsByColumnIndexes()
         {
             VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age, string Gender)>();
             reportBuilder.AddColumn("Name", x => x.Name);
@@ -98,7 +98,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_TwoHeaderGroups_CorrectCells()
+        public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnIndexes()
         {
             VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder =
                 new VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)>();
@@ -136,7 +136,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_ColumnOutOfHeaderGroup_CorrectCells()
+        public void BuildShouldSupportComplexHeaderNotSpanningAllColumns()
         {
             VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder =
                 new VerticalReportSchemaBuilder<(string Name, int Age)>();
@@ -175,7 +175,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_ThreeHeaderRows_CorrectCells()
+        public void BuildShouldSupportMultipleComplexHeaderRows()
         {
             /*
              ------------------------------------
@@ -244,7 +244,7 @@ namespace XReports.Tests.SchemaBuilders
         }
 
         [Fact]
-        public void Build_TwoHeaderGroupsInOneRow_CorrectCells()
+        public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnNames()
         {
             VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
                 new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();

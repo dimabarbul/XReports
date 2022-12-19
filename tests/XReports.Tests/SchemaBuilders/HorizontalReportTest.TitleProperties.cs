@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -10,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders
     public partial class HorizontalReportTest
     {
         [Fact]
-        public void Build_WithCustomHeaderProperty_CorrectProperties()
+        public void BuildShouldSupportCustomHeaderProperty()
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)
@@ -28,53 +29,26 @@ namespace XReports.Tests.SchemaBuilders
                 .ContainItemsAssignableTo<CustomTitleProperty>();
         }
 
-        [Fact(Skip = "Complex title is not implemented yet")]
-        public void Build_WithCustomPropertyForComplexHeaderUsingAddHeaderProperty_CorrectProperties()
+        [Fact]
+        public void BuildShouldSupportCustomPropertyForComplexHeaderUsingHeaderName()
         {
-            // HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
-            // reportBuilder.AddRow("Value", s => s);
-            // reportBuilder.AddComplexTitle(0, "Complex", "Value");
-            // reportBuilder.AddTitleProperty("Complex", new CustomTitleProperty());
-            //
-            // IReportTable<ReportCell> table = reportBuilder.Build(new string[] { });
-            //
-            // ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            // cells.Should().HaveCount(2);
-            // cells[0][0].Properties.Should()
-            //     .HaveCount(1).And
-            //     .ContainItemsAssignableTo<CustomTitleProperty>();
-        }
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            reportBuilder.AddRow("Value", s => s);
+            reportBuilder.AddComplexHeader(0, "Complex", "Value");
+            reportBuilder.AddComplexHeaderProperties("Complex", new CustomTitleProperty());
 
-        [Fact(Skip = "Complex title is not implemented yet")]
-        public void Build_WithCustomPropertyForComplexHeaderUsingProcessor_CorrectProperties()
-        {
-            // HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
-            // reportBuilder.AddRow("Value", s => s);
-            // reportBuilder.AddComplexTitle(0, "Complex", "Value");
-            // reportBuilder.AddTitleCellProcessor(new CustomTitlePropertyProcessor());
-            //
-            // IReportTable<ReportCell> table = reportBuilder.Build(new string[] { });
-            //
-            // ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            // cells.Should().HaveCount(2);
-            // cells[0][0].Properties.Should()
-            //     .HaveCount(1).And
-            //     .ContainItemsAssignableTo<CustomTitleProperty>();
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<string>());
+
+            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
+            cells.Should().HaveCount(1);
+            cells[0].Should().HaveCount(2);
+            cells[0][0].Properties.Should()
+                .HaveCount(1).And
+                .ContainItemsAssignableTo<CustomTitleProperty>();
         }
 
         private class CustomTitleProperty : ReportCellProperty
         {
         }
-
-        // private class CustomTitlePropertyProcessor : IReportCellProcessor
-        // {
-        //     public void Process(ReportCell cell)
-        //     {
-        //         if (cell.InternalValue == "Complex")
-        //         {
-        //             cell.AddProperty(new CustomTitleProperty());
-        //         }
-        //     }
-        // }
     }
 }
