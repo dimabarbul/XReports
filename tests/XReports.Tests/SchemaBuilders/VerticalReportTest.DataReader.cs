@@ -1,9 +1,11 @@
+using System;
 using System.Data;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -13,31 +15,70 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportDataReaderAsDataSource()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+            VerticalReportSchemaBuilder<IDataReader> builder = new();
 
             builder.AddColumn("Name", x => x.GetString(0));
             builder.AddColumn("Age", x => x.GetInt32(1));
 
-            using (DataTable dataTable = new DataTable())
+            using DataTable dataTable = new();
+            dataTable.Columns.AddRange(new[]
             {
-                dataTable.Columns.AddRange(new[]
-                {
-                    new DataColumn("Name", typeof(string)), new DataColumn("Age", typeof(int)),
-                });
-                dataTable.Rows.Add("John", 23);
-                dataTable.Rows.Add("Jane", 22);
-                using (IDataReader dataReader = new DataTableReader(dataTable))
-                {
-                    IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
+                new DataColumn("Name", typeof(string)),
+                new DataColumn("Age", typeof(int)),
+            });
+            dataTable.Rows.Add("John", 23);
+            dataTable.Rows.Add("Jane", 22);
 
-                    ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
+            using IDataReader dataReader = new DataTableReader(dataTable);
+            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
 
-                    cells[0][0].GetValue<string>().Should().Be("John");
-                    cells[0][1].GetValue<int>().Should().Be(23);
-                    cells[1][0].GetValue<string>().Should().Be("Jane");
-                    cells[1][1].GetValue<int>().Should().Be(22);
-                }
-            }
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "John", 23 },
+                new object[] { "Jane", 22 },
+            });
+        }
+
+        [Fact]
+        public void BuildShouldThrowWhenDataReaderIsDataSourceButSourceTypeIsDifferent()
+        {
+            VerticalReportSchemaBuilder<string> builder = new();
+
+            builder.AddColumn("Value", s => s);
+
+            using DataTable dataTable = new();
+            dataTable.Columns.AddRange(new[]
+            {
+                new DataColumn("Value", typeof(string)),
+            });
+            dataTable.Rows.Add("John");
+            dataTable.Rows.Add("Jane");
+
+            using IDataReader dataReader = new DataTableReader(dataTable);
+            Action action = () => _ = builder.BuildSchema().BuildReportTable(dataReader);
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void BuildShouldThrowWhenDataReaderIsSourceTypeButDataSourceIsDifferent()
+        {
+            VerticalReportSchemaBuilder<IDataReader> builder = new();
+
+            builder.AddColumn("Value", x => x.GetString(0));
+
+            using DataTable dataTable = new();
+            dataTable.Columns.AddRange(new[]
+            {
+                new DataColumn("Value", typeof(string)),
+            });
+            dataTable.Rows.Add("John");
+            dataTable.Rows.Add("Jane");
+
+            using IDataReader dataReader = new DataTableReader(dataTable);
+            Action action = () => _ = builder.BuildSchema().BuildReportTable(new[] { dataReader });
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
     }
 }

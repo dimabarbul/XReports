@@ -3,6 +3,7 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using XReports.ValueProviders;
 using Xunit;
 
@@ -13,26 +14,27 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportOneComplexHeaderRow()
         {
-            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
+            VerticalReportSchemaBuilder<int> reportBuilder = new();
             reportBuilder.AddColumn("Value", i => i);
             reportBuilder.AddComplexHeader(0, "Statistics", "Value");
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[] { 1 });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("Statistics");
-            headerCells[1][0].GetValue<string>().Should().Be("Value");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].GetValue<int>().Should().Be(1);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Statistics" },
+                new[] { "Value" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { 1 },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportComplexHeaderRowsByColumnNames()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age)>();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "Name", "Age");
@@ -43,29 +45,26 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane Doe", 27),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("Personal Info");
-            headerCells[0][0].ColumnSpan.Should().Be(2);
-            headerCells[0][1].Should().BeNull();
-            headerCells[1][0].GetValue<string>().Should().Be("Name");
-            headerCells[1][0].ColumnSpan.Should().Be(1);
-            headerCells[1][1].GetValue<string>().Should().Be("Age");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<string>().Should().Be("John Doe");
-            cells[0][0].ColumnSpan.Should().Be(1);
-            cells[0][1].GetValue<int>().Should().Be(30);
-            cells[1][0].GetValue<string>().Should().Be("Jane Doe");
-            cells[1][0].ColumnSpan.Should().Be(1);
-            cells[1][1].GetValue<int>().Should().Be(27);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Personal Info") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[] { "Name", "Age" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "John Doe", 30 },
+                new object[] { "Jane Doe", 27 },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportComplexHeaderRowsByColumnIndexes()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder = new VerticalReportSchemaBuilder<(string Name, int Age, string Gender)>();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder = new();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Gender", x => x.Gender);
@@ -77,31 +76,27 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane Doe", 27, "Female"),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("Personal Info");
-            headerCells[0][0].ColumnSpan.Should().Be(3);
-            headerCells[0][1].Should().BeNull();
-            headerCells[0][2].Should().BeNull();
-            headerCells[1][0].GetValue<string>().Should().Be("Name");
-            headerCells[1][1].GetValue<string>().Should().Be("Age");
-            headerCells[1][2].GetValue<string>().Should().Be("Gender");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<string>().Should().Be("John Doe");
-            cells[0][1].GetValue<int>().Should().Be(30);
-            cells[0][2].GetValue<string>().Should().Be("Male");
-            cells[1][0].GetValue<string>().Should().Be("Jane Doe");
-            cells[1][1].GetValue<int>().Should().Be(27);
-            cells[1][2].GetValue<string>().Should().Be("Female");
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Personal Info") { ColumnSpan = 3 },
+                    null,
+                    null,
+                },
+                new object[] { "Name", "Age", "Gender" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "John Doe", 30, "Male" },
+                new object[] { "Jane Doe", 27, "Female" },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnIndexes()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder =
-                new VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)>();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder = new();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Job", x => x.Job);
@@ -114,32 +109,27 @@ namespace XReports.Tests.SchemaBuilders
                 ("John Doe", 30, "Developer", 1000m),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("Personal Info");
-            headerCells[0][0].ColumnSpan.Should().Be(2);
-            headerCells[0][1].Should().BeNull();
-            headerCells[0][2].GetValue<string>().Should().Be("Job Info");
-            headerCells[0][2].ColumnSpan.Should().Be(2);
-            headerCells[0][3].Should().BeNull();
-            headerCells[1][0].GetValue<string>().Should().Be("Name");
-            headerCells[1][1].GetValue<string>().Should().Be("Age");
-            headerCells[1][2].GetValue<string>().Should().Be("Job");
-            headerCells[1][3].GetValue<string>().Should().Be("Salary");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].GetValue<string>().Should().Be("John Doe");
-            cells[0][1].GetValue<int>().Should().Be(30);
-            cells[0][2].GetValue<string>().Should().Be("Developer");
-            cells[0][3].GetValue<decimal>().Should().Be(1000m);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Personal Info") { ColumnSpan = 2 },
+                    null,
+                    new ReportCellData("Job Info") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[] { "Name", "Age", "Job", "Salary" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "John Doe", 30, "Developer", 1000m },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportComplexHeaderNotSpanningAllColumns()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder =
-                new VerticalReportSchemaBuilder<(string Name, int Age)>();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
@@ -151,27 +141,21 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane Doe", 30),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("#");
-            headerCells[0][0].RowSpan.Should().Be(2);
-            headerCells[0][0].ColumnSpan.Should().Be(1);
-            headerCells[0][1].GetValue<string>().Should().Be("Employee");
-            headerCells[0][1].ColumnSpan.Should().Be(2);
-            headerCells[0][1].RowSpan.Should().Be(1);
-            headerCells[0][2].Should().BeNull();
-            headerCells[1][0].Should().BeNull();
-            headerCells[1][1].GetValue<string>().Should().Be("Name");
-            headerCells[1][2].GetValue<string>().Should().Be("Age");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<int>().Should().Be(1);
-            cells[0][1].GetValue<string>().Should().Be("John Doe");
-            cells[0][2].GetValue<int>().Should().Be(30);
-            cells[1][0].GetValue<int>().Should().Be(2);
-            cells[1][1].GetValue<string>().Should().Be("Jane Doe");
-            cells[1][2].GetValue<int>().Should().Be(30);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("#") { RowSpan = 2 },
+                    new ReportCellData("Employee") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[] { null, "Name", "Age" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { 1, "John Doe", 30 },
+                new object[] { 2, "Jane Doe", 30 },
+            });
         }
 
         [Fact]
@@ -187,8 +171,7 @@ namespace XReports.Tests.SchemaBuilders
              | 2 | Jane       | Doe       | 30  |
              ------------------------------------
              */
-            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
-                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder = new();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
@@ -202,52 +185,35 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane", "Doe", 30),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(3);
-            headerCells[0][0].GetValue<string>().Should().Be("#");
-            headerCells[0][0].RowSpan.Should().Be(3);
-            headerCells[0][0].ColumnSpan.Should().Be(1);
-            headerCells[0][1].GetValue<string>().Should().Be("Employee");
-            headerCells[0][1].ColumnSpan.Should().Be(3);
-            headerCells[0][1].RowSpan.Should().Be(1);
-            headerCells[0][2].Should().BeNull();
-            headerCells[0][3].Should().BeNull();
-
-            headerCells[1][0].Should().BeNull();
-            headerCells[1][1].GetValue<string>().Should().Be("Personal Info");
-            headerCells[1][1].RowSpan.Should().Be(1);
-            headerCells[1][1].ColumnSpan.Should().Be(2);
-            headerCells[1][2].Should().BeNull();
-            headerCells[1][3].GetValue<string>().Should().Be("Age");
-            headerCells[1][3].ColumnSpan.Should().Be(1);
-            headerCells[1][3].RowSpan.Should().Be(2);
-
-            headerCells[2][0].Should().BeNull();
-            headerCells[2][1].GetValue<string>().Should().Be("First Name");
-            headerCells[2][1].RowSpan.Should().Be(1);
-            headerCells[2][1].ColumnSpan.Should().Be(1);
-            headerCells[2][2].GetValue<string>().Should().Be("Last Name");
-            headerCells[2][2].ColumnSpan.Should().Be(1);
-            headerCells[2][2].RowSpan.Should().Be(1);
-            headerCells[2][3].Should().BeNull();
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<int>().Should().Be(1);
-            cells[0][1].GetValue<string>().Should().Be("John");
-            cells[0][2].GetValue<string>().Should().Be("Doe");
-            cells[0][3].GetValue<int>().Should().Be(30);
-            cells[1][0].GetValue<int>().Should().Be(2);
-            cells[1][1].GetValue<string>().Should().Be("Jane");
-            cells[1][2].GetValue<string>().Should().Be("Doe");
-            cells[1][3].GetValue<int>().Should().Be(30);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("#") { RowSpan = 3 },
+                    new ReportCellData("Employee") { ColumnSpan = 3 },
+                    null,
+                    null,
+                },
+                new object[]
+                {
+                    null,
+                    new ReportCellData("Personal Info") { ColumnSpan = 2 },
+                    null,
+                    new ReportCellData("Age") { RowSpan = 2 },
+                },
+                new object[] { null, "First Name", "Last Name", null },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { 1, "John", "Doe", 30 },
+                new object[] { 2, "Jane", "Doe", 30 },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnNames()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
-                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder = new();
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
             reportBuilder.AddColumn("Age", x => x.Age);
@@ -260,32 +226,21 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane", "Doe", 30),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("Personal Info");
-            headerCells[0][0].ColumnSpan.Should().Be(2);
-            headerCells[0][0].RowSpan.Should().Be(1);
-            headerCells[0][1].Should().BeNull();
-            headerCells[0][2].GetValue<string>().Should().Be("Extra");
-
-            headerCells[1][0].GetValue<string>().Should().Be("First Name");
-            headerCells[1][0].RowSpan.Should().Be(1);
-            headerCells[1][0].ColumnSpan.Should().Be(1);
-            headerCells[1][1].GetValue<string>().Should().Be("Last Name");
-            headerCells[1][1].ColumnSpan.Should().Be(1);
-            headerCells[1][1].RowSpan.Should().Be(1);
-            headerCells[1][2].GetValue<string>().Should().Be("Age");
-            headerCells[1][2].ColumnSpan.Should().Be(1);
-            headerCells[1][2].RowSpan.Should().Be(1);
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<string>().Should().Be("John");
-            cells[0][1].GetValue<string>().Should().Be("Doe");
-            cells[0][2].GetValue<int>().Should().Be(30);
-            cells[1][0].GetValue<string>().Should().Be("Jane");
-            cells[1][1].GetValue<string>().Should().Be("Doe");
-            cells[1][2].GetValue<int>().Should().Be(30);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Personal Info") { ColumnSpan = 2 },
+                    null,
+                    "Extra",
+                },
+                new object[] { "First Name", "Last Name", "Age" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "John", "Doe", 30 },
+                new object[] { "Jane", "Doe", 30 },
+            });
         }
     }
 }

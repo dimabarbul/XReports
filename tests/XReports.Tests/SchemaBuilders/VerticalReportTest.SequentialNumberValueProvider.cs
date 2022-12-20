@@ -3,6 +3,7 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using XReports.ValueProviders;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportSequentialNumberValueProviderWithDefaultStartValue()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            VerticalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
@@ -22,20 +23,21 @@ namespace XReports.Tests.SchemaBuilders
                 "Jane Doe",
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("#");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<int>().Should().Be(1);
-            cells[1][0].GetValue<int>().Should().Be(2);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "#" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { 1 },
+                new object[] { 2 },
+            });
         }
 
         [Fact]
         public void BuildShouldSupportSequentialNumberValueProviderWithNonDefaultStartValue()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            VerticalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider(15));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
@@ -44,14 +46,15 @@ namespace XReports.Tests.SchemaBuilders
                 "Jane Doe",
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("#");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<int>().Should().Be(15);
-            cells[1][0].GetValue<int>().Should().Be(16);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "#" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { 15 },
+                new object[] { 16 },
+            });
         }
     }
 }

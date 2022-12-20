@@ -1,9 +1,11 @@
 using System;
-using FluentAssertions;
+using System.Collections.Generic;
+using System.Linq;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -13,45 +15,76 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldHaveHeaderWhenNoRows()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new VerticalReportSchemaBuilder<(string FirstName, string LastName)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("First name");
-            headerCells[0][1].GetValue<string>().Should().Be("Last name");
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().BeEmpty();
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new [] { "First name", "Last name" },
+            });
+            table.Rows.Should().BeEquivalentTo(Enumerable.Empty<IEnumerable<object>>());
         }
 
         [Fact]
         public void BuildShouldSupportMultipleRows()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new VerticalReportSchemaBuilder<(string FirstName, string LastName)>();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe"),
-                ("Jane", "Do"),
+                ("Jane", "Doe"),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("First name");
-            headerCells[0][1].GetValue<string>().Should().Be("Last name");
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "First name", "Last name" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "John", "Doe" },
+                new[] { "Jane", "Doe" },
+            });
+        }
 
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<string>().Should().Be("John");
-            cells[0][1].GetValue<string>().Should().Be("Doe");
-            cells[1][0].GetValue<string>().Should().Be("Jane");
-            cells[1][1].GetValue<string>().Should().Be("Do");
+        [Fact]
+        public void EnumeratingReportMultipleTimesShouldWork()
+        {
+            VerticalReportSchemaBuilder<string> reportBuilder = new();
+            reportBuilder.AddColumn("Value", s => s);
+
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            {
+                "test",
+            });
+            // enumerating for the first time
+            foreach (IEnumerable<ReportCell> row in table.HeaderRows)
+            {
+                foreach (ReportCell _ in row)
+                {
+                }
+            }
+            foreach (IEnumerable<ReportCell> row in table.Rows)
+            {
+                foreach (ReportCell _ in row)
+                {
+                }
+            }
+
+            // enumerating for the second time
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Value" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "test" },
+            });
         }
     }
 }

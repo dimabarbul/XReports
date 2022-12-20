@@ -1,8 +1,9 @@
-using FluentAssertions;
+using System.Collections.Immutable;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -12,7 +13,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomPropertyUsingProcessor()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            VerticalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddColumn("Value", s => s)
                 .AddProcessors(new CustomPropertyProcessor());
 
@@ -21,34 +22,48 @@ namespace XReports.Tests.SchemaBuilders
                 "Test",
             });
 
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should()
-                .HaveCount(1).And
-                .ContainSingle(p => p is CustomProperty && ((CustomProperty)p).Assigned);
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Value" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[]
+                {
+                    new ReportCellData("Test")
+                    {
+                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomProperty(true)),
+                    },
+                },
+            });
         }
 
         [Fact]
         public void BuildShouldApplyCustomPropertyUsingAddPropertiesMethod()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            VerticalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddColumn("Value", s => s)
-                .AddProperties(new CustomProperty());
+                .AddProperties(new CustomProperty(true));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 "Test",
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0][0].Properties.Should().BeEmpty();
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should()
-                .HaveCount(1).And
-                .AllBeOfType<CustomProperty>();
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Value" },
+            });
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[]
+                {
+                    new ReportCellData("Test")
+                    {
+                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomProperty(true)),
+                    },
+                },
+            });
         }
 
         private class CustomPropertyProcessor : IReportCellProcessor<string>
