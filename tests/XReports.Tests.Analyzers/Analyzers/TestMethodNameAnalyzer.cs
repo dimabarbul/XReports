@@ -10,7 +10,7 @@ namespace XReports.Tests.Analyzers.Analyzers
     public class TestMethodNameAnalyzer : DiagnosticAnalyzer
     {
         private const string PatternConfigKey = "dotnet_diagnostic.CUSTOM2.pattern";
-        private const string DefaultPattern = @"^[a-zA-Z]+Should[a-zA-Z0-9]+(When[a-zA-Z0-9]+)?$";
+        private const string DefaultPattern = @"^[a-zA-Z]+Should[a-zA-Z0-9]+$";
 
         private readonly DiagnosticDescriptor diagnostic = new DiagnosticDescriptor(
             "CUSTOM2",
