@@ -1,10 +1,10 @@
 using System;
-using FluentAssertions;
 using XReports.AttributeHandlers;
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -14,7 +14,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldApplyCustomAttributeHandler()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+            AttributeBasedBuilder helper = new(
                 this.serviceProvider,
                 new[] { new CustomAttributeHandler() });
 
@@ -25,10 +25,15 @@ namespace XReports.Tests.SchemaBuilders
                 new EntityWithCustomAttribute() { Title = "Test" },
             });
 
-            ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
-
-            cells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainItemsAssignableTo<CustomProperty>();
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] {
+                    new ReportCellData("Test")
+                    {
+                        Properties = new[] { new CustomProperty() },
+                    },
+                },
+            });
         }
 
         private class EntityWithCustomAttribute

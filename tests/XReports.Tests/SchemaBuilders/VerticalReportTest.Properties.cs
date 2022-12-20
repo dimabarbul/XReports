@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
@@ -32,7 +31,7 @@ namespace XReports.Tests.SchemaBuilders
                 {
                     new ReportCellData("Test")
                     {
-                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomProperty(true)),
+                        Properties = new[] { new CustomProperty(true) },
                     },
                 },
             });
@@ -60,7 +59,7 @@ namespace XReports.Tests.SchemaBuilders
                 {
                     new ReportCellData("Test")
                     {
-                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomProperty(true)),
+                        Properties = new[] { new CustomProperty(true) },
                     },
                 },
             });

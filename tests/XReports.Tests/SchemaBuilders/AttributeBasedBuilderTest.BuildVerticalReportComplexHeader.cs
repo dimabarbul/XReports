@@ -1,9 +1,9 @@
 using System.Linq;
-using FluentAssertions;
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -13,61 +13,70 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldSupportOneComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
             IReportSchema<OneComplexHeaderClass> schema = builderHelper.BuildSchema<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-            headerCells.Should().HaveCount(2);
-            headerCells[0].Should().HaveCount(3);
-            headerCells[0][0].GetValue<string>().Should().Be("ID");
-            headerCells[0][1].GetValue<string>().Should().Be("Personal");
-            headerCells[0][2].Should().BeNull();
-            headerCells[1].Should().HaveCount(3);
-            headerCells[1][0].Should().BeNull();
-            headerCells[1][1].GetValue<string>().Should().Be("Name");
-            headerCells[1][2].GetValue<string>().Should().Be("Age");
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID") { RowSpan = 2 },
+                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[] { null, "Name", "Age" },
+            });
         }
 
         [Fact]
         public void BuildVerticalReportShouldSupportSeveralLevelsOfComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
             IReportSchema<SeveralLevelsOfComplexHeaderClass> schema = builderHelper.BuildSchema<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-            headerCells.Should().HaveCount(4);
-            headerCells[0].Should().HaveCount(6);
-            headerCells[0][0].GetValue<string>().Should().Be("ID");
-            headerCells[0][1].GetValue<string>().Should().Be("Employee Info");
-            headerCells[0][2].Should().BeNull();
-            headerCells[0][3].Should().BeNull();
-            headerCells[0][4].Should().BeNull();
-            headerCells[0][5].GetValue<string>().Should().Be("Employee # in Department");
-            headerCells[1].Should().HaveCount(6);
-            headerCells[1][0].Should().BeNull();
-            headerCells[1][1].GetValue<string>().Should().Be("Personal");
-            headerCells[1][2].Should().BeNull();
-            headerCells[1][3].GetValue<string>().Should().Be("Job Info");
-            headerCells[1][4].Should().BeNull();
-            headerCells[1][5].Should().BeNull();
-            headerCells[2].Should().HaveCount(6);
-            headerCells[2][0].Should().BeNull();
-            headerCells[2][1].GetValue<string>().Should().Be("Name");
-            headerCells[2][2].GetValue<string>().Should().Be("Age");
-            headerCells[2][3].GetValue<string>().Should().Be("Job Title");
-            headerCells[2][4].GetValue<string>().Should().Be("Sensitive");
-            headerCells[2][5].Should().BeNull();
-            headerCells[3].Should().HaveCount(6);
-            headerCells[3][0].Should().BeNull();
-            headerCells[3][1].Should().BeNull();
-            headerCells[3][2].Should().BeNull();
-            headerCells[3][3].Should().BeNull();
-            headerCells[3][4].GetValue<string>().Should().Be("Salary");
-            headerCells[3][5].Should().BeNull();
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID") { RowSpan = 4 },
+                    new ReportCellData("Employee Info") { ColumnSpan = 4 },
+                    null,
+                    null,
+                    null,
+                    new ReportCellData("Employee # in Department") { RowSpan = 4 },
+                },
+                new object[]
+                {
+                    null,
+                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    null,
+                    new ReportCellData("Job Info") { ColumnSpan = 2 },
+                    null,
+                    null,
+                },
+                new object[]
+                {
+                    null,
+                    new ReportCellData("Name") { RowSpan = 2 },
+                    new ReportCellData("Age") { RowSpan = 2 },
+                    new ReportCellData("Job Title") { RowSpan = 2 },
+                    "Sensitive",
+                    null,
+                },
+                new object[]
+                {
+                    null,
+                    null,
+                    null,
+                    null,
+                    "Salary",
+                    null,
+                },
+            });
         }
 
         private class OneComplexHeaderClass

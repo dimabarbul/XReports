@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -14,50 +14,50 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldAddPropertiesInCorrectOrder()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
             IReportSchema<SeveralPropertiesClass> schema = builderHelper.BuildSchema<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0].Should().HaveCount(2);
-            headerCells[0][0].GetValue<string>().Should().Be("ID");
-            headerCells[0][1].GetValue<string>().Should().Be("Name");
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "ID", "Name" },
+            });
         }
 
         [Fact]
         public void BuildVerticalReportShouldIgnorePropertiesWithoutAttribute()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
             IReportSchema<SomePropertiesWithoutAttribute> schema = builderHelper.BuildSchema<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0].Should().HaveCount(1);
-            headerCells[0][0].GetValue<string>().Should().Be("Name");
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Name" },
+            });
         }
 
         [Fact]
         public void BuildVerticalReportShouldSetCorrectValueTypeForPropertiesWithAttribute()
         {
-            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
             IReportSchema<PropertiesWithAttributes> schema = builderHelper.BuildSchema<PropertiesWithAttributes>();
 
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            PropertiesWithAttributes item = new()
             {
-                new PropertiesWithAttributes() { Id = 1, Name = "John Doe", Salary = 1000m, DateOfBirth = new DateTime(2000, 4, 7) },
-            });
+                Id = 1,
+                Name = "John Doe",
+                Salary = 1000m,
+                DateOfBirth = new DateTime(2000, 4, 7),
+            };
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[] { item });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.Rows);
-            headerCells.Should().HaveCount(1);
-            headerCells[0].Should().HaveCount(4);
-            headerCells[0][0].ValueType.Should().Be(typeof(int));
-            headerCells[0][1].ValueType.Should().Be(typeof(string));
-            headerCells[0][2].ValueType.Should().Be(typeof(decimal));
-            headerCells[0][3].ValueType.Should().Be(typeof(DateTime));
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { item.Id, item.Name, item.Salary, item.DateOfBirth },
+            });
         }
 
         private class SeveralPropertiesClass

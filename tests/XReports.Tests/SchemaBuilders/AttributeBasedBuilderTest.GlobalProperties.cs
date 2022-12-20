@@ -1,4 +1,3 @@
-using FluentAssertions;
 using XReports.AttributeHandlers;
 using XReports.Attributes;
 using XReports.Enums;
@@ -6,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -15,7 +15,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldApplyGlobalProperties()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+            AttributeBasedBuilder helper = new(
                 this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
@@ -27,21 +27,30 @@ namespace XReports.Tests.SchemaBuilders
                     new WithGlobalProperties() { Id = 1 },
                 });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-
-            headerCells[0][0].Properties.Should().BeEmpty();
-
-            ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
-
-            cells[0][0].Properties.Should().HaveCount(2)
-                .And.ContainSingle(p => p is BoldProperty)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Center);
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "ID" },
+            });
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData(1)
+                    {
+                        Properties = new ReportCellProperty[]
+                        {
+                            new BoldProperty(),
+                            new AlignmentProperty(Alignment.Center),
+                        },
+                    },
+                },
+            });
         }
 
         [Fact]
         public void BuildVerticalReportShouldNotApplyGlobalPropertiesWhenOverwritten()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+            AttributeBasedBuilder helper = new(
                 this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
@@ -52,16 +61,29 @@ namespace XReports.Tests.SchemaBuilders
                 new WithOverwrittenGlobalProperties() { Id = 1 },
             });
 
-            ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
-
-            cells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is DecimalPrecisionProperty && ((DecimalPrecisionProperty)p).Precision == 0);
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "ID" },
+            });
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData(1)
+                    {
+                        Properties = new[]
+                        {
+                            new DecimalPrecisionProperty(0),
+                        },
+                    },
+                },
+            });
         }
 
         [Fact]
         public void BuildVerticalReportShouldApplyGlobalPropertiesWhenOverwrittenForHeader()
         {
-            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+            AttributeBasedBuilder helper = new(
                 this.serviceProvider,
                 new[] { new CommonAttributeHandler() });
 
@@ -73,15 +95,32 @@ namespace XReports.Tests.SchemaBuilders
                     new WithOverwrittenForHeaderGlobalProperties() { Id = 1 },
                 });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(reportTable.HeaderRows);
-
-            headerCells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Right);
-
-            ReportCell[][] cells = this.GetCellsAsArray(reportTable.Rows);
-
-            cells[0][0].Properties.Should().HaveCount(1)
-                .And.ContainSingle(p => p is AlignmentProperty && ((AlignmentProperty)p).Alignment == Alignment.Center);
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[]
+                {
+                    new ReportCellData("ID")
+                    {
+                        Properties = new[]
+                        {
+                            new AlignmentProperty(Alignment.Right),
+                        },
+                    },
+                },
+            });
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData(1)
+                    {
+                        Properties = new[]
+                        {
+                            new AlignmentProperty(Alignment.Center),
+                        },
+                    },
+                },
+            });
         }
 
         [VerticalReport]

@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Common;
 using FluentAssertions.Primitives;
 using XReports.Models;
 
@@ -30,10 +34,7 @@ namespace XReports.Tests.Assertions
                 this.Subject.Should().NotBeNull("{0} should not be null", this.Identifier);
                 this.Subject.GetUnderlyingValue().Should()
                     .Be(expected.Value, "value of {0} should be correct", this.Identifier);
-                this.Subject.Properties.Should().BeEquivalentTo(
-                    expected.Properties,
-                    o => o.RespectingRuntimeTypes(),
-                    "properties of {0} should be correct", this.Identifier);
+                this.AssertProperties(expected.Properties);
                 this.Subject.ColumnSpan.Should().Be(expected.ColumnSpan, "column span of {0} should be correct",
                     this.Identifier);
                 this.Subject.RowSpan.Should()
@@ -41,6 +42,24 @@ namespace XReports.Tests.Assertions
             }
 
             return new AndConstraint<ReportCellAssertions>(this);
+        }
+
+        private void AssertProperties(IReadOnlyCollection<ReportCellProperty> expectedProperties)
+        {
+            Dictionary<Type, ReportCellProperty> actualMap = this.BuildPropertiesMap(this.Subject.Properties);
+            Dictionary<Type, ReportCellProperty> expectedMap = this.BuildPropertiesMap(expectedProperties);
+
+            foreach ((Type type, ReportCellProperty property) in actualMap)
+            {
+                expectedMap.Should().ContainKey(type, "property of type {0} should be expected", type);
+                property.Should().IsSameOrEqualTo(expectedMap[type]);
+            }
+        }
+
+        private Dictionary<Type, ReportCellProperty> BuildPropertiesMap(
+            IEnumerable<ReportCellProperty> properties)
+        {
+            return properties.ToDictionary(p => p.GetType());
         }
     }
 }

@@ -1,8 +1,8 @@
-using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -12,7 +12,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomPropertyWithProcessor()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddRow("Value", s => s)
                 .AddProcessors(new CustomPropertyProcessor());
 
@@ -21,18 +21,23 @@ namespace XReports.Tests.SchemaBuilders
                 "Test",
             });
 
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should().BeEmpty();
-            cells[0][1].Properties.Should()
-                .HaveCount(1).And
-                .ContainSingle(p => p is CustomProperty && ((CustomProperty)p).Assigned);
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    "Value",
+                    new ReportCellData("Test")
+                    {
+                        Properties = new[] { new CustomProperty(true) },
+                    },
+                },
+            });
         }
 
         [Fact]
         public void BuildShouldApplyCustomPropertyWithoutProcessor()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new();
             reportBuilder.AddRow("Value", s => s)
                 .AddProperties(new CustomProperty());
 
@@ -41,12 +46,17 @@ namespace XReports.Tests.SchemaBuilders
                 "Test",
             });
 
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(1);
-            cells[0][0].Properties.Should().BeEmpty();
-            cells[0][1].Properties.Should()
-                .HaveCount(1).And
-                .AllBeOfType<CustomProperty>();
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    "Value",
+                    new ReportCellData("Test")
+                    {
+                        Properties = new[] { new CustomProperty(true) },
+                    },
+                },
+            });
         }
 
         private class CustomPropertyProcessor : IReportCellProcessor<string>

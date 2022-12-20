@@ -38,7 +38,7 @@ namespace XReports.Tests.SchemaBuilders
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
                 ("John", "Doe"),
-                ("Jane", "Doe"),
+                ("Jane", "Do"),
             });
 
             table.HeaderRows.Should().BeEquivalentTo(new[]
@@ -48,7 +48,7 @@ namespace XReports.Tests.SchemaBuilders
             table.Rows.Should().BeEquivalentTo(new[]
             {
                 new[] { "John", "Doe" },
-                new[] { "Jane", "Doe" },
+                new[] { "Jane", "Do" },
             });
         }
 

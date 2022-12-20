@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Immutable;
 using System.Linq;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -27,7 +26,7 @@ namespace XReports.Tests.SchemaBuilders
                 {
                     new ReportCellData("Value")
                     {
-                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomHeaderProperty()),
+                        Properties = new[] { new CustomHeaderProperty() },
                     },
                 },
             });
@@ -49,44 +48,15 @@ namespace XReports.Tests.SchemaBuilders
                 {
                     new ReportCellData("Complex")
                     {
-                        Properties = ImmutableArray.Create<ReportCellProperty>(new CustomHeaderProperty()),
+                        Properties = new[] { new CustomHeaderProperty() },
                     },
                 },
                 new object[] { "Value" },
             });
         }
 
-        private class CustomHeaderProperty : ReportCellProperty, IEquatable<CustomHeaderProperty>
+        private class CustomHeaderProperty : ReportCellProperty
         {
-            public bool Equals(CustomHeaderProperty other)
-            {
-                return true;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj is null)
-                {
-                    return false;
-                }
-
-                if (ReferenceEquals(this, obj))
-                {
-                    return true;
-                }
-
-                if (obj.GetType() != this.GetType())
-                {
-                    return false;
-                }
-
-                return this.Equals((CustomHeaderProperty)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return base.GetHashCode();
-            }
         }
     }
 }

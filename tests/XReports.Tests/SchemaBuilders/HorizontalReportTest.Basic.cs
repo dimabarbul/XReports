@@ -1,8 +1,10 @@
-using FluentAssertions;
+using System.Collections.Generic;
+using System.Linq;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders
@@ -12,7 +14,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportMultipleRows()
         {
-            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new HorizontalReportSchemaBuilder<(string FirstName, string LastName)>();
+            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
             reportBuilder.AddRow("First name", x => x.FirstName);
             reportBuilder.AddRow("Last name", x => x.LastName);
 
@@ -22,17 +24,12 @@ namespace XReports.Tests.SchemaBuilders
                 ("Jane", "Do"),
             });
 
-            ReportCell[][] headerCells = this.GetCellsAsArray(table.HeaderRows);
-            headerCells.Should().BeEmpty();
-
-            ReportCell[][] cells = this.GetCellsAsArray(table.Rows);
-            cells.Should().HaveCount(2);
-            cells[0][0].GetValue<string>().Should().Be("First name");
-            cells[0][1].GetValue<string>().Should().Be("John");
-            cells[0][2].GetValue<string>().Should().Be("Jane");
-            cells[1][0].GetValue<string>().Should().Be("Last name");
-            cells[1][1].GetValue<string>().Should().Be("Doe");
-            cells[1][2].GetValue<string>().Should().Be("Do");
+            table.HeaderRows.Should().BeEquivalentTo(Enumerable.Empty<IEnumerable<object>>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "First name", "John", "Jane" },
+                new[] { "Last name", "Doe", "Do" },
+            });
         }
     }
 }

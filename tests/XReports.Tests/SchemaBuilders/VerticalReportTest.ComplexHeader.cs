@@ -1,4 +1,3 @@
-using FluentAssertions;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;

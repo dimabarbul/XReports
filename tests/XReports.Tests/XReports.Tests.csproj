@@ -62,17 +62,8 @@
       <Compile Update="SchemaBuilders\VerticalReportTest.Properties.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.SequentialNumberValueProvider.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.TypedCells.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
       <Compile Update="SchemaBuilders\VerticalReportTest.ComplexHeader.cs">
         <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.TypedCells.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
       <Compile Update="SchemaBuilders\HorizontalReportTest.TitleProperties.cs">
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
@@ -81,9 +72,6 @@
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
       <Compile Update="SchemaBuilders\HorizontalReportTest.Properties.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.SequentialNumberValueProvider.cs">
         <DependentUpon>HorizontalReportTest.cs</DependentUpon>
       </Compile>
       <Compile Update="SchemaBuilders\HorizontalReportTest.Basic.cs">
