@@ -5,6 +5,7 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Common.Assertions;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders

@@ -9,11 +9,11 @@ namespace XReports.Tests.Analyzers.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TestMethodNameAnalyzer : DiagnosticAnalyzer
     {
-        private const string PatternConfigKey = "dotnet_diagnostic.CUSTOM2.pattern";
+        private const string PatternConfigKey = "dotnet_diagnostic.CustomTM1.pattern";
         private const string DefaultPattern = @"^[a-zA-Z]+Should[a-zA-Z0-9]+$";
 
         private readonly DiagnosticDescriptor diagnostic = new DiagnosticDescriptor(
-            "CUSTOM2",
+            "CustomTM1",
             "Test method name",
             "Test method '{0}' should follow pattern '{1}'",
             "Naming",

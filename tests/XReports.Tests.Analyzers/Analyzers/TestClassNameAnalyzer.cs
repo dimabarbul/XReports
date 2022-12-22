@@ -10,11 +10,11 @@ namespace XReports.Tests.Analyzers.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TestClassNameAnalyzer : DiagnosticAnalyzer
     {
-        private const string SuffixConfigKey = "dotnet_diagnostic.CUSTOM1.suffix";
+        private const string SuffixConfigKey = "dotnet_diagnostic.CustomTC1.suffix";
         private const string DefaultSuffix = "Test";
 
         private readonly DiagnosticDescriptor diagnostic = new DiagnosticDescriptor(
-            "CUSTOM1",
+            "CustomTC1",
             "Test class name",
             "Test class '{0}' should end with '{1}', for example, 'MyClass{1}'",
             "Naming",
