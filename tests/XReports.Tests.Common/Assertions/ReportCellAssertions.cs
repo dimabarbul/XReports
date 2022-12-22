@@ -6,9 +6,9 @@ using FluentAssertions.Common;
 using FluentAssertions.Primitives;
 using XReports.Models;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
-    internal class ReportCellAssertions : ReferenceTypeAssertions<ReportCell, ReportCellAssertions>
+    public class ReportCellAssertions : ReferenceTypeAssertions<ReportCell, ReportCellAssertions>
     {
         public ReportCellAssertions(ReportCell actualValue)
             : base(actualValue)
@@ -49,10 +49,10 @@ namespace XReports.Tests.Assertions
             Dictionary<Type, ReportCellProperty> actualMap = this.BuildPropertiesMap(this.Subject.Properties);
             Dictionary<Type, ReportCellProperty> expectedMap = this.BuildPropertiesMap(expectedProperties);
 
-            foreach ((Type type, ReportCellProperty property) in actualMap)
+            foreach (KeyValuePair<Type, ReportCellProperty> kv in actualMap)
             {
-                expectedMap.Should().ContainKey(type, "property of type {0} should be expected", type);
-                property.Should().IsSameOrEqualTo(expectedMap[type]);
+                expectedMap.Should().ContainKey(kv.Key, "property of type {0} should be expected", kv.Key);
+                kv.Value.Should().IsSameOrEqualTo(expectedMap[kv.Key]);
             }
         }
 

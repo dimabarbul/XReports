@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using XReports.Models;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
-    internal static class ReportCellsAssertionsExtensions
+    public static class ReportCellsAssertionsExtensions
     {
         public static ReportCellsAssertions Should(this IEnumerable<IEnumerable<ReportCell>> reportCells)
         {

@@ -18,11 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj"/>
+    <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
     <ProjectReference Include="..\XReports.Tests.Analyzers\XReports.Tests.Analyzers.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <OutputItemType>Analyzer</OutputItemType>
     </ProjectReference>
+    <ProjectReference Include="..\XReports.Tests.Common\XReports.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,36 @@
     </Compile>
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Basic.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Header.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Properties.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.TitleProperties.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Basic.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.ComplexHeader.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.DataReader.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderCellProcessor.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderProperties.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Properties.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

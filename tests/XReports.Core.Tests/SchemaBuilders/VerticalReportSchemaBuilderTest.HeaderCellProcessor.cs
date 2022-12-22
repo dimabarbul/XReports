@@ -6,9 +6,9 @@ using XReports.Models;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Tests.SchemaBuilders
+namespace XReports.Core.Tests.SchemaBuilders
 {
-    public partial class VerticalReportTest
+    public partial class VerticalReportSchemaBuilderTest
     {
         [Fact]
         public void BuildShouldCallHeaderProcessor()

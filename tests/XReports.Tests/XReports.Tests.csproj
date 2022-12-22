@@ -17,66 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Builders\VerticalReportTest.HeaderCellProcessor.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.HeaderProperties.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.Properties.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.TypedCells.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.Basic.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.ComplexHeader.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\HorizontalReportTest.Basic.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\HorizontalReportTest.Properties.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\HorizontalReportTest.TypedCells.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\VerticalReportTest.SequentialNumberValueProvider.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\HorizontalReportTest.SequentialNumberValueProvider.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Builders\HorizontalReportTest.TitleProperties.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.HeaderCellProcessor.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.HeaderProperties.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.Properties.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.ComplexHeader.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.TitleProperties.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.Header.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.Properties.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\HorizontalReportTest.Basic.cs">
-        <DependentUpon>HorizontalReportTest.cs</DependentUpon>
-      </Compile>
       <Compile Update="DependencyInjection\EpplusWriterDITest.Formatters.cs">
         <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
       </Compile>
@@ -91,12 +31,6 @@
       </Compile>
       <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
         <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.Basic.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\VerticalReportTest.DataReader.cs">
-        <DependentUpon>VerticalReportTest.cs</DependentUpon>
       </Compile>
       <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.AttributeHandler.cs">
         <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
@@ -119,6 +53,7 @@
         <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
         <OutputItemType>Analyzer</OutputItemType>
       </ProjectReference>
+      <ProjectReference Include="..\XReports.Tests.Common\XReports.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>

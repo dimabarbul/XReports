@@ -4,9 +4,9 @@ using FluentAssertions;
 using FluentAssertions.Collections;
 using XReports.Models;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
-    internal class ReportCellsAssertions : GenericCollectionAssertions<IEnumerable<ReportCell>>
+    public class ReportCellsAssertions : GenericCollectionAssertions<IEnumerable<ReportCell>>
     {
         public ReportCellsAssertions(IEnumerable<IEnumerable<ReportCell>> actualValue)
             : base(actualValue)

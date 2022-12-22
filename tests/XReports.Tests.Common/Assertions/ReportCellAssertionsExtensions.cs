@@ -1,8 +1,8 @@
 using XReports.Models;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
-    internal static class ReportCellAssertionsExtensions
+    public static class ReportCellAssertionsExtensions
     {
         public static ReportCellAssertions Should(this ReportCell reportCell, string identifier = null)
         {

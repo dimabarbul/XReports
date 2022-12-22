@@ -5,12 +5,11 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
-using XReports.Tests.Assertions;
 using Xunit;
 
-namespace XReports.Tests.SchemaBuilders
+namespace XReports.Core.Tests.SchemaBuilders
 {
-    public partial class VerticalReportTest
+    public partial class VerticalReportSchemaBuilderTest
     {
         [Fact]
         public void BuildShouldSupportDataReaderAsDataSource()
