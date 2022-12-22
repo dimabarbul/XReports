@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
-        <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
+  <PropertyGroup>
+    <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
+    <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
 
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
@@ -19,6 +19,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
+    <ProjectReference Include="..\XReports.Tests.Analyzers\XReports.Tests.Analyzers.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+    <ProjectReference Include="..\XReports.Tests.Common\XReports.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +32,36 @@
     </Compile>
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Basic.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Header.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Properties.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.TitleProperties.cs">
+      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Basic.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.ComplexHeader.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.DataReader.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderCellProcessor.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderProperties.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Properties.cs">
+      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

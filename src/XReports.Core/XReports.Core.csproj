@@ -1,26 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-        <PackageVersion>0.1.5</PackageVersion>
-        <Authors>Dmitriy Barbul</Authors>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
-        <RootNamespace>XReports</RootNamespace>
-        <Title>XReports.Core</Title>
-        <Description>Extensible library for building reports. Only basic classes and abstractions are included.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <PackageVersion>0.1.5</PackageVersion>
+    <Authors>Dmitriy Barbul</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
+    <RootNamespace>XReports</RootNamespace>
+    <Title>XReports.Core</Title>
+    <Description>Extensible library for building reports. Only basic classes and abstractions are included.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
-        <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
+      <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.10" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.10" />
+  </ItemGroup>
 
 </Project>

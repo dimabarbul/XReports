@@ -16,6 +16,11 @@ namespace XReports.Models
 
         public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
+            if (typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+            {
+                throw new ArgumentException($"Please, use overload with {typeof(IDataReader)} as argument");
+            }
+
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
                 Properties = this.TableProperties,
@@ -28,6 +33,11 @@ namespace XReports.Models
 
         public IReportTable<ReportCell> BuildReportTable(IDataReader dataReader)
         {
+            if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
+            {
+                throw new ArgumentException($"Please, use overload with {typeof(IEnumerable<TSourceEntity>)} as argument");
+            }
+
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
                 Properties = this.TableProperties,
@@ -148,11 +158,6 @@ namespace XReports.Models
 
             public RowsFromDataReaderCollection(VerticalReportSchema<TSourceEntity> schema, IDataReader dataReader)
             {
-                if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
-                {
-                    throw new InvalidOperationException("Report schema should should be of IDataReader");
-                }
-
                 this.schema = schema;
                 this.dataReader = dataReader;
             }
@@ -175,11 +180,6 @@ namespace XReports.Models
 
             public RowsFromDataReaderEnumerator(VerticalReportSchema<TSourceEntity> schema, IDataReader dataReader)
             {
-                if (!typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
-                {
-                    throw new InvalidOperationException("Report schema should should be of IDataReader");
-                }
-
                 this.dataReader = dataReader;
                 this.cellsEnumerator = new CellsFromDataReaderEnumerator(schema);
             }
