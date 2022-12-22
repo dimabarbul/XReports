@@ -13,7 +13,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportOneComplexHeaderRow()
         {
-            VerticalReportSchemaBuilder<int> reportBuilder = new();
+            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
             reportBuilder.AddColumn("Value", i => i);
             reportBuilder.AddComplexHeader(0, "Statistics", "Value");
 
@@ -33,7 +33,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportComplexHeaderRowsByColumnNames()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddComplexHeader(0, "Personal Info", "Name", "Age");
@@ -63,7 +64,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportComplexHeaderRowsByColumnIndexes()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Gender)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age, string Gender)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Gender", x => x.Gender);
@@ -95,7 +97,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnIndexes()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age, string Job, decimal Salary)>();
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
             reportBuilder.AddColumn("Job", x => x.Job);
@@ -128,7 +131,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportComplexHeaderNotSpanningAllColumns()
         {
-            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string Name, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string Name, int Age)>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("Name", x => x.Name);
             reportBuilder.AddColumn("Age", x => x.Age);
@@ -170,7 +174,8 @@ namespace XReports.Core.Tests.SchemaBuilders
              | 2 | Jane       | Doe       | 30  |
              ------------------------------------
              */
-            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
             reportBuilder.AddColumn("#", new SequentialNumberValueProvider());
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
@@ -212,7 +217,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportComplexHeaderWithMultipleGroupsInOneRowByColumnNames()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName, int Age)>();
             reportBuilder.AddColumn("First Name", x => x.FirstName);
             reportBuilder.AddColumn("Last Name", x => x.LastName);
             reportBuilder.AddColumn("Age", x => x.Age);

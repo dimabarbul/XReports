@@ -14,7 +14,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldAddPropertiesInCorrectOrder()
         {
-            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SeveralPropertiesClass> schema = builderHelper.BuildSchema<SeveralPropertiesClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralPropertiesClass>());
@@ -28,7 +28,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldIgnorePropertiesWithoutAttribute()
         {
-            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SomePropertiesWithoutAttribute> schema = builderHelper.BuildSchema<SomePropertiesWithoutAttribute>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
@@ -42,10 +42,10 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldSetCorrectValueTypeForPropertiesWithAttribute()
         {
-            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<PropertiesWithAttributes> schema = builderHelper.BuildSchema<PropertiesWithAttributes>();
 
-            PropertiesWithAttributes item = new()
+            PropertiesWithAttributes item = new PropertiesWithAttributes
             {
                 Id = 1,
                 Name = "John Doe",

@@ -13,8 +13,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldCallHeaderProcessor()
         {
-            VerticalReportSchemaBuilder<int> reportBuilder = new();
-            CustomHeaderCellProcessor processor = new();
+            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
+            CustomHeaderCellProcessor processor = new CustomHeaderCellProcessor();
             reportBuilder.AddColumn("#", i => i)
                 .AddHeaderProcessors(processor);
 

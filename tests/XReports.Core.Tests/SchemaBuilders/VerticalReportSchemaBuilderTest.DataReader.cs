@@ -15,12 +15,12 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportDataReaderAsDataSource()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new();
+            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
 
             builder.AddColumn("Name", x => x.GetString(0));
             builder.AddColumn("Age", x => x.GetInt32(1));
 
-            using DataTable dataTable = new();
+            using DataTable dataTable = new DataTable();
             dataTable.Columns.AddRange(new[]
             {
                 new DataColumn("Name", typeof(string)),
@@ -42,11 +42,11 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldThrowWhenDataReaderIsDataSourceButSourceTypeIsDifferent()
         {
-            VerticalReportSchemaBuilder<string> builder = new();
+            VerticalReportSchemaBuilder<string> builder = new VerticalReportSchemaBuilder<string>();
 
             builder.AddColumn("Value", s => s);
 
-            using DataTable dataTable = new();
+            using DataTable dataTable = new DataTable();
             dataTable.Columns.AddRange(new[]
             {
                 new DataColumn("Value", typeof(string)),
@@ -63,11 +63,11 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldThrowWhenDataReaderIsSourceTypeButDataSourceIsDifferent()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new();
+            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
 
             builder.AddColumn("Value", x => x.GetString(0));
 
-            using DataTable dataTable = new();
+            using DataTable dataTable = new DataTable();
             dataTable.Columns.AddRange(new[]
             {
                 new DataColumn("Value", typeof(string)),

@@ -12,7 +12,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomPropertyWithProcessor()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)
                 .AddProcessors(new CustomPropertyProcessor());
 
@@ -37,7 +37,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomPropertyWithoutProcessor()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)
                 .AddProperties(new CustomProperty());
 

@@ -15,7 +15,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldHaveHeaderWhenNoRows()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
@@ -31,7 +32,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportMultipleRows()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
+            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
+                new VerticalReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
@@ -55,7 +57,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void EnumeratingReportMultipleTimesShouldWork()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new();
+            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]

@@ -15,9 +15,8 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldApplyGlobalProperties()
         {
-            AttributeBasedBuilder helper = new(
-                this.serviceProvider,
-                new[] { new CommonAttributeHandler() });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                this.serviceProvider, new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithGlobalProperties> schema = helper.BuildSchema<WithGlobalProperties>();
 
@@ -50,9 +49,8 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldNotApplyGlobalPropertiesWhenOverwritten()
         {
-            AttributeBasedBuilder helper = new(
-                this.serviceProvider,
-                new[] { new CommonAttributeHandler() });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                this.serviceProvider, new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenGlobalProperties> schema = helper.BuildSchema<WithOverwrittenGlobalProperties>();
 
@@ -83,9 +81,8 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldApplyGlobalPropertiesWhenOverwrittenForHeader()
         {
-            AttributeBasedBuilder helper = new(
-                this.serviceProvider,
-                new[] { new CommonAttributeHandler() });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                this.serviceProvider, new[] { new CommonAttributeHandler() });
 
             IReportSchema<WithOverwrittenForHeaderGlobalProperties> schema = helper.BuildSchema<WithOverwrittenForHeaderGlobalProperties>();
 

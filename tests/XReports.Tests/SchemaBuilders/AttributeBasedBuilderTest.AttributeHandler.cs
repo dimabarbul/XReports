@@ -14,9 +14,8 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldApplyCustomAttributeHandler()
         {
-            AttributeBasedBuilder helper = new(
-                this.serviceProvider,
-                new[] { new CustomAttributeHandler() });
+            AttributeBasedBuilder helper = new AttributeBasedBuilder(
+                this.serviceProvider, new[] { new CustomAttributeHandler() });
 
             IReportSchema<EntityWithCustomAttribute> schema = helper.BuildSchema<EntityWithCustomAttribute>();
 

@@ -14,7 +14,8 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportMultipleRows()
         {
-            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder = new();
+            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
+                new HorizontalReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddRow("First name", x => x.FirstName);
             reportBuilder.AddRow("Last name", x => x.LastName);
 

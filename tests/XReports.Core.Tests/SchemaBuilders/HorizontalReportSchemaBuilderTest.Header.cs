@@ -12,7 +12,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportHeader()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(string.Empty, s => s.Length);
 
@@ -30,7 +30,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldSupportMultipleHeaderRows()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new();
+            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s);
             reportBuilder.AddHeaderRow(string.Empty, s => s.Length);
             reportBuilder.AddHeaderRow(string.Empty, s => s.Substring(0, 1));

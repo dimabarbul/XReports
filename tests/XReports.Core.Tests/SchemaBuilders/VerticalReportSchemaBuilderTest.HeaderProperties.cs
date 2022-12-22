@@ -14,7 +14,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomHeaderProperty()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new();
+            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
                 .AddHeaderProperties(new CustomHeaderProperty());
 
@@ -35,7 +35,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         [Fact]
         public void BuildShouldApplyCustomPropertyForComplexHeaderUsingHeaderName()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new();
+            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddComplexHeader(0, "Complex", "Value");
             reportBuilder.AddComplexHeaderProperties("Complex", new CustomHeaderProperty());

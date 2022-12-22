@@ -13,7 +13,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldSupportOneComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<OneComplexHeaderClass> schema = builderHelper.BuildSchema<OneComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<OneComplexHeaderClass>());
@@ -33,7 +33,7 @@ namespace XReports.Tests.SchemaBuilders
         [Fact]
         public void BuildVerticalReportShouldSupportSeveralLevelsOfComplexHeader()
         {
-            AttributeBasedBuilder builderHelper = new(this.serviceProvider);
+            AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(this.serviceProvider);
             IReportSchema<SeveralLevelsOfComplexHeaderClass> schema = builderHelper.BuildSchema<SeveralLevelsOfComplexHeaderClass>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SeveralLevelsOfComplexHeaderClass>());
