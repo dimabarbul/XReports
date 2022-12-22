@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-        <PackageVersion>0.1.7</PackageVersion>
-        <Title>XReports</Title>
-        <Authors>Dmitriy Barbul</Authors>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
-        <Description>Extensible library for building reports. Includes some general properties, writers etc.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <PackageVersion>0.1.7</PackageVersion>
+    <Title>XReports</Title>
+    <Authors>Dmitriy Barbul</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
+    <Description>Extensible library for building reports. Includes some general properties, writers etc.</Description>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="EPPlus" Version="4.5.3.3" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\XReports.Core\XReports.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XReports.Core\XReports.Core.csproj" />
+  </ItemGroup>
 
 </Project>

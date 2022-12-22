@@ -1,59 +1,59 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
-        <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
+  <PropertyGroup>
+    <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
+    <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
 
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="5.10.3" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-        <PackageReference Include="xunit" Version="2.4.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
-        <PackageReference Include="coverlet.collector" Version="1.2.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="DependencyInjection\EpplusWriterDITest.Formatters.cs">
-        <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="DependencyInjection\EpplusWriterDITest.Writers.cs">
-        <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="DependencyInjection\HtmlStringWriterDITest.Classes.cs">
-        <DependentUpon>HtmlStringWriterDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="DependencyInjection\HtmlStreamWriterDITest.Classes.cs">
-        <DependentUpon>HtmlStreamWriterDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
-        <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.AttributeHandler.cs">
-        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReport.cs">
-        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReportComplexHeader.cs">
-        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
-      </Compile>
-      <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.GlobalProperties.cs">
-        <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="DependencyInjection\EpplusWriterDITest.Formatters.cs">
+      <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DependencyInjection\EpplusWriterDITest.Writers.cs">
+      <DependentUpon>EpplusWriterDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DependencyInjection\HtmlStringWriterDITest.Classes.cs">
+      <DependentUpon>HtmlStringWriterDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DependencyInjection\HtmlStreamWriterDITest.Classes.cs">
+      <DependentUpon>HtmlStreamWriterDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
+      <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.AttributeHandler.cs">
+      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReport.cs">
+      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReportComplexHeader.cs">
+      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.GlobalProperties.cs">
+      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
-      <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
-      <ProjectReference Include="..\XReports.Tests.Analyzers\XReports.Tests.Analyzers.csproj">
-        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-        <OutputItemType>Analyzer</OutputItemType>
-      </ProjectReference>
-      <ProjectReference Include="..\XReports.Tests.Common\XReports.Tests.Common.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
+    <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
+    <ProjectReference Include="..\XReports.Tests.Analyzers\XReports.Tests.Analyzers.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+    <ProjectReference Include="..\XReports.Tests.Common\XReports.Tests.Common.csproj" />
+  </ItemGroup>
 
 </Project>
