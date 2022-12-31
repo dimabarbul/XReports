@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ReportCellProcessors;
 
 namespace XReports.SchemaBuilders
 {
@@ -41,6 +40,8 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties)
         {
+            this.CheckAllPropertiesNotNull(properties);
+
             this.GlobalProperties.AddRange(properties);
 
             return this;
@@ -48,6 +49,8 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties)
         {
+            this.CheckAllPropertiesNotNull(properties);
+
             this.TableProperties.AddRange(properties);
 
             return this;
@@ -55,20 +58,17 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
         {
+            this.CheckAllPropertiesNotNull(properties);
+
             this.currentProvider.CellProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(Func<TSourceEntity, ReportCellProperty> propertySelector)
-        {
-            this.currentProvider.CellProcessors.Add(new DynamicPropertiesCellProcessor<TSourceEntity>(propertySelector));
 
             return this;
         }
 
         public IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
         {
+            this.CheckAllPropertiesNotNull(properties);
+
             this.currentProvider.HeaderProperties.AddRange(properties);
 
             return this;
@@ -130,6 +130,8 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
+            this.CheckAllPropertiesNotNull(properties);
+
             this.CommonComplexHeadersProperties.AddRange(properties);
 
             return this;
@@ -158,17 +160,43 @@ namespace XReports.SchemaBuilders
 
         protected ReportSchemaBuilder<TSourceEntity> InsertCellsProvider(int index, IReportCellsProvider<TSourceEntity> provider)
         {
+            string title = provider.Title;
+            if (title == null)
+            {
+                throw new ArgumentException("Title cannot be null", nameof(provider));
+            }
+
+            if (index < 0 || index > this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             this.currentProvider = new ConfiguredCellsProvider(provider);
 
             this.CellsProviders.Insert(index, this.currentProvider);
-            this.NamedProviders[this.currentProvider.Provider.Title] = this.currentProvider;
+            if (!this.NamedProviders.ContainsKey(title))
+            {
+                this.NamedProviders[title] = this.currentProvider;
+            }
 
             return this;
         }
 
         protected int GetCellsProviderIndex(string title)
         {
-            return this.CellsProviders.IndexOf(this.NamedProviders[title]);
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
+            int index;
+            if (!this.NamedProviders.ContainsKey(title) ||
+                (index = this.CellsProviders.IndexOf(this.NamedProviders[title])) == -1)
+            {
+                throw new ArgumentException($"Cells provider with title {title} is not found", nameof(title));
+            }
+
+            return index;
         }
 
         protected ReportCellProperty[] AddGlobalProperties(List<ReportCellProperty> cellProperties)
@@ -183,6 +211,14 @@ namespace XReports.SchemaBuilders
             }
 
             return result.ToArray();
+        }
+
+        private void CheckAllPropertiesNotNull<TProperty>(TProperty[] properties)
+        {
+            if (properties.Any(p => p == null))
+            {
+                throw new ArgumentException("All properties should not be null", nameof(properties));
+            }
         }
 
         protected class ConfiguredCellsProvider

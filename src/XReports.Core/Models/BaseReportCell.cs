@@ -4,10 +4,10 @@ using System.Globalization;
 
 namespace XReports.Models
 {
-    public abstract class BaseReportCell
+    public class BaseReportCell
     {
         private object value;
-        private readonly List<ReportCellProperty> properties = new List<ReportCellProperty>();
+        private List<ReportCellProperty> properties = new List<ReportCellProperty>();
 
         public int ColumnSpan { get; set; } = 1;
 
@@ -120,7 +120,10 @@ namespace XReports.Models
 
         public BaseReportCell Clone()
         {
-            return (BaseReportCell)this.MemberwiseClone();
+            BaseReportCell reportCell = (BaseReportCell)this.MemberwiseClone();
+            reportCell.properties = new List<ReportCellProperty>(this.properties);
+
+            return reportCell;
         }
     }
 }

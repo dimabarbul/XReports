@@ -1,4 +1,3 @@
-using System;
 using XReports.Models;
 
 namespace XReports.Interfaces
@@ -14,9 +13,6 @@ namespace XReports.Interfaces
         IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties);
 
         IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties);
-
-        IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(
-            Func<TSourceEntity, ReportCellProperty> propertySelector);
 
         IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties);
 

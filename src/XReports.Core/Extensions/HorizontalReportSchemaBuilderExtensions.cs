@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using XReports.Interfaces;
+using XReports.Models;
+using XReports.ReportCellProcessors;
 using XReports.ReportCellsProviders;
 
 namespace XReports.Extensions
@@ -91,6 +94,24 @@ namespace XReports.Extensions
                 new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
 
             return builder.AddHeaderRow(provider);
+        }
+
+        public static IHorizontalReportSchemaBuilder<TEntity> AddDynamicProperties<TEntity>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
+            Func<TEntity, ReportCellProperty> propertySelector)
+        {
+            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertySelector));
+
+            return builder;
+        }
+
+        public static IHorizontalReportSchemaBuilder<TEntity> AddDynamicProperties<TEntity>(
+            this IHorizontalReportSchemaBuilder<TEntity> builder,
+            Func<TEntity, IEnumerable<ReportCellProperty>> propertySelector)
+        {
+            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertySelector));
+
+            return builder;
         }
     }
 }

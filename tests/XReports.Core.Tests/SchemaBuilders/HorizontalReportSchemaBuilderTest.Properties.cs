@@ -39,7 +39,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         {
             HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
             reportBuilder.AddRow("Value", s => s)
-                .AddProperties(new CustomProperty());
+                .AddProperties(new CustomProperty(true));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

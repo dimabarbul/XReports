@@ -45,24 +45,6 @@
     <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.TitleProperties.cs">
       <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Basic.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.ComplexHeader.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.DataReader.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderCellProcessor.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderProperties.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Properties.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>
