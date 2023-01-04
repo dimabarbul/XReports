@@ -10,11 +10,11 @@ namespace XReports.SchemaBuilders
     {
         private ConfiguredCellsProvider currentProvider;
 
+        private readonly ComplexHeaderBuilder complexHeaderBuilder = new ComplexHeaderBuilder();
+
         protected List<ConfiguredCellsProvider> CellsProviders { get; } = new List<ConfiguredCellsProvider>();
 
         protected Dictionary<string, ConfiguredCellsProvider> NamedProviders { get; } = new Dictionary<string, ConfiguredCellsProvider>();
-
-        protected List<ComplexHeader> ComplexHeaders { get; } = new List<ComplexHeader>();
 
         protected Dictionary<string, List<ReportCellProperty>> ComplexHeadersProperties { get; } = new Dictionary<string, List<ReportCellProperty>>();
 
@@ -90,28 +90,28 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, int fromColumn, int? toColumn = null)
         {
-            this.ComplexHeaders.Add(
-                new ComplexHeader()
-                {
-                    RowIndex = rowIndex,
-                    Title = title,
-                    StartIndex = fromColumn,
-                    EndIndex = toColumn ?? fromColumn,
-                });
+            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
 
             return this;
         }
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
-            this.ComplexHeaders.Add(
-                new ComplexHeader()
-                {
-                    RowIndex = rowIndex,
-                    Title = title,
-                    StartIndex = this.CellsProviders.FindIndex(c => c.Provider.Title.Equals(fromColumn, StringComparison.OrdinalIgnoreCase)),
-                    EndIndex = this.CellsProviders.FindIndex(c => c.Provider.Title.Equals(toColumn ?? fromColumn, StringComparison.OrdinalIgnoreCase)),
-                });
+            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
+        {
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
+        {
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
 
             return this;
         }
@@ -211,6 +211,13 @@ namespace XReports.SchemaBuilders
             }
 
             return result.ToArray();
+        }
+
+        protected ComplexHeaderCell[,] BuildComplexHeader(bool transpose)
+        {
+            return this.complexHeaderBuilder.Build(
+                this.CellsProviders.Select(p => p.Provider.Title).ToArray(),
+                transpose);
         }
 
         private void CheckAllPropertiesNotNull<TProperty>(TProperty[] properties)

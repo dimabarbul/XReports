@@ -44,7 +44,7 @@ namespace XReports.SchemaBuilders
                             c.HeaderProcessors.ToArray()))
                     .ToArray(),
                 this.TableProperties.ToArray(),
-                this.ComplexHeaders.ToArray(),
+                this.BuildComplexHeader(transpose: false),
                 this.ComplexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray()),
                 this.CommonComplexHeadersProperties.ToArray());

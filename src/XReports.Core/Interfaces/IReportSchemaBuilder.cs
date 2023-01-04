@@ -27,6 +27,12 @@ namespace XReports.Interfaces
         IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
             int rowIndex, string title, string fromColumn, string toColumn = null);
 
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
+            int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null);
+
+        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
+            int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null);
+
         IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(
             string title, params ReportCellProperty[] properties);
 
