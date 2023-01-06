@@ -4,19 +4,21 @@ namespace XReports.Interfaces
 {
     public interface IHorizontalReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
     {
-        IHorizontalReportSchemaBuilder<TSourceEntity> AddRow(IReportCellsProvider<TSourceEntity> provider);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> AddRow(string title, IReportCellsProvider<TSourceEntity> provider);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> InsertRow(int index, IReportCellsProvider<TSourceEntity> provider);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> InsertRow(int index, string title, IReportCellsProvider<TSourceEntity> provider);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> InsertRowBefore(string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> InsertRowBefore(string beforeTitle, string title, IReportCellsProvider<TSourceEntity> provider);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> ForRow(string title);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> ForRow(string title);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> AddHeaderRow(IReportCellsProvider<TSourceEntity> provider);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> AddHeaderRow(string title,
+            IReportCellsProvider<TSourceEntity> provider);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, IReportCellsProvider<TSourceEntity> provider);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, string title,
+            IReportCellsProvider<TSourceEntity> provider);
 
-        IHorizontalReportSchemaBuilder<TSourceEntity> ForHeaderRow(int index);
+        IReportSchemaCellsProviderBuilder<TSourceEntity> ForHeaderRow(int index);
 
         HorizontalReportSchema<TSourceEntity> BuildSchema();
     }

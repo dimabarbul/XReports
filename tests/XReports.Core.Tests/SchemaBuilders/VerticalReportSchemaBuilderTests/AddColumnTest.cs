@@ -18,7 +18,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
             const string columnName = "TheColumn";
 
-            schemaBuilder.AddColumn(new EmptyCellsProvider<int>(columnName));
+            schemaBuilder.AddColumn(columnName, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
@@ -32,7 +32,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.AddColumn(new EmptyCellsProvider<int>("Column1"));
+            schemaBuilder.AddColumn("Column1", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
@@ -48,7 +48,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
-            schemaBuilder.AddColumn(new EmptyCellsProvider<int>(title));
+            schemaBuilder.AddColumn(title, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
@@ -62,7 +62,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
-            Action action = () => schemaBuilder.AddColumn(new EmptyCellsProvider<int>(null));
+            Action action = () => schemaBuilder.AddColumn(null, new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -73,7 +73,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             for (int i = 0; i < columnsCount; i++)
             {
-                schemaBuilder.AddColumn(new EmptyCellsProvider<int>($"Column{i + 1}"));
+                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellsProvider<int>());
             }
 
             return schemaBuilder;

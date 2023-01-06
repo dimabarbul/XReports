@@ -67,7 +67,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
                 .AddProperties(centerAlignment);
             reportBuilder.AddRow("Age", e => e.Age)
                 .AddHeaderProperties(bold);
-            reportBuilder.AddRow(new EmptyCellsProvider<Entity>("Score"))
+            reportBuilder.AddRow("Score", new EmptyCellsProvider<Entity>())
                 .AddHeaderProperties(bold);
             reportBuilder.AddRow("Min. Score", e => e.MinScore)
                 .AddHeaderProperties(indentation);

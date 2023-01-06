@@ -44,10 +44,9 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         private IReportTable<ReportCell> BuildReport()
         {
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
-            reportBuilder
-                .AddColumn("First Name", e => e.FirstName)
-                .AddColumn("Last Name", e => e.LastName)
-                .AddColumn("Email", e => e.Email)
+            reportBuilder.AddColumn("First Name", e => e.FirstName);
+            reportBuilder.AddColumn("Last Name", e => e.LastName);
+            reportBuilder.AddColumn("Email", e => e.Email)
                 .AddProperties(new ReplaceEmptyProperty("-"));
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(new ReplaceEmptyProperty("(no score)"));

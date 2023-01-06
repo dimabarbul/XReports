@@ -16,7 +16,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group1", 0, 1);
             this.builder.AddGroup(0, "Group2", 2, 3);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..4], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..4]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -39,21 +39,23 @@ namespace XReports.Core.Tests
         public void AddGroupByColumnNamesShouldAddHeaderWithMultipleGroupsInOneRow()
         {
             this.builder.AddGroup(0, "Group1", "Column1", "Column2");
-            this.builder.AddGroup(0, "Group2", "Column3");
+            this.builder.AddGroup(0, "Group2", "Column3", "Column4");
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..4]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
                 {
                     this.CreateComplexCell("Group1", columnSpan: 2),
                     null,
-                    this.CreateComplexCell("Group2"),
+                    this.CreateComplexCell("Group2", columnSpan: 2),
+                    null,
                 },
                 {
-                    this.CreateRegularCell("Column1"),
-                    this.CreateRegularCell("Column2"),
-                    this.CreateRegularCell("Column3"),
+                    this.CreateRegularCell(this.columnNames[0]),
+                    this.CreateRegularCell(this.columnNames[1]),
+                    this.CreateRegularCell(this.columnNames[2]),
+                    this.CreateRegularCell(this.columnNames[3]),
                 },
             });
         }
@@ -63,7 +65,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", 1, 2);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -85,7 +87,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", "Column2", "Column3");
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -102,22 +104,22 @@ namespace XReports.Core.Tests
             });
         }
 
+        /// <remarks>
+        /// |---------------------------------------|
+        /// | Column1 |            Group1           |
+        /// |         |-----------------------------|
+        /// |         |       Group2      | Column4 |
+        /// |         |-------------------|         |
+        /// |         | Column2 | Column3 |         |
+        /// |---------------------------------------|
+        /// </remarks>
         [Fact]
         public void AddGroupShouldAddMultipleComplexHeaderRows()
         {
-            /*
-             |---------------------------------------|
-             | Column1 |            Group1           |
-             |         |-----------------------------|
-             |         |       Group2      | Column4 |
-             |         |-------------------|         |
-             |         | Column2 | Column3 |         |
-             |---------------------------------------|
-             */
             this.builder.AddGroup(0, "Group1", "Column2", "Column4");
             this.builder.AddGroup(1, "Group2", "Column2", "Column3");
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..4], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..4]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -161,7 +163,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", startIndex, endIndex);
 
-            Action action = () => this.builder.Build(this.columnNames[..2], false);
+            Action action = () => this.builder.Build(this.columnNames[..2]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -188,7 +190,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(1, "Group1", 0, 1);
             this.builder.AddGroup(4, "Group2", 0, 1);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -213,7 +215,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(1, "Group1", "Column1", "Column2");
             this.builder.AddGroup(4, "Group2", "Column1", "Column2");
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -237,7 +239,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", "Column1".ToUpperInvariant());
 
-            Action action = () => this.builder.Build(this.columnNames[..1], false);
+            Action action = () => this.builder.Build(this.columnNames[..1]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -247,7 +249,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", "ColumnX");
 
-            Action action = () => this.builder.Build(this.columnNames[..1], false);
+            Action action = () => this.builder.Build(this.columnNames[..1]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -261,7 +263,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group1", group1Start, group1End);
             this.builder.AddGroup(0, "Group2", group2Start, group2End);
 
-            Action action = () => this.builder.Build(this.columnNames[..4], false);
+            Action action = () => this.builder.Build(this.columnNames[..4]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -276,7 +278,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group1", columns[group1Start], columns[group1End]);
             this.builder.AddGroup(0, "Group2", columns[group2Start], columns[group2End]);
 
-            Action action = () => this.builder.Build(columns, false);
+            Action action = () => this.builder.Build(columns);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -287,7 +289,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, 2, "Group1", 0, 2);
             this.builder.AddGroup(1, "Group2", 2);
 
-            Action action = () => this.builder.Build(this.columnNames[..3], false);
+            Action action = () => this.builder.Build(this.columnNames[..3]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -299,7 +301,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, 2, "Group1", columns[0], columns[2]);
             this.builder.AddGroup(1, "Group2", columns[2]);
 
-            Action action = () => this.builder.Build(columns, false);
+            Action action = () => this.builder.Build(columns);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -342,7 +344,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group1", higherRowGroupStart, higherRowGroupEnd);
             this.builder.AddGroup(1, "Group2", lowerRowGroupStart, lowerRowGroupEnd);
 
-            Action action = () => this.builder.Build(this.columnNames[..4], false);
+            Action action = () => this.builder.Build(this.columnNames[..4]);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -359,7 +361,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group1", columns[higherRowGroupStart], columns[higherRowGroupEnd]);
             this.builder.AddGroup(1, "Group2", columns[lowerRowGroupStart], columns[lowerRowGroupEnd]);
 
-            Action action = () => this.builder.Build(columns, false);
+            Action action = () => this.builder.Build(columns);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -389,7 +391,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, 2, "Group1", 0);
             this.builder.AddGroup(0, "Group2", 1);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..2]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -416,7 +418,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, 2, "Group1", columns[0]);
             this.builder.AddGroup(0, "Group2", columns[1]);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(columns, false);
+            ComplexHeaderCell[,] cells = this.builder.Build(columns);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -452,7 +454,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group2", 2, 2);
             this.builder.AddGroup(1, "Group3", 2, 2);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -483,7 +485,7 @@ namespace XReports.Core.Tests
             this.builder.AddGroup(0, "Group2", columns[2], columns[2]);
             this.builder.AddGroup(1, "Group3", columns[2], columns[2]);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(columns, false);
+            ComplexHeaderCell[,] cells = this.builder.Build(columns);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -510,7 +512,7 @@ namespace XReports.Core.Tests
         {
             this.builder.AddGroup(0, "Group", 2, 0);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3], false);
+            ComplexHeaderCell[,] cells = this.builder.Build(this.columnNames[..3]);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {
@@ -533,7 +535,7 @@ namespace XReports.Core.Tests
             string[] columns = this.columnNames[..3];
             this.builder.AddGroup(0, "Group", columns[2], columns[0]);
 
-            ComplexHeaderCell[,] cells = this.builder.Build(columns, false);
+            ComplexHeaderCell[,] cells = this.builder.Build(columns);
 
             cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
             {

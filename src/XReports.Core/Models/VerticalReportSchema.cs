@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using XReports.Interfaces;
-using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 
 namespace XReports.Models
 {

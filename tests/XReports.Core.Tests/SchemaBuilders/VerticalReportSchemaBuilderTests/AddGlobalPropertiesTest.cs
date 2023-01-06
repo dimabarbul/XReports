@@ -1,6 +1,4 @@
-using System;
 using System.Globalization;
-using FluentAssertions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.ReportCellsProviders;
@@ -10,14 +8,15 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 {
+    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddGlobalPropertiesTest"/>
     public class AddGlobalPropertiesTest
     {
         [Fact]
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRows()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, int>("Value", x => x));
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, string>("As string", x => x.ToString(CultureInfo.InvariantCulture)));
+            schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
+            schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
 
             schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
 
@@ -60,60 +59,6 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                     },
                 },
             });
-        }
-
-        [Fact]
-        public void AddGlobalPropertiesShouldAddOnlyPropertiesOfTypesNotAddedPreviously()
-        {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, int>("Value", x => x))
-                .AddProperties(new CustomProperty1() { Value = true });
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, string>("As string", x => x.ToString(CultureInfo.InvariantCulture)))
-                .AddProperties(new CustomProperty2() { Value = true });
-
-            schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
-
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[]
-            {
-                1,
-            });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
-            {
-                new[] {"Value", "As string" },
-            });
-            table.Rows.Should().BeEquivalentTo(new[]
-            {
-                new object[]
-                {
-                    new ReportCellData(1)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new CustomProperty1() { Value = true },
-                            new CustomProperty2(),
-                        },
-                    },
-                    new ReportCellData("1")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new CustomProperty1(),
-                            new CustomProperty2() { Value = true },
-                        },
-                    },
-                },
-            });
-        }
-
-        [Fact]
-        public void AddGlobalPropertiesShouldThrowWhenSomePropertyIsNull()
-        {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, int>("Value", x => x));
-
-            Action action = () => schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2(), null);
-
-            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private class CustomProperty1 : ReportCellProperty

@@ -7,13 +7,6 @@ namespace XReports.ReportCellsProviders
     {
         private readonly ReportCell reportCell = new ReportCell();
 
-        protected ReportCellsProvider(string title)
-        {
-            this.Title = title;
-        }
-
-        public string Title { get; }
-
         public abstract ReportCell GetCell(TSourceEntity entity);
 
         protected ReportCell CreateCell(TValue value)

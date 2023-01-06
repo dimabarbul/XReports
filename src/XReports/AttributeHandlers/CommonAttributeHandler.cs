@@ -1,13 +1,16 @@
 using XReports.Attributes;
+using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.SchemaBuilders;
 
 namespace XReports.AttributeHandlers
 {
     public class CommonAttributeHandler : AttributeHandler<BasePropertyAttribute>
     {
-        protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, BasePropertyAttribute attribute)
+        protected override void HandleAttribute<TSourceEntity>(
+            IReportSchemaBuilder<TSourceEntity> builder,
+            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            BasePropertyAttribute attribute)
         {
             ReportCellProperty property = this.GetCellProperty(attribute);
             if (property == null)
@@ -17,11 +20,11 @@ namespace XReports.AttributeHandlers
 
             if (attribute.IsHeader)
             {
-                builder.AddHeaderProperties(property);
+                cellsProviderBuilder.AddHeaderProperties(property);
             }
             else
             {
-                builder.AddProperties(property);
+                cellsProviderBuilder.AddProperties(property);
             }
         }
 

@@ -17,8 +17,8 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             CustomTableProperty1 tableProperty1 = new CustomTableProperty1();
             CustomTableProperty2 tableProperty2 = new CustomTableProperty2();
-            reportBuilder.AddColumn("Value", s => s)
-                .AddTableProperties(tableProperty1, tableProperty2);
+            reportBuilder.AddColumn("Value", s => s);
+            reportBuilder.AddTableProperties(tableProperty1, tableProperty2);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {
@@ -43,8 +43,8 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
             CustomTableProperty1 tableProperty1 = new CustomTableProperty1();
             CustomTableProperty1 tableProperty2 = new CustomTableProperty1();
-            reportBuilder.AddColumn("Value", s => s)
-                .AddTableProperties(tableProperty1, tableProperty2);
+            reportBuilder.AddColumn("Value", s => s);
+            reportBuilder.AddTableProperties(tableProperty1, tableProperty2);
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
             {

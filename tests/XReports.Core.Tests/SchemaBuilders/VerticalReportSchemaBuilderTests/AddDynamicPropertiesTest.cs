@@ -8,15 +8,17 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 {
+    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddDynamicPropertiesTest"/>
     public class AddDynamicPropertiesTest
     {
         [Fact]
         public void AddDynamicPropertiesShouldAddProperties()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, int>("Column", x => x));
+            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
+                schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
-            schemaBuilder.AddDynamicProperties(x => x > 0 ? new CustomProperty2() : new CustomProperty1());
+            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[] { 0, 1 });
             table.HeaderRows.Should().BeEquivalentTo(new[]
@@ -37,36 +39,6 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                     new ReportCellData(1)
                     {
                         Properties = new[] { new CustomProperty2() },
-                    },
-                },
-            });
-        }
-
-        [Fact]
-        public void AddDynamicPropertiesShouldIgnoreNulls()
-        {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn(new ComputedValueReportCellsProvider<int, int>("Column", x => x));
-
-            schemaBuilder.AddDynamicProperties(_ => new ReportCellProperty[]
-            {
-                new CustomProperty1(),
-                new CustomProperty2(),
-                null,
-            });
-
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[] { 0 });
-            table.Rows.Should().BeEquivalentTo(new[]
-            {
-                new object[]
-                {
-                    new ReportCellData(0)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new CustomProperty1(),
-                            new CustomProperty2(),
-                        },
                     },
                 },
             });

@@ -1,32 +1,28 @@
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports.Core.Tests.Extensions;
-using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddProcessorsTest"/>
     public class AddProcessorsTest
     {
         [Fact]
         public void AddProcessorsShouldAddProcessorsToBeCalledDuringForEachRow()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+                "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
-            reportBuilder.AddColumn("Value", s => s)
-                .AddProcessors(processor1, processor2);
+            builder.AddProcessors(processor1, processor2);
+            ReportSchemaCellsProvider<string> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
-            {
-                "Test",
-                "Test2",
-            });
-            table.Enumerate();
+            provider.CreateCell("Test");
+            provider.CreateCell("Test2");
 
             processor1.ProcessedData.Should().Equal("Test", "Test2");
             processor2.ProcessedData.Should().Equal("Test", "Test2");

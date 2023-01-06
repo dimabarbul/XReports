@@ -47,9 +47,8 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             ThreeColorHeatmapProperty heatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 50, Color.Yellow, 100, Color.Lime);
 
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
-            reportBuilder
-                .AddColumn("Name", e => e.Name)
-                .AddColumn("Score", e => e.Score)
+            reportBuilder.AddColumn("Name", e => e.Name);
+            reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(heatmapProperty);
 
             IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());

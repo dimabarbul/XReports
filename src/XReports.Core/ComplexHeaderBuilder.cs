@@ -78,15 +78,16 @@ namespace XReports
                 ));
         }
 
-        public ComplexHeaderCell[,] Build(IReadOnlyList<string> columnNames, bool transpose)
+        public ComplexHeaderCell[,] Build(IReadOnlyList<string> columnNames)
         {
             this.Validate(columnNames);
             this.NormalizeRowIndexes();
             ComplexHeaderCell[,] header = this.BuildHeaderCells(columnNames);
             this.MoveSpanHeaderTitleUp(header);
             this.ValidateAllCellsFilled(header);
+            this.CleanUpHeaderCells(header);
 
-            return transpose ? this.GetTransposedHeaderCells(header) : this.GetHeaderCells(header);
+            return header;
         }
 
         /// <summary>
@@ -128,51 +129,24 @@ namespace XReports
             return headerCells;
         }
 
-        private ComplexHeaderCell[,] GetHeaderCells(ComplexHeaderCell[,] header)
+        private void CleanUpHeaderCells(ComplexHeaderCell[,] header)
         {
             int rowsCount = header.GetLength(0);
             int columnsCount = header.GetLength(1);
-            ComplexHeaderCell[,] result = new ComplexHeaderCell[rowsCount, columnsCount];
 
             for (int rowIndex = 0; rowIndex < rowsCount; rowIndex++)
             {
                 for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
                 {
-                    if (header[rowIndex, columnIndex] == null ||
-                        ReferenceEquals(header[rowIndex, columnIndex], this.spannedCell))
+                    if (ReferenceEquals(header[rowIndex, columnIndex], this.spannedCell))
                     {
-                        continue;
+                        header[rowIndex, columnIndex] = null;
                     }
-
-                    result[rowIndex, columnIndex] = header[rowIndex, columnIndex];
                 }
             }
-
-            return result;
         }
 
-        private ComplexHeaderCell[,] GetTransposedHeaderCells(ComplexHeaderCell[,] header)
-        {
-            int rowsCount = header.GetLength(0);
-            int columnsCount = header.GetLength(1);
-            ComplexHeaderCell[,] result = new ComplexHeaderCell[columnsCount, rowsCount];
 
-            for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
-            {
-                for (int rowIndex = 0; rowIndex < rowsCount; rowIndex++)
-                {
-                    if (header[rowIndex, columnIndex] == null ||
-                        ReferenceEquals(header[rowIndex, columnIndex], this.spannedCell))
-                    {
-                        continue;
-                    }
-
-                    result[columnIndex, rowIndex] = header[rowIndex, columnIndex];
-                }
-            }
-
-            return result;
-        }
 
         private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
         {

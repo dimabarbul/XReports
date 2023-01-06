@@ -2,10 +2,11 @@ using System.Runtime.CompilerServices;
 using XReports.Interfaces;
 using XReports.Models;
 
-namespace XReports.ReportCellsProviders
+namespace XReports.ReportSchemaCellsProviders
 {
     public class ReportSchemaCellsProvider<TSourceEntity>
     {
+        private readonly string title;
         private readonly IReportCellsProvider<TSourceEntity> provider;
         private readonly ReportCellProperty[] cellProperties;
         private readonly ReportCellProperty[] headerProperties;
@@ -15,12 +16,14 @@ namespace XReports.ReportCellsProviders
         private readonly ReportCell headerCell = new ReportCell();
 
         public ReportSchemaCellsProvider(
+            string title,
             IReportCellsProvider<TSourceEntity> provider,
             ReportCellProperty[] cellProperties,
             ReportCellProperty[] headerProperties,
             IReportCellProcessor<TSourceEntity>[] cellProcessors,
             IReportCellProcessor<TSourceEntity>[] headerProcessors)
         {
+            this.title = title;
             this.provider = provider;
             this.cellProperties = cellProperties;
             this.headerProperties = headerProperties;
@@ -41,7 +44,7 @@ namespace XReports.ReportCellsProviders
         public ReportCell CreateHeaderCell()
         {
             this.headerCell.Clear();
-            this.headerCell.SetValue(this.provider.Title);
+            this.headerCell.SetValue(this.title);
 
             this.AddHeaderProperties(this.headerCell);
             this.RunHeaderProcessors(this.headerCell);

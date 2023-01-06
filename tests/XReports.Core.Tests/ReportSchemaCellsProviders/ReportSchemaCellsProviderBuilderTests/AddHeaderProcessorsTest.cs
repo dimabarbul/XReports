@@ -1,26 +1,27 @@
-using System.Linq;
+using System;
 using FluentAssertions;
-using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddHeaderProcessorsTest"/>
     public class AddHeaderProcessorsTest
     {
         [Fact]
         public void AddHeaderProcessorsShouldAddProcessorsToBeCalledForHeaderCell()
         {
-            VerticalReportSchemaBuilder<int> reportBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+                "#", new ComputedValueReportCellsProvider<int, int>(i => i));
             CustomHeaderCellProcessor1 processor1 = new CustomHeaderCellProcessor1();
             CustomHeaderCellProcessor2 processor2 = new CustomHeaderCellProcessor2();
-            reportBuilder.AddColumn("#", i => i)
-                .AddHeaderProcessors(processor1, processor2);
 
-            IReportTable<ReportCell> _ = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            builder.AddHeaderProcessors(processor1, processor2);
+
+            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            provider.CreateHeaderCell();
 
             processor1.CallsCount.Should().Be(1);
             processor2.CallsCount.Should().Be(1);

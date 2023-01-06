@@ -1,117 +1,96 @@
 using System;
-using System.Collections.Generic;
 using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellProcessors;
 using XReports.ReportCellsProviders;
 
 namespace XReports.Extensions
 {
     public static class HorizontalReportSchemaBuilderExtensions
     {
-        public static IHorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> AddRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.AddRow(provider);
+            return builder.AddRow(title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> AddRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> AddRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.AddRow(provider);
+            return builder.AddRow(title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.InsertRow(index, provider);
+            return builder.InsertRow(index, title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> InsertRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.InsertRow(index, provider);
+            return builder.InsertRow(index, title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.InsertRowBefore(beforeTitle, provider);
+            return builder.InsertRowBefore(beforeTitle, title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertRowBefore<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.InsertRowBefore(beforeTitle, provider);
+            return builder.InsertRowBefore(beforeTitle, title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertHeaderRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             int rowIndex,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
             ComputedValueReportCellsProvider<TEntity, TValue> provider =
-                new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+                new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.InsertHeaderRow(rowIndex, provider);
+            return builder.InsertHeaderRow(rowIndex, title, provider);
         }
 
-        public static IHorizontalReportSchemaBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> AddHeaderRow<TEntity, TValue>(
             this IHorizontalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
             ComputedValueReportCellsProvider<TEntity, TValue> provider =
-                new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+                new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.AddHeaderRow(provider);
-        }
-
-        public static IHorizontalReportSchemaBuilder<TEntity> AddDynamicProperties<TEntity>(
-            this IHorizontalReportSchemaBuilder<TEntity> builder,
-            Func<TEntity, ReportCellProperty> propertySelector)
-        {
-            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertySelector));
-
-            return builder;
-        }
-
-        public static IHorizontalReportSchemaBuilder<TEntity> AddDynamicProperties<TEntity>(
-            this IHorizontalReportSchemaBuilder<TEntity> builder,
-            Func<TEntity, IEnumerable<ReportCellProperty>> propertySelector)
-        {
-            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertySelector));
-
-            return builder;
+            return builder.AddHeaderRow(title, provider);
         }
     }
 }

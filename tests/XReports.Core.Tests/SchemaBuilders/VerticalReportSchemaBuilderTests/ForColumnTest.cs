@@ -17,10 +17,10 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2");
 
-            schemaBuilder.ForColumn("Column1");
+            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
 
             CustomProperty property = new CustomProperty();
-            schemaBuilder.AddHeaderProperties(property);
+            cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
             {
@@ -71,10 +71,10 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2", "Column1");
 
-            schemaBuilder.ForColumn("Column1");
+            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
 
             CustomProperty property = new CustomProperty();
-            schemaBuilder.AddHeaderProperties(property);
+            cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
             {
@@ -96,7 +96,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             foreach (string column in columns)
             {
-                schemaBuilder.AddColumn(new EmptyCellsProvider<int>(column));
+                schemaBuilder.AddColumn(column, new EmptyCellsProvider<int>());
             }
 
             return schemaBuilder;

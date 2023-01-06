@@ -114,7 +114,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         public void AddComplexHeaderPropertiesWithTitleShouldAddPropertiesToAllComplexHeaderCellsWithTheTitleCaseSensitively()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
-            schemaBuilder.AddColumn(new EmptyCellsProvider<int>("TheGroup"));
+            schemaBuilder.AddColumn("TheGroup", new EmptyCellsProvider<int>());
             schemaBuilder
                 .AddComplexHeader(0, "TheGroup", 0, 2)
                 .AddComplexHeader(1, "thegroup", 0, 1)
@@ -226,7 +226,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             for (int i = 0; i < columnsCount; i++)
             {
-                schemaBuilder.AddColumn(new EmptyCellsProvider<int>($"Column{i + 1}"));
+                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellsProvider<int>());
             }
 
             return schemaBuilder;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using XReports.Interfaces;
-using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 
 namespace XReports.Models
 {
@@ -8,7 +8,6 @@ namespace XReports.Models
     {
         protected IReadOnlyList<ReportSchemaCellsProvider<TSourceEntity>> CellsProviders { get; }
         protected IReadOnlyList<ReportTableProperty> TableProperties { get; }
-
 
 #pragma warning disable CA1819 // OK for complex header
         protected ComplexHeaderCell[,] ComplexHeader { get; }

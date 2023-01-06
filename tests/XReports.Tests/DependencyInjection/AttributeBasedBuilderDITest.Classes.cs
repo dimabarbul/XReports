@@ -1,6 +1,5 @@
 using System;
 using XReports.Interfaces;
-using XReports.SchemaBuilders;
 
 namespace XReports.Tests.DependencyInjection
 {
@@ -12,7 +11,10 @@ namespace XReports.Tests.DependencyInjection
 
         private class MyAttributeHandler : IMyAttributeHandler
         {
-            public void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
+            public void Handle<TSourceEntity>(
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
+                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                Attribute attribute)
             {
                 throw new NotImplementedException();
             }
@@ -20,7 +22,10 @@ namespace XReports.Tests.DependencyInjection
 
         private class MyAnotherAttributeHandler : IMyAttributeHandler
         {
-            public void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
+            public void Handle<TSourceEntity>(
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
+                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                Attribute attribute)
             {
                 throw new NotImplementedException();
             }
@@ -32,7 +37,10 @@ namespace XReports.Tests.DependencyInjection
             {
             }
 
-            public void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
+            public void Handle<TSourceEntity>(
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
+                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                Attribute attribute)
             {
                 throw new NotImplementedException();
             }
