@@ -12,6 +12,8 @@ namespace XReports.Interfaces
 
         IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(string title);
 
+        IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(int index);
+
         VerticalReportSchema<TSourceEntity> BuildSchema();
     }
 }

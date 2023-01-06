@@ -12,6 +12,8 @@ namespace XReports.Interfaces
 
         IReportSchemaCellsProviderBuilder<TSourceEntity> ForRow(string title);
 
+        IReportSchemaCellsProviderBuilder<TSourceEntity> ForRow(int index);
+
         IReportSchemaCellsProviderBuilder<TSourceEntity> AddHeaderRow(string title,
             IReportCellsProvider<TSourceEntity> provider);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
@@ -24,6 +25,16 @@ namespace XReports.SchemaBuilders
         public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(string title)
         {
             return this.GetProvider(title);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(int index)
+        {
+            if (index < 0 || index >= this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this.CellsProviders[index];
         }
 
         public VerticalReportSchema<TSourceEntity> BuildSchema()

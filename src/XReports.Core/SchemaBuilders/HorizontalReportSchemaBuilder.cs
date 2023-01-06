@@ -31,6 +31,16 @@ namespace XReports.SchemaBuilders
             return this.GetProvider(title);
         }
 
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForRow(int index)
+        {
+            if (index < 0 || index >= this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this.CellsProviders[index];
+        }
+
         public IReportSchemaCellsProviderBuilder<TSourceEntity> AddHeaderRow(string title, IReportCellsProvider<TSourceEntity> provider)
         {
             return this.InsertHeaderRow(this.headerProviders.Count, title, provider);
