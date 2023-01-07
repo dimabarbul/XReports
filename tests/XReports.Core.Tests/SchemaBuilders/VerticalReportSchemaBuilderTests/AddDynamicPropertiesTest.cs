@@ -18,7 +18,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
-            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? new CustomProperty2() : new CustomProperty1());
+            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[] { 0, 1 });
             table.HeaderRows.Should().BeEquivalentTo(new[]

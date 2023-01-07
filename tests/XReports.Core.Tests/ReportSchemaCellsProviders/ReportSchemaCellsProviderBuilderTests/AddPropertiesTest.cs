@@ -19,7 +19,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             builder.AddProperties(new CustomProperty1(), new CustomProperty2());
 
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
-            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             provider.CreateCell(0).Should().Be(new ReportCellData(0)
             {
                 Properties = expectedProperties,
@@ -38,7 +38,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty1());
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty1() };
             provider.CreateCell(0).Should().Be(new ReportCellData(0)
             {

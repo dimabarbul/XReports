@@ -19,7 +19,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
             builder.AddProcessors(processor1, processor2);
-            ReportSchemaCellsProvider<string> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
 
             provider.CreateCell("Test");
             provider.CreateCell("Test2");

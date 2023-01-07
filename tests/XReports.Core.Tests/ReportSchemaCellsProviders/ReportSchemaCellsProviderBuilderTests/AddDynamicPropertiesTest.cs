@@ -16,9 +16,9 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
                 "Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
-            builder.AddDynamicProperties(x => x > 0 ? new CustomProperty2() : new CustomProperty1());
+            builder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
             ReportCell zeroCell = (ReportCell)provider.CreateCell(0).Clone();
             ReportCell oneCell = (ReportCell)provider.CreateCell(1).Clone();
@@ -46,7 +46,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
                 null,
             });
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell cell = provider.CreateCell(0);
 
             cell.Should().Be(new ReportCellData(0)

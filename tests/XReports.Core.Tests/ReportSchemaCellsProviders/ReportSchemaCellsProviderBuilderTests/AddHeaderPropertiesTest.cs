@@ -18,7 +18,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
 
-            ReportSchemaCellsProvider<string> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Be(new ReportCellData("Value")
             {
@@ -38,7 +38,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty1());
 
-            ReportSchemaCellsProvider<string> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Be(new ReportCellData("Value")
             {

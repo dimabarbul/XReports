@@ -20,7 +20,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             builder.AddHeaderProcessors(processor1, processor2);
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(ArraySegment<ReportCellProperty>.Empty);
+            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             provider.CreateHeaderCell();
 
             processor1.CallsCount.Should().Be(1);

@@ -67,7 +67,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
         private class CustomProperty1 : ReportCellProperty
         {
-            public bool Value { get; init; }
+            public bool Value { get; set; }
         }
 
         private class CustomProperty2 : ReportCellProperty

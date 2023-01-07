@@ -63,12 +63,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
         private class CustomProperty1 : ReportCellProperty
         {
-            public bool Value { get; init; }
+            public bool Value { get; set; }
         }
 
         private class CustomProperty2 : ReportCellProperty
         {
-            public bool Value { get; init; }
+            public bool Value { get; set; }
         }
     }
 }
