@@ -17,6 +17,10 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
     <PackageReference Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net48'" Include="Microsoft.VisualStudio.TestPlatform.ObjectModel" Version="14.0.0" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0'">
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\XReports.Core\XReports.Core.csproj" />
