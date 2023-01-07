@@ -166,5 +166,29 @@ namespace XReports.Core.Tests.Models
                 new object[]{ "String", 6 },
             });
         }
+
+        [Fact]
+        public void BuildReportTableShouldThrowWhenDataReaderIsClosed()
+        {
+            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+
+            builder.AddColumn("Value", x => x.GetString(0));
+
+            using (DataTable dataTable = new DataTable())
+            {
+                dataTable.Columns.AddRange(new[] { new DataColumn("Value", typeof(string)), });
+                dataTable.Rows.Add("John");
+                dataTable.Rows.Add("Jane");
+
+                using (IDataReader dataReader = new DataTableReader(dataTable))
+                {
+                    dataReader.Close();
+
+                    Action action = () => _ = builder.BuildSchema().BuildReportTable(dataReader);
+
+                    action.Should().ThrowExactly<InvalidOperationException>();
+                }
+            }
+        }
     }
 }

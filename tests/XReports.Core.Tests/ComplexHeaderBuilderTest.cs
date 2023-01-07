@@ -255,6 +255,30 @@ namespace XReports.Core.Tests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
+        [Fact]
+        public void AddGroupByColumnNamesShouldTakeFirstColumnWhenColumnNameIsDuplicated()
+        {
+            this.builder.AddGroup(0, "Group", "Column1", "Column3");
+
+            ComplexHeaderCell[,] cells = this.builder.Build(new[] { "Column1", "Column2", "Column1", "Column3" });
+
+            cells.Should().BeEquivalentTo(new ComplexHeaderCell[,]
+            {
+                {
+                    this.CreateComplexCell("Group", columnSpan: 4),
+                    null,
+                    null,
+                    null,
+                },
+                {
+                    this.CreateRegularCell("Column1"),
+                    this.CreateRegularCell("Column2"),
+                    this.CreateRegularCell("Column1"),
+                    this.CreateRegularCell("Column3"),
+                },
+            });
+        }
+
         [Theory]
         [InlineData(0, 3, 1, 2)]
         [InlineData(0, 2, 1, 3)]
