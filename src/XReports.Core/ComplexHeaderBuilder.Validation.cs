@@ -49,5 +49,13 @@ namespace XReports
                 throw new ArgumentException(errorMessage);
             }
         }
+
+        private void ValidateNumberNotNegative(string parameterName, int parameter)
+        {
+            if (parameter < 0)
+            {
+                throw new ArgumentOutOfRangeException(parameterName, $"Parameter should not be negative");
+            }
+        }
     }
 }

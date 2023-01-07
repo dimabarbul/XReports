@@ -24,7 +24,7 @@ namespace XReports.ReportSchemaCellsProviders
 
         public IReportSchemaCellsProviderBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
         {
-            this.CheckAllPropertiesNotNull(properties);
+            this.ValidateAllItemsNotNull(properties);
 
             this.cellProperties.AddRange(properties);
 
@@ -33,7 +33,7 @@ namespace XReports.ReportSchemaCellsProviders
 
         public IReportSchemaCellsProviderBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
         {
-            this.CheckAllPropertiesNotNull(properties);
+            this.ValidateAllItemsNotNull(properties);
 
             this.headerProperties.AddRange(properties);
 
@@ -42,6 +42,8 @@ namespace XReports.ReportSchemaCellsProviders
 
         public IReportSchemaCellsProviderBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
         {
+            this.ValidateAllItemsNotNull(processors);
+
             this.cellProcessors.AddRange(processors);
 
             return this;
@@ -49,6 +51,8 @@ namespace XReports.ReportSchemaCellsProviders
 
         public IReportSchemaCellsProviderBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
         {
+            this.ValidateAllItemsNotNull(processors);
+
             this.headerProcessors.AddRange(processors);
 
             return this;
@@ -56,7 +60,7 @@ namespace XReports.ReportSchemaCellsProviders
 
         public ReportSchemaCellsProvider<TSourceEntity> Build(IReadOnlyList<ReportCellProperty> globalProperties)
         {
-            this.CheckAllPropertiesNotNull(globalProperties);
+            this.ValidateAllItemsNotNull(globalProperties);
 
             return new ReportSchemaCellsProvider<TSourceEntity>(
                 this.Title,
@@ -81,11 +85,11 @@ namespace XReports.ReportSchemaCellsProviders
             return result.ToArray();
         }
 
-        private void CheckAllPropertiesNotNull<TProperty>(IEnumerable<TProperty> properties)
+        private void ValidateAllItemsNotNull<TItem>(IEnumerable<TItem> items)
         {
-            if (properties.Any(p => p == null))
+            if (items.Any(i => i == null))
             {
-                throw new ArgumentException("All properties should not be null", nameof(properties));
+                throw new ArgumentException("All items should not be null", nameof(items));
             }
         }
     }

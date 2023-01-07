@@ -54,6 +54,26 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         }
 
         [Fact]
+        public void AddGlobalPropertiesShouldAddOnlyFirstPropertyOfTypeFromGlobalPropertiesList()
+        {
+            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+                "Value", new ComputedValueReportCellsProvider<int, int>(x => x));
+
+            ReportSchemaCellsProvider<int> provider = builder.Build(
+                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty1() });
+
+            ReportCellProperty[] expectedProperties =
+            {
+                new CustomProperty1(),
+            };
+            provider.CreateHeaderCell().Should().Be(new ReportCellData("Value"));
+            provider.CreateCell(0).Should().Be(new ReportCellData(0)
+            {
+                Properties = expectedProperties,
+            });
+        }
+
+        [Fact]
         public void AddGlobalPropertiesShouldThrowWhenSomePropertyIsNull()
         {
             ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(

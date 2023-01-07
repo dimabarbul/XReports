@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace XReports.Models
 {
-    public class BaseReportCell
+    public abstract class BaseReportCell
     {
         private object value;
         private List<ReportCellProperty> properties = new List<ReportCellProperty>();

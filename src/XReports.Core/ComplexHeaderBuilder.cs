@@ -12,12 +12,12 @@ namespace XReports
 
         public void AddGroup(int rowIndex, string title, int fromColumn, int? toColumn = null)
         {
-            this.CheckNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.CheckNumberNotNegative(nameof(fromColumn), fromColumn);
+            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
+            this.ValidateNumberNotNegative(nameof(fromColumn), fromColumn);
 
             if (toColumn != null)
             {
-                this.CheckNumberNotNegative(nameof(toColumn), (int)toColumn);
+                this.ValidateNumberNotNegative(nameof(toColumn), (int)toColumn);
             }
 
             this.groups.Add(
@@ -31,7 +31,7 @@ namespace XReports
 
         public void AddGroup(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
-            this.CheckNumberNotNegative(nameof(rowIndex), rowIndex);
+            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
@@ -45,13 +45,13 @@ namespace XReports
 
         public void AddGroup(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
         {
-            this.CheckNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.CheckNumberNotNegative(nameof(fromColumn), fromColumn);
-            this.CheckNumberNotNegative(nameof(rowSpan), rowSpan);
+            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
+            this.ValidateNumberNotNegative(nameof(fromColumn), fromColumn);
+            this.ValidateNumberNotNegative(nameof(rowSpan), rowSpan);
 
             if (toColumn != null)
             {
-                this.CheckNumberNotNegative(nameof(toColumn), (int)toColumn);
+                this.ValidateNumberNotNegative(nameof(toColumn), (int)toColumn);
             }
 
             this.groups.Add(
@@ -65,8 +65,8 @@ namespace XReports
 
         public void AddGroup(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
         {
-            this.CheckNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.CheckNumberNotNegative(nameof(rowSpan), rowSpan);
+            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
+            this.ValidateNumberNotNegative(nameof(rowSpan), rowSpan);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
@@ -145,8 +145,6 @@ namespace XReports
                 }
             }
         }
-
-
 
         private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
         {
@@ -280,14 +278,6 @@ namespace XReports
             }
 
             return null;
-        }
-
-        private void CheckNumberNotNegative(string parameterName, int parameter)
-        {
-            if (parameter < 0)
-            {
-                throw new ArgumentOutOfRangeException(parameterName, $"Parameter should not be negative");
-            }
         }
 
         private abstract class ComplexHeaderGroup

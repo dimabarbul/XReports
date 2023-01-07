@@ -28,6 +28,17 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             processor2.ProcessedData.Should().Equal("Test", "Test2");
         }
 
+        [Fact]
+        public void AddProcessorsShouldThrowWhenSomeProcessorIsNull()
+        {
+            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+                "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
+
+            Action action = () => builder.AddProcessors(new CustomProcessor1(), new CustomProcessor2(), null);
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
         private abstract class CustomProcessor : IReportCellProcessor<string>
         {
             public List<string> ProcessedData { get; } = new List<string>();

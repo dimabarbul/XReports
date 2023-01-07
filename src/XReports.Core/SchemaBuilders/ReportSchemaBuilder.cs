@@ -26,7 +26,7 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties)
         {
-            this.CheckAllPropertiesNotNull(properties);
+            this.ValidateAllPropertiesNotNull(properties);
 
             this.GlobalProperties.AddRange(properties);
 
@@ -35,7 +35,7 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties)
         {
-            this.CheckAllPropertiesNotNull(properties);
+            this.ValidateAllPropertiesNotNull(properties);
 
             this.TableProperties.AddRange(properties);
 
@@ -84,7 +84,7 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
-            this.CheckAllPropertiesNotNull(properties);
+            this.ValidateAllPropertiesNotNull(properties);
 
             this.CommonComplexHeadersProperties.AddRange(properties);
 
@@ -144,7 +144,7 @@ namespace XReports.SchemaBuilders
             return transpose ? complexHeader.Transpose() : complexHeader;
         }
 
-        private void CheckAllPropertiesNotNull<TProperty>(TProperty[] properties)
+        private void ValidateAllPropertiesNotNull<TProperty>(TProperty[] properties)
         {
             if (properties.Any(p => p == null))
             {

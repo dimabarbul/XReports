@@ -15,10 +15,10 @@ namespace XReports.Tests.Common.Extensions
             return expected != null &&
                 (actual == expected ||
                     actual.Equals(expected) ||
-                    HasSameTypeAndProperties(actual, expected));
+                    HaveSameTypeAndProperties(actual, expected));
         }
 
-        private static bool HasSameTypeAndProperties(object actual, object expected)
+        private static bool HaveSameTypeAndProperties(object actual, object expected)
         {
             Type type = actual.GetType();
             if (type != expected.GetType())

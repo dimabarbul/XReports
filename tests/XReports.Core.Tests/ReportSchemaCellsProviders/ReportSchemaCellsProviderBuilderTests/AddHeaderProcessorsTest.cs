@@ -27,6 +27,17 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             processor2.CallsCount.Should().Be(1);
         }
 
+        [Fact]
+        public void AddProcessorsShouldThrowWhenSomeProcessorIsNull()
+        {
+            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+                "#", new ComputedValueReportCellsProvider<int, int>(i => i));
+
+            Action action = () => builder.AddHeaderProcessors(new CustomHeaderCellProcessor1(), new CustomHeaderCellProcessor2(), null);
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
         private abstract class CustomHeaderCellProcessor : IReportCellProcessor<int>
         {
             public void Process(ReportCell cell, int data)
