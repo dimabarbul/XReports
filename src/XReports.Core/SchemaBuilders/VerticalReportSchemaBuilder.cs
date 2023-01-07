@@ -1,50 +1,50 @@
+using System;
 using System.Linq;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {
     public class VerticalReportSchemaBuilder<TSourceEntity> : ReportSchemaBuilder<TSourceEntity>, IVerticalReportSchemaBuilder<TSourceEntity>
     {
-        public IVerticalReportSchemaBuilder<TSourceEntity> AddColumn(IReportCellsProvider<TSourceEntity> provider)
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> AddColumn(string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            return this.InsertColumn(this.CellsProviders.Count, provider);
+            return this.InsertColumn(this.CellsProviders.Count, title, provider);
         }
 
-        public IVerticalReportSchemaBuilder<TSourceEntity> InsertColumn(int index, IReportCellsProvider<TSourceEntity> provider)
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.InsertCellsProvider(index, provider);
-
-            return this;
+            return this.InsertCellsProvider(index, title, provider);
         }
 
-        public IVerticalReportSchemaBuilder<TSourceEntity> InsertColumnBefore(string title, IReportCellsProvider<TSourceEntity> provider)
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            return this.InsertColumn(this.GetCellsProviderIndex(title), provider);
+            return this.InsertColumn(this.GetCellsProviderIndex(beforeTitle), title, provider);
         }
 
-        public IVerticalReportSchemaBuilder<TSourceEntity> ForColumn(string title)
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(string title)
         {
-            this.SelectProvider(title);
+            return this.GetProvider(title);
+        }
 
-            return this;
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(int index)
+        {
+            if (index < 0 || index >= this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this.CellsProviders[index];
         }
 
         public VerticalReportSchema<TSourceEntity> BuildSchema()
         {
             return new VerticalReportSchema<TSourceEntity>(
                 this.CellsProviders
-                    .Select(
-                        c => new ReportSchemaCellsProvider<TSourceEntity>(
-                            c.Provider,
-                            this.AddGlobalProperties(c.CellProperties),
-                            c.HeaderProperties.ToArray(),
-                            c.CellProcessors.ToArray(),
-                            c.HeaderProcessors.ToArray()))
+                    .Select(c => c.Build(this.GlobalProperties))
                     .ToArray(),
                 this.TableProperties.ToArray(),
-                this.ComplexHeaders.ToArray(),
+                this.BuildComplexHeader(transpose: false),
                 this.ComplexHeadersProperties
                     .ToDictionary(x => x.Key, x => x.Value.ToArray()),
                 this.CommonComplexHeadersProperties.ToArray());

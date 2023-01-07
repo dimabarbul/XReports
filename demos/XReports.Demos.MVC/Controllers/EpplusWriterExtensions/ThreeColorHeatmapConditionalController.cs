@@ -57,9 +57,8 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             ThreeColorHeatmapProperty lastScoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 5, Color.Yellow, 10, Color.Lime);
 
             VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
-            reportBuilder
-                .AddColumn("Name", e => e.Name)
-                .AddColumn("Last Score", e => e.LastScore)
+            reportBuilder.AddColumn("Name", e => e.Name);
+            reportBuilder.AddColumn("Last Score", e => e.LastScore)
                 .AddProperties(lastScoreHeatmapProperty);
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(scoreHeatmapProperty);

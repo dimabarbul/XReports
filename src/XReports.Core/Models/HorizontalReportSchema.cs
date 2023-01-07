@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using XReports.Interfaces;
-using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 
 namespace XReports.Models
 {
@@ -9,15 +9,15 @@ namespace XReports.Models
     {
         private readonly ReportSchemaCellsProvider<TSourceEntity>[] headerRows;
 
-        public HorizontalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] headerRows, ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeader[] complexHeaders, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
-            : base(cellsProviders, tableProperties, complexHeaders, complexHeaderProperties, commonComplexHeaderProperties)
+        public HorizontalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] headerRows, ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeaderCell[,] complexHeader, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
+            : base(cellsProviders, tableProperties, complexHeader, complexHeaderProperties, commonComplexHeaderProperties)
         {
             this.headerRows = headerRows;
         }
 
         public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
-            ReportCell[][] complexHeader = this.CreateComplexHeader(transpose: true);
+            ReportCell[][] complexHeader = this.CreateComplexHeader(isTransposed: true);
 
             return new ReportTable<ReportCell>
             {

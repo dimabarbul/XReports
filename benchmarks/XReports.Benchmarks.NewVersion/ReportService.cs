@@ -317,11 +317,10 @@ public class ReportService : IReportService, IDisposable
             IReportCellsProvider<Person> column = (IReportCellsProvider<Person>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddColumn(column).AddProperties(this.MapProperties(source.Properties));
+            reportBuilder.AddColumn(source.Title, column).AddProperties(this.MapProperties(source.Properties));
         }
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
@@ -341,11 +340,10 @@ public class ReportService : IReportService, IDisposable
             IReportCellsProvider<IDataReader> column = (IReportCellsProvider<IDataReader>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(IDataReader), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddColumn(column).AddProperties(this.MapProperties(source.Properties));
+            reportBuilder.AddColumn(source.Title, column).AddProperties(this.MapProperties(source.Properties));
         }
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
@@ -366,11 +364,10 @@ public class ReportService : IReportService, IDisposable
             IReportCellsProvider<Person> row = (IReportCellsProvider<Person>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddRow(row).AddProperties(this.MapProperties(source.Properties));
+            reportBuilder.AddRow(source.Title, row).AddProperties(this.MapProperties(source.Properties));
         }
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));

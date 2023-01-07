@@ -47,9 +47,9 @@ namespace XReports.SchemaBuilders
                 this.BuildVerticalReport<TEntity, TBuildParameter>(reportAttribute as VerticalReportAttribute, parameter).BuildSchema();
         }
 
-        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute)
+        private IHorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity>(HorizontalReportAttribute reportAttribute)
         {
-            HorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
+            IHorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
 
             if (reportAttribute?.PostBuilder != null
                 && typeof(IHorizontalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
@@ -61,10 +61,10 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity, TBuildParameter>(
+        private IHorizontalReportSchemaBuilder<TEntity> BuildHorizontalReport<TEntity, TBuildParameter>(
             HorizontalReportAttribute reportAttribute, TBuildParameter parameter)
         {
-            HorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
+            IHorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
 
             if (reportAttribute?.PostBuilder == null)
             {
@@ -82,9 +82,9 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private HorizontalReportSchemaBuilder<TEntity> BuildHorizontalReportNoPostBuild<TEntity>()
+        private IHorizontalReportSchemaBuilder<TEntity> BuildHorizontalReportNoPostBuild<TEntity>()
         {
-            HorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
+            IHorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
             ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
             Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
@@ -95,7 +95,7 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private void AddRows<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] globalAttributes)
+        private void AddRows<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] globalAttributes)
         {
             foreach (ReportVariableData x in reportVariables)
             {
@@ -103,17 +103,16 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private void AddRow<TEntity>(HorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
+        private void AddRow<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
-            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
+            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property);
 
-            builder.AddRow(instance);
-            builder.AddAlias(property.Name);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddRow(attribute.Title, instance);
 
-            this.ApplyAttributes(builder, property, globalAttributes);
+            this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
 
-        private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property, ReportVariableAttribute attribute)
+        private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(TEntity));
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
@@ -122,14 +121,13 @@ namespace XReports.SchemaBuilders
             IReportCellsProvider<TEntity> instance = (IReportCellsProvider<TEntity>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(TEntity), property.PropertyType),
-                attribute.Title,
                 lambdaExpression.Compile());
             return instance;
         }
 
-        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute)
+        private IVerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute)
         {
-            VerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
+            IVerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
 
             if (reportAttribute?.PostBuilder != null
                 && typeof(IVerticalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
@@ -141,10 +139,10 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity, TBuildParameter>(
+        private IVerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity, TBuildParameter>(
             VerticalReportAttribute reportAttribute, TBuildParameter parameter)
         {
-            VerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
+            IVerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
 
             if (reportAttribute?.PostBuilder == null)
             {
@@ -162,9 +160,9 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private VerticalReportSchemaBuilder<TEntity> BuildVerticalReportNoPostBuild<TEntity>()
+        private IVerticalReportSchemaBuilder<TEntity> BuildVerticalReportNoPostBuild<TEntity>()
         {
-            VerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
+            IVerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
             ReportVariableData[] properties = this.GetProperties<TEntity>();
 
@@ -176,7 +174,7 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private void AddColumns<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] globalAttributes)
+        private void AddColumns<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] globalAttributes)
         {
             foreach (ReportVariableData x in properties)
             {
@@ -184,7 +182,7 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private void AddComplexHeader<TEntity>(ReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddComplexHeader<TEntity>(IReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
         {
             Dictionary<int, Dictionary<string, List<int>>> complexHeader = new Dictionary<int, Dictionary<string, List<int>>>();
 
@@ -217,7 +215,7 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private void ProcessTablePropertyAttributes<TEntity>(VerticalReportSchemaBuilder<TEntity> builder)
+        private void ProcessTablePropertyAttributes<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder)
         {
             IEnumerable<TablePropertyAttribute> attributes = typeof(TEntity)
                 .GetCustomAttributes<TablePropertyAttribute>();
@@ -225,22 +223,25 @@ namespace XReports.SchemaBuilders
             {
                 foreach (IAttributeHandler handler in this.handlers)
                 {
-                    handler.Handle(builder, attribute);
+                    handler.Handle(builder, null, attribute);
                 }
             }
         }
 
-        private void AddColumn<TEntity>(VerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
+        private void AddColumn<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
-            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property, attribute);
+            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property);
 
-            builder.AddColumn(instance);
-            builder.AddAlias(property.Name);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(attribute.Title, instance);
 
-            this.ApplyAttributes(builder, property, globalAttributes);
+            this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
 
-        private void ApplyAttributes<TEntity>(ReportSchemaBuilder<TEntity> builder, PropertyInfo property, Attribute[] globalAttributes)
+        private void ApplyAttributes<TEntity>(
+            IReportSchemaBuilder<TEntity> builder,
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder,
+            PropertyInfo property,
+            Attribute[] globalAttributes)
         {
             Attribute[] propertyAttributes = property.GetCustomAttributes().ToArray();
             Attribute[] attributes = this.MergeGlobalAttributes(propertyAttributes, globalAttributes);
@@ -249,7 +250,7 @@ namespace XReports.SchemaBuilders
             {
                 foreach (IAttributeHandler handler in this.handlers)
                 {
-                    handler.Handle(builder, attribute);
+                    handler.Handle(builder, cellsProviderBuilder, attribute);
                 }
             }
         }

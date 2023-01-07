@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using XReports.Interfaces;
-using XReports.ReportCellsProviders;
+using XReports.ReportSchemaCellsProviders;
 
 namespace XReports.Models
 {
     public class VerticalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>
     {
-        public VerticalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeader[] complexHeaders, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
-            : base(cellsProviders, tableProperties, complexHeaders, complexHeaderProperties, commonComplexHeaderProperties)
+        public VerticalReportSchema(ReportSchemaCellsProvider<TSourceEntity>[] cellsProviders, ReportTableProperty[] tableProperties, ComplexHeaderCell[,] complexHeader, Dictionary<string, ReportCellProperty[]> complexHeaderProperties, ReportCellProperty[] commonComplexHeaderProperties)
+            : base(cellsProviders, tableProperties, complexHeader, complexHeaderProperties, commonComplexHeaderProperties)
         {
         }
 
@@ -24,7 +24,7 @@ namespace XReports.Models
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
                 Properties = this.TableProperties,
-                HeaderRows = this.CreateComplexHeader(),
+                HeaderRows = this.CreateComplexHeader(isTransposed: false),
                 Rows = new RowsFromEntityCollection(this, source),
             };
 
@@ -41,7 +41,7 @@ namespace XReports.Models
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
                 Properties = this.TableProperties,
-                HeaderRows = this.CreateComplexHeader(),
+                HeaderRows = this.CreateComplexHeader(isTransposed: false),
                 Rows = new RowsFromDataReaderCollection(this, dataReader),
             };
 

@@ -1,14 +1,17 @@
 using XReports.Attributes;
+using XReports.Interfaces;
 using XReports.Properties;
-using XReports.SchemaBuilders;
 
 namespace XReports.AttributeHandlers
 {
     public class SameColumnFormatAttributeHandler : AttributeHandler<SameColumnFormatAttribute>
     {
-        protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, SameColumnFormatAttribute attribute)
+        protected override void HandleAttribute<TSourceEntity>(
+            IReportSchemaBuilder<TSourceEntity> builder,
+            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            SameColumnFormatAttribute attribute)
         {
-            builder.AddProperties(new SameColumnFormatProperty());
+            cellsProviderBuilder.AddProperties(new SameColumnFormatProperty());
         }
     }
 }

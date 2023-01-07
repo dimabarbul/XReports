@@ -6,68 +6,68 @@ namespace XReports.Extensions
 {
     public static class VerticalReportSchemaBuilderExtensions
     {
-        public static IVerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.AddColumn(provider);
+            return builder.AddColumn(title, provider);
         }
 
-        public static IVerticalReportSchemaBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.AddColumn(provider);
+            return builder.AddColumn(title, provider);
         }
 
-        public static IVerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.InsertColumn(index, provider);
+            return builder.InsertColumn(index, title, provider);
         }
 
-        public static IVerticalReportSchemaBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.InsertColumn(index, provider);
+            return builder.InsertColumn(index, title, provider);
         }
 
-        public static IVerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(title, valueSelector);
+            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
 
-            return builder.InsertColumnBefore(beforeTitle, provider);
+            return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
 
-        public static IVerticalReportSchemaBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IVerticalReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(title, valueProvider);
+            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
 
-            return builder.InsertColumnBefore(beforeTitle, provider);
+            return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
     }
 }

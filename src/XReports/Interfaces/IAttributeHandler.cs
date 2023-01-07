@@ -1,10 +1,12 @@
 using System;
-using XReports.SchemaBuilders;
 
 namespace XReports.Interfaces
 {
     public interface IAttributeHandler
     {
-        void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute);
+        void Handle<TSourceEntity>(
+            IReportSchemaBuilder<TSourceEntity> schemaBuilder,
+            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            Attribute attribute);
     }
 }

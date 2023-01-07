@@ -7,8 +7,7 @@ namespace XReports.ReportCellsProviders
     {
         private readonly IValueProvider<TValue> provider;
 
-        public ValueProviderReportCellsProvider(string title, IValueProvider<TValue> provider)
-            : base(title)
+        public ValueProviderReportCellsProvider(IValueProvider<TValue> provider)
         {
             this.provider = provider;
         }

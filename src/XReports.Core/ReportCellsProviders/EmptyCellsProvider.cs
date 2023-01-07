@@ -6,8 +6,7 @@ namespace XReports.ReportCellsProviders
     {
         private readonly ReportCell reportCell;
 
-        public EmptyCellsProvider(string title)
-            : base(title)
+        public EmptyCellsProvider()
         {
             this.reportCell = ReportCell.FromValue(string.Empty);
         }

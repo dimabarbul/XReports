@@ -7,8 +7,7 @@ namespace XReports.ReportCellsProviders
     {
         private readonly Func<TSourceEntity, TValue> valueSelector;
 
-        public ComputedValueReportCellsProvider(string title, Func<TSourceEntity, TValue> valueSelector)
-            : base(title)
+        public ComputedValueReportCellsProvider(Func<TSourceEntity, TValue> valueSelector)
         {
             this.valueSelector = valueSelector;
         }

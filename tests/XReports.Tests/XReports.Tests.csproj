@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
     <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>

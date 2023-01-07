@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks Condition="$(OS) != 'Unix'">net6.0;net462;net47;net471;net472;net48</TargetFrameworks>
     <TargetFramework Condition="$(OS) == 'Unix'">net6.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -44,24 +45,6 @@
     </Compile>
     <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.TitleProperties.cs">
       <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Basic.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.ComplexHeader.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.DataReader.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderCellProcessor.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.HeaderProperties.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\VerticalReportSchemaBuilderTest.Properties.cs">
-      <DependentUpon>VerticalReportSchemaBuilderTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

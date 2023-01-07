@@ -1,20 +1,25 @@
 using System;
 using XReports.Interfaces;
-using XReports.SchemaBuilders;
 
 namespace XReports.AttributeHandlers
 {
     public abstract class AttributeHandler<TAttribute> : IAttributeHandler
         where TAttribute : Attribute
     {
-        public void Handle<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, Attribute attribute)
+        public void Handle<TSourceEntity>(
+            IReportSchemaBuilder<TSourceEntity> schemaBuilder,
+            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            Attribute attribute)
         {
             if (attribute is TAttribute typedAttribute)
             {
-                this.HandleAttribute(builder, typedAttribute);
+                this.HandleAttribute(schemaBuilder, cellsProviderBuilder, typedAttribute);
             }
         }
 
-        protected abstract void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, TAttribute attribute);
+        protected abstract void HandleAttribute<TSourceEntity>(
+            IReportSchemaBuilder<TSourceEntity> builder,
+            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            TAttribute attribute);
     }
 }

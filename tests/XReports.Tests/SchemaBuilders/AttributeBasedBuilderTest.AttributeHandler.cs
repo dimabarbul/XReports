@@ -53,9 +53,12 @@ namespace XReports.Tests.SchemaBuilders
 
         private class CustomAttributeHandler : AttributeHandler<CustomAttribute>
         {
-            protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, CustomAttribute attribute)
+            protected override void HandleAttribute<TSourceEntity>(
+                IReportSchemaBuilder<TSourceEntity> builder,
+                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                CustomAttribute attribute)
             {
-                builder.AddProperties(new CustomProperty());
+                cellsProviderBuilder.AddProperties(new CustomProperty());
             }
         }
     }

@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ReportCellProcessors;
+using XReports.ReportSchemaCellsProviders;
 
 namespace XReports.SchemaBuilders
 {
     public abstract class ReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
     {
-        private ConfiguredCellsProvider currentProvider;
+        private readonly ComplexHeaderBuilder complexHeaderBuilder = new ComplexHeaderBuilder();
 
-        protected List<ConfiguredCellsProvider> CellsProviders { get; } = new List<ConfiguredCellsProvider>();
+        protected List<IReportSchemaCellsProviderBuilder<TSourceEntity>> CellsProviders { get; } = new List<IReportSchemaCellsProviderBuilder<TSourceEntity>>();
 
-        protected Dictionary<string, ConfiguredCellsProvider> NamedProviders { get; } = new Dictionary<string, ConfiguredCellsProvider>();
-
-        protected List<ComplexHeader> ComplexHeaders { get; } = new List<ComplexHeader>();
+        protected Dictionary<string, IReportSchemaCellsProviderBuilder<TSourceEntity>> NamedProviders { get; } = new Dictionary<string, IReportSchemaCellsProviderBuilder<TSourceEntity>>();
 
         protected Dictionary<string, List<ReportCellProperty>> ComplexHeadersProperties { get; } = new Dictionary<string, List<ReportCellProperty>>();
 
@@ -25,22 +24,10 @@ namespace XReports.SchemaBuilders
 
         protected List<ReportTableProperty> TableProperties { get; } = new List<ReportTableProperty>();
 
-        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias)
-        {
-            this.NamedProviders[alias] = this.currentProvider;
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddAlias(string alias, string target)
-        {
-            this.NamedProviders[alias] = this.NamedProviders[target];
-
-            return this;
-        }
-
         public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties)
         {
+            this.ValidateAllPropertiesNotNull(properties);
+
             this.GlobalProperties.AddRange(properties);
 
             return this;
@@ -48,70 +35,37 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties)
         {
+            this.ValidateAllPropertiesNotNull(properties);
+
             this.TableProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
-        {
-            this.currentProvider.CellProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddDynamicProperty(Func<TSourceEntity, ReportCellProperty> propertySelector)
-        {
-            this.currentProvider.CellProcessors.Add(new DynamicPropertiesCellProcessor<TSourceEntity>(propertySelector));
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
-        {
-            this.currentProvider.HeaderProperties.AddRange(properties);
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
-        {
-            this.currentProvider.CellProcessors.AddRange(processors);
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
-        {
-            this.currentProvider.HeaderProcessors.AddRange(processors);
 
             return this;
         }
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, int fromColumn, int? toColumn = null)
         {
-            this.ComplexHeaders.Add(
-                new ComplexHeader()
-                {
-                    RowIndex = rowIndex,
-                    Title = title,
-                    StartIndex = fromColumn,
-                    EndIndex = toColumn ?? fromColumn,
-                });
+            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
 
             return this;
         }
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
-            this.ComplexHeaders.Add(
-                new ComplexHeader()
-                {
-                    RowIndex = rowIndex,
-                    Title = title,
-                    StartIndex = this.CellsProviders.FindIndex(c => c.Provider.Title.Equals(fromColumn, StringComparison.OrdinalIgnoreCase)),
-                    EndIndex = this.CellsProviders.FindIndex(c => c.Provider.Title.Equals(toColumn ?? fromColumn, StringComparison.OrdinalIgnoreCase)),
-                });
+            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
+        {
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
+        {
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
 
             return this;
         }
@@ -130,77 +84,72 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
+            this.ValidateAllPropertiesNotNull(properties);
+
             this.CommonComplexHeadersProperties.AddRange(properties);
 
             return this;
         }
 
-        protected ReportSchemaBuilder<TSourceEntity> SelectProvider(ConfiguredCellsProvider provider)
+        protected IReportSchemaCellsProviderBuilder<TSourceEntity> GetProvider(string title)
         {
-            this.currentProvider = provider;
-
-            return this;
+            return this.CellsProviders[this.GetCellsProviderIndex(title)];
         }
 
-        protected ReportSchemaBuilder<TSourceEntity> SelectProvider(int index)
+        protected ReportSchemaCellsProviderBuilder<TSourceEntity> InsertCellsProvider(int index, string title, IReportCellsProvider<TSourceEntity> provider)
         {
-            this.currentProvider = this.CellsProviders[index];
+            if (title == null)
+            {
+                throw new ArgumentException("Title cannot be null", nameof(provider));
+            }
 
-            return this;
-        }
+            if (index < 0 || index > this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
 
-        protected ReportSchemaBuilder<TSourceEntity> SelectProvider(string title)
-        {
-            this.currentProvider = this.CellsProviders[this.GetCellsProviderIndex(title)];
+            ReportSchemaCellsProviderBuilder<TSourceEntity> builder = new ReportSchemaCellsProviderBuilder<TSourceEntity>(title, provider);
 
-            return this;
-        }
+            this.CellsProviders.Insert(index, builder);
+            if (!this.NamedProviders.ContainsKey(title))
+            {
+                this.NamedProviders[title] = builder;
+            }
 
-        protected ReportSchemaBuilder<TSourceEntity> InsertCellsProvider(int index, IReportCellsProvider<TSourceEntity> provider)
-        {
-            this.currentProvider = new ConfiguredCellsProvider(provider);
-
-            this.CellsProviders.Insert(index, this.currentProvider);
-            this.NamedProviders[this.currentProvider.Provider.Title] = this.currentProvider;
-
-            return this;
+            return builder;
         }
 
         protected int GetCellsProviderIndex(string title)
         {
-            return this.CellsProviders.IndexOf(this.NamedProviders[title]);
-        }
-
-        protected ReportCellProperty[] AddGlobalProperties(List<ReportCellProperty> cellProperties)
-        {
-            List<ReportCellProperty> result = new List<ReportCellProperty>(cellProperties);
-            for (int i = 0; i < this.GlobalProperties.Count; i++)
+            if (title == null)
             {
-                if (!result.Any(p => p.GetType() == this.GlobalProperties[i].GetType()))
-                {
-                    result.Add(this.GlobalProperties[i]);
-                }
+                throw new ArgumentNullException(nameof(title));
             }
 
-            return result.ToArray();
-        }
-
-        protected class ConfiguredCellsProvider
-        {
-            public ConfiguredCellsProvider(IReportCellsProvider<TSourceEntity> provider)
+            int index;
+            if (!this.NamedProviders.ContainsKey(title) ||
+                (index = this.CellsProviders.IndexOf(this.NamedProviders[title])) == -1)
             {
-                this.Provider = provider;
+                throw new ArgumentException($"Cells provider with title {title} is not found", nameof(title));
             }
 
-            public IReportCellsProvider<TSourceEntity> Provider { get; }
+            return index;
+        }
 
-            public List<ReportCellProperty> CellProperties { get; } = new List<ReportCellProperty>();
+        protected ComplexHeaderCell[,] BuildComplexHeader(bool transpose)
+        {
+            ComplexHeaderCell[,] complexHeader = this.complexHeaderBuilder.Build(
+                this.CellsProviders.Select(p => p.Title).ToArray());
 
-            public List<ReportCellProperty> HeaderProperties { get; } = new List<ReportCellProperty>();
+            return transpose ? complexHeader.Transpose() : complexHeader;
+        }
 
-            public List<IReportCellProcessor<TSourceEntity>> CellProcessors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
-
-            public List<IReportCellProcessor<TSourceEntity>> HeaderProcessors { get; } = new List<IReportCellProcessor<TSourceEntity>>();
+        private void ValidateAllPropertiesNotNull<TProperty>(TProperty[] properties)
+        {
+            if (properties.Any(p => p == null))
+            {
+                throw new ArgumentException("All properties should not be null", nameof(properties));
+            }
         }
     }
 }
