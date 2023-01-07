@@ -38,6 +38,11 @@ namespace XReports.Models
                 throw new ArgumentException($"Please, use overload with {typeof(IEnumerable<TSourceEntity>)} as argument");
             }
 
+            if (dataReader.IsClosed)
+            {
+                throw new InvalidOperationException("Data reader is closed");
+            }
+
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
                 Properties = this.TableProperties,
