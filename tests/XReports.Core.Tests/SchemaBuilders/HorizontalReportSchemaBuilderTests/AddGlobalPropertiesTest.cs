@@ -6,7 +6,7 @@ using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddGlobalPropertiesTest"/>
     public class AddGlobalPropertiesTest
@@ -14,9 +14,9 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRows()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
-            schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
+            HorizontalReportSchemaBuilder<int> schemaBuilder = new HorizontalReportSchemaBuilder<int>();
+            schemaBuilder.AddRow("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
+            schemaBuilder.AddRow("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
 
             schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
 
@@ -24,10 +24,6 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             {
                 1,
                 2,
-            });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
-            {
-                new[] {"Value", "As string" },
             });
             ReportCellProperty[] expectedProperties =
             {
@@ -38,18 +34,20 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             {
                 new object[]
                 {
+                    "Value",
                     new ReportCellData(1)
                     {
                         Properties = expectedProperties,
                     },
-                    new ReportCellData("1")
+                    new ReportCellData(2)
                     {
                         Properties = expectedProperties,
                     },
                 },
                 new object[]
                 {
-                    new ReportCellData(2)
+                    "As string",
+                    new ReportCellData("1")
                     {
                         Properties = expectedProperties,
                     },

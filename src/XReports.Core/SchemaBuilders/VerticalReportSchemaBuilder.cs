@@ -39,6 +39,11 @@ namespace XReports.SchemaBuilders
 
         public VerticalReportSchema<TSourceEntity> BuildSchema()
         {
+            if (this.CellsProviders.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot build schema for table with no columns.");
+            }
+
             return new VerticalReportSchema<TSourceEntity>(
                 this.CellsProviders
                     .Select(c => c.Build(this.GlobalProperties))

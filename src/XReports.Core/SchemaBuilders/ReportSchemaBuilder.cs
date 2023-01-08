@@ -100,7 +100,7 @@ namespace XReports.SchemaBuilders
         {
             if (title == null)
             {
-                throw new ArgumentException("Title cannot be null", nameof(provider));
+                throw new ArgumentException("Title cannot be null", nameof(title));
             }
 
             if (index < 0 || index > this.CellsProviders.Count)

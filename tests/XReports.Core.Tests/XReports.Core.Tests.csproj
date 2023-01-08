@@ -38,18 +38,6 @@
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Basic.cs">
-      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Header.cs">
-      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.Properties.cs">
-      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
-    <Compile Update="SchemaBuilders\HorizontalReportSchemaBuilderTest.TitleProperties.cs">
-      <DependentUpon>HorizontalReportSchemaBuilderTest.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>
