@@ -48,6 +48,11 @@ namespace XReports.SchemaBuilders
 
         public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertHeaderRow(int rowIndex, string title, IReportCellsProvider<TSourceEntity> provider)
         {
+            if (title == null)
+            {
+                throw new ArgumentException("Title cannot be null", nameof(title));
+            }
+
             IReportSchemaCellsProviderBuilder<TSourceEntity> builder = new ReportSchemaCellsProviderBuilder<TSourceEntity>(title, provider);
             this.headerProviders.Insert(rowIndex, builder);
 
@@ -61,6 +66,11 @@ namespace XReports.SchemaBuilders
 
         public HorizontalReportSchema<TSourceEntity> BuildSchema()
         {
+            if (this.CellsProviders.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot build schema for table with no rows.");
+            }
+
             return new HorizontalReportSchema<TSourceEntity>(
                 this.headerProviders
                     .Select(c => c.Build(Array.Empty<ReportCellProperty>()))

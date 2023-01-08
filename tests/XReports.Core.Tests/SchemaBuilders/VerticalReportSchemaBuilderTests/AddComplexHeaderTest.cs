@@ -8,7 +8,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 {
-    /// <seealso cref="ComplexHeaderBuilderTest"/>
+    /// <seealso cref="XReports.Core.Tests.ComplexHeaderBuilderTest"/>
     public class AddComplexHeaderTest
     {
         /// <remarks>
