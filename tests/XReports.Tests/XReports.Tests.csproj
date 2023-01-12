@@ -33,17 +33,20 @@
     <Compile Update="DependencyInjection\AttributeBasedBuilderDITest.Classes.cs">
       <DependentUpon>AttributeBasedBuilderDITest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.AttributeHandler.cs">
-      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\PostBuilderTest.Classes.cs">
+      <DependentUpon>PostBuilderTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReport.cs">
-      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\PostBuilderTest.Attributes.cs">
+      <DependentUpon>PostBuilderTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.BuildVerticalReportComplexHeader.cs">
-      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\PostBuilderFromServiceProviderTest.Classes.cs">
+      <DependentUpon>PostBuilderFromServiceProviderTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\AttributeBasedBuilderTest.GlobalProperties.cs">
-      <DependentUpon>AttributeBasedBuilderTest.cs</DependentUpon>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\PostBuilderFromServiceProviderTest.Attributes.cs">
+      <DependentUpon>PostBuilderFromServiceProviderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\BuildParameterTest.Classes.cs">
+      <DependentUpon>BuildParameterTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

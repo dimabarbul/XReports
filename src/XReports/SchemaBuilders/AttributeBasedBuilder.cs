@@ -16,17 +16,16 @@ namespace XReports.SchemaBuilders
         private readonly IServiceProvider serviceProvider;
         private readonly IAttributeHandler[] handlers;
 
-        public AttributeBasedBuilder(IServiceProvider serviceProvider, IEnumerable<IAttributeHandler> handlers = null)
+        public AttributeBasedBuilder(IEnumerable<IAttributeHandler> handlers)
+        {
+            this.serviceProvider = null;
+            this.handlers = handlers.ToArray();
+        }
+
+        public AttributeBasedBuilder(IServiceProvider serviceProvider, IEnumerable<IAttributeHandler> handlers)
         {
             this.serviceProvider = serviceProvider;
-            if (handlers != null)
-            {
-                this.handlers = handlers.ToArray();
-            }
-            else
-            {
-                this.handlers = Array.Empty<IAttributeHandler>();
-            }
+            this.handlers = handlers.ToArray();
         }
 
         public IReportSchema<TEntity> BuildSchema<TEntity>()
@@ -51,11 +50,10 @@ namespace XReports.SchemaBuilders
         {
             IHorizontalReportSchemaBuilder<TEntity> builder = this.BuildHorizontalReportNoPostBuild<TEntity>();
 
-            if (reportAttribute?.PostBuilder != null
-                && typeof(IHorizontalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
+            if (reportAttribute?.PostBuilder != null)
             {
-                ((IHorizontalReportPostBuilder<TEntity>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
-                    .Build(builder);
+                this.ExecutePostBuilder<IHorizontalReportPostBuilder<TEntity>>(
+                    reportAttribute.PostBuilder, builder);
             }
 
             return builder;
@@ -71,13 +69,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            if (!typeof(IHorizontalReportPostBuilder<TEntity, TBuildParameter>).IsAssignableFrom(reportAttribute.PostBuilder))
-            {
-                throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IHorizontalReportPostBuilder<TEntity, TBuildParameter>)}.");
-            }
-
-            ((IHorizontalReportPostBuilder<TEntity, TBuildParameter>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
-                .Build(builder, parameter);
+            this.ExecutePostBuilder<IHorizontalReportPostBuilder<TEntity, TBuildParameter>>(
+                reportAttribute.PostBuilder, builder, parameter);
 
             return builder;
         }
@@ -92,6 +85,8 @@ namespace XReports.SchemaBuilders
             this.AddRows(builder, reportVariables, globalAttributes);
             this.AddComplexHeader(builder, reportVariables);
 
+            this.ProcessTablePropertyAttributes<TEntity>(builder);
+
             return builder;
         }
 
@@ -105,9 +100,9 @@ namespace XReports.SchemaBuilders
 
         private void AddRow<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
-            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property);
+            IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddRow(attribute.Title, instance);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddRow(attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
@@ -118,22 +113,21 @@ namespace XReports.SchemaBuilders
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
             LambdaExpression lambdaExpression = Expression.Lambda(memberExpression, parameter);
 
-            IReportCellsProvider<TEntity> instance = (IReportCellsProvider<TEntity>)Activator.CreateInstance(
+            IReportCellsProvider<TEntity> cellsProvider = (IReportCellsProvider<TEntity>)Activator.CreateInstance(
                 typeof(ComputedValueReportCellsProvider<,>)
                     .MakeGenericType(typeof(TEntity), property.PropertyType),
                 lambdaExpression.Compile());
-            return instance;
+            return cellsProvider;
         }
 
         private IVerticalReportSchemaBuilder<TEntity> BuildVerticalReport<TEntity>(VerticalReportAttribute reportAttribute)
         {
             IVerticalReportSchemaBuilder<TEntity> builder = this.BuildVerticalReportNoPostBuild<TEntity>();
 
-            if (reportAttribute?.PostBuilder != null
-                && typeof(IVerticalReportPostBuilder<TEntity>).IsAssignableFrom(reportAttribute.PostBuilder))
+            if (reportAttribute?.PostBuilder != null)
             {
-                ((IVerticalReportPostBuilder<TEntity>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
-                    .Build(builder);
+                this.ExecutePostBuilder<IVerticalReportPostBuilder<TEntity>>(
+                    reportAttribute.PostBuilder, builder);
             }
 
             return builder;
@@ -149,13 +143,8 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            if (!typeof(IVerticalReportPostBuilder<TEntity, TBuildParameter>).IsAssignableFrom(reportAttribute.PostBuilder))
-            {
-                throw new InvalidOperationException($"Type {reportAttribute.PostBuilder} is not assignable to {typeof(IVerticalReportPostBuilder<TEntity, TBuildParameter>)}.");
-            }
-
-            ((IVerticalReportPostBuilder<TEntity, TBuildParameter>)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, reportAttribute.PostBuilder))
-                .Build(builder, parameter);
+            this.ExecutePostBuilder<IVerticalReportPostBuilder<TEntity, TBuildParameter>>(
+                reportAttribute.PostBuilder, builder, parameter);
 
             return builder;
         }
@@ -184,42 +173,49 @@ namespace XReports.SchemaBuilders
 
         private void AddComplexHeader<TEntity>(IReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
         {
-            Dictionary<int, Dictionary<string, List<int>>> complexHeader = new Dictionary<int, Dictionary<string, List<int>>>();
+            IEnumerable<ComplexHeaderAttribute> complexHeaderAttributes = typeof(TEntity).GetCustomAttributes<ComplexHeaderAttribute>();
+            Dictionary<int, int> normalizedIndexes = properties
+                .OrderBy(p => p.Attribute.Order)
+                .Select((p, i) => new { Index = i, p.Attribute.Order })
+                .ToDictionary(x => x.Order, x => x.Index);
 
-            foreach (ReportVariableAttribute property in properties.Select(p => p.Attribute))
+            foreach (ComplexHeaderAttribute attribute in complexHeaderAttributes)
             {
-                for (int i = 0; i < property.ComplexHeader.Length; i++)
+                if (attribute.UsesIndexes)
                 {
-                    if (!complexHeader.ContainsKey(i))
-                    {
-                        complexHeader.Add(i, new Dictionary<string, List<int>>());
-                    }
+                    int startIndex = normalizedIndexes.ContainsKey(attribute.StartIndex) ?
+                        normalizedIndexes[attribute.StartIndex] :
+                        throw new ArgumentException($"Start index {attribute.StartIndex} does not exist for type {typeof(TEntity)}");
+                    int? endIndex = attribute.EndIndex == null ?
+                        (int?)null :
+                        normalizedIndexes.ContainsKey(attribute.EndIndex.Value) ?
+                            normalizedIndexes[attribute.EndIndex.Value] :
+                            throw new ArgumentException($"End index {attribute.EndIndex} does not exist for type {typeof(TEntity)}");
 
-                    string title = property.ComplexHeader[i];
-                    if (!complexHeader[i].ContainsKey(title))
-                    {
-                        complexHeader[i].Add(title, new List<int>());
-                    }
-
-                    complexHeader[i][title].Add(property.Order);
+                    builder.AddComplexHeader(
+                        attribute.RowIndex,
+                        attribute.RowSpan,
+                        attribute.Title,
+                        startIndex,
+                        endIndex);
                 }
-            }
-
-            int minimumIndex = properties.Min(p => p.Attribute.Order);
-            foreach (KeyValuePair<int, Dictionary<string, List<int>>> header in complexHeader)
-            {
-                foreach (KeyValuePair<string, List<int>> column in header.Value)
+                else
                 {
-                    builder.AddComplexHeader(header.Key, column.Key, column.Value.Min() - minimumIndex, column.Value.Max() - minimumIndex);
+                    builder.AddComplexHeader(
+                        attribute.RowIndex,
+                        attribute.RowSpan,
+                        attribute.Title,
+                        attribute.StartTitle,
+                        attribute.EndTitle);
                 }
             }
         }
 
-        private void ProcessTablePropertyAttributes<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder)
+        private void ProcessTablePropertyAttributes<TEntity>(IReportSchemaBuilder<TEntity> builder)
         {
-            IEnumerable<TablePropertyAttribute> attributes = typeof(TEntity)
-                .GetCustomAttributes<TablePropertyAttribute>();
-            foreach (TablePropertyAttribute attribute in attributes)
+            IEnumerable<TableAttribute> attributes = typeof(TEntity)
+                .GetCustomAttributes<TableAttribute>();
+            foreach (TableAttribute attribute in attributes)
             {
                 foreach (IAttributeHandler handler in this.handlers)
                 {
@@ -230,9 +226,9 @@ namespace XReports.SchemaBuilders
 
         private void AddColumn<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportVariableAttribute attribute, Attribute[] globalAttributes)
         {
-            IReportCellsProvider<TEntity> instance = this.CreateCellsProvider<TEntity>(property);
+            IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(attribute.Title, instance);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
@@ -258,8 +254,9 @@ namespace XReports.SchemaBuilders
         private Attribute[] MergeGlobalAttributes(Attribute[] propertyAttributes, Attribute[] globalAttributes)
         {
             return propertyAttributes
+                .Where(a => !(a is ReportVariableAttribute))
                 .Concat(globalAttributes
-                    .Where(a => !(a is TablePropertyAttribute))
+                    .Where(a => !(a is TableAttribute) && !(a is ReportAttribute))
                     .Where(a =>
                         (
                             !(a is BasePropertyAttribute)
@@ -274,7 +271,7 @@ namespace XReports.SchemaBuilders
 
         private ReportVariableData[] GetProperties<TEntity>()
         {
-            return typeof(TEntity).GetProperties()
+            ReportVariableData[] reportVariables = typeof(TEntity).GetProperties()
                 .Select(p => new
                 {
                     Property = p,
@@ -288,6 +285,18 @@ namespace XReports.SchemaBuilders
                 })
                 .OrderBy(x => x.Attribute.Order)
                 .ToArray();
+
+            if (reportVariables.Length == 0)
+            {
+                throw new ArgumentException($"There are no report variables in {typeof(TEntity)}");
+            }
+
+            if (reportVariables.Select(v => v.Attribute.Order).Distinct().Count() != reportVariables.Length)
+            {
+                throw new ArgumentException("Order of report variables should be unique");
+            }
+
+            return reportVariables;
         }
 
         private Attribute[] GetGlobalAttributes<TEntity>()
@@ -295,6 +304,63 @@ namespace XReports.SchemaBuilders
             return typeof(TEntity).GetCustomAttributes()
                 .Where(a => !(a is ReportAttribute))
                 .ToArray();
+        }
+
+        private void ExecutePostBuilder<TPostBuilderType>(Type postBuilderType, params object[] arguments)
+        {
+            if (!typeof(TPostBuilderType).IsAssignableFrom(postBuilderType))
+            {
+                throw new ArgumentException($"Type {postBuilderType} should implement {typeof(TPostBuilderType)}");
+            }
+
+            MethodInfo buildMethod = typeof(TPostBuilderType).GetMethod(
+                "Build", arguments.Select(a => a.GetType()).ToArray());
+            if (buildMethod == null)
+            {
+                throw new ArgumentException($"Cannot find method \"Build\" in type {typeof(TPostBuilderType)}");
+            }
+
+            (TPostBuilderType postBuilder, bool shouldDispose) = this.CreatePostBuilder<TPostBuilderType>(postBuilderType);
+
+            buildMethod.Invoke(postBuilder, arguments);
+
+            if (shouldDispose)
+            {
+                this.DisposePostBuilder(postBuilder);
+            }
+        }
+
+        private (TPostBuilderType postBuilder, bool shouldDispose) CreatePostBuilder<TPostBuilderType>(Type postBuilderType)
+        {
+            bool shouldDispose;
+            TPostBuilderType postBuilder;
+
+            if (this.serviceProvider == null)
+            {
+                postBuilder = (TPostBuilderType)Activator.CreateInstance(postBuilderType);
+                shouldDispose = true;
+            }
+            else if ((postBuilder = (TPostBuilderType)this.serviceProvider.GetService(postBuilderType)) != null)
+            {
+                shouldDispose = false;
+            }
+            else
+            {
+                postBuilder = (TPostBuilderType)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, postBuilderType);
+                shouldDispose = true;
+            }
+
+            return (postBuilder, shouldDispose);
+        }
+
+        private void DisposePostBuilder<TPostBuilderType>(TPostBuilderType postBuilder)
+        {
+            if (postBuilder is IAsyncDisposable && !(postBuilder is IDisposable))
+            {
+                throw new ArgumentException($"Post builder implements {typeof(IAsyncDisposable)}, but not {typeof(IDisposable)}. Please, implement {typeof(IDisposable)}.");
+            }
+
+            (postBuilder as IDisposable)?.Dispose();
         }
 
         private class ReportVariableData

@@ -169,18 +169,22 @@ namespace XReports.Core.Tests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        [Fact]
-        public void AddGroupByColumnIndexesShouldThrowWhenRowIndexIsLessThanZero()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void AddGroupByColumnIndexesShouldThrowWhenRowIndexIsLessThanOne(int rowSpan)
         {
-            Action action = () => this.builder.AddGroup(-1, "Group", 0);
+            Action action = () => this.builder.AddGroup(0, rowSpan, "Group", 0);
 
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
 
-        [Fact]
-        public void AddGroupByColumnIndexesShouldThrowWhenRowSpanIsLessThanZero()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void AddGroupByColumnIndexesShouldThrowWhenRowSpanIsLessThanOne(int rowSpan)
         {
-            Action action = () => this.builder.AddGroup(0, -1, "Group", 0);
+            Action action = () => this.builder.AddGroup(0, rowSpan, "Group", 0);
 
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }

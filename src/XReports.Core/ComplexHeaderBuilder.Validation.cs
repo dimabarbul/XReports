@@ -54,7 +54,15 @@ namespace XReports
         {
             if (parameter < 0)
             {
-                throw new ArgumentOutOfRangeException(parameterName, $"Parameter should not be negative");
+                throw new ArgumentOutOfRangeException(parameterName, "Parameter should not be negative");
+            }
+        }
+
+        private void ValidateNumberPositive(string parameterName, int parameter)
+        {
+            if (parameter <= 0)
+            {
+                throw new ArgumentOutOfRangeException(parameterName, "Parameter should be positive");
             }
         }
     }

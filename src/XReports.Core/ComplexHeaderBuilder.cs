@@ -47,7 +47,7 @@ namespace XReports
         {
             this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
             this.ValidateNumberNotNegative(nameof(fromColumn), fromColumn);
-            this.ValidateNumberNotNegative(nameof(rowSpan), rowSpan);
+            this.ValidateNumberPositive(nameof(rowSpan), rowSpan);
 
             if (toColumn != null)
             {
@@ -66,7 +66,7 @@ namespace XReports
         public void AddGroup(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
         {
             this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.ValidateNumberNotNegative(nameof(rowSpan), rowSpan);
+            this.ValidateNumberPositive(nameof(rowSpan), rowSpan);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
