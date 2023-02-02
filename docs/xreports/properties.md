@@ -6,7 +6,7 @@ Marks cell to be center-, left- or right-aligned.
 
 Example:
 ```c#
-reportBuilder.AddProperties(new AlignmentProperty(AlignmentType.Right));
+reportBuilder.AddProperties(new AlignmentProperty(Alignment.Right));
 ```
 
 In Html it will be converted to `style="text-align: right"` attribute.
