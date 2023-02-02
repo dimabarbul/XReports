@@ -79,20 +79,39 @@ namespace XReports.SchemaBuilders
         {
             IHorizontalReportSchemaBuilder<TEntity> builder = new HorizontalReportSchemaBuilder<TEntity>();
 
-            ReportVariableData[] reportVariables = this.GetProperties<TEntity>();
+            PropertyAttribute<HeaderRowAttribute>[] headerRows = this.GetHeaderRowProperties<TEntity>();
+            PropertyAttribute<ReportVariableAttribute>[] reportVariables = this.GetReportVariables<TEntity>();
             Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
 
+            this.AddHeaderRows(builder, headerRows);
             this.AddRows(builder, reportVariables, globalAttributes);
             this.AddComplexHeader(builder, reportVariables);
 
-            this.ProcessTablePropertyAttributes<TEntity>(builder);
+            this.ProcessTablePropertyAttributes(builder);
 
             return builder;
         }
 
-        private void AddRows<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, ReportVariableData[] reportVariables, Attribute[] globalAttributes)
+        private void AddHeaderRows<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, PropertyAttribute<HeaderRowAttribute>[] propertyAttributes)
         {
-            foreach (ReportVariableData x in reportVariables)
+            foreach (PropertyAttribute<HeaderRowAttribute> propertyAttribute in propertyAttributes)
+            {
+                this.AddHeaderRow(builder, propertyAttribute);
+            }
+        }
+
+        private void AddHeaderRow<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, PropertyAttribute<HeaderRowAttribute> propertyAttribute)
+        {
+            IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(propertyAttribute.Property);
+
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddHeaderRow(propertyAttribute.Attribute.Title, cellsProvider);
+
+            this.ApplyAttributes(builder, cellsProviderBuilder, propertyAttribute.Property, Array.Empty<Attribute>());
+        }
+
+        private void AddRows<TEntity>(IHorizontalReportSchemaBuilder<TEntity> builder, PropertyAttribute<ReportVariableAttribute>[] reportVariables, Attribute[] globalAttributes)
+        {
+            foreach (PropertyAttribute<ReportVariableAttribute> x in reportVariables)
             {
                 this.AddRow(builder, x.Property, x.Attribute, globalAttributes);
             }
@@ -151,9 +170,15 @@ namespace XReports.SchemaBuilders
 
         private IVerticalReportSchemaBuilder<TEntity> BuildVerticalReportNoPostBuild<TEntity>()
         {
+            PropertyAttribute<HeaderRowAttribute>[] headerRowProperties = this.GetHeaderRowProperties<TEntity>();
+            if (headerRowProperties.Length > 0)
+            {
+                throw new InvalidOperationException($"Vertical report cannot have properties with {typeof(HeaderRowAttribute)} attribute");
+            }
+
             IVerticalReportSchemaBuilder<TEntity> builder = new VerticalReportSchemaBuilder<TEntity>();
             Attribute[] globalAttributes = this.GetGlobalAttributes<TEntity>();
-            ReportVariableData[] properties = this.GetProperties<TEntity>();
+            PropertyAttribute<ReportVariableAttribute>[] properties = this.GetReportVariables<TEntity>();
 
             this.AddColumns(builder, properties, globalAttributes);
             this.AddComplexHeader(builder, properties);
@@ -163,15 +188,15 @@ namespace XReports.SchemaBuilders
             return builder;
         }
 
-        private void AddColumns<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties, Attribute[] globalAttributes)
+        private void AddColumns<TEntity>(IVerticalReportSchemaBuilder<TEntity> builder, PropertyAttribute<ReportVariableAttribute>[] properties, Attribute[] globalAttributes)
         {
-            foreach (ReportVariableData x in properties)
+            foreach (PropertyAttribute<ReportVariableAttribute> x in properties)
             {
                 this.AddColumn(builder, x.Property, x.Attribute, globalAttributes);
             }
         }
 
-        private void AddComplexHeader<TEntity>(IReportSchemaBuilder<TEntity> builder, ReportVariableData[] properties)
+        private void AddComplexHeader<TEntity>(IReportSchemaBuilder<TEntity> builder, PropertyAttribute<ReportVariableAttribute>[] properties)
         {
             IEnumerable<ComplexHeaderAttribute> complexHeaderAttributes = typeof(TEntity).GetCustomAttributes<ComplexHeaderAttribute>();
             Dictionary<int, int> normalizedIndexes = properties
@@ -240,7 +265,7 @@ namespace XReports.SchemaBuilders
             Attribute[] globalAttributes)
         {
             Attribute[] propertyAttributes = property.GetCustomAttributes().ToArray();
-            Attribute[] attributes = this.MergeGlobalAttributes(propertyAttributes, globalAttributes);
+            Attribute[] attributes = this.MergeAndFilterAttributes(propertyAttributes, globalAttributes);
 
             foreach (Attribute attribute in attributes)
             {
@@ -251,10 +276,10 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private Attribute[] MergeGlobalAttributes(Attribute[] propertyAttributes, Attribute[] globalAttributes)
+        private Attribute[] MergeAndFilterAttributes(Attribute[] propertyAttributes, Attribute[] globalAttributes)
         {
             return propertyAttributes
-                .Where(a => !(a is ReportVariableAttribute))
+                .Where(a => !(a is ReportVariableAttribute) && !(a is HeaderRowAttribute))
                 .Concat(globalAttributes
                     .Where(a => !(a is TableAttribute) && !(a is ReportAttribute))
                     .Where(a =>
@@ -269,16 +294,16 @@ namespace XReports.SchemaBuilders
                 .ToArray();
         }
 
-        private ReportVariableData[] GetProperties<TEntity>()
+        private PropertyAttribute<ReportVariableAttribute>[] GetReportVariables<TEntity>()
         {
-            ReportVariableData[] reportVariables = typeof(TEntity).GetProperties()
+            PropertyAttribute<ReportVariableAttribute>[] reportVariables = typeof(TEntity).GetProperties()
                 .Select(p => new
                 {
                     Property = p,
                     Attribute = p.GetCustomAttribute<ReportVariableAttribute>(),
                 })
                 .Where(x => x.Attribute != null)
-                .Select(x => new ReportVariableData()
+                .Select(x => new PropertyAttribute<ReportVariableAttribute>()
                 {
                     Property = x.Property,
                     Attribute = x.Attribute,
@@ -297,6 +322,31 @@ namespace XReports.SchemaBuilders
             }
 
             return reportVariables;
+        }
+
+        private PropertyAttribute<HeaderRowAttribute>[] GetHeaderRowProperties<TEntity>()
+        {
+            PropertyAttribute<HeaderRowAttribute>[] headerRowProperties = typeof(TEntity).GetProperties()
+                .Select(p => new
+                {
+                    Property = p,
+                    Attribute = p.GetCustomAttribute<HeaderRowAttribute>(),
+                })
+                .Where(x => x.Attribute != null)
+                .Select(x => new PropertyAttribute<HeaderRowAttribute>()
+                {
+                    Property = x.Property,
+                    Attribute = x.Attribute,
+                })
+                .OrderBy(x => x.Attribute.Order)
+                .ToArray();
+
+            if (headerRowProperties.Select(v => v.Attribute.Order).Distinct().Count() != headerRowProperties.Length)
+            {
+                throw new ArgumentException("Order of header rows should be unique");
+            }
+
+            return headerRowProperties;
         }
 
         private Attribute[] GetGlobalAttributes<TEntity>()
@@ -363,11 +413,12 @@ namespace XReports.SchemaBuilders
             (postBuilder as IDisposable)?.Dispose();
         }
 
-        private class ReportVariableData
+        private class PropertyAttribute<TAttribute>
+            where TAttribute : Attribute
         {
             public PropertyInfo Property { get; set; }
 
-            public ReportVariableAttribute Attribute { get; set; }
+            public TAttribute Attribute { get; set; }
         }
     }
 }

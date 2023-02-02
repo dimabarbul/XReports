@@ -81,18 +81,18 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [Fact]
-        public void BuildSchemaShouldApplyGlobalPropertiesWhenOverwrittenForHeader()
+        public void BuildSchemaShouldApplyGlobalPropertiesWhenOverwrittenForHeaderForVertical()
         {
             AttributeBasedBuilder builder = new AttributeBasedBuilder(new[]
             {
                 new CommonAttributeHandler(),
             });
 
-            IReportSchema<WithOverwrittenForHeaderGlobalProperties> schema = builder.BuildSchema<WithOverwrittenForHeaderGlobalProperties>();
+            IReportSchema<VerticalWithOverwrittenForHeaderGlobalProperties> schema = builder.BuildSchema<VerticalWithOverwrittenForHeaderGlobalProperties>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
             {
-                new WithOverwrittenForHeaderGlobalProperties() { Id = 1 },
+                new VerticalWithOverwrittenForHeaderGlobalProperties() { Id = 1 },
             });
             reportTable.HeaderRows.Should().BeEquivalentTo(new[]
             {
@@ -111,6 +111,42 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new object[]
                 {
+                    new ReportCellData(1)
+                    {
+                        Properties = new[]
+                        {
+                            new AlignmentProperty(Alignment.Center),
+                        },
+                    },
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldApplyGlobalPropertiesWhenOverwrittenForHeaderForHorizontal()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(new[]
+            {
+                new CommonAttributeHandler(),
+            });
+
+            IReportSchema<HorizontalWithOverwrittenForHeaderGlobalProperties> schema = builder.BuildSchema<HorizontalWithOverwrittenForHeaderGlobalProperties>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            {
+                new HorizontalWithOverwrittenForHeaderGlobalProperties() { Id = 1 },
+            });
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID")
+                    {
+                        Properties = new[]
+                        {
+                            new AlignmentProperty(Alignment.Right),
+                        },
+                    },
                     new ReportCellData(1)
                     {
                         Properties = new[]
@@ -191,7 +227,16 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [Alignment(Alignment.Center)]
-        private class WithOverwrittenForHeaderGlobalProperties
+        private class VerticalWithOverwrittenForHeaderGlobalProperties
+        {
+            [ReportVariable(1, "ID")]
+            [Alignment(Alignment.Right, IsHeader = true)]
+            public int Id { get; set; }
+        }
+
+        [HorizontalReport]
+        [Alignment(Alignment.Center)]
+        private class HorizontalWithOverwrittenForHeaderGlobalProperties
         {
             [ReportVariable(1, "ID")]
             [Alignment(Alignment.Right, IsHeader = true)]
