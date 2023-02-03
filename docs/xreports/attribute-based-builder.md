@@ -71,13 +71,9 @@ class User
 
 The attribute has 2 required arguments - column order (any number, columns will be added in ascending order of this number) and column title. Building report from this model will have 3 columns: User Name, Email and Age.
 
-Columns/rows are added with two names: class property name and title from ReportVariable attribute. So in previous example you can work with the first column in post-builder class as:
+Columns/rows are added with title from ReportVariable attribute. So in previous example you can work with the first column in post-builder class as:
 
 ```c#
-// You can use class property name.
-builder.ForColumn(nameof(User.Name));
-
-// Or you can you title.
 builder.ForColumn("User Name");
 ```
 
@@ -86,18 +82,20 @@ builder.ForColumn("User Name");
 Complex header can be specified as optional argument to ReportVariableAttribute.
 
 ```c#
+[ComplexHeader(1, "Personal Info", "Name", "Age")]
+[ComplexHeader(2, "Contact Info", 3, 4)]
 class User
 {
-    [ReportVariable(1, "Name", ComplexHeader = new[] { "Personal Info" })]
+    [ReportVariable(1, "Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Age", ComplexHeader = new[] { "Personal Info" })]
+    [ReportVariable(2, "Age")]
     public int Age { get; set; }
 
-    [ReportVariable(3, "Name", ComplexHeader = new[] { "Personal Info", "Contact Info" })]
+    [ReportVariable(3, "Phone")]
     public string Phone { get; set; }
 
-    [ReportVariable(4, "Email", ComplexHeader = new[] { "Personal Info", "Contact Info" })]
+    [ReportVariable(4, "Email")]
     public string Email { get; set; }
 }
 ```
@@ -116,11 +114,83 @@ In this example report will have one complex header row (topmost) "Personal Info
         <th colSpan="2">Contact Info</th>
     </tr>
     <tr>
-        <th>Name</th>
+        <th>Phone</th>
         <th>Email</th>
     </tr>
 </thead>
 </table>
+```
+
+### Header Row in Horizontal Report
+
+To add header row to horizontal report you can use `HeaderRowAttribute` attribute above property that should be used as a header row.
+
+```c#
+[HorizontalReport]
+class User
+{
+    [HeaderRow(1, "Name")]
+    public string Name { get; set; }
+
+    [ReportVariable(1, "Age")]
+    public int Age { get; set; }
+
+    [ReportVariable(2, "Phone")]
+    public string Phone { get; set; }
+
+    [ReportVariable(3, "Email")]
+    public string Email { get; set; }
+}
+```
+
+In this example report will have one header row and 3 rows. Exported to Html report might look like following:
+
+```html
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>John Doe</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>Age</td>
+        <td>21</td>
+    </tr>
+    <tr>
+        <td>Phone</td>
+        <td>1234567890</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>johndoe@example.com</td>
+    </tr>
+</tbody>
+</table>
+```
+
+Global attributes are **not** applied to header rows, to apply attributes you eed to specify them explicitly on property:
+
+```c#
+[HorizontalReport]
+[Alignment(Alignment.Center)]
+class User
+{
+    [HeaderRow(1, "Name")]
+    [Alignment(Alignment.Center, IsHeader = true)]
+    [Alignment(Alignment.Center)]
+    public string Name { get; set; }
+
+    [ReportVariable(1, "Age")]
+    public int Age { get; set; }
+
+    [ReportVariable(2, "Phone")]
+    public string Phone { get; set; }
+
+    [ReportVariable(3, "Email")]
+    public string Email { get; set; }
+}
 ```
 
 ### Built-in Attributes
@@ -134,11 +204,11 @@ class User
     public string Name { get; set; }
 
     [ReportVariable(2, "Email")]
-    [Alignment(AlignmentType.Center, IsHeader = true)]
+    [Alignment(Alignment.Center, IsHeader = true)]
     public string Email { get; set; }
 
     [ReportVariable(3, "Age")]
-    [Alignment(AlignmentType.Center)]
+    [Alignment(Alignment.Center)]
     public int Age { get; set; }
 }
 ```
@@ -146,7 +216,7 @@ class User
 In this example, Age column cells will be center aligned. Also Email header cell will be center aligned.
 
 Built-in attributes:
-- **Alignment**. Has 1 required argument - AlignmentType - center, left or right.
+- **Alignment**. Has 1 required argument - Alignment - center, left or right.
 - **Bold**. No arguments.
 - **Color**. Has 1 (font color) or 2 (font and background colors) required arguments.
 - **CustomProperty**. Has 1 required argument - type of property to assign. Property should have no constructor arguments.
@@ -229,14 +299,13 @@ class HorizontalReportModel
 
 ### Post-Builder
 
-Sometimes using property attributes is not enough. For example, when you're making horizontal report, you cannot add header rows using attributes. To add extra logic when building report you can provide post-builder class.
+Sometimes using property attributes is not enough. For example, you cannot add dynamic properties using attributes. To add extra logic when building report you can provide post-builder class.
 
 ```c#
 [HorizontalReport(PostBuilder = typeof(PostBuilder))]
 class ReportModel
 {
-    // Name will not be a row in the report as it does not have
-    // ReportVariable attribute. But it will be used in post-builder.
+    [HeaderRow(1, "Name")]
     public string Name { get; set; }
 
     [ReportVariable(1, "Email")]
@@ -251,11 +320,11 @@ class ReportModel
     private class PostBuilder : IHorizontalReportPostBuilder<ReportModel>
     {
         // This method will be called after all columns/rows are added to schema builder.
-        public void Build(HorizontalReportSchemaBuilder<ReportModel> builder)
+        public void Build(IHorizontalReportSchemaBuilder<ReportModel> builder)
         {
             // add any custom actions here
             builder.AddHeaderRow(string.Empty, (ReportModel r) => r.Name)
-                .AddProperties(new AlignmentProperty(AlignmentType.Center));
+                .AddProperties(new AlignmentProperty(Alignment.Center));
         }
     }
 }
@@ -293,7 +362,7 @@ class UserModel
             this.lotteryService = lotteryService;
         }
 
-        public void Build(VerticalReportSchemaBuilder<UserModel> builder)
+        public void Build(IVerticalReportSchemaBuilder<UserModel> builder)
         {
             // Use injected service.
             string winner = this.lotteryService.GetWinner();
@@ -344,9 +413,9 @@ class UserScoreModel
     // that will be passed during building of report schema.
     private class PostBuilder : IVerticalReportPostBuilder<UserScoreModel, decimal>
     {
-        public void Build(VerticalReportSchemaBuilder<UserScoreModel> builder, decimal minScore)
+        public void Build(IVerticalReportSchemaBuilder<UserScoreModel> builder, decimal minScore)
         {
-            builder.ForColumn(nameof(Score))
+            builder.ForColumn("Score")
                 .AddDynamicProperty((UserScoreModel m) => m.Score > minScore ? new BoldProperty() : null);
         }
     }
@@ -380,7 +449,7 @@ builder.BuildSchema<UserScoreModel, decimal>(90).BuildReportTable(data);
 Often you may want all columns/rows in report to have the same attribute, for example, center alignment. To do so you may add the attribute to class.
 
 ```c#
-[Alignment(AlignmentType.Center)]
+[Alignment(Alignment.Center)]
 class ReportModel
 {
     [ReportVariable(1, "Name")]
@@ -399,16 +468,16 @@ class ReportModel
 class ReportModel
 {
     [ReportVariable(1, "Name")]
-    [Alignment(AlignmentType.Center)]
+    [Alignment(Alignment.Center)]
     public string Name { get; set; }
 
     [ReportVariable(2, "Email")]
-    [Alignment(AlignmentType.Center)]
+    [Alignment(Alignment.Center)]
     public string Email { get; set; }
 
     [ReportVariable(3, "Score")]
     [DecimalPrecision(2)]
-    [Alignment(AlignmentType.Center)]
+    [Alignment(Alignment.Center)]
     public decimal Score { get; set; }
 }
 ```
@@ -430,8 +499,8 @@ class TitleProperty : ReportTableProperty
     public string Title { get; }
 }
 
-// Inherit TablePropertyAttribute class.
-class TitlePropertyAttribute : TablePropertyAttribute
+// Inherit TableAttribute class.
+class TitlePropertyAttribute : TableAttribute
 {
     public TitlePropertyAttribute(string title)
     {
