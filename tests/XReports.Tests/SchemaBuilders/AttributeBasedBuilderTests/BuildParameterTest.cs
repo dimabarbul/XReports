@@ -30,10 +30,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 try
                 {
                     builder.GetType()
-                        .GetMethod(
-                            nameof(AttributeBasedBuilder.BuildSchema),
-                            genericParameterCount: 1,
-                            Type.EmptyTypes)
+                        .GetMethods()
+                        .First(mi =>
+                            mi.Name == nameof(AttributeBasedBuilder.BuildSchema)
+                            && mi.IsGenericMethodDefinition
+                            && mi.GetGenericArguments().Length == 1)
                         .MakeGenericMethod(entityType, expectedParameterType)
                         .Invoke(builder, new object[] { 1 });
                 }

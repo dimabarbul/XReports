@@ -217,7 +217,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 public ValueTask DisposeAsync()
                 {
                     GC.SuppressFinalize(this);
-                    return ValueTask.CompletedTask;
+                    return new ValueTask(Task.CompletedTask);
                 }
             }
         }
@@ -240,7 +240,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 public ValueTask DisposeAsync()
                 {
                     GC.SuppressFinalize(this);
-                    return ValueTask.CompletedTask;
+                    return new ValueTask(Task.CompletedTask);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     GC.SuppressFinalize(this);
                     AsyncDisposeCalls++;
 
-                    return ValueTask.CompletedTask;
+                    return new ValueTask(Task.CompletedTask);
                 }
             }
         }
@@ -308,7 +308,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     GC.SuppressFinalize(this);
                     AsyncDisposeCalls++;
 
-                    return ValueTask.CompletedTask;
+                    return new ValueTask(Task.CompletedTask);
                 }
             }
         }
