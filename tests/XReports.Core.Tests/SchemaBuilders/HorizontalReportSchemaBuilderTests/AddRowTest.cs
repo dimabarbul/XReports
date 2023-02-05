@@ -25,7 +25,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             {
                 new[] { "Row1" },
                 new[] { "Row2" },
-                new[] { "TheRow" },
+                new[] { rowName },
             });
         }
 
@@ -67,6 +67,44 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
             Action action = () => schemaBuilder.AddRow(null, new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void AddRowShouldAddRowWithId()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            const string rowName = "TheRow";
+
+            schemaBuilder.AddRow(new RowId("Row"), rowName, new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "Row1" },
+                new[] { "Row2" },
+                new[] { rowName },
+            });
+        }
+
+        [Fact]
+        public void AddRowShouldThrowWhenIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            Action action = () => schemaBuilder.AddRow(null, "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void AddRowShouldThrowWhenIdExists()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = new HorizontalReportSchemaBuilder<int>();
+            schemaBuilder.AddRow(new RowId("Row"), "Row1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.AddRow(new RowId("Row"), "Row2", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }

@@ -114,6 +114,54 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [Fact]
+        public void BuildReportTableShouldBuildComplexHeaderWhenColumnsAreReferredByPropertyNamesForVerticalReport()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+            IReportSchema<VerticalOneComplexHeaderByPropertyNames> schema = builder.BuildSchema<VerticalOneComplexHeaderByPropertyNames>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalOneComplexHeaderByPropertyNames>());
+
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID") { RowSpan = 2 },
+                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[] { null, "Name", "Age" },
+            });
+        }
+
+        [Fact]
+        public void BuildReportTableShouldBuildComplexHeaderWhenRowsAreReferredByPropertyNamesForHorizontalReport()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+            IReportSchema<HorizontalOneComplexHeaderByPropertyNames> schema = builder.BuildSchema<HorizontalOneComplexHeaderByPropertyNames>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalOneComplexHeaderByPropertyNames>());
+
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID") { ColumnSpan = 2 },
+                    null,
+                },
+                new object[]
+                {
+                    new ReportCellData("Personal") { RowSpan = 2 },
+                    "Name",
+                },
+                new object[]
+                {
+                    null,
+                    "Age",
+                },
+            });
+        }
+
+        [Fact]
         public void BuildReportTableShouldBuildComplexHeaderWhenGapInColumnIndexesForVerticalReport()
         {
             AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
@@ -350,6 +398,59 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             IReportSchema<HorizontalByTitlesWithColumnFromPostBuilder> schema = builder.BuildSchema<HorizontalByTitlesWithColumnFromPostBuilder>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByTitlesWithColumnFromPostBuilder>());
+
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Complex Header") { RowSpan = 3 },
+                    "ID",
+                },
+                new object[]
+                {
+                    null,
+                    "Name",
+                },
+                new object[]
+                {
+                    null,
+                    "Age",
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildReportTableShouldSpanColumnsAddedInPostBuilderWhenColumnsAreReferredByPropertyNamesForVertical()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+            IReportSchema<VerticalByPropertyNamesWithColumnFromPostBuilder> schema = builder.BuildSchema<VerticalByPropertyNamesWithColumnFromPostBuilder>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalByPropertyNamesWithColumnFromPostBuilder>());
+
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Complex Header") { ColumnSpan = 3 },
+                    null,
+                    null,
+                },
+                new object[]
+                {
+                    "ID",
+                    "Name",
+                    "Age",
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildReportTableShouldSpanColumnsAddedInPostBuilderWhenRowsAreReferredByPropertyNamesForHorizontal()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+            IReportSchema<HorizontalByPropertyNamesWithColumnFromPostBuilder> schema = builder.BuildSchema<HorizontalByPropertyNamesWithColumnFromPostBuilder>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
 
             reportTable.Rows.Should().BeEquivalentTo(new[]
             {

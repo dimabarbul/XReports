@@ -71,7 +71,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             Action action = () => schemaBuilder.InsertRow(0, null, new EmptyCellsProvider<int>());
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]

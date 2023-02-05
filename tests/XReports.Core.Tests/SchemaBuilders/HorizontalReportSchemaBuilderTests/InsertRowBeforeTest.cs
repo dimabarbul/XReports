@@ -70,7 +70,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             Action action = () => schemaBuilder.InsertRowBefore("Row1", null, new EmptyCellsProvider<int>());
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
         {
             HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertRowBefore(null, "TheRow", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertRowBefore((string)null, "TheRow", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -118,6 +118,109 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 new[] { "Row2" },
                 new[] { "Row1" },
             });
+        }
+
+        [Fact]
+        public void InsertRowBeforeByTitleShouldInsertRowWithId()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            schemaBuilder.InsertRowBefore("Row1", new RowId("Row"), "TheRow", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "TheRow" },
+                new[] { "Row1" },
+                new[] { "Row2" },
+            });
+        }
+
+        [Fact]
+        public void InsertRowBeforeByTitleShouldThrowWhenIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(1);
+
+            Action action = () => schemaBuilder.InsertRowBefore("Row1", null, "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertRowBeforeByTitleShouldThrowWhenIdExists()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("Row"), "Row1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRowBefore("Row1", new RowId("Row"), "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void InsertRowBeforeByIdShouldInsertRowWithId()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            schemaBuilder.InsertRowBefore(new RowId("1"), new RowId("3"), "TheRow", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "TheRow" },
+                new[] { "Row1" },
+                new[] { "Row2" },
+            });
+        }
+
+        [Fact]
+        public void InsertRowBeforeByIdShouldThrowWhenIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRowBefore(new RowId("1"), null, "3", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertRowBeforeByIdShouldThrowWhenIdExists()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRowBefore(new RowId("1"), new RowId("2"), "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void InsertRowBeforeByIdShouldThrowWhenBeforeIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRowBefore((RowId)null, new RowId("3"), "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertRowBeforeByIdShouldThrowWhenBeforeIdDoesNotExist()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRowBefore(new RowId("0"), new RowId("3"), "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private HorizontalReportSchemaBuilder<int> CreateSchemaBuilder(int rowsCount)

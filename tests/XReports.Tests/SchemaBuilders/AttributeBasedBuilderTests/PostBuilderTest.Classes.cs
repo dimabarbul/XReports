@@ -2,13 +2,14 @@ using System;
 using System.Threading.Tasks;
 using XReports.Attributes;
 using XReports.Interfaces;
+using XReports.Models;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
     public partial class PostBuilderTest
     {
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
-        private class ForVerticalReport
+        private class Vertical
         {
             [ReportVariable(1, "ID")]
             public int Id { get; set; }
@@ -16,11 +17,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IVerticalReportPostBuilder<ForVerticalReport>
+            public class PostBuilder : IVerticalReportPostBuilder<Vertical>
             {
                 public static int Calls { get; set; }
 
-                public void Build(IVerticalReportSchemaBuilder<ForVerticalReport> builder)
+                public void Build(IVerticalReportSchemaBuilder<Vertical> builder)
                 {
                     Calls++;
                 }
@@ -28,7 +29,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
-        private class ForHorizontalReport
+        private class Horizontal
         {
             [ReportVariable(1, "ID")]
             public int Id { get; set; }
@@ -36,11 +37,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IHorizontalReportPostBuilder<ForHorizontalReport>
+            public class PostBuilder : IHorizontalReportPostBuilder<Horizontal>
             {
                 public static int Calls;
 
-                public void Build(IHorizontalReportSchemaBuilder<ForHorizontalReport> builder)
+                public void Build(IHorizontalReportSchemaBuilder<Horizontal> builder)
                 {
                     Calls++;
                 }
@@ -93,7 +94,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             }
         }
 
-        [VerticalReport(PostBuilder = typeof(ForVerticalReport.PostBuilder))]
+        [VerticalReport(PostBuilder = typeof(Vertical.PostBuilder))]
         private class VerticalWithWrongPostBuilderEntityType
         {
             [ReportVariable(1, "ID")]
@@ -121,7 +122,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Id { get; set; }
         }
 
-        [HorizontalReport(PostBuilder = typeof(ForHorizontalReport.PostBuilder))]
+        [HorizontalReport(PostBuilder = typeof(Horizontal.PostBuilder))]
         private class HorizontalWithWrongPostBuilderEntityType
         {
             [ReportVariable(1, "ID")]
@@ -379,6 +380,44 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 {
                     GC.SuppressFinalize(this);
                     this.dependency.Call();
+                }
+            }
+        }
+
+        [VerticalReport(PostBuilder = typeof(PostBuilder))]
+        private class VerticalForColumnByPropertyName
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name")]
+            public string Name { get; set; }
+
+            public class PostBuilder : IVerticalReportPostBuilder<VerticalForColumnByPropertyName>
+            {
+                public void Build(IVerticalReportSchemaBuilder<VerticalForColumnByPropertyName> builder)
+                {
+                    builder.ForColumn(new ColumnId(nameof(VerticalForColumnByPropertyName.Id)))
+                        .AddHeaderProperties(new MyProperty());
+                }
+            }
+        }
+
+        [HorizontalReport(PostBuilder = typeof(PostBuilder))]
+        private class HorizontalForRowByPropertyName
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name")]
+            public string Name { get; set; }
+
+            public class PostBuilder : IHorizontalReportPostBuilder<HorizontalForRowByPropertyName>
+            {
+                public void Build(IHorizontalReportSchemaBuilder<HorizontalForRowByPropertyName> builder)
+                {
+                    builder.ForRow(new RowId(nameof(HorizontalForRowByPropertyName.Id)))
+                        .AddHeaderProperties(new MyProperty());
                 }
             }
         }

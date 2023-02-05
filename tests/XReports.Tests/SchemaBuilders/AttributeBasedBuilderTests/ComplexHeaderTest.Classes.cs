@@ -32,6 +32,19 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Age { get; set; }
         }
 
+        [ComplexHeader(0, "Personal", nameof(FullName), nameof(Age), true)]
+        private class VerticalOneComplexHeaderByPropertyNames
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name")]
+            public string FullName { get; set; }
+
+            [ReportVariable(3, "Age")]
+            public int Age { get; set; }
+        }
+
         [HorizontalReport]
         [ComplexHeader(0, "Personal", 2, 3)]
         private class HorizontalOneComplexHeaderByIndexes
@@ -49,6 +62,20 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport]
         [ComplexHeader(0, "Personal", "Name", "Age")]
         private class HorizontalOneComplexHeaderByTitles
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Name")]
+            public string FullName { get; set; }
+
+            [ReportVariable(3, "Age")]
+            public int Age { get; set; }
+        }
+
+        [HorizontalReport]
+        [ComplexHeader(0, "Personal", nameof(FullName), nameof(Age), true)]
+        private class HorizontalOneComplexHeaderByPropertyNames
         {
             [ReportVariable(1, "ID")]
             public int Id { get; set; }
@@ -91,7 +118,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Employee Info", 2, 5)]
         [ComplexHeader(0, 2, "Dept. Info", 6)]
         [ComplexHeader(1, "Personal", "Name", "Age")]
-        [ComplexHeader(1, "Job Info", 4, 5)]
+        [ComplexHeader(1, "Job Info", nameof(JobTitle), nameof(Salary), true)]
         [ComplexHeader(2, "Sensitive", "Salary")]
         private class VerticalMultipleLevelsOfComplexHeader
         {
@@ -214,6 +241,44 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 public void Build(IHorizontalReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder)
                 {
                     builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByTitlesWithColumnFromPostBuilder>());
+                }
+            }
+        }
+
+        [VerticalReport(PostBuilder = typeof(PostBuilder))]
+        [ComplexHeader(0, "Complex Header", nameof(Id), nameof(Age), true)]
+        private class VerticalByPropertyNamesWithColumnFromPostBuilder
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Age")]
+            public string Age { get; set; }
+
+            private class PostBuilder : IVerticalReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
+            {
+                public void Build(IVerticalReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder)
+                {
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByPropertyNamesWithColumnFromPostBuilder>());
+                }
+            }
+        }
+
+        [HorizontalReport(PostBuilder = typeof(PostBuilder))]
+        [ComplexHeader(0, "Complex Header", nameof(Id), nameof(Age), true)]
+        private class HorizontalByPropertyNamesWithColumnFromPostBuilder
+        {
+            [ReportVariable(1, "ID")]
+            public int Id { get; set; }
+
+            [ReportVariable(2, "Age")]
+            public string Age { get; set; }
+
+            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
+            {
+                public void Build(IHorizontalReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder)
+                {
+                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
                 }
             }
         }

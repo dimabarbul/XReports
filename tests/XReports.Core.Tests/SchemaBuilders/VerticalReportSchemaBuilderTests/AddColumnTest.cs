@@ -23,7 +23,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().BeEquivalentTo(new[]
             {
-                new object[] { "Column1", "Column2", "TheColumn" },
+                new object[] { "Column1", "Column2", columnName },
             });
         }
 
@@ -63,6 +63,44 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
             Action action = () => schemaBuilder.AddColumn(null, new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void AddColumnShouldAddColumnWithId()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ColumnId id = new ColumnId("Column");
+            const string columnName = "TheColumn";
+
+            schemaBuilder.AddColumn(id, columnName, new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "Column1", "Column2", columnName },
+            });
+        }
+
+        [Fact]
+        public void AddColumnShouldThrowWhenIdIsNull()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            Action action = () => schemaBuilder.AddColumn(null, "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void AddColumnShouldThrowWhenIdExists()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ColumnId id = new ColumnId("Column");
+            schemaBuilder.AddColumn(id, "Column1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.AddColumn(id, "Column2", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }

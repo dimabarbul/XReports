@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using XReports.Helpers;
 using XReports.Models;
 
-namespace XReports
+namespace XReports.ComplexHeader
 {
     public partial class ComplexHeaderBuilder
     {
@@ -12,12 +13,12 @@ namespace XReports
 
         public void AddGroup(int rowIndex, string title, int fromColumn, int? toColumn = null)
         {
-            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.ValidateNumberNotNegative(nameof(fromColumn), fromColumn);
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
+            Validation.NotNegative(nameof(fromColumn), fromColumn);
 
             if (toColumn != null)
             {
-                this.ValidateNumberNotNegative(nameof(toColumn), (int)toColumn);
+                Validation.NotNegative(nameof(toColumn), (int)toColumn);
             }
 
             this.groups.Add(
@@ -31,7 +32,7 @@ namespace XReports
 
         public void AddGroup(int rowIndex, string title, string fromColumn, string toColumn = null)
         {
-            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
@@ -43,15 +44,29 @@ namespace XReports
                 ));
         }
 
+        public void AddGroup(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn = null)
+        {
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
+
+            this.groups.Add(
+                new ComplexHeaderGroupByColumnId(
+                    rowIndex,
+                    title,
+                    fromColumn,
+                    toColumn,
+                    1
+                ));
+        }
+
         public void AddGroup(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
         {
-            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.ValidateNumberNotNegative(nameof(fromColumn), fromColumn);
-            this.ValidateNumberPositive(nameof(rowSpan), rowSpan);
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
+            Validation.NotNegative(nameof(fromColumn), fromColumn);
+            Validation.Positive(nameof(rowSpan), rowSpan);
 
             if (toColumn != null)
             {
-                this.ValidateNumberNotNegative(nameof(toColumn), (int)toColumn);
+                Validation.NotNegative(nameof(toColumn), (int)toColumn);
             }
 
             this.groups.Add(
@@ -65,8 +80,8 @@ namespace XReports
 
         public void AddGroup(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
         {
-            this.ValidateNumberNotNegative(nameof(rowIndex), rowIndex);
-            this.ValidateNumberPositive(nameof(rowSpan), rowSpan);
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
+            Validation.Positive(nameof(rowSpan), rowSpan);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
@@ -78,11 +93,31 @@ namespace XReports
                 ));
         }
 
-        public ComplexHeaderCell[,] Build(IReadOnlyList<string> columnNames)
+        public void AddGroup(int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null)
         {
-            this.Validate(columnNames);
+            Validation.NotNegative(nameof(rowIndex), rowIndex);
+            Validation.Positive(nameof(rowSpan), rowSpan);
+
+            this.groups.Add(
+                new ComplexHeaderGroupByColumnId(
+                    rowIndex,
+                    title,
+                    fromColumn,
+                    toColumn,
+                    rowSpan
+                ));
+        }
+
+        public ComplexHeaderCell[,] Build(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
+        {
+            if (columnNames.Count != columnIds.Count)
+            {
+                throw new ArgumentException("Count of column names should be the same as count of column IDs.");
+            }
+
+            this.Validate(columnNames, columnIds);
             this.NormalizeRowIndexes();
-            ComplexHeaderCell[,] header = this.BuildHeaderCells(columnNames);
+            ComplexHeaderCell[,] header = this.BuildHeaderCells(columnNames, columnIds);
             this.MoveSpanHeaderTitleUp(header);
             this.ValidateAllCellsFilled(header);
             this.CleanUpHeaderCells(header);
@@ -115,7 +150,7 @@ namespace XReports
             }
         }
 
-        private ComplexHeaderCell[,] BuildHeaderCells(IReadOnlyList<string> columnNames)
+        private ComplexHeaderCell[,] BuildHeaderCells(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             int complexHeaderRowsCount =
                 this.groups.Count > 0 ?
@@ -123,7 +158,7 @@ namespace XReports
                     0;
             ComplexHeaderCell[,] headerCells = new ComplexHeaderCell[complexHeaderRowsCount + 1, columnNames.Count];
 
-            this.AddComplexHeaderCells(headerCells, columnNames);
+            this.AddComplexHeaderCells(headerCells, columnNames, columnIds);
             this.AddRegularHeaderCells(headerCells, columnNames);
 
             return headerCells;
@@ -146,10 +181,10 @@ namespace XReports
             }
         }
 
-        private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
+        private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             foreach (GroupWithPosition group in this.groups
-                .Select(g => this.GetGroupWithPosition(g, columnNames))
+                .Select(g => this.GetGroupWithPosition(g, columnNames, columnIds))
                 .OrderBy(h => h.Group.RowIndex)
                 .ThenBy(h => h.StartIndex))
             {
@@ -182,18 +217,19 @@ namespace XReports
             }
         }
 
-        private GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames)
+        private GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
-            if (group is ComplexHeaderGroupByIndex groupByIndex)
+            switch (group)
             {
-                return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
+                case ComplexHeaderGroupByIndex groupByIndex:
+                    return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
+                case ComplexHeaderGroupByName groupByName:
+                    return new GroupWithPosition(group, this.GetColumnIndex(groupByName.FromColumn, columnNames), this.GetColumnIndex(groupByName.ToColumn, columnNames));
+                case ComplexHeaderGroupByColumnId groupByColumnId:
+                    return new GroupWithPosition(group, this.GetColumnIndex(groupByColumnId.FromColumn, columnIds), this.GetColumnIndex(groupByColumnId.ToColumn, columnIds));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(group), $"Unexpected type of group: {group.GetType()}");
             }
-
-            ComplexHeaderGroupByName groupByName = (ComplexHeaderGroupByName)group;
-
-            return new GroupWithPosition(group,
-                this.GetColumnIndex(groupByName.FromColumn, columnNames),
-                this.GetColumnIndex(groupByName.ToColumn, columnNames));
         }
 
         private int GetColumnIndex(string columnName, IReadOnlyList<string> columnNames)
@@ -207,6 +243,19 @@ namespace XReports
             }
 
             throw new ArgumentException($"Column name {columnName} not found");
+        }
+
+        private int GetColumnIndex(ColumnId columnId, IReadOnlyList<ColumnId> columnIds)
+        {
+            for (int i = 0; i < columnIds.Count; i++)
+            {
+                if (columnId.Equals(columnIds[i]))
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException($"Column ID {columnId} not found");
         }
 
         private void AddRegularHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
@@ -302,6 +351,8 @@ namespace XReports
             public ComplexHeaderGroupByName(int rowIndex, string title, string fromColumn, string toColumn, int rowSpan)
                 : base(rowIndex, title, rowSpan)
             {
+                Validation.NotNull(nameof(fromColumn), fromColumn);
+
                 this.FromColumn = fromColumn;
                 this.ToColumn = toColumn ?? fromColumn;
             }
@@ -317,6 +368,21 @@ namespace XReports
             {
                 this.StartIndex = startIndex;
                 this.EndIndex = endIndex;
+            }
+        }
+
+        private class ComplexHeaderGroupByColumnId : ComplexHeaderGroup
+        {
+            public ColumnId FromColumn { get; }
+            public ColumnId ToColumn { get; }
+
+            public ComplexHeaderGroupByColumnId(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn, int rowSpan)
+                : base(rowIndex, title, rowSpan)
+            {
+                Validation.NotNull(nameof(fromColumn), fromColumn);
+
+                this.FromColumn = fromColumn;
+                this.ToColumn = toColumn ?? fromColumn;
             }
         }
 
