@@ -70,7 +70,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             Action action = () => schemaBuilder.InsertColumn(0, null, new EmptyCellsProvider<int>());
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
@@ -91,6 +91,41 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             Action action = () => schemaBuilder.InsertColumn(-1, "Column", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void InsertColumnShouldInsertColumnWithId()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Column1", "Column2" });
+
+            schemaBuilder.InsertColumn(0, new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "TheColumn", "Column1", "Column2" },
+            });
+        }
+
+        [Fact]
+        public void InsertColumnShouldThrowWhenIdIsNull()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            Action action = () => schemaBuilder.InsertColumn(0, null, "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertColumnShouldThrowWhenIdExists()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("Column"), "Column1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumn(0, new ColumnId("Column"), "Column2", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private VerticalReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)

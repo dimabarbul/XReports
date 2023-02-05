@@ -14,7 +14,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
     public class InsertColumnBeforeTest
     {
         [Fact]
-        public void InsertColumnBeforeShouldInsertColumnAtCorrectPosition()
+        public void InsertColumnBeforeByTitleShouldInsertColumnAtCorrectPosition()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
@@ -28,7 +28,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldInsertColumnWithExistingTitle()
+        public void InsertColumnBeforeByTitleShouldInsertColumnWithExistingTitle()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
@@ -44,7 +44,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void InsertColumnBeforeShouldInsertColumnWithEmptyTitle(string title)
+        public void InsertColumnBeforeByTitleShouldInsertColumnWithEmptyTitle(string title)
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
@@ -58,27 +58,27 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldThrowWhenTitleIsNull()
+        public void InsertColumnBeforeByTitleShouldThrowWhenTitleIsNull()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
             Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, new EmptyCellsProvider<int>());
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldThrowWhenBeforeColumnNameIsNull()
+        public void InsertColumnBeforeByTitleShouldThrowWhenBeforeColumnNameIsNull()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertColumnBefore(null, "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore((string)null, "TheColumn", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldThrowWhenTitleIsInDifferentCase()
+        public void InsertColumnBeforeByTitleShouldThrowWhenTitleIsInDifferentCase()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
@@ -88,7 +88,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldThrowWhenTitleDoesNotExist()
+        public void InsertColumnBeforeByTitleShouldThrowWhenTitleDoesNotExist()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
@@ -98,7 +98,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         }
 
         [Fact]
-        public void InsertColumnBeforeShouldInsertColumnBeforeFirstOccurenceOfTitleWhenMultipleColumnsHasTheTitle()
+        public void InsertColumnBeforeByTitleShouldInsertColumnBeforeFirstOccurenceOfTitle()
         {
             VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Column1", "Column2", "Column1" });
 
@@ -109,6 +109,105 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             {
                 new[] { "TheColumn", "Column1", "Column2", "Column1" },
             });
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByTitleShouldInsertColumnWithId()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "TheColumn", "Column1", "Column2" },
+            });
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByTitleShouldThrowWhenIdIsNull()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(1);
+
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByTitleShouldThrowWhenIdExists()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("Column"), "Column1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByIdShouldInsertColumnWithId()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+
+            schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new[] { "TheColumn", "Column1", "Column2" },
+            });
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByIdShouldThrowWhenIdIsNull()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), null, "3", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByIdShouldThrowWhenIdExists()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("2"), "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByIdShouldThrowWhenBeforeIdIsNull()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumnBefore((ColumnId)null, new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertColumnBeforeByIdShouldThrowWhenBeforeIdDoesNotExist()
+        {
+            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("0"), new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private VerticalReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)

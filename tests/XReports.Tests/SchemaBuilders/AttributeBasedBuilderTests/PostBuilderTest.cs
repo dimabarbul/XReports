@@ -5,7 +5,9 @@ using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using XReports.Interfaces;
+using XReports.Models;
 using XReports.SchemaBuilders;
+using XReports.Tests.Common.Assertions;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -17,9 +19,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         {
             AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
 
-            IReportSchema<ForVerticalReport> _ = builder.BuildSchema<ForVerticalReport>();
+            IReportSchema<Vertical> _ = builder.BuildSchema<Vertical>();
 
-            ForVerticalReport.PostBuilder.Calls.Should().Be(1);
+            Vertical.PostBuilder.Calls.Should().Be(1);
         }
 
         [Fact]
@@ -27,9 +29,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         {
             AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
 
-            IReportSchema<ForHorizontalReport> _ = builder.BuildSchema<ForHorizontalReport>();
+            IReportSchema<Horizontal> _ = builder.BuildSchema<Horizontal>();
 
-            ForHorizontalReport.PostBuilder.Calls.Should().Be(1);
+            Horizontal.PostBuilder.Calls.Should().Be(1);
         }
 
         [Fact]
@@ -240,6 +242,57 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             Action action = () => builder.BuildSchema<HorizontalWithDisposablePostBuilderWithDependency>();
 
             action.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public void BuildSchemaShouldMakeColumnsAvailableInPostBuilderByPropertyNamesForVerticalReport()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<VerticalForColumnByPropertyName> schema = builder.BuildSchema<VerticalForColumnByPropertyName>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalForColumnByPropertyName>());
+            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID")
+                    {
+                        Properties = new ReportCellProperty[]
+                        {
+                            new MyProperty(),
+                        },
+                    },
+                    "Name",
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldMakeRowsAvailableInPostBuilderByPropertyNamesForHorizontalReport()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<HorizontalForRowByPropertyName> schema = builder.BuildSchema<HorizontalForRowByPropertyName>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalForRowByPropertyName>());
+            reportTable.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("ID")
+                    {
+                        Properties = new ReportCellProperty[]
+                        {
+                            new MyProperty(),
+                        },
+                    },
+                },
+                new object[]
+                {
+                    "Name",
+                },
+            });
         }
     }
 }

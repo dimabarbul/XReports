@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using XReports.Models;
 
-namespace XReports
+namespace XReports.ComplexHeader
 {
     public partial class ComplexHeaderBuilder
     {
-        private void Validate(IReadOnlyList<string> columnNames)
+        private void Validate(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             GroupWithPosition[] groupsWithPositions = this.groups
-                .Select(g => this.GetGroupWithPosition(g, columnNames))
+                .Select(g => this.GetGroupWithPosition(g, columnNames, columnIds))
                 .ToArray();
 
             this.ValidateColumnIndexes(groupsWithPositions, columnNames.Count);
@@ -47,22 +47,6 @@ namespace XReports
             if (headerCell != null)
             {
                 throw new ArgumentException(errorMessage);
-            }
-        }
-
-        private void ValidateNumberNotNegative(string parameterName, int parameter)
-        {
-            if (parameter < 0)
-            {
-                throw new ArgumentOutOfRangeException(parameterName, "Parameter should not be negative");
-            }
-        }
-
-        private void ValidateNumberPositive(string parameterName, int parameter)
-        {
-            if (parameter <= 0)
-            {
-                throw new ArgumentOutOfRangeException(parameterName, "Parameter should be positive");
             }
         }
     }

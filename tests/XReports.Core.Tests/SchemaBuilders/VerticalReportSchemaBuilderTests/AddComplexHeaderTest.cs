@@ -2,6 +2,7 @@ using System.Linq;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
 using Xunit;
@@ -73,6 +74,55 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             reportBuilder.AddComplexHeader(0, "Group2", "Column3", "Column4");
             reportBuilder.AddComplexHeader(1, "Group3", "Column3");
             reportBuilder.AddComplexHeader(1, "Group4", "Column4");
+
+            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Group1")
+                    {
+                        ColumnSpan = 2,
+                        RowSpan = 2,
+                    },
+                    null,
+                    new ReportCellData("Group2")
+                    {
+                        ColumnSpan = 2,
+                    },
+                    null,
+                },
+                new object[]
+                {
+                    null,
+                    null,
+                    "Group3",
+                    "Group4",
+                },
+                new object[]
+                {
+                    "Column1",
+                    "Column2",
+                    "Column3",
+                    "Column4",
+                },
+            });
+        }
+
+        /// <see cref="AddComplexHeaderByColumnIndexesShouldAddCorrectHeader"/>
+        [Fact]
+        public void AddComplexHeaderByColumnIdsShouldAddCorrectHeader()
+        {
+            VerticalReportSchemaBuilder<int> reportBuilder = this.CreateSchemaBuilder(0);
+            reportBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("3"), "Column3", new EmptyCellsProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("4"), "Column4", new EmptyCellsProvider<int>());
+            reportBuilder.AddComplexHeader(0, 2, "Group1", new ColumnId("1"), new ColumnId("2"));
+            reportBuilder.AddComplexHeader(0, "Group2", new ColumnId("3"), new ColumnId("4"));
+            reportBuilder.AddComplexHeader(1, "Group3", new ColumnId("3"));
+            reportBuilder.AddComplexHeader(1, "Group4", new ColumnId("4"));
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
 

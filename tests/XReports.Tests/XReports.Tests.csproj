@@ -48,6 +48,18 @@
     <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\BuildParameterTest.Classes.cs">
       <DependentUpon>BuildParameterTest.cs</DependentUpon>
     </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\HorizontalHeaderRowAttributeHandlersTest.Attributes.cs">
+      <DependentUpon>HorizontalHeaderRowAttributeHandlersTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\HorizontalHeaderRowAttributeHandlersTest.Classes.cs">
+      <DependentUpon>HorizontalHeaderRowAttributeHandlersTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\ComplexHeaderTest.Classes.cs">
+      <DependentUpon>ComplexHeaderTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\HorizontalHeaderRowTest.Classes.cs">
+      <DependentUpon>HorizontalHeaderRowTest.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XReports.Attributes;
 using XReports.Enums;
 using XReports.Interfaces;
+using XReports.Models;
 using XReports.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
@@ -121,7 +122,7 @@ namespace XReports.SchemaBuilders
         {
             IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddRow(attribute.Title, cellsProvider);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddRow(new RowId(property.Name), attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
@@ -206,7 +207,7 @@ namespace XReports.SchemaBuilders
 
             foreach (ComplexHeaderAttribute attribute in complexHeaderAttributes)
             {
-                if (attribute.UsesIndexes)
+                if (attribute.UseIndexes)
                 {
                     int startIndex = normalizedIndexes.ContainsKey(attribute.StartIndex) ?
                         normalizedIndexes[attribute.StartIndex] :
@@ -223,6 +224,31 @@ namespace XReports.SchemaBuilders
                         attribute.Title,
                         startIndex,
                         endIndex);
+                }
+                else if (attribute.UseId)
+                {
+                    if (builder is IVerticalReportSchemaBuilder<TEntity> verticalBuilder)
+                    {
+                        verticalBuilder.AddComplexHeader(
+                            attribute.RowIndex,
+                            attribute.RowSpan,
+                            attribute.Title,
+                            new ColumnId(attribute.StartTitle),
+                            attribute.EndTitle == null ?
+                                null :
+                                new ColumnId(attribute.EndTitle));
+                    }
+                    else
+                    {
+                        ((IHorizontalReportSchemaBuilder<TEntity>)builder).AddComplexHeader(
+                            attribute.RowIndex,
+                            attribute.RowSpan,
+                            attribute.Title,
+                            new RowId(attribute.StartTitle),
+                            attribute.EndTitle == null ?
+                                null :
+                                new RowId(attribute.EndTitle));
+                    }
                 }
                 else
                 {
@@ -253,7 +279,7 @@ namespace XReports.SchemaBuilders
         {
             IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(attribute.Title, cellsProvider);
+            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }

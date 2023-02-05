@@ -13,7 +13,7 @@ Probably, the most used cells provider. When you add column or row supplying cal
 ```c#
 builder.AddColumn("Name", (Customer c) => c.Name);
 // is the same as
-builder.AddColumn(new ComputedValueReportCellsProvider<Customer, string>("Name", (Customer c) => c.Name));
+builder.AddColumn("Name", new ComputedValueReportCellsProvider<Customer, string>((Customer c) => c.Name));
 ```
 
 This provider accepts callback that returns cell value.
@@ -36,11 +36,11 @@ HorizontalReportSchemaBuilder<Customer> builder = new HorizontalReportSchemaBuil
 builder.AddHeaderRow(string.Empty, (Customer c) => c.Name);
 
 // Add empty row to separate rows visually.
-builder.AddRow(new EmptyCellsProvider<Customer>("Personal Info"));
+builder.AddRow("Personal Info", new EmptyCellsProvider<Customer>());
 builder.AddRow("Email", (Customer c) => c.Email);
 
 // Another "group" of rows.
-builder.AddRow(new EmptyCellsProvider<Customer>("Review Info"));
+builder.AddRow("Review Info", new EmptyCellsProvider<Customer>());
 builder.AddRow("Score", (Customer c) => c.Score);
 builder.AddRow("Comment", (Customer c) => c.Comment);
 
@@ -81,7 +81,7 @@ It returns cells from data returned by supplied IValueProvider. There is short f
 ```c#
 builder.AddColumn("#", new SequentialNumberValueProvider());
 // is the same as
-builder.AddColumn(new ValueProviderReportCellsProvider<Customer, int>("#", new SequentialNumberValueProvider()));
+builder.AddColumn("#", new ValueProviderReportCellsProvider<Customer, int>(new SequentialNumberValueProvider()));
 ```
 
 ## Custom Cells Providers
@@ -106,19 +106,13 @@ class StatusCellsProvider<TData> : IReportCellsProvider<TData>
     private readonly Func<TData, bool> isActive;
     private readonly Func<TData, bool> isDeleted;
 
-    public StatusCellsProvider(string title, Func<TData, bool> isActive, Func<TData, bool> isDeleted)
+    public StatusCellsProvider(Func<TData, bool> isActive, Func<TData, bool> isDeleted)
     {
-        this.Title = title;
         this.isActive = isActive;
         this.isDeleted = isDeleted;
     }
 
     #region IReportCellsProvider
-
-    // Every cells provider should have title. It will be displayed at the top
-    // of report of at the left column depending on if report is vertical or
-    // horizontal.
-    public string Title { get; }
 
     // Returns cell for given entity.
     public ReportCell GetCell(TData entity)
@@ -146,7 +140,7 @@ class Product
 
 VerticalReportSchemaBuilder<Product> productBuilder = new VerticalReportSchemaBuilder<Product>();
 
-productBuilder.AddColumn(new StatusCellsProvider<Product>("Status", p => p.IsActive, p => p.IsDeleted));
+productBuilder.AddColumn("Status", new StatusCellsProvider<Product>(p => p.IsActive, p => p.IsDeleted));
 productBuilder.AddColumn("Name", (Product p) => p.Name);
 
 VerticalReportSchema<Product> productSchema = productBuilder.BuildSchema();
@@ -190,7 +184,7 @@ class User
 
 VerticalReportSchemaBuilder<User> userBuilder = new VerticalReportSchemaBuilder<User>();
 
-userBuilder.AddColumn(new StatusCellsProvider<User>("User status", p => !p.IsBlocked, p => p.IsDeleted));
+userBuilder.AddColumn("User status", new StatusCellsProvider<User>(p => !p.IsBlocked, p => p.IsDeleted));
 userBuilder.AddColumn("Username", (User p) => p.Username);
 
 VerticalReportSchema<User> userSchema = userBuilder.BuildSchema();

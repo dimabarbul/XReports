@@ -15,7 +15,8 @@ namespace XReports.Attributes
         public string StartTitle { get; }
         public string EndTitle { get; }
 
-        public bool UsesIndexes { get; }
+        public bool UseId { get; }
+        public bool UseIndexes { get; }
 
         public ComplexHeaderAttribute(int rowIndex, string title, int startIndex)
         {
@@ -23,7 +24,7 @@ namespace XReports.Attributes
             this.Title = title;
             this.StartIndex = startIndex;
 
-            this.UsesIndexes = true;
+            this.UseIndexes = true;
         }
 
         public ComplexHeaderAttribute(int rowIndex, string title, int startIndex, int endIndex)
@@ -33,26 +34,28 @@ namespace XReports.Attributes
             this.StartIndex = startIndex;
             this.EndIndex = endIndex;
 
-            this.UsesIndexes = true;
+            this.UseIndexes = true;
         }
 
-        public ComplexHeaderAttribute(int rowIndex, string title, string startTitle)
+        public ComplexHeaderAttribute(int rowIndex, string title, string startTitle, bool useId = false)
         {
             this.RowIndex = rowIndex;
             this.Title = title;
             this.StartTitle = startTitle;
+            this.UseId = useId;
 
-            this.UsesIndexes = false;
+            this.UseIndexes = false;
         }
 
-        public ComplexHeaderAttribute(int rowIndex, string title, string startTitle, string endTitle)
+        public ComplexHeaderAttribute(int rowIndex, string title, string startTitle, string endTitle, bool useId = false)
         {
             this.RowIndex = rowIndex;
             this.Title = title;
             this.StartTitle = startTitle;
             this.EndTitle = endTitle;
+            this.UseId = useId;
 
-            this.UsesIndexes = false;
+            this.UseIndexes = false;
         }
 
         public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, int startIndex)
@@ -62,7 +65,7 @@ namespace XReports.Attributes
             this.Title = title;
             this.StartIndex = startIndex;
 
-            this.UsesIndexes = true;
+            this.UseIndexes = true;
         }
 
         public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, int startIndex, int endIndex)
@@ -73,28 +76,30 @@ namespace XReports.Attributes
             this.StartIndex = startIndex;
             this.EndIndex = endIndex;
 
-            this.UsesIndexes = true;
+            this.UseIndexes = true;
         }
 
-        public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, string startTitle)
+        public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, string startTitle, bool useId = false)
         {
             this.RowIndex = rowIndex;
             this.RowSpan = rowSpan;
             this.Title = title;
             this.StartTitle = startTitle;
+            this.UseId = useId;
 
-            this.UsesIndexes = false;
+            this.UseIndexes = false;
         }
 
-        public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, string startTitle, string endTitle)
+        public ComplexHeaderAttribute(int rowIndex, int rowSpan, string title, string startTitle, string endTitle, bool useId = false)
         {
             this.RowIndex = rowIndex;
             this.RowSpan = rowSpan;
             this.Title = title;
             this.StartTitle = startTitle;
             this.EndTitle = endTitle;
+            this.UseId = useId;
 
-            this.UsesIndexes = false;
+            this.UseIndexes = false;
         }
     }
 }

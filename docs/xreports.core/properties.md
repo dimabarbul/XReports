@@ -114,26 +114,30 @@ ADMIN                | ********
 */
 ```
 
-Please, note that AddProperties method does not specify which column should get the properties. This is because builder "remembers" column that was added last.
+There are several ways to configure columns:
 
 ```c#
-// You can use fluent syntax.
+// You can use fluent syntax to configure newly added column.
 builder.AddColumn("Username", u => u.Username)
     .AddProperties(new UpperCaseProperty());
 
 // Or add properties later.
-builder.AddColumn("Username", u => u.Username);
-builder.AddProperties(new UpperCaseProperty());
+IReportSchemaCellsProviderBuilder<UserInfo> cellsBuilder = builder.AddColumn("Username", u => u.Username);
+cellsBuilder.AddProperties(new UpperCaseProperty());
 
-// If you want to switch builder to work with another column.
+// To work with column added previously, you can use ForColumn method.
 // Username column in example below should have been added earlier.
 builder.ForColumn("Username")
+    .AddProperties(new UpperCaseProperty());
+
+// If the column has been added with ID, you can use it.
+builder.ForColumn(new ColumnId("Username"))
     .AddProperties(new UpperCaseProperty());
 ```
 
 ## Header Properties
 
-Note that in previous example header of column Username was not converted to uppercase and Password was not hidden. That's because properties were applied to body cells. If we need to apply property to header cell, we need to:
+Note that in previous example header of column Username was not converted to uppercase and header of Password was not hidden. That's because properties were applied to body cells. If we need to apply property to header cell, we need to use method AddHeaderProperties:
 ```c#
 …
 builder.AddColumn("Username", u => u.Username)

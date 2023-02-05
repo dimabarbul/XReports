@@ -2,6 +2,7 @@ using System;
 using XReports.AttributeHandlers;
 using XReports.Attributes;
 using XReports.Interfaces;
+using XReports.Models;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -51,6 +52,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 this.OnHandle?.Invoke(attribute);
             }
+        }
+
+        private class MyProperty : ReportCellProperty
+        {
         }
     }
 }

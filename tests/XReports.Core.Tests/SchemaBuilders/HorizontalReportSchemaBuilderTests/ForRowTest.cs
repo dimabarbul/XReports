@@ -64,7 +64,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
         {
             HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Row");
 
-            Action action = () => schemaBuilder.ForRow(null);
+            Action action = () => schemaBuilder.ForRow((string)null);
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -135,6 +135,58 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             Action action = () => schemaBuilder.ForRow(index);
 
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void ForRowByIdShouldSwitchContextToColumnWithTheId()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder();
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForRow(new RowId("1"));
+
+            CustomProperty property = new CustomProperty();
+            cellsProviderBuilder.AddHeaderProperties(property);
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Row1")
+                    {
+                        Properties = new [] { property },
+                    },
+                },
+                new object[]
+                {
+                    "Row2",
+                },
+            });
+        }
+
+        [Fact]
+        public void ForRowByIdShouldThrowWhenIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder();
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.ForRow((RowId)null);
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void ForRowByIdShouldThrowWhenIdDoesNotExist()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder();
+            schemaBuilder.AddRow(new RowId("1"), "Row1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddRow(new RowId("2"), "Row2", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.ForRow(new RowId("3"));
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private HorizontalReportSchemaBuilder<int> CreateSchemaBuilder(params string[] rows)

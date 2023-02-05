@@ -1,12 +1,19 @@
 # Properties
 
+In examples below variable `cellsProviderBuilder` is a variable of type `IReportSchemaCellsProviderBuilder<TSourceEntity>`, where TSourceEntity is a type of model of the report. This variable is a result of adding column/row to report. For example:
+
+```c#
+IVerticalReportSchemaBuilder<string> builder = new VerticalReportSchemaBuilder<string>();
+IReportSchemaCellsProviderBuilder<string> cellsProviderBuilder = reportBuilder.AddColumn("Value");
+```
+
 ## AlignmentProperty
 
 Marks cell to be center-, left- or right-aligned.
 
 Example:
 ```c#
-reportBuilder.AddProperties(new AlignmentProperty(Alignment.Right));
+cellsProviderBuilder.AddProperties(new AlignmentProperty(Alignment.Right));
 ```
 
 In Html it will be converted to `style="text-align: right"` attribute.
@@ -17,7 +24,7 @@ Marks cell as highlighted in bold font.
 
 Example:
 ```c#
-reportBuilder.AddProperties(new BoldProperty());
+cellsProviderBuilder.AddProperties(new BoldProperty());
 ```
 
 In Html it will be converted to `strong` tag, for example, `<strong>Name</strong>`.
@@ -29,10 +36,10 @@ Sets cell font and (optionally) background color.
 Example:
 ```c#
 // Blue font color.
-reportBuilder.AddProperties(new ColorProperty(Color.Blue));
+cellsProviderBuilder.AddProperties(new ColorProperty(Color.Blue));
 
 // Yellow font color on black background.
-reportBuilder.AddProperties(new ColorProperty(Color.Yellow, Color.Black));
+cellsProviderBuilder.AddProperties(new ColorProperty(Color.Yellow, Color.Black));
 ```
 
 In Html it will be converted to `color` and `background-color` styles respectively.
@@ -67,27 +74,27 @@ All other text will be passed as format to DateTime.ToString or as Excel cell fo
 Example:
 ```c#
 // Will be formatted like "January 21, 2021"
-reportBuilder.AddProperties(new DateTimeFormatProperty("MMMM d, yyyy"));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("MMMM d, yyyy"));
 
 // Will be formatted like "Thursday, January 21, 2021" in Html and Excel.
 // Though dddd is not in the list above, it will work as it has the same meaning
 // in c# and in Excel.
-reportBuilder.AddProperties(new DateTimeFormatProperty("dddd, MMMM d, yyyy"));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("dddd, MMMM d, yyyy"));
 
 // If value of the cell is "12:34:56", depending on computer setting
 // Html might contain "12:34:56 +00:00", but Excel will contain "12:34:56 K"
-reportBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss K"));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss K"));
 ```
 
 To stop interpreting character as format specifier prepend the character with backslash or enclose into double quotes.
 
 ```c#
 // If value of the cell is "12:34:56", Html and Excel will contain "12:34:56 K"
-reportBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss \"K\""));
-reportBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss \\K"));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss \"K\""));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss \\K"));
 
 // For example, "Today is Thursday"
-reportBuilder.AddProperties(new DateTimeFormatProperty("\"Today is \"dddd"));
+cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("\"Today is \"dddd"));
 ```
 
 ## DecimalPrecisionProperty
@@ -96,7 +103,7 @@ Sets precision of decimal data contained in cell.
 
 ```c#
 // Will be formatted with 2 decimal places.
-reportBuilder.AddProperties(new DecimalPrecisionProperty(2));
+cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2));
 ```
 
 ## MaxLengthProperty
@@ -105,7 +112,7 @@ Specifies maximum length of text in cell. Built-in property handlers trim text l
 
 ```c#
 // Example: "Lorem ips…"
-reportBuilder.AddProperties(new MaxLengthProperty(10));
+cellsProviderBuilder.AddProperties(new MaxLengthProperty(10));
 ```
 
 ## PercentFormatProperty
@@ -114,13 +121,13 @@ Sets precision and postfix text for percent value. Value will automatically be m
 
 ```c#
 // 0.49555 → "49.56%"
-reportBuilder.AddProperties(new PercentFormatProperty(2));
+cellsProviderBuilder.AddProperties(new PercentFormatProperty(2));
 
 // 0.49555 → "50"
-reportBuilder.AddProperties(new PercentFormatProperty(0, string.Empty));
+cellsProviderBuilder.AddProperties(new PercentFormatProperty(0, string.Empty));
 
 // 0.49555 → "49.6 (%)"
-reportBuilder.AddProperties(new PercentFormatProperty(1, " (%)"));
+cellsProviderBuilder.AddProperties(new PercentFormatProperty(1, " (%)"));
 ```
 
 ## SameColumnFormatProperty

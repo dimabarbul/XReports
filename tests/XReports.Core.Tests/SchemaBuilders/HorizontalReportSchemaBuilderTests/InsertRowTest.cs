@@ -71,7 +71,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             Action action = () => schemaBuilder.InsertRow(0, null, new EmptyCellsProvider<int>());
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]
@@ -92,6 +92,43 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             Action action = () => schemaBuilder.InsertRow(-1, "Row", new EmptyCellsProvider<int>());
 
             action.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void InsertRowShouldInsertRowWithId()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Row1", "Row2" });
+
+            schemaBuilder.InsertRow(0, new RowId("Row"), "TheRow", new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            table.Rows.Should().BeEquivalentTo(new[]
+            {
+                new object[] { "TheRow" },
+                new object[] { "Row1" },
+                new object[] { "Row2" },
+            });
+        }
+
+        [Fact]
+        public void InsertRowShouldThrowWhenIdIsNull()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+
+            Action action = () => schemaBuilder.InsertRow(0, null, "TheRow", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void InsertRowShouldThrowWhenIdExists()
+        {
+            HorizontalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            schemaBuilder.AddRow(new RowId("Row"), "Row1", new EmptyCellsProvider<int>());
+
+            Action action = () => schemaBuilder.InsertRow(0, new RowId("Row"), "Row2", new EmptyCellsProvider<int>());
+
+            action.Should().ThrowExactly<ArgumentException>();
         }
 
         private HorizontalReportSchemaBuilder<int> CreateSchemaBuilder(int rowsCount)
