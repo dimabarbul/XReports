@@ -1,6 +1,7 @@
 # Building Reports
 
 ## Report Flow
+
 (using report schema builder) → Report Schema → (using data) → Generic Report Table → (converter) → Typed Report Table → (writer) → Output
 
 Converting of generic report table to typed one is optional. It's possible to work with it. Examples given here do not use conversion.
@@ -14,6 +15,14 @@ There are 2 schema builders: VerticalReportSchemaBuilder and HorizontalReportSch
 Both builders are generic classes. It means that you need to specify type of source. There is special IDataReader source type which will be discussed later.
 
 ## Vertical Report
+
+Vertical report consists of columns. Each column has to have:
+- ID (optional) - column ID, can be used to unambiguously refer to column
+- title (required) - title of the column, will be displayed in header cell  
+cannot be null, but can be empty string
+can be used to refer to column
+- report cells provider (required) - the class responsible for providing report cells  
+more on this later
 
 ### Simple Example
 
@@ -65,6 +74,30 @@ Name                 | Email                | Age
 John Doe             | john@example.com     | 23                  
 Jane Doe             | jane@example.com     | 22                  
 */
+```
+
+You can add columns using following methods:
+
+```c#
+// Add column to the end.
+builder.AddColumn("Name", (Customer x) => x.Name);
+
+// Insert column at specified position (0-based).
+builder.InsertColumn(0, "Name", (Customer x) => x.Name);
+
+// Insert column before another column.
+// Here column Name will be added before column with title "Age".
+builder.InsertColumnBefore("Age", "Name", (Customer x) => x.Name);
+
+// Any of the methods above can be used with column ID specified
+// right before title.
+// ID does not have to be the same as column title, but it has to be
+// unique among all column IDs.
+builder.InsertColumn(0, new ColumnId("Name"), "Name", (Customer x) => x.Name);
+
+// Also it is possible to use column ID for inserting column
+// before another one.
+builder.InsertColumnBefore(new ColumnId("Age"), "Name", (Customer x) => x.Name);
 ```
 
 ### IDataReader
@@ -141,16 +174,17 @@ VerticalReportSchemaBuilder<Customer> builder = new VerticalReportSchemaBuilder<
 builder.AddColumn("Name", (Customer x) => x.Name);
 builder.AddColumn("Email", (Customer x) => x.Email);
 builder.AddColumn("Age", (Customer x) => x.Age);
-builder.AddColumn("Job", (Customer x) => x.JobTitle);
-builder.AddColumn("Salary ($)", (Customer x) => x.Salary);
+builder.AddColumn(new ColumnId("Job"), "Job", (Customer x) => x.JobTitle);
+builder.AddColumn(new ColumnId("Salary"), "Salary ($)", (Customer x) => x.Salary);
 
-// Complex header rows have 0-based index indicating order of the row (0 - top). 
+// Complex header rows have 0-based index indicating order of the row (0 - top).
+// Add complex header by column indexes (0-based): from-to.
 builder.AddComplexHeader(0, "Customer Information", 0, 4);
-// Add complex header by column names: from-to.
-// Core below combines columns from Name to Age under Personal Information.
+// Or by column titles.
+// Code below combines columns from Name to Age under Personal Information.
 builder.AddComplexHeader(1, "Personal Information", "Name", "Age");
-// Or by column indexes (0-based).
-builder.AddComplexHeader(1, "Job Info", 3, 4);
+// Also you can use column ID.
+builder.AddComplexHeader(1, "Job Info", new ColumnId("Job"), new ColumnId("Salary"));
 
 // Build schema.
 VerticalReportSchema<Customer> schema = builder.BuildSchema();

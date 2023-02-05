@@ -74,15 +74,24 @@ The attribute has 2 required arguments - column order (any number, columns will 
 Columns/rows are added with title from ReportVariable attribute. So in previous example you can work with the first column in post-builder class as:
 
 ```c#
+// You can use column title
 builder.ForColumn("User Name");
+// or property name as column ID
+builder.ForColumn(new ColumnId(nameof(User.Name)));
 ```
 
 ### Complex Header
 
-Complex header can be specified as optional argument to ReportVariableAttribute.
+Complex header can be specified using ComplexHeaderAttribute.
 
 ```c#
-[ComplexHeader(1, "Personal Info", "Name", "Age")]
+// Add complex header using property names.
+[ComplexHeader(1, "User Info", nameof(Name), nameof(Email), true)]
+// Add complex header using columns/rows titles.
+[ComplexHeader(2, "Personal Info", "Name", "Age")]
+// Add complex header using column/row order.
+// Note that numbers here are column order values - the numbers
+// used in ReportVariableAttribute, not columns/rows indexes.
 [ComplexHeader(2, "Contact Info", 3, 4)]
 class User
 {
@@ -100,20 +109,21 @@ class User
 }
 ```
 
-In this example report will have one complex header row (topmost) "Personal Info" combining all columns and second complex header row "Contact Info" combining Phone and Email columns. Exported to Html report might look like following:
+In this example report will have one complex header row (topmost) "User Info" combining all columns and second complex header row with "Personal Info" above "Name" and "Age" and "Contact Info" combining "Phone" and "Email" columns. Exported to Html report might look like following:
 
 ```html
 <table>
 <thead>
     <tr>
-        <th colSpan="4">Personal Info</th>
+        <th colSpan="4">User Info</th>
     </tr>
     <tr>
-        <th rowSpan="2">Name</th>
-        <th rowSpan="2">Age</th>
+        <th colSpan="2">Personal Info</th>
         <th colSpan="2">Contact Info</th>
     </tr>
     <tr>
+        <th>Name</th>
+        <th>Age</th>
         <th>Phone</th>
         <th>Email</th>
     </tr>
@@ -170,7 +180,7 @@ In this example report will have one header row and 3 rows. Exported to Html rep
 </table>
 ```
 
-Global attributes are **not** applied to header rows, to apply attributes you eed to specify them explicitly on property:
+Global attributes are **not** applied to header rows, to apply attributes you need to specify them explicitly on property:
 
 ```c#
 [HorizontalReport]
@@ -331,6 +341,8 @@ class ReportModel
 ```
 
 For vertical report post-builder class should implement IVerticalReportPostBuilder interface.
+
+**Important note:** in post-builder class to refer to columns/rows by index you need to use sequential 0-based index, and not numbers from ReportVariableAttribute. For example, in the example above to refer to "Email" column you need to use `builder.ForColumn(0)`.
 
 ### Constructor Dependencies
 
