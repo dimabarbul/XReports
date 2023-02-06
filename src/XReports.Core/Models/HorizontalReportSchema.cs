@@ -44,12 +44,10 @@ namespace XReports.Models
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source, ReportCell[][] complexHeader)
         {
-            int rowIndex = 0;
-
             return this.CellsProviders
                 .Select(
-                    row =>
-                        complexHeader[rowIndex++]
+                    (row, rowIndex) =>
+                        complexHeader[rowIndex]
                             .Concat(source.Select(row.CreateCell)));
         }
     }
