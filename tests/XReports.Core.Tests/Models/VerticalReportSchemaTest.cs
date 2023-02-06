@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using FluentAssertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
@@ -29,7 +27,7 @@ namespace XReports.Core.Tests.Models
             {
                 new [] { "First name", "Last name" },
             });
-            table.Rows.Should().BeEquivalentTo(Enumerable.Empty<IEnumerable<object>>());
+            table.Rows.Should().BeEmpty();
         }
 
         [Fact]
