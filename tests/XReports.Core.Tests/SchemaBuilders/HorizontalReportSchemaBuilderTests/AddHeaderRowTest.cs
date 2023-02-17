@@ -69,5 +69,36 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             action.Should().ThrowExactly<ArgumentException>();
         }
+
+        [Fact]
+        public void AddHeaderRowShouldAddHeaderCellSpanningComplexHeaderColumnsWhenComplexHeaderIsAdded()
+        {
+            HorizontalReportSchemaBuilder<string> schemaBuilder = new HorizontalReportSchemaBuilder<string>();
+            schemaBuilder.AddRow("Row", new EmptyCellsProvider<string>());
+
+            schemaBuilder.AddComplexHeader(0, "Header1", 0);
+            schemaBuilder.AddComplexHeader(1, "Header2", 0);
+            schemaBuilder.AddHeaderRow("Value", new ComputedValueReportCellsProvider<string, string>(x => x));
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[]
+            {
+                "Test",
+                "Test2",
+            });
+            table.HeaderRows.Should().BeEquivalentTo(new[]
+            {
+                new object[]
+                {
+                    new ReportCellData("Value")
+                    {
+                        ColumnSpan = 3,
+                    },
+                    null,
+                    null,
+                    "Test",
+                    "Test2",
+                },
+            });
+        }
     }
 }

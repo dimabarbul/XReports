@@ -38,6 +38,15 @@
     <Compile Update="DependencyInjection\XReportsDITest.Classes.cs">
       <DependentUpon>XReportsDITest.cs</DependentUpon>
     </Compile>
+    <Compile Update="ReportConverterTest.Handlers.cs">
+      <DependentUpon>ReportConverterTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ReportConverterTest.NewReportCell.cs">
+      <DependentUpon>ReportConverterTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="ReportConverterTest.Properties.cs">
+      <DependentUpon>ReportConverterTest.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

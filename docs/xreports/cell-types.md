@@ -25,6 +25,17 @@ public class HtmlReportCell : BaseReportCell
         this.Styles.Clear();
         this.Attributes.Clear();
     }
+
+    public override BaseReportCell Clone()
+    {
+        HtmlReportCell reportCell = (HtmlReportCell)base.Clone();
+
+        reportCell.CssClasses = new HashSet<string>(this.CssClasses);
+        reportCell.Styles = new Dictionary<string, string>(this.Styles);
+        reportCell.Attributes = new Dictionary<string, string>(this.Attributes);
+
+        return reportCell;
+    }
 }
 
 public class ExcelReportCell : BaseReportCell

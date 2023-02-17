@@ -17,6 +17,16 @@ class HtmlReportCell : BaseReportCell
         this.CssClasses.Clear();
         this.Styles.Clear();
     }
+
+    public override BaseReportCell Clone()
+    {
+        HtmlReportCell reportCell = (HtmlReportCell)base.Clone();
+
+        reportCell.CssClasses = new List<string>(this.CssClasses);
+        reportCell.Styles = new List<string>(this.Styles);
+
+        return reportCell;
+    }
 }
 
 class BoldProperty : ReportCellProperty
