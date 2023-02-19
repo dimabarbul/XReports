@@ -1,3 +1,4 @@
+using System.Text;
 using XReports.Interfaces;
 using XReports.Writers;
 
@@ -10,14 +11,14 @@ namespace XReports.Demos.MVC.XReports
         {
         }
 
-        protected override void BeginTable()
+        protected override void BeginTable(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append(@"<table class=""table table-sm"">");
+            stringBuilder.Append(@"<table class=""table table-sm"">");
         }
 
-        protected override void BeginHead()
+        protected override void BeginHead(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append(@"<thead class=""thead-dark"">");
+            stringBuilder.Append(@"<thead class=""thead-dark"">");
         }
     }
 }
