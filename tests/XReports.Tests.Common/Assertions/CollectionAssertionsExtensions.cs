@@ -16,10 +16,10 @@ namespace XReports.Tests.Common.Assertions
 
             actualList.Should().HaveSameCount(expectedList);
 
-            foreach (T actual in actualList)
+            for (int i = 0; i < actualList.Count; i++)
             {
                 int expectedIndex = expectedList.FindIndex(
-                    e => actual.IsSameOrEqualsOrHasSameTypeAndProperties(e));
+                    e => actualList[i].IsSameOrEqualsOrHasSameTypeAndProperties(e));
 
                 if (expectedIndex != -1)
                 {
@@ -29,7 +29,7 @@ namespace XReports.Tests.Common.Assertions
                 {
                     Execute.Assertion
                         .ForCondition(false)
-                        .FailWith("element {0} does not exist in expected collection", actual);
+                        .FailWith("element {0} at index {1} does not exist in collection {2}", actualList[i], i, expected);
                 }
             }
 

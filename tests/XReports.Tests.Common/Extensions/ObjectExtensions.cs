@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+using FluentAssertions;
 
 namespace XReports.Tests.Common.Extensions
 {
@@ -9,7 +12,7 @@ namespace XReports.Tests.Common.Extensions
         {
             if (actual == null)
             {
-                throw new ArgumentNullException(nameof(actual));
+                return expected == null;
             }
 
             return expected != null &&
@@ -20,6 +23,16 @@ namespace XReports.Tests.Common.Extensions
 
         private static bool HaveSameTypeAndProperties(object actual, object expected)
         {
+            if (actual is IEnumerable actualEnumerable)
+            {
+                if (!(expected is IEnumerable expectedEnumerable))
+                {
+                    return false;
+                }
+
+                return ContainSameOrEqualElements(actualEnumerable, expectedEnumerable);
+            }
+
             Type type = actual.GetType();
             if (type != expected.GetType())
             {
@@ -35,6 +48,42 @@ namespace XReports.Tests.Common.Extensions
             }
 
             return true;
+        }
+
+        private static bool ContainSameOrEqualElements(IEnumerable actualEnumerable, IEnumerable expectedEnumerable)
+        {
+            List<object> actualList = ToList(actualEnumerable);
+            List<object> expectedList = ToList(expectedEnumerable);
+
+            actualList.Should().HaveSameCount(expectedList);
+
+            foreach (object actual in actualList)
+            {
+                int expectedIndex = expectedList.FindIndex(
+                    e => actual.IsSameOrEqualsOrHasSameTypeAndProperties(e));
+
+                if (expectedIndex != -1)
+                {
+                    expectedList.RemoveAt(expectedIndex);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static List<object> ToList(IEnumerable enumerable)
+        {
+            List<object> result = new List<object>();
+            foreach (object o in enumerable)
+            {
+                result.Add(o);
+            }
+
+            return result;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace XReports.Tests.Common.Assertions
 
         public AndConstraint<ReportCellsAssertions> BeEquivalentTo(IEnumerable<IEnumerable<object>> expected)
         {
-            ReportCell[][] actualCells = this.GetCells();
+            ReportCell[][] actualCells = this.Subject.Clone();
             ReportCellData[][] expectedCells = this.ConvertExpectedCells(expected);
 
             actualCells.Should().HaveSameCount(expectedCells, "report should have correct count of rows");
@@ -46,11 +46,6 @@ namespace XReports.Tests.Common.Assertions
                         (value as ReportCellData ?? new ReportCellData(value)))
                     .ToArray())
                 .ToArray();
-        }
-
-        private ReportCell[][] GetCells()
-        {
-            return this.Subject.Select(row => row.Select(c => (ReportCell)c?.Clone()).ToArray()).ToArray();
         }
     }
 }

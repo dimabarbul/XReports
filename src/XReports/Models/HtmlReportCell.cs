@@ -7,11 +7,11 @@ namespace XReports.Models
         // True if cell content should not be escaped.
         public bool IsHtml { get; set; }
 
-        public HashSet<string> CssClasses { get; } = new HashSet<string>();
+        public HashSet<string> CssClasses { get; private set; } = new HashSet<string>();
 
-        public Dictionary<string, string> Styles { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Styles { get; private set; } = new Dictionary<string, string>();
 
-        public Dictionary<string, string> Attributes { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Attributes { get; private set; } = new Dictionary<string, string>();
 
         public override void Clear()
         {
@@ -21,6 +21,17 @@ namespace XReports.Models
             this.CssClasses.Clear();
             this.Styles.Clear();
             this.Attributes.Clear();
+        }
+
+        public override BaseReportCell Clone()
+        {
+            HtmlReportCell reportCell = (HtmlReportCell)base.Clone();
+
+            reportCell.CssClasses = new HashSet<string>(this.CssClasses);
+            reportCell.Styles = new Dictionary<string, string>(this.Styles);
+            reportCell.Attributes = new Dictionary<string, string>(this.Attributes);
+
+            return reportCell;
         }
     }
 }

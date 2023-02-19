@@ -118,7 +118,7 @@ namespace XReports.Models
             this.properties.Clear();
         }
 
-        public BaseReportCell Clone()
+        public virtual BaseReportCell Clone()
         {
             BaseReportCell reportCell = (BaseReportCell)this.MemberwiseClone();
             reportCell.properties = new List<ReportCellProperty>(this.properties);
