@@ -2,6 +2,8 @@
 
 EpplusWriter class provides ability to write Excel report to XLSX file (or stream with XLSX content) using [Epplus 4](https://github.com/JanKallman/EPPlus).
 
+EpplusWriter class **is not** thread safe, i.e., you should not use one instance to write several reports in parallel.
+
 ## .NET Core Integration
 
 You need to call extension method AddEpplusWriter. There are 3 forms of this method.

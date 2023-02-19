@@ -14,7 +14,7 @@ namespace XReports.Writers
     public class EpplusWriter : IEpplusWriter
     {
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
-        private readonly List<IEpplusFormatter> formatters;
+        private readonly IEpplusFormatter[] formatters;
 
         public EpplusWriter()
             : this(Enumerable.Empty<IEpplusFormatter>())
@@ -23,7 +23,7 @@ namespace XReports.Writers
 
         public EpplusWriter(IEnumerable<IEpplusFormatter> formatters)
         {
-            this.formatters = new List<IEpplusFormatter>(formatters);
+            this.formatters = formatters.ToArray();
         }
 
         protected string WorksheetName { get; set; } = "Data";
@@ -257,6 +257,7 @@ namespace XReports.Writers
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
         {
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(this.WorksheetName);
+            this.columnFormatCells.Clear();
 
             this.WriteReportToWorksheet(table, worksheet, this.StartRow, this.StartColumn);
         }

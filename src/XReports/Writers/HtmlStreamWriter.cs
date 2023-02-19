@@ -13,7 +13,6 @@ namespace XReports.Writers
         private static readonly Encoding StreamWriterEncoding = Encoding.UTF8;
 
         private readonly IHtmlStreamCellWriter htmlStreamCellWriter;
-        private StreamWriter streamWriter;
 
         public HtmlStreamWriter(IHtmlStreamCellWriter htmlStreamCellWriter)
         {
@@ -30,28 +29,26 @@ namespace XReports.Writers
 
         public Task WriteAsync(IReportTable<HtmlReportCell> reportTable, StreamWriter streamWriter)
         {
-            this.streamWriter = streamWriter;
-
-            return this.WriteReportAsync(reportTable);
+            return this.WriteReportAsync(reportTable, streamWriter);
         }
 
-        protected virtual async Task WriteReportAsync(IReportTable<HtmlReportCell> reportTable)
+        protected virtual async Task WriteReportAsync(IReportTable<HtmlReportCell> reportTable, StreamWriter streamWriter)
         {
-            await this.BeginTableAsync().ConfigureAwait(false);
-            await this.WriteHeaderAsync(reportTable).ConfigureAwait(false);
-            await this.WriteBodyAsync(reportTable).ConfigureAwait(false);
-            await this.EndTableAsync().ConfigureAwait(false);
+            await this.BeginTableAsync(streamWriter).ConfigureAwait(false);
+            await this.WriteHeaderAsync(streamWriter, reportTable).ConfigureAwait(false);
+            await this.WriteBodyAsync(streamWriter, reportTable).ConfigureAwait(false);
+            await this.EndTableAsync(streamWriter).ConfigureAwait(false);
 
-            await this.streamWriter.FlushAsync().ConfigureAwait(false);
+            await streamWriter.FlushAsync().ConfigureAwait(false);
         }
 
-        protected virtual async Task WriteHeaderAsync(IReportTable<HtmlReportCell> reportTable)
+        protected virtual async Task WriteHeaderAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginHeadAsync().ConfigureAwait(false);
+            await this.BeginHeadAsync(streamWriter).ConfigureAwait(false);
 
             foreach (IEnumerable<HtmlReportCell> row in reportTable.HeaderRows)
             {
-                await this.BeginRowAsync().ConfigureAwait(false);
+                await this.BeginRowAsync(streamWriter).ConfigureAwait(false);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -60,22 +57,22 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.htmlStreamCellWriter.WriteHeaderCellAsync(this.streamWriter, cell).ConfigureAwait(false);
+                    await this.htmlStreamCellWriter.WriteHeaderCellAsync(streamWriter, cell).ConfigureAwait(false);
                 }
 
-                await this.EndRowAsync().ConfigureAwait(false);
+                await this.EndRowAsync(streamWriter).ConfigureAwait(false);
             }
 
-            await this.EndHeadAsync().ConfigureAwait(false);
+            await this.EndHeadAsync(streamWriter).ConfigureAwait(false);
         }
 
-        protected virtual async Task WriteBodyAsync(IReportTable<HtmlReportCell> reportTable)
+        protected virtual async Task WriteBodyAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginBodyAsync().ConfigureAwait(false);
+            await this.BeginBodyAsync(streamWriter).ConfigureAwait(false);
 
             foreach (IEnumerable<HtmlReportCell> row in reportTable.Rows)
             {
-                await this.BeginRowAsync().ConfigureAwait(false);
+                await this.BeginRowAsync(streamWriter).ConfigureAwait(false);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -84,53 +81,53 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    await this.htmlStreamCellWriter.WriteBodyCellAsync(this.streamWriter, cell).ConfigureAwait(false);
+                    await this.htmlStreamCellWriter.WriteBodyCellAsync(streamWriter, cell).ConfigureAwait(false);
                 }
 
-                await this.EndRowAsync().ConfigureAwait(false);
+                await this.EndRowAsync(streamWriter).ConfigureAwait(false);
             }
 
-            await this.EndBodyAsync().ConfigureAwait(false);
+            await this.EndBodyAsync(streamWriter).ConfigureAwait(false);
         }
 
-        protected virtual Task BeginHeadAsync()
+        protected virtual Task BeginHeadAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("<thead>");
+            return streamWriter.WriteAsync("<thead>");
         }
 
-        protected virtual Task EndHeadAsync()
+        protected virtual Task EndHeadAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("</thead>");
+            return streamWriter.WriteAsync("</thead>");
         }
 
-        protected virtual Task BeginBodyAsync()
+        protected virtual Task BeginBodyAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("<tbody>");
+            return streamWriter.WriteAsync("<tbody>");
         }
 
-        protected virtual Task EndBodyAsync()
+        protected virtual Task EndBodyAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("</tbody>");
+            return streamWriter.WriteAsync("</tbody>");
         }
 
-        protected virtual Task BeginRowAsync()
+        protected virtual Task BeginRowAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("<tr>");
+            return streamWriter.WriteAsync("<tr>");
         }
 
-        protected virtual Task EndRowAsync()
+        protected virtual Task EndRowAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("</tr>");
+            return streamWriter.WriteAsync("</tr>");
         }
 
-        protected virtual Task BeginTableAsync()
+        protected virtual Task BeginTableAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("<table>");
+            return streamWriter.WriteAsync("<table>");
         }
 
-        protected virtual Task EndTableAsync()
+        protected virtual Task EndTableAsync(StreamWriter streamWriter)
         {
-            return this.streamWriter.WriteAsync("</table>");
+            return streamWriter.WriteAsync("</table>");
         }
     }
 }

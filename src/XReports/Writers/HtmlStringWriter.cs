@@ -14,31 +14,29 @@ namespace XReports.Writers
             this.htmlStringCellWriter = htmlStringCellWriter;
         }
 
-        protected StringBuilder StringBuilder { get; private set; }
-
         public string WriteToString(IReportTable<HtmlReportCell> reportTable)
         {
-            this.StringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            this.WriteReport(reportTable);
+            this.WriteReport(stringBuilder, reportTable);
 
-            return this.StringBuilder.ToString();
+            return stringBuilder.ToString();
         }
 
-        protected virtual void WriteReport(IReportTable<HtmlReportCell> reportTable)
+        protected virtual void WriteReport(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
-            this.BeginTable();
-            this.WriteHeader(reportTable);
-            this.WriteBody(reportTable);
-            this.EndTable();
+            this.BeginTable(stringBuilder);
+            this.WriteHeader(stringBuilder, reportTable);
+            this.WriteBody(stringBuilder, reportTable);
+            this.EndTable(stringBuilder);
         }
 
-        protected virtual void WriteHeader(IReportTable<HtmlReportCell> reportTable)
+        protected virtual void WriteHeader(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
-            this.BeginHead();
+            this.BeginHead(stringBuilder);
             foreach (IEnumerable<HtmlReportCell> row in reportTable.HeaderRows)
             {
-                this.BeginRow();
+                this.BeginRow(stringBuilder);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -47,21 +45,21 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.htmlStringCellWriter.WriteHeaderCell(this.StringBuilder, cell);
+                    this.htmlStringCellWriter.WriteHeaderCell(stringBuilder, cell);
                 }
 
-                this.EndRow();
+                this.EndRow(stringBuilder);
             }
 
-            this.EndHead();
+            this.EndHead(stringBuilder);
         }
 
-        protected virtual void WriteBody(IReportTable<HtmlReportCell> reportTable)
+        protected virtual void WriteBody(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
-            this.BeginBody();
+            this.BeginBody(stringBuilder);
             foreach (IEnumerable<HtmlReportCell> row in reportTable.Rows)
             {
-                this.BeginRow();
+                this.BeginRow(stringBuilder);
 
                 foreach (HtmlReportCell cell in row)
                 {
@@ -70,53 +68,53 @@ namespace XReports.Writers
                         continue;
                     }
 
-                    this.htmlStringCellWriter.WriteBodyCell(this.StringBuilder, cell);
+                    this.htmlStringCellWriter.WriteBodyCell(stringBuilder, cell);
                 }
 
-                this.EndRow();
+                this.EndRow(stringBuilder);
             }
 
-            this.EndBody();
+            this.EndBody(stringBuilder);
         }
 
-        protected virtual void BeginHead()
+        protected virtual void BeginHead(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("<thead>");
+            stringBuilder.Append("<thead>");
         }
 
-        protected virtual void EndHead()
+        protected virtual void EndHead(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("</thead>");
+            stringBuilder.Append("</thead>");
         }
 
-        protected virtual void BeginBody()
+        protected virtual void BeginBody(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("<tbody>");
+            stringBuilder.Append("<tbody>");
         }
 
-        protected virtual void EndBody()
+        protected virtual void EndBody(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("</tbody>");
+            stringBuilder.Append("</tbody>");
         }
 
-        protected virtual void BeginRow()
+        protected virtual void BeginRow(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("<tr>");
+            stringBuilder.Append("<tr>");
         }
 
-        protected virtual void EndRow()
+        protected virtual void EndRow(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("</tr>");
+            stringBuilder.Append("</tr>");
         }
 
-        protected virtual void BeginTable()
+        protected virtual void BeginTable(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("<table>");
+            stringBuilder.Append("<table>");
         }
 
-        protected virtual void EndTable()
+        protected virtual void EndTable(StringBuilder stringBuilder)
         {
-            this.StringBuilder.Append("</table>");
+            stringBuilder.Append("</table>");
         }
     }
 }
