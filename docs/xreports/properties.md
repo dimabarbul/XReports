@@ -44,41 +44,19 @@ cellsProviderBuilder.AddProperties(new ColorProperty(Color.Yellow, Color.Black))
 
 In Html it will be converted to `color` and `background-color` styles respectively.
 
-## DateTimeFormatProperty
+## DateTimeFormatProperty and ExcelDateTimeFormatProperty
 
-Sets format of date and time data contained in cell. Supported format specifiers:
+Sets format of date and time data contained in cell. Cells may contain either DateTimeOffset data type, in which case value is treated as DateTimeOffset, or other type, in which case value will be converted to DateTime.
 
-Format Specifier | Meaning
------------------|--------
-dd               |  day with leading zero (00 – 31)
-d                |  day (1 – 31)
-MM               |  month with leading zero (01 – 12)
-M                |  month (1 – 12)
-MMMM             |  month name (January, February etc.)
-yyyy             |  full year (4 digits)
-yy               |  short year (2 digits)
-HH               |  hour in 24-hour format with leading zero (00 – 23)
-H                |  hour in 24-hour format (0 – 23)
-hh               |  hour in 12-hour format with leading zero (01 – 12)
-h                |  hour in 12-hour format (1 – 12)
-mm               |  minute with leading zero (00 – 59)
-m                |  minute (0 – 59)
-ss               |  second with leading zero (00 – 59)
-s                |  second (0 – 59)
-tt               |  am/pm
-
-Only format specifiers mentioned above are guaranteed to be correctly formatted during converting to Html and Excel.
-
-All other text will be passed as format to DateTime.ToString or as Excel cell format as is, so if it has special meaning, it will be applied. For example, if you pass "MMM", it will be interpreted as short month name, e.g., Jan, Feb.
+The format is not parsed and not mutated in any way, it is passed as is to ToString method in Html handler and as number format in Excel handler.
 
 Example:
+
 ```c#
 // Will be formatted like "January 21, 2021"
 cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("MMMM d, yyyy"));
 
 // Will be formatted like "Thursday, January 21, 2021" in Html and Excel.
-// Though dddd is not in the list above, it will work as it has the same meaning
-// in c# and in Excel.
 cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("dddd, MMMM d, yyyy"));
 
 // If value of the cell is "12:34:56", depending on computer setting
@@ -97,37 +75,72 @@ cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("HH:mm:ss \\K"));
 cellsProviderBuilder.AddProperties(new DateTimeFormatProperty("\"Today is \"dddd"));
 ```
 
-## DecimalPrecisionProperty
-
-Sets precision of decimal data contained in cell.
+Unfortunately, there is no conversion between Html and Excel formats, so if you need to use different format strings for Excel, you'll need to assign another property:
 
 ```c#
-// Will be formatted with 2 decimal places.
+cellsProviderBuilder
+    // "tt" works for DateTime.ToString, but not in Excel.
+    // "AM/PM" is the Excel equivalent to "tt".
+    .AddProperties(new ExcelDateTimeFormatProperty(
+        "HH:mm:ss tt",
+        "HH:mm:ss AM/PM"));
+```
+
+ExcelDateTimeFormatProperty is a subclass of DateTimeFormatProperty, so handlers for DateTimeFormatProperty will also handle ExcelDateTimeFormatProperty. The trick here is that there is handler for ExcelDateTimeFormatProperty which has lower priority (so, executed earlier) than Excel handler for DateTimeFormatProperty.
+
+## DecimalPrecisionProperty
+
+Sets precision of decimal data contained in cell. Property handler for Html uses culture from thread's CurrentCulture.
+
+```c#
+// 1.2 → "1.20"
+// 1.2345 → "1.23"
 cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2));
+
+// 1.2 → "1.2"
+// 1.2345 → "1.23"
+cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2, false));
 ```
 
 ## MaxLengthProperty
 
-Specifies maximum length of text in cell. Built-in property handlers trim text length to N-1 character and append ellipsis.
+Specifies maximum length of text in cell.
 
 ```c#
-// Example: "Lorem ips…"
+// "Lorem ipsum" → "Lorem ips…"
+// "Test text." → "Test text."
 cellsProviderBuilder.AddProperties(new MaxLengthProperty(10));
+
+// "Lorem ipsum" → "Lorem i..."
+// "Test text." → "Test text."
+cellsProviderBuilder.AddProperties(new MaxLengthProperty(10, "..."));
 ```
+
+The property limits number of 16-bit characters, so it won't work correctly for strings containing multi-character symbols.
 
 ## PercentFormatProperty
 
-Sets precision and postfix text for percent value. Value will automatically be multiplied by 100, so value 1 is 100%.
+Sets precision and postfix text for percent value. Value will automatically be multiplied by 100, so value 1 is 100%. Property handler for Html uses culture from thread's CurrentCulture.
 
 ```c#
 // 0.49555 → "49.56%"
+// 0.5 → "50.00%"
 cellsProviderBuilder.AddProperties(new PercentFormatProperty(2));
 
 // 0.49555 → "50"
+// 0.5 → "50"
 cellsProviderBuilder.AddProperties(new PercentFormatProperty(0, string.Empty));
 
 // 0.49555 → "49.6 (%)"
+// 0.49 → "49.0 (%)"
 cellsProviderBuilder.AddProperties(new PercentFormatProperty(1, " (%)"));
+
+// 0.49555 → "49.56%"
+// 0.5 → "50%"
+cellsProviderBuilder.AddProperties(new PercentFormatProperty(2, preserveTrailingZeros: false));
+
+// 0.49 → "49 (%)"
+cellsProviderBuilder.AddProperties(new PercentFormatProperty(1, " (%)", false));
 ```
 
 ## SameColumnFormatProperty

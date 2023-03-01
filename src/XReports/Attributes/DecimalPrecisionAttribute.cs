@@ -15,5 +15,7 @@ namespace XReports.Attributes
         }
 
         public int Precision { get; }
+
+        public bool PreserveTrailingZeros { get; set; } = true;
     }
 }

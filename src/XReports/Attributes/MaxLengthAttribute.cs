@@ -15,5 +15,7 @@ namespace XReports.Attributes
         }
 
         public int MaxLength { get; }
+
+        public string Text { get; set; } = "…";
     }
 }

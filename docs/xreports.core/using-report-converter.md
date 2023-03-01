@@ -133,6 +133,7 @@ As you can see this class does not have any code to update cell. It is used only
 
 ```c#
 // PropertyHandler class can be used if you want to handle only properties of one type.
+// The handler will be called for inherited properties as well.
 // Otherwise you may implement IPropertyHandler<TReportCell> interface and process all properties.
 class EmailLinkPropertyHandler : PropertyHandler<EmailLinkProperty, HtmlCell>
 {

@@ -10,14 +10,14 @@ namespace XReports.PropertyHandlers
 
         public bool Handle(ReportCellProperty property, TReportCell cell)
         {
-            if (property.GetType() != typeof(TPropertyType))
+            if (property is TPropertyType typedProperty)
             {
-                return false;
+                this.HandleProperty(typedProperty, cell);
+
+                return true;
             }
 
-            this.HandleProperty((TPropertyType)property, cell);
-
-            return true;
+            return false;
         }
 
         protected abstract void HandleProperty(TPropertyType property, TReportCell cell);

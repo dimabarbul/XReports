@@ -47,16 +47,16 @@ namespace XReports.AttributeHandlers
                     property = new DateTimeFormatProperty(dateTimeFormatAttribute.Format);
                     break;
                 case DecimalPrecisionAttribute decimalPrecisionAttribute:
-                    property = new DecimalPrecisionProperty(decimalPrecisionAttribute.Precision);
+                    property = new DecimalPrecisionProperty(decimalPrecisionAttribute.Precision, decimalPrecisionAttribute.PreserveTrailingZeros);
                     break;
                 case MaxLengthAttribute maxLengthAttribute:
-                    property = new MaxLengthProperty(maxLengthAttribute.MaxLength);
+                    property = new MaxLengthProperty(maxLengthAttribute.MaxLength, maxLengthAttribute.Text);
                     break;
                 case PercentFormatAttribute percentFormatAttribute:
-                    property = new PercentFormatProperty(percentFormatAttribute.Precision)
-                    {
-                        PostfixText = percentFormatAttribute.PostfixText,
-                    };
+                    property = new PercentFormatProperty(
+                        percentFormatAttribute.Precision,
+                        percentFormatAttribute.PostfixText,
+                        percentFormatAttribute.PreserveTrailingZeros);
                     break;
                 default:
                     // only predefined list of attributes is processed
