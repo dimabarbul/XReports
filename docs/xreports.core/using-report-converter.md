@@ -165,6 +165,16 @@ IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(new[]
 …
 ```
 
+If you have many handlers, it might be awkward to add them one by one. You may use TypesCollection type to load types:
+
+```c#
+IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(
+    new TypesCollection<IPropertyHandler<HtmlCell>>()
+        .AddFromAssembly(typeof(EmailLinkPropertyHandler).Assembly)
+        .Remove<UnnecessaryHandler>()
+        .Select(t => (IPropertyHandler<HtmlCell>)Activator.CreateInstance(t)));
+```
+
 So now we can assign the property to email column.
 
 ```c#

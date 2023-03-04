@@ -11,6 +11,7 @@ namespace XReports.DependencyInjection
         private readonly List<Type> types = new List<Type>();
         private readonly List<Type> baseTypes = new List<Type>();
         private readonly List<(Assembly, Type)> assemblies = new List<(Assembly, Type)>();
+        private readonly List<Type> exclusions = new List<Type>();
 
         public IReadOnlyCollection<Type> Types => this.LoadTypes();
 
@@ -60,11 +61,29 @@ namespace XReports.DependencyInjection
             return this;
         }
 
+        public TypesCollection<TBaseType> Remove<T>()
+        {
+            return this.Remove(typeof(T));
+        }
+
+        public TypesCollection<TBaseType> Remove(params Type[] types)
+        {
+            foreach (Type type in types)
+            {
+                this.ValidateType(type);
+            }
+
+            this.exclusions.AddRange(types);
+
+            return this;
+        }
+
         private Type[] LoadTypes()
         {
             return this.types
                 .Concat(this.baseTypes.SelectMany(this.GetImplementingTypes))
                 .Concat(this.assemblies.SelectMany(this.GetTypesInAssembly))
+                .Except(this.exclusions)
                 .Distinct()
                 .ToArray();
         }

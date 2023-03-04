@@ -1,4 +1,4 @@
-namespace XReports.Core.Tests.Options
+namespace XReports.Core.Tests.DependencyInjection
 {
     public partial class TypesCollectionTest
     {
