@@ -5,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -33,14 +34,29 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 },
             });
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[] { "ID", 1, 2 },
-                new object[] { "Name", "John Doe", "Jane Doe" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell(2),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                    ReportCellHelper.CreateReportCell("Jane Doe"),
+                },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { "Age", 22, 21 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Age"),
+                    ReportCellHelper.CreateReportCell(22),
+                    ReportCellHelper.CreateReportCell(21),
+                },
             });
         }
 
@@ -66,14 +82,29 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 },
             });
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Name", "John", "Jane" },
-                new[] { "Name", "Doe", "Doe" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John"),
+                    ReportCellHelper.CreateReportCell("Jane"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Doe"),
+                    ReportCellHelper.CreateReportCell("Doe"),
+                },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { "Age", 22, 21 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Age"),
+                    ReportCellHelper.CreateReportCell(22),
+                    ReportCellHelper.CreateReportCell(21),
+                },
             });
         }
 
@@ -99,14 +130,29 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 },
             });
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[] { "ID", 1, 2 },
-                new object[] { "Name", "John Doe", "Jane Doe" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell(2),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                    ReportCellHelper.CreateReportCell("Jane Doe"),
+                },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { "Age", 22, 21 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Age"),
+                    ReportCellHelper.CreateReportCell(22),
+                    ReportCellHelper.CreateReportCell(21),
+                },
             });
         }
 

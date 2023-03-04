@@ -7,6 +7,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -24,18 +25,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             cellsProviderBuilder.AddHeaderProperties(new CustomProperty());
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Header1")
-                    {
-                        Properties = new [] { new CustomProperty() },
-                    },
+                    ReportCellHelper.CreateReportCell("Header1", new CustomProperty()),
                 },
-                new object[]
+                new[]
                 {
-                    "Header2",
+                    ReportCellHelper.CreateReportCell("Header2"),
                 },
             });
         }

@@ -8,6 +8,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -252,18 +253,12 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             IReportSchema<VerticalForColumnByPropertyName> schema = builder.BuildSchema<VerticalForColumnByPropertyName>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalForColumnByPropertyName>());
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new MyProperty(),
-                        },
-                    },
-                    "Name",
+                    ReportCellHelper.CreateReportCell("ID", new MyProperty()),
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
             });
         }
@@ -276,21 +271,15 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             IReportSchema<HorizontalForRowByPropertyName> schema = builder.BuildSchema<HorizontalForRowByPropertyName>();
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalForRowByPropertyName>());
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new MyProperty(),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell("ID", new MyProperty()),
                 },
-                new object[]
+                new[]
                 {
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
             });
         }

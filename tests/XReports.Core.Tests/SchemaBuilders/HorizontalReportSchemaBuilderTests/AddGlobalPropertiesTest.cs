@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -30,31 +31,19 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    "Value",
-                    new ReportCellData(1)
-                    {
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData(2)
-                    {
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell(1, expectedProperties),
+                    ReportCellHelper.CreateReportCell(2, expectedProperties),
                 },
-                new object[]
+                new[]
                 {
-                    "As string",
-                    new ReportCellData("1")
-                    {
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("2")
-                    {
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("As string"),
+                    ReportCellHelper.CreateReportCell("1", expectedProperties),
+                    ReportCellHelper.CreateReportCell("2", expectedProperties),
                 },
             });
         }

@@ -5,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.Models
@@ -22,10 +23,16 @@ namespace XReports.Core.Tests.Models
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
 
             table.HeaderRows.Should().BeEmpty();
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "First name" },
-                new[] { "Last name" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("First name"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Last name"),
+                },
             });
         }
 
@@ -44,9 +51,13 @@ namespace XReports.Core.Tests.Models
 
             // enumerating for the second time
             table.HeaderRows.Should().BeEmpty();
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Value", "test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("test"),
+                },
             });
         }
 
@@ -70,16 +81,32 @@ namespace XReports.Core.Tests.Models
             });
 
             table1.HeaderRows.Should().BeEmpty();
-            table1.Rows.Should().BeEquivalentTo(new[]
+            table1.Rows.Should().Equal(new[]
             {
-                new object[] { "Value", "Test" },
-                new object[] { "Length", 4 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Length"),
+                    ReportCellHelper.CreateReportCell(4),
+                },
             });
             table2.HeaderRows.Should().BeEmpty();
-            table2.Rows.Should().BeEquivalentTo(new[]
+            table2.Rows.Should().Equal(new[]
             {
-                new object[] { "Value", "String" },
-                new object[] { "Length", 6 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("String"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Length"),
+                    ReportCellHelper.CreateReportCell(6),
+                },
             });
         }
     }

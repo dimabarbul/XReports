@@ -49,7 +49,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             });
             table.Enumerate();
 
-            processor.Properties.Should().ContainSameOrEqualElements(new ReportCellProperty[]
+            processor.Properties.Should().BeEquivalentTo(new ReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),

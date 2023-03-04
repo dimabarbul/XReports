@@ -1,15 +1,17 @@
 using System.Linq;
+using XReports.Core.Tests.ComplexHeader;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ComplexHeaderBuilderTest"/>
+    /// <seealso cref="ComplexHeaderBuilderTest"/>
     public class AddComplexHeaderTest
     {
         /// <remarks>
@@ -32,35 +34,28 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
 
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        ColumnSpan = 2,
-                        RowSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group1", columnSpan: 2, rowSpan: 2),
                     null,
-                    new ReportCellData("Group2")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group2", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Group3",
-                    "Group4",
+                    ReportCellHelper.CreateReportCell("Group3"),
+                    ReportCellHelper.CreateReportCell("Group4"),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
-                    "Column3",
-                    "Column4",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column3"),
+                    ReportCellHelper.CreateReportCell("Column4"),
                 },
             });
         }
@@ -77,35 +72,28 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
 
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        ColumnSpan = 2,
-                        RowSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group1", columnSpan: 2, rowSpan: 2),
                     null,
-                    new ReportCellData("Group2")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group2", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Group3",
-                    "Group4",
+                    ReportCellHelper.CreateReportCell("Group3"),
+                    ReportCellHelper.CreateReportCell("Group4"),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
-                    "Column3",
-                    "Column4",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column3"),
+                    ReportCellHelper.CreateReportCell("Column4"),
                 },
             });
         }
@@ -126,35 +114,28 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
 
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        ColumnSpan = 2,
-                        RowSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group1", columnSpan: 2, rowSpan: 2),
                     null,
-                    new ReportCellData("Group2")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Group2", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Group3",
-                    "Group4",
+                    ReportCellHelper.CreateReportCell("Group3"),
+                    ReportCellHelper.CreateReportCell("Group4"),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
-                    "Column3",
-                    "Column4",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column3"),
+                    ReportCellHelper.CreateReportCell("Column4"),
                 },
             });
         }

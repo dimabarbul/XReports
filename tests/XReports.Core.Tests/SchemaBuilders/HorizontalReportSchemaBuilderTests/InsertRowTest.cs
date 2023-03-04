@@ -7,6 +7,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -27,8 +28,8 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             rows.Insert(index, rowsName);
-            table.Rows.Should().BeEquivalentTo(rows
-                .Select(row => new object[] { row })
+            table.Rows.Should().Equal(rows
+                .Select(row => new[] { ReportCellHelper.CreateReportCell(row) })
                 .ToArray());
         }
 
@@ -40,11 +41,20 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.InsertRow(0, "Row2", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Row2" },
-                new[] { "Row1" },
-                new[] { "Row2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Row2"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Row1"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Row2"),
+                },
             });
         }
 
@@ -58,9 +68,12 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.InsertRow(0, title, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[] { title },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(title),
+                },
             });
         }
 
@@ -102,11 +115,20 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.InsertRow(0, new RowId("Row"), "TheRow", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[] { "TheRow" },
-                new object[] { "Row1" },
-                new object[] { "Row2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("TheRow"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Row1"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Row2"),
+                },
             });
         }
 

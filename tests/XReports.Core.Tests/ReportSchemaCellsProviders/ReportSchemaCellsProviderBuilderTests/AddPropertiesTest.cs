@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.ReportSchemaCellsProviders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
@@ -20,14 +21,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
             ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
-            provider.CreateCell(0).Should().Be(new ReportCellData(0)
-            {
-                Properties = expectedProperties,
-            });
-            provider.CreateCell(1).Should().Be(new ReportCellData(1)
-            {
-                Properties = expectedProperties,
-            });
+            provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
+            provider.CreateCell(1).Should().Equal(ReportCellHelper.CreateReportCell(1, expectedProperties));
         }
 
         [Fact]
@@ -40,10 +35,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty1() };
-            provider.CreateCell(0).Should().Be(new ReportCellData(0)
-            {
-                Properties = expectedProperties,
-            });
+            provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
 
         [Fact]

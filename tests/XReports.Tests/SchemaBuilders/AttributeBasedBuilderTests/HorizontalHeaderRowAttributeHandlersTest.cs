@@ -5,6 +5,7 @@ using XReports.Models;
 using XReports.Properties;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -65,35 +66,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     Name = "Jane Doe",
                 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[] { "ID", 1, 2 },
-            });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
-            {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Name")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
-                    new ReportCellData("John Doe")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
-                    new ReportCellData("Jane Doe")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell(2),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name", new BoldProperty()),
+                    ReportCellHelper.CreateReportCell("John Doe", new BoldProperty()),
+                    ReportCellHelper.CreateReportCell("Jane Doe", new BoldProperty()),
                 },
             });
         }
@@ -121,30 +109,23 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     Name = "Jane Doe",
                 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    "ID",
-                    new ReportCellData(1)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
-                    new ReportCellData(2)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1, new BoldProperty()),
+                    ReportCellHelper.CreateReportCell(2, new BoldProperty()),
                 },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { "Name", "John Doe", "Jane Doe" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                    ReportCellHelper.CreateReportCell("Jane Doe"),
+                },
             });
         }
 
@@ -171,24 +152,23 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     Name = "Jane Doe",
                 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                        },
-                    },
-                    1,
-                    2,
+                    ReportCellHelper.CreateReportCell("ID", new BoldProperty()),
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell(2),
                 },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { "Name", "John Doe", "Jane Doe" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                    ReportCellHelper.CreateReportCell("Jane Doe"),
+                },
             });
         }
     }

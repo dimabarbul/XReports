@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.ReportSchemaCellsProviders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
@@ -24,11 +25,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            provider.CreateHeaderCell().Should().Be(new ReportCellData("Value"));
-            provider.CreateCell(0).Should().Be(new ReportCellData(0)
-            {
-                Properties = expectedProperties,
-            });
+            provider.CreateHeaderCell().Should().Equal(ReportCellHelper.CreateReportCell("Value"));
+            provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
 
         [Fact]
@@ -46,11 +44,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
                 new CustomProperty1() { Value = true },
                 new CustomProperty2(),
             };
-            provider.CreateHeaderCell().Should().Be(new ReportCellData("Value"));
-            provider.CreateCell(0).Should().Be(new ReportCellData(0)
-            {
-                Properties = expectedProperties,
-            });
+            provider.CreateHeaderCell().Should().Equal(ReportCellHelper.CreateReportCell("Value"));
+            provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
 
         [Fact]
@@ -66,11 +61,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
             {
                 new CustomProperty1(),
             };
-            provider.CreateHeaderCell().Should().Be(new ReportCellData("Value"));
-            provider.CreateCell(0).Should().Be(new ReportCellData(0)
-            {
-                Properties = expectedProperties,
-            });
+            provider.CreateHeaderCell().Should().Equal(ReportCellHelper.CreateReportCell("Value"));
+            provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
 
         [Fact]

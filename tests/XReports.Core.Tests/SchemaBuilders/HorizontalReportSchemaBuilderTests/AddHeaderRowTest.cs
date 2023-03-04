@@ -6,6 +6,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -26,19 +27,19 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 "Test",
                 "Test2",
             });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    "Value",
-                    "Test",
-                    "Test2",
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Test"),
+                    ReportCellHelper.CreateReportCell("Test2"),
                 },
-                new object[]
+                new[]
                 {
-                    "Length",
-                    4,
-                    5,
+                    ReportCellHelper.CreateReportCell("Length"),
+                    ReportCellHelper.CreateReportCell(4),
+                    ReportCellHelper.CreateReportCell(5),
                 },
             });
         }
@@ -54,9 +55,12 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.AddHeaderRow(title, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { title },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(title),
+                },
             });
         }
 
@@ -85,18 +89,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 "Test",
                 "Test2",
             });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Value")
-                    {
-                        ColumnSpan = 3,
-                    },
+                    ReportCellHelper.CreateReportCell("Value", columnSpan: 3),
                     null,
                     null,
-                    "Test",
-                    "Test2",
+                    ReportCellHelper.CreateReportCell("Test"),
+                    ReportCellHelper.CreateReportCell("Test2"),
                 },
             });
         }

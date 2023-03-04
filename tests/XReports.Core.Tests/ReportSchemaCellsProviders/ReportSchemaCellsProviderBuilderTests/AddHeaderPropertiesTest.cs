@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.ReportSchemaCellsProviders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
@@ -20,14 +21,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
-            headerCell.Should().Be(new ReportCellData("Value")
-            {
-                Properties = new ReportCellProperty[]
-                {
-                    new CustomHeaderProperty1(),
-                    new CustomHeaderProperty2(),
-                },
-            });
+            headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
+                "Value", new CustomHeaderProperty1(), new CustomHeaderProperty2()));
         }
 
         [Fact]
@@ -40,14 +35,8 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
 
             ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
-            headerCell.Should().Be(new ReportCellData("Value")
-            {
-                Properties = new ReportCellProperty[]
-                {
-                    new CustomHeaderProperty1(),
-                    new CustomHeaderProperty1(),
-                },
-            });
+            headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
+                "Value", new CustomHeaderProperty1(), new CustomHeaderProperty1()));
         }
 
         [Fact]
