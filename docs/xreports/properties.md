@@ -46,9 +46,9 @@ In Html it will be converted to `color` and `background-color` styles respective
 
 ## DateTimeFormatProperty and ExcelDateTimeFormatProperty
 
-Sets format of date and time data contained in cell. Cells may contain either DateTimeOffset data type, in which case value is treated as DateTimeOffset, or other type, in which case value will be converted to DateTime.
+Sets format of date and time data contained in cell. Cells may contain either DateTimeOffset data type, in which case value is treated as DateTimeOffset, or other type, in which case value will be converted to DateTime. During export to Excel DateTimeOffset cannot be set in Excel as is, because Excel does not have timezone, so value in Excel will be value of its DateTime property.
 
-The format is not parsed and not mutated in any way, it is passed as is to ToString method in Html handler and as number format in Excel handler.
+The format is not parsed and not mutated in any way, it is simply passed to ToString method in Html handler and as number format in Excel handler.
 
 Example:
 
@@ -142,6 +142,8 @@ cellsProviderBuilder.AddProperties(new PercentFormatProperty(2, preserveTrailing
 // 0.49 → "49 (%)"
 cellsProviderBuilder.AddProperties(new PercentFormatProperty(1, " (%)", false));
 ```
+
+If format contains percent sign ("%"), then Excel will contain original value and will multiply the value by 100 during displaying. But if the format does not contain percent sign, Excel won't be able to display value correctly, so the value itself will is multiplied during export to Excel.
 
 ## SameColumnFormatProperty
 

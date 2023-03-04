@@ -249,6 +249,7 @@ Built-in attributes:
   - text (optional parameter, default "…"): text to append if string length is greater than maximum limit
 - **PercentFormat**
   - decimal places count (required argument): decimal places to display
+  - preserve trailing zeros (optional parameter, default true): flag indicating whether trailing zeros should be displayed
   - postfix text (optional parameter, default "%"): text appended after the value
 - **SameColumnFormat**. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
 
