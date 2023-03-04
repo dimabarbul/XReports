@@ -60,6 +60,12 @@
     <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\HorizontalHeaderRowTest.Classes.cs">
       <DependentUpon>HorizontalHeaderRowTest.cs</DependentUpon>
     </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\StandardAttributesTest.Properties.cs">
+      <DependentUpon>StandardAttributesTest.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\StandardAttributesTest.Classes.cs">
+      <DependentUpon>StandardAttributesTest.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

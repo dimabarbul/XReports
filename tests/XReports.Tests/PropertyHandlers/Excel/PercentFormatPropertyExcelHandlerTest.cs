@@ -157,7 +157,12 @@ namespace XReports.Tests.PropertyHandlers.Excel
             bool handled = handler.Handle(property, cell);
 
             handled.Should().BeTrue();
-            decimal expected = postfixText.Contains('%', StringComparison.Ordinal) ?
+            decimal expected =
+#if NET6_0_OR_GREATER
+                postfixText.Contains('%', StringComparison.Ordinal) ?
+#else
+                postfixText.Contains("%") ?
+#endif
                 value :
                 value * 100;
             cell.GetValue<decimal>().Should().Be(expected);

@@ -55,7 +55,10 @@ namespace XReports.Tests.Common.Extensions
             List<object> actualList = ToList(actualEnumerable);
             List<object> expectedList = ToList(expectedEnumerable);
 
-            actualList.Should().HaveSameCount(expectedList);
+            if (actualList.Count != expectedList.Count)
+            {
+                return false;
+            }
 
             foreach (object actual in actualList)
             {

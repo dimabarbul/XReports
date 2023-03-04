@@ -2,7 +2,8 @@ using System;
 
 namespace XReports.Attributes
 {
-    public sealed class PercentFormatAttribute : BasePropertyAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+    public sealed class PercentFormatAttribute : Attribute
     {
         public PercentFormatAttribute(int precision)
         {
@@ -18,6 +19,6 @@ namespace XReports.Attributes
 
         public bool PreserveTrailingZeros { get; set; } = true;
 
-        public string PostfixText { get; set; }
+        public string PostfixText { get; set; } = "%";
     }
 }
