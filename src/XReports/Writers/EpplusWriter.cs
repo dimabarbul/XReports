@@ -7,7 +7,7 @@ using OfficeOpenXml.Style;
 using XReports.Enums;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.Properties.Excel;
+using XReports.Properties;
 
 namespace XReports.Writers
 {

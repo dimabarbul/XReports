@@ -9,7 +9,6 @@ using XReports.Enums;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.Properties.Excel;
 using XReports.PropertyHandlers.Excel;
 using XReports.PropertyHandlers.Html;
 using XReports.ReportCellsProviders;

@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using XReports.Models;
 using XReports.Properties;
-using XReports.Properties.Excel;
 using XReports.PropertyHandlers.Excel;
 using Xunit;
 

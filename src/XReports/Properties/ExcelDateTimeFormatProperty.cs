@@ -1,6 +1,6 @@
 using System;
 
-namespace XReports.Properties.Excel
+namespace XReports.Properties
 {
     public class ExcelDateTimeFormatProperty : DateTimeFormatProperty
     {

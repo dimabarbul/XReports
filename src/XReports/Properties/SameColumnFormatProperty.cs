@@ -1,6 +1,6 @@
 using XReports.Models;
 
-namespace XReports.Properties.Excel
+namespace XReports.Properties
 {
     public class SameColumnFormatProperty : ReportCellProperty
     {

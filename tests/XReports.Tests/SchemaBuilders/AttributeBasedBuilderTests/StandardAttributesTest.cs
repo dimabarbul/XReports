@@ -7,7 +7,6 @@ using XReports.Enums;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.Properties.Excel;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;

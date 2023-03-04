@@ -3,7 +3,6 @@ using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.Properties.Excel;
 
 namespace XReports.AttributeHandlers
 {

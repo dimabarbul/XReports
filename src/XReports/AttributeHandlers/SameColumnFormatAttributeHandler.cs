@@ -1,6 +1,6 @@
 using XReports.Attributes;
 using XReports.Interfaces;
-using XReports.Properties.Excel;
+using XReports.Properties;
 
 namespace XReports.AttributeHandlers
 {
