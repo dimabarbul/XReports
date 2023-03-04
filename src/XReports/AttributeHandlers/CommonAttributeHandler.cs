@@ -1,3 +1,4 @@
+using System;
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
@@ -5,12 +6,9 @@ using XReports.Properties;
 
 namespace XReports.AttributeHandlers
 {
-    public class CommonAttributeHandler : AttributeHandler<BasePropertyAttribute>
+    public class CommonAttributeHandler : IAttributeHandler
     {
-        protected override void HandleAttribute<TSourceEntity>(
-            IReportSchemaBuilder<TSourceEntity> builder,
-            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
-            BasePropertyAttribute attribute)
+        public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder, Attribute attribute)
         {
             ReportCellProperty property = this.GetCellProperty(attribute);
             if (property == null)
@@ -18,7 +16,8 @@ namespace XReports.AttributeHandlers
                 return;
             }
 
-            if (attribute.IsHeader)
+            if (attribute is BasePropertyAttribute basePropertyAttribute
+                && basePropertyAttribute.IsHeader)
             {
                 cellsProviderBuilder.AddHeaderProperties(property);
             }
@@ -28,7 +27,7 @@ namespace XReports.AttributeHandlers
             }
         }
 
-        private ReportCellProperty GetCellProperty(BasePropertyAttribute attribute)
+        private ReportCellProperty GetCellProperty(Attribute attribute)
         {
             ReportCellProperty property = null;
 
@@ -46,17 +45,24 @@ namespace XReports.AttributeHandlers
                 case DateTimeFormatAttribute dateTimeFormatAttribute:
                     property = new DateTimeFormatProperty(dateTimeFormatAttribute.Format);
                     break;
+                case ExcelDateTimeFormatAttribute excelDateTimeFormatAttribute:
+                    property = new ExcelDateTimeFormatProperty(
+                        excelDateTimeFormatAttribute.Format,
+                        excelDateTimeFormatAttribute.ExcelFormat);
+                    break;
                 case DecimalPrecisionAttribute decimalPrecisionAttribute:
-                    property = new DecimalPrecisionProperty(decimalPrecisionAttribute.Precision);
+                    property = new DecimalPrecisionProperty(
+                        decimalPrecisionAttribute.Precision,
+                        decimalPrecisionAttribute.PreserveTrailingZeros);
                     break;
                 case MaxLengthAttribute maxLengthAttribute:
-                    property = new MaxLengthProperty(maxLengthAttribute.MaxLength);
+                    property = new MaxLengthProperty(maxLengthAttribute.MaxLength, maxLengthAttribute.Text);
                     break;
                 case PercentFormatAttribute percentFormatAttribute:
-                    property = new PercentFormatProperty(percentFormatAttribute.Precision)
-                    {
-                        PostfixText = percentFormatAttribute.PostfixText,
-                    };
+                    property = new PercentFormatProperty(
+                        percentFormatAttribute.Precision,
+                        percentFormatAttribute.PostfixText,
+                        percentFormatAttribute.PreserveTrailingZeros);
                     break;
                 default:
                     // only predefined list of attributes is processed

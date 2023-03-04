@@ -26,7 +26,7 @@ namespace XReports.Core.Tests
             return cell;
         }
 
-        private class NewReportCell : BaseReportCell
+        internal class NewReportCell : BaseReportCell
         {
             public List<string> Data { get; private set; } = new List<string>();
 

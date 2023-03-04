@@ -5,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -25,15 +26,20 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalOneComplexHeaderByIndexes>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { RowSpan = 2 },
-                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Personal", columnSpan: 2),
                     null,
                 },
-                new object[] { null, "Name", "Age" },
+                new[]
+                {
+                    null,
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
+                },
             });
         }
 
@@ -45,22 +51,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalOneComplexHeaderByIndexes>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Personal") { RowSpan = 2 },
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Personal", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -73,15 +79,20 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalOneComplexHeaderByTitles>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { RowSpan = 2 },
-                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Personal", columnSpan: 2),
                     null,
                 },
-                new object[] { null, "Name", "Age" },
+                new[]
+                {
+                    null,
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
+                },
             });
         }
 
@@ -93,22 +104,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalOneComplexHeaderByTitles>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Personal") { RowSpan = 2 },
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Personal", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -121,15 +132,20 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalOneComplexHeaderByPropertyNames>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { RowSpan = 2 },
-                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Personal", columnSpan: 2),
                     null,
                 },
-                new object[] { null, "Name", "Age" },
+                new[]
+                {
+                    null,
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
+                },
             });
         }
 
@@ -141,22 +157,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalOneComplexHeaderByPropertyNames>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Personal") { RowSpan = 2 },
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Personal", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -169,15 +185,20 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalByIndexesWithGapsInIndexes>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { RowSpan = 2 },
-                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Personal", columnSpan: 2),
                     null,
                 },
-                new object[] { null, "Name", "Age" },
+                new[]
+                {
+                    null,
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
+                },
             });
         }
 
@@ -189,22 +210,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByIndexesWithGapsInIndexes>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Personal") { RowSpan = 2 },
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Personal", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -217,42 +238,42 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalMultipleLevelsOfComplexHeader>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    "Common",
-                    new ReportCellData("Employee Info") { ColumnSpan = 4 },
+                    ReportCellHelper.CreateReportCell("Common"),
+                    ReportCellHelper.CreateReportCell("Employee Info", columnSpan: 4),
                     null,
                     null,
                     null,
-                    new ReportCellData("Dept. Info") { RowSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Dept. Info", rowSpan: 2),
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID") { RowSpan = 3 },
-                    new ReportCellData("Personal") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("ID", rowSpan: 3),
+                    ReportCellHelper.CreateReportCell("Personal", columnSpan: 2),
                     null,
-                    new ReportCellData("Job Info") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Job Info", columnSpan: 2),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    new ReportCellData("Name") { RowSpan = 2 },
-                    new ReportCellData("Age") { RowSpan = 2 },
-                    new ReportCellData("Job Title") { RowSpan = 2 },
-                    "Sensitive",
-                    new ReportCellData("Employee # in Department") { RowSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Name", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Age", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Job Title", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Sensitive"),
+                    ReportCellHelper.CreateReportCell("Employee # in Department", rowSpan: 2),
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
                     null,
                     null,
-                    "Salary",
+                    ReportCellHelper.CreateReportCell("Salary"),
                     null,
                 },
             });
@@ -266,48 +287,48 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalMultipleLevelsOfComplexHeader>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    "Common",
-                    new ReportCellData("ID") { ColumnSpan = 3 },
+                    ReportCellHelper.CreateReportCell("Common"),
+                    ReportCellHelper.CreateReportCell("ID", columnSpan: 3),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Employee Info") { RowSpan = 4 },
-                    new ReportCellData("Personal") { RowSpan = 2 },
-                    new ReportCellData("Name") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Employee Info", rowSpan: 4),
+                    ReportCellHelper.CreateReportCell("Personal", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Name", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    new ReportCellData("Age") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Age", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    new ReportCellData("Job Info") { RowSpan = 2 },
-                    new ReportCellData("Job Title") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Job Info", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Job Title", columnSpan: 2),
                     null,
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Sensitive",
-                    "Salary",
+                    ReportCellHelper.CreateReportCell("Sensitive"),
+                    ReportCellHelper.CreateReportCell("Salary"),
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Dept. Info") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Dept. Info", columnSpan: 2),
                     null,
-                    new ReportCellData("Employee # in Department") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Employee # in Department", columnSpan: 2),
                     null,
                 },
             });
@@ -321,18 +342,18 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalByIndexesWithColumnFromPostBuilder>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Complex Header", columnSpan: 2),
                     null,
-                    new ReportCellData("Age") { RowSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Age", rowSpan: 2),
                 },
-                new object[]
+                new[]
                 {
-                    "ID",
-                    "Name",
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
                     null,
                 },
             });
@@ -346,21 +367,21 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByIndexesWithColumnFromPostBuilder>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { RowSpan = 2 },
-                    "ID",
+                    ReportCellHelper.CreateReportCell("Complex Header", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("ID"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Age") { ColumnSpan = 2 },
+                    ReportCellHelper.CreateReportCell("Age", columnSpan: 2),
                     null,
                 },
             });
@@ -374,19 +395,19 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalByTitlesWithColumnFromPostBuilder>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { ColumnSpan = 3 },
+                    ReportCellHelper.CreateReportCell("Complex Header", columnSpan: 3),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    "ID",
-                    "Name",
-                    "Age",
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -399,22 +420,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByTitlesWithColumnFromPostBuilder>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { RowSpan = 3 },
-                    "ID",
+                    ReportCellHelper.CreateReportCell("Complex Header", rowSpan: 3),
+                    ReportCellHelper.CreateReportCell("ID"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -427,19 +448,19 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<VerticalByPropertyNamesWithColumnFromPostBuilder>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { ColumnSpan = 3 },
+                    ReportCellHelper.CreateReportCell("Complex Header", columnSpan: 3),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    "ID",
-                    "Name",
-                    "Age",
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }
@@ -452,22 +473,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Complex Header") { RowSpan = 3 },
-                    "ID",
+                    ReportCellHelper.CreateReportCell("Complex Header", rowSpan: 3),
+                    ReportCellHelper.CreateReportCell("ID"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Name",
+                    ReportCellHelper.CreateReportCell("Name"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Age",
+                    ReportCellHelper.CreateReportCell("Age"),
                 },
             });
         }

@@ -226,15 +226,32 @@ class User
 In this example, Age column cells will be center aligned. Also Email header cell will be center aligned.
 
 Built-in attributes:
-- **Alignment**. Has 1 required argument - Alignment - center, left or right.
+- **Alignment**
+  - alignment (required argument): center, left or right.
 - **Bold**. No arguments.
-- **Color**. Has 1 (font color) or 2 (font and background colors) required arguments.
-- **CustomProperty**. Has 1 required argument - type of property to assign. Property should have no constructor arguments.
-- **DateTimeFormat**. Has 1 required argument - format string - c# DateTime format string.
-- **DecimalPrecision**. Has 1 required argument - decimal places count.
-- **MaxLength**. Has 1 required argument - maximum characters count.
-- **PercentFormat**. Has 1 required argument - decimal places count. Optionally may have PostfixText - text appended after percent value.
-- **SameColumnFormat**. No arguments. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
+- **Color**
+  - font color (required argument): color of text
+  - background color (optional argument): color of background
+
+  _you can use color name, number (e.g., 0xFF0000) or known color name_
+- **CustomProperty**
+  - property type (required argument): property type to assign; the property should have parameterless constructor
+- **DateTimeFormat**
+  - format string (required argument): c# DateTime format string
+- **ExcelDateTimeFormat**
+  - format string (required argument): c# DateTime format string
+  - Excel format string (required argument): DateTime format string to apply when exporting to Excel
+- **DecimalPrecision**
+  - decimal places (required argument): decimal places to display
+  - preserve trailing zeros (optional parameter, default true): flag indicating whether trailing zeros should be displayed
+- **MaxLength**
+  - maximum characters count (required argument): maximum length of resulting string
+  - text (optional parameter, default "…"): text to append if string length is greater than maximum limit
+- **PercentFormat**
+  - decimal places count (required argument): decimal places to display
+  - preserve trailing zeros (optional parameter, default true): flag indicating whether trailing zeros should be displayed
+  - postfix text (optional parameter, default "%"): text appended after the value
+- **SameColumnFormat**. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
 
 The attributes assign corresponding properties to row or column. To get more information about built-in properties, refer to [Properties](properties.md).
 

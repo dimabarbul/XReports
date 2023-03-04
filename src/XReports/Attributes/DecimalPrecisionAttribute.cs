@@ -2,7 +2,8 @@ using System;
 
 namespace XReports.Attributes
 {
-    public sealed class DecimalPrecisionAttribute : BasePropertyAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+    public sealed class DecimalPrecisionAttribute : Attribute
     {
         public DecimalPrecisionAttribute(int precision)
         {
@@ -15,5 +16,7 @@ namespace XReports.Attributes
         }
 
         public int Precision { get; }
+
+        public bool PreserveTrailingZeros { get; set; } = true;
     }
 }

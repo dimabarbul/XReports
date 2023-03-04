@@ -6,6 +6,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -27,35 +28,24 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        RowSpan = 3,
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("Group2")
-                    {
-                        RowSpan = 2,
-                        Properties = expectedProperties,
-                    },
-                    "Row1",
+                    ReportCellHelper.CreateReportCell("Group1", rowSpan: 3, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Group2", rowSpan: 2, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Row1"),
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    new ReportCellData("Row3")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Row3", columnSpan: 2),
                     null,
                 },
             });
@@ -76,35 +66,24 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty1(),
             };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        RowSpan = 3,
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("Group2")
-                    {
-                        RowSpan = 2,
-                        Properties = expectedProperties,
-                    },
-                    "Row1",
+                    ReportCellHelper.CreateReportCell("Group1", rowSpan: 3, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Group2", rowSpan: 2, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Row1"),
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    new ReportCellData("Row3")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Row3", columnSpan: 2),
                     null,
                 },
             });
@@ -130,38 +109,28 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("TheGroup")
-                    {
-                        RowSpan = 3,
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("thegroup")
-                    {
-                        RowSpan = 2,
-                    },
-                    "Group2",
-                    "Row1",
+                    ReportCellHelper.CreateReportCell("TheGroup", rowSpan: 3, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("thegroup", rowSpan: 2),
+                    ReportCellHelper.CreateReportCell("Group2"),
+                    ReportCellHelper.CreateReportCell("Row1"),
                 },
-                new object[]
+                new[]
                 {
                     null,
                     null,
-                    new ReportCellData("TheGroup")
-                    {
-                        Properties = expectedProperties,
-                    },
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("TheGroup", expectedProperties),
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Group1",
-                    "Group3",
-                    "TheGroup",
+                    ReportCellHelper.CreateReportCell("Group1"),
+                    ReportCellHelper.CreateReportCell("Group3"),
+                    ReportCellHelper.CreateReportCell("TheGroup"),
                 },
             });
         }
@@ -186,25 +155,22 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.AddComplexHeaderProperties("AnotherGroup", new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group")
-                    {
-                        RowSpan = 3,
-                    },
-                    "Row1",
+                    ReportCellHelper.CreateReportCell("Group", rowSpan: 3),
+                    ReportCellHelper.CreateReportCell("Row1"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
-                new object[]
+                new[]
                 {
                     null,
-                    "Row3",
+                    ReportCellHelper.CreateReportCell("Row3"),
                 },
             });
         }

@@ -6,6 +6,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -27,35 +28,24 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        ColumnSpan = 3,
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("Group1", columnSpan: 3, properties: expectedProperties),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group2")
-                    {
-                        ColumnSpan = 2,
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("Group2", columnSpan: 2, properties: expectedProperties),
                     null,
-                    new ReportCellData("Column3")
-                    {
-                        RowSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Column3", rowSpan: 2),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
                     null,
                 },
             });
@@ -76,35 +66,24 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty1(),
             };
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group1")
-                    {
-                        ColumnSpan = 3,
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("Group1", columnSpan: 3, properties: expectedProperties),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group2")
-                    {
-                        ColumnSpan = 2,
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("Group2", columnSpan: 2, properties: expectedProperties),
                     null,
-                    new ReportCellData("Column3")
-                    {
-                        RowSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("Column3", rowSpan: 2),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
                     null,
                 },
             });
@@ -130,41 +109,31 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("TheGroup")
-                    {
-                        ColumnSpan = 3,
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell("TheGroup", columnSpan: 3, properties: expectedProperties),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData("thegroup")
-                    {
-                        ColumnSpan = 2,
-                    },
+                    ReportCellHelper.CreateReportCell("thegroup", columnSpan: 2),
                     null,
-                    "Group1",
+                    ReportCellHelper.CreateReportCell("Group1"),
                 },
-                new object[]
+                new[]
                 {
-                    "Group2",
-                    new ReportCellData("TheGroup")
-                    {
-                        Properties = expectedProperties,
-                    },
-                    "Group3",
+                    ReportCellHelper.CreateReportCell("Group2"),
+                    ReportCellHelper.CreateReportCell("TheGroup", expectedProperties),
+                    ReportCellHelper.CreateReportCell("Group3"),
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
-                    "TheGroup",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("TheGroup"),
                 },
             });
         }
@@ -189,22 +158,19 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.AddComplexHeaderProperties("AnotherGroup", new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Group")
-                    {
-                        ColumnSpan = 3,
-                    },
+                    ReportCellHelper.CreateReportCell("Group", columnSpan: 3),
                     null,
                     null,
                 },
-                new object[]
+                new[]
                 {
-                    "Column1",
-                    "Column2",
-                    "Column3",
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column3"),
                 },
             });
         }

@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentAssertions.Primitives;
 using XReports.Models;
+using XReports.Tests.Common.Helpers;
 
 namespace XReports.Tests.Common.Assertions
 {
@@ -19,23 +20,9 @@ namespace XReports.Tests.Common.Assertions
 
         protected override string Identifier { get; } = "report cell";
 
-        public AndConstraint<ReportCellAssertions> Be(ReportCellData expected)
+        public AndConstraint<ReportCellAssertions> Equal(ReportCell expected)
         {
-            if (expected == null)
-            {
-                this.Subject.Should().BeNull("{0} should be null", this.Identifier);
-            }
-            else
-            {
-                this.Subject.Should().NotBeNull("{0} should not be null", this.Identifier);
-                this.Subject.GetUnderlyingValue().Should()
-                    .Be(expected.Value, "value of {0} should be correct", this.Identifier);
-                this.Subject.Properties.Should().ContainSameOrEqualElements(expected.Properties);
-                this.Subject.ColumnSpan.Should().Be(expected.ColumnSpan, "column span of {0} should be correct",
-                    this.Identifier);
-                this.Subject.RowSpan.Should()
-                    .Be(expected.RowSpan, "row span of {0} should be correct", this.Identifier);
-            }
+            ReportCellHelper.GetCellInspector(expected).Invoke(this.Subject);
 
             return new AndConstraint<ReportCellAssertions>(this);
         }

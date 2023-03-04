@@ -6,11 +6,12 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
-    public class ReportVariableTest
+    public partial class ReportVariableTest
     {
         [Fact]
         public void BuildSchemaShouldAddPropertiesInCorrectOrder()
@@ -20,9 +21,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<MultiplePropertiesClass>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "ID", "Name" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                },
             });
         }
 
@@ -34,9 +39,12 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<SomePropertiesWithoutAttribute>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Name" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                },
             });
         }
 
@@ -55,9 +63,15 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             };
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[] { item });
 
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[] { item.Id, item.Name, item.Salary, item.DateOfBirth },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(item.Id),
+                    ReportCellHelper.CreateReportCell(item.Name),
+                    ReportCellHelper.CreateReportCell(item.Salary),
+                    ReportCellHelper.CreateReportCell(item.DateOfBirth),
+                },
             });
         }
 
@@ -69,9 +83,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<DuplicatedTitle>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Address", "Address" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Address"),
+                    ReportCellHelper.CreateReportCell("Address"),
+                },
             });
         }
 
@@ -83,9 +101,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Empty<GapInOrder>());
 
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "ID", "Name" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                },
             });
         }
 
@@ -107,72 +129,6 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             Action action = () => builderHelper.BuildSchema<NoReportVariables>();
 
             action.Should().ThrowExactly<ArgumentException>();
-        }
-
-        private class MultiplePropertiesClass
-        {
-            [ReportVariable(1, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(2, "Name")]
-            public string Name { get; set; }
-        }
-
-        private class SomePropertiesWithoutAttribute
-        {
-            public int Id { get; set; }
-
-            [ReportVariable(1, "Name")]
-            public string Name { get; set; }
-        }
-
-        private class PropertiesWithAttributes
-        {
-            [ReportVariable(0, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(1, "Name")]
-            public string Name { get; set; }
-
-            [ReportVariable(2, "Salary")]
-            public decimal Salary { get; set; }
-
-            [ReportVariable(3, "DateOfBirth")]
-            public DateTime DateOfBirth { get; set; }
-        }
-
-        private class DuplicatedTitle
-        {
-            [ReportVariable(1, "Address")]
-            public string Address1 { get; set; }
-
-            [ReportVariable(2, "Address")]
-            public string Address2 { get; set; }
-        }
-
-        private class GapInOrder
-        {
-            [ReportVariable(1, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(3, "Name")]
-            public string Name { get; set; }
-        }
-
-        private class DuplicatedOrder
-        {
-            [ReportVariable(1, "ID")]
-            public int Id { get; set; }
-
-            [ReportVariable(1, "Name")]
-            public string Name { get; set; }
-        }
-
-        private class NoReportVariables
-        {
-            public int Id { get; set; }
-
-            public string Name { get; set; }
         }
     }
 }

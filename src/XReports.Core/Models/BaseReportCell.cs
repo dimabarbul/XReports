@@ -38,7 +38,7 @@ namespace XReports.Models
                 return (TValue)this.value;
             }
 
-            return (TValue)Convert.ChangeType(this.value, typeof(TValue), CultureInfo.InvariantCulture);
+            return (TValue)Convert.ChangeType(this.value, typeof(TValue), CultureInfo.CurrentCulture);
         }
 
         public void SetValue<TValue>(TValue value)

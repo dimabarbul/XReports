@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -25,38 +26,30 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 1,
                 2,
             });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] {"Value", "As string" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("As string"),
+                },
             });
             ReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
             };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("1")
-                    {
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell(1, expectedProperties),
+                    ReportCellHelper.CreateReportCell("1", expectedProperties),
                 },
-                new object[]
+                new[]
                 {
-                    new ReportCellData(2)
-                    {
-                        Properties = expectedProperties,
-                    },
-                    new ReportCellData("2")
-                    {
-                        Properties = expectedProperties,
-                    },
+                    ReportCellHelper.CreateReportCell(2, expectedProperties),
+                    ReportCellHelper.CreateReportCell("2", expectedProperties),
                 },
             });
         }

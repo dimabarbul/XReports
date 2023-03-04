@@ -5,7 +5,7 @@ namespace XReports.Properties
 {
     public class PercentFormatProperty : ReportCellProperty
     {
-        public PercentFormatProperty(int precision)
+        public PercentFormatProperty(int precision, string postfixText = "%", bool preserveTrailingZeros = true)
         {
             if (precision < 0)
             {
@@ -13,10 +13,14 @@ namespace XReports.Properties
             }
 
             this.Precision = precision;
+            this.PostfixText = postfixText;
+            this.PreserveTrailingZeros = preserveTrailingZeros;
         }
 
         public int Precision { get; }
 
-        public string PostfixText { get; set; } = "%";
+        public string PostfixText { get; }
+
+        public bool PreserveTrailingZeros { get; }
     }
 }

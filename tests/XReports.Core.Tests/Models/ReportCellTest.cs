@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Threading;
 using FluentAssertions;
 using XReports.Models;
 using Xunit;
@@ -15,6 +17,16 @@ namespace XReports.Core.Tests.Models
 
             reportCell.GetValue<decimal>().Should().Be(1m);
             reportCell.GetValue<string>().Should().Be("1");
+        }
+
+        [Fact]
+        public void GetValueShouldConvertValueUsingCurrentCulture()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+            ReportCell reportCell = new ReportCell();
+            reportCell.SetValue("1,23");
+
+            reportCell.GetValue<decimal>().Should().Be(1.23m);
         }
 
         [Fact]

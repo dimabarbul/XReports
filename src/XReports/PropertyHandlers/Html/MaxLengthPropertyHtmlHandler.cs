@@ -21,7 +21,7 @@ namespace XReports.PropertyHandlers.Html
                 return;
             }
 
-            cell.SetValue(value.Substring(0, property.MaxLength - 1) + '…');
+            cell.SetValue(value.Substring(0, property.MaxLength - property.Text.Length) + property.Text);
         }
     }
 }

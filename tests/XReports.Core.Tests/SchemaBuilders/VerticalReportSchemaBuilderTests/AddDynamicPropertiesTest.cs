@@ -4,6 +4,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -21,25 +22,22 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[] { 0, 1 });
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Column" },
-            });
-            table.Rows.Should().BeEquivalentTo(new[]
-            {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(0)
-                    {
-                        Properties = new[] { new CustomProperty1() },
-                    },
+                    ReportCellHelper.CreateReportCell("Column"),
                 },
-                new object[]
+            });
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = new[] { new CustomProperty2() },
-                    },
+                    ReportCellHelper.CreateReportCell(0, new CustomProperty1()),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(1, new CustomProperty2()),
                 },
             });
         }

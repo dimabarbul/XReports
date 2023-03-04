@@ -7,6 +7,7 @@ using XReports.Properties;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -27,22 +28,16 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new WithGlobalProperties() { Id = 1 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "ID" },
+                new[] { ReportCellHelper.CreateReportCell("ID") },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                            new AlignmentProperty(Alignment.Center),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell(
+                        1, new BoldProperty(), new AlignmentProperty(Alignment.Center)),
                 },
             });
         }
@@ -61,21 +56,15 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new WithOverwrittenGlobalProperties() { Id = 1 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "ID" },
+                new[] { ReportCellHelper.CreateReportCell("ID") },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = new[]
-                        {
-                            new DecimalPrecisionProperty(0),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell(1, new DecimalPrecisionProperty(0)),
                 },
             });
         }
@@ -94,30 +83,18 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new VerticalWithOverwrittenForHeaderGlobalProperties() { Id = 1 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
-                    new ReportCellData("ID")
-                    {
-                        Properties = new[]
-                        {
-                            new AlignmentProperty(Alignment.Right),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell("ID", new AlignmentProperty(Alignment.Right)),
                 },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = new[]
-                        {
-                            new AlignmentProperty(Alignment.Center),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell(1, new AlignmentProperty(Alignment.Center)),
                 },
             });
         }
@@ -136,24 +113,12 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new HorizontalWithOverwrittenForHeaderGlobalProperties() { Id = 1 },
             });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
+            reportTable.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("ID")
-                    {
-                        Properties = new[]
-                        {
-                            new AlignmentProperty(Alignment.Right),
-                        },
-                    },
-                    new ReportCellData(1)
-                    {
-                        Properties = new[]
-                        {
-                            new AlignmentProperty(Alignment.Center),
-                        },
-                    },
+                    ReportCellHelper.CreateReportCell("ID", new AlignmentProperty(Alignment.Right)),
+                    ReportCellHelper.CreateReportCell(1, new AlignmentProperty(Alignment.Center)),
                 },
             });
         }
@@ -172,23 +137,21 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 new WithPostBuilder() { Id = 1 },
             });
-            reportTable.HeaderRows.Should().BeEquivalentTo(new[]
+            reportTable.HeaderRows.Should().Equal(new[]
             {
-                new[] { "ID", "From PostBuilder" },
-            });
-            reportTable.Rows.Should().BeEquivalentTo(new[]
-            {
-                new object[]
+                new[]
                 {
-                    new ReportCellData(1)
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new BoldProperty(),
-                            new AlignmentProperty(Alignment.Center),
-                        },
-                    },
-                    string.Empty,
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("From PostBuilder"),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(
+                        1, new BoldProperty(), new AlignmentProperty(Alignment.Center)),
+                    ReportCellHelper.CreateReportCell(string.Empty),
                 },
             });
         }

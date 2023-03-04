@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
+using XReports.Core.Tests.Assertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
 using XReports.Interfaces;
@@ -29,7 +30,7 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = new ReportConverter<NewReportCell>().Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -42,7 +43,7 @@ namespace XReports.Core.Tests
                     this.CreateCell("Square", properties: new MyProperty()),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -154,7 +155,7 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -164,7 +165,7 @@ namespace XReports.Core.Tests
                         properties: new MyProperty()),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -188,7 +189,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
             converted.HeaderRows.Clone().Should().BeEmpty();
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -249,14 +250,14 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
                     this.CreateCell("Value"),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -283,7 +284,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
             converted.HeaderRows.Clone().Should().BeEmpty();
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -312,7 +313,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
             converted.Enumerate();
 
-            breadcrumbs.Should().ContainSameOrEqualElements(
+            breadcrumbs.Should().BeEquivalentTo(
                 Enumerable.Range(0, dataCount)
                     .SelectMany(_ => new ReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
         }
@@ -333,7 +334,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
             converted.Enumerate();
 
-            breadcrumbs.Should().ContainSameOrEqualElements(
+            breadcrumbs.Should().BeEquivalentTo(
                 Enumerable.Range(0, dataCount)
                     .SelectMany(_ => new ReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
         }
@@ -352,14 +353,14 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
                     this.CreateCell("Value"),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -385,7 +386,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
             converted.HeaderRows.Clone().Should().BeEmpty();
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -410,14 +411,14 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
                     this.CreateCell("Value"),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -440,7 +441,7 @@ namespace XReports.Core.Tests
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
             converted.HeaderRows.Clone().Should().BeEmpty();
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -463,14 +464,14 @@ namespace XReports.Core.Tests
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
                     this.CreateCell("Value"),
                 },
             });
-            converted.Rows.Clone().Should().ContainSameOrEqualElements(new[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {

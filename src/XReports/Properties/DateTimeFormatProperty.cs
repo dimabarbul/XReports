@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using XReports.Helpers;
 using XReports.Models;
 
 namespace XReports.Properties
@@ -11,12 +9,12 @@ namespace XReports.Properties
         {
             if (string.IsNullOrEmpty(format))
             {
-                throw new ArgumentException("Format cannot be empty or null", nameof(format));
+                throw new ArgumentNullException(nameof(format));
             }
 
-            this.Parts = DateTimeParser.Parse(format);
+            this.Format = format;
         }
 
-        public IReadOnlyList<DateTimeFormatPart> Parts { get; }
+        public string Format { get; }
     }
 }

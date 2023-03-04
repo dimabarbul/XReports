@@ -3,6 +3,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -22,19 +23,13 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
                 "Test",
             });
 
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Value")
-                    {
-                        Properties = new ReportCellProperty[]
-                        {
-                            new CustomHeaderProperty1(),
-                            new CustomHeaderProperty2(),
-                        },
-                    },
-                    "Test",
+                    ReportCellHelper.CreateReportCell(
+                        "Value", new CustomHeaderProperty1(), new CustomHeaderProperty2()),
+                    ReportCellHelper.CreateReportCell("Test"),
                 },
             });
         }

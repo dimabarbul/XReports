@@ -5,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -26,11 +27,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             });
 
             ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Value", "Test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
             });
-            table.Properties.Should().ContainSameOrEqualElements(expectedProperties);
+            table.Properties.Should().BeEquivalentTo(expectedProperties);
         }
 
         [Fact]
@@ -48,11 +53,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             });
 
             ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Value", "Test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
             });
-            table.Properties.Should().ContainSameOrEqualElements(expectedProperties);
+            table.Properties.Should().BeEquivalentTo(expectedProperties);
         }
 
         [Fact]

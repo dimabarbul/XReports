@@ -6,6 +6,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -22,15 +23,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Column1")
-                    {
-                        Properties = new [] { property },
-                    },
-                    "Column2",
+                    ReportCellHelper.CreateReportCell("Column1", property),
+                    ReportCellHelper.CreateReportCell("Column2"),
                 },
             });
         }
@@ -76,16 +74,13 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Column1")
-                    {
-                        Properties = new []{ property },
-                    },
-                    "Column2",
-                    "Column1",
+                    ReportCellHelper.CreateReportCell("Column1", property),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column1"),
                 },
             });
         }
@@ -100,15 +95,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Column1")
-                    {
-                        Properties = new [] { property },
-                    },
-                    "Column2",
+                    ReportCellHelper.CreateReportCell("Column1", property),
+                    ReportCellHelper.CreateReportCell("Column2"),
                 },
             });
         }
@@ -137,15 +129,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Column1")
-                    {
-                        Properties = new [] { property },
-                    },
-                    "Column2",
+                    ReportCellHelper.CreateReportCell("Column1", property),
+                    ReportCellHelper.CreateReportCell("Column2"),
                 },
             });
         }

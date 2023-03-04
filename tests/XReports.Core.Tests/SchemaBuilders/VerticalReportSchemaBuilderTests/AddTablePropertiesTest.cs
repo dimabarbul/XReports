@@ -5,6 +5,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -26,15 +27,21 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             });
 
             ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Value" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                },
             });
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
             });
-            table.Properties.Should().ContainSameOrEqualElements(expectedProperties);
+            table.Properties.Should().BeEquivalentTo(expectedProperties);
         }
 
         [Fact]
@@ -52,15 +59,21 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             });
 
             ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Value" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                },
             });
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "Test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
             });
-            table.Properties.Should().ContainSameOrEqualElements(expectedProperties);
+            table.Properties.Should().BeEquivalentTo(expectedProperties);
         }
 
         [Fact]

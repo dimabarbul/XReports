@@ -7,6 +7,7 @@ using XReports.Interfaces;
 using XReports.Models;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.Models
@@ -23,9 +24,13 @@ namespace XReports.Core.Tests.Models
 
             IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
 
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new [] { "First name", "Last name" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("First name"),
+                    ReportCellHelper.CreateReportCell("Last name"),
+                },
             });
             table.Rows.Should().BeEmpty();
         }
@@ -44,13 +49,19 @@ namespace XReports.Core.Tests.Models
             table.Enumerate();
 
             // enumerating for the second time
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Value" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                },
             });
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new[] { "test" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("test"),
+                },
             });
         }
 
@@ -75,10 +86,18 @@ namespace XReports.Core.Tests.Models
                 {
                     IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
 
-                    reportTable.Rows.Should().BeEquivalentTo(new[]
+                    reportTable.Rows.Should().Equal(new[]
                     {
-                        new object[] { "John", 23 },
-                        new object[] { "Jane", 22 },
+                        new[]
+                        {
+                            ReportCellHelper.CreateReportCell("John"),
+                            ReportCellHelper.CreateReportCell(23),
+                        },
+                        new[]
+                        {
+                            ReportCellHelper.CreateReportCell("Jane"),
+                            ReportCellHelper.CreateReportCell(22),
+                        },
                     });
                 }
             }
@@ -147,21 +166,37 @@ namespace XReports.Core.Tests.Models
                 "String",
             });
 
-            table1.HeaderRows.Should().BeEquivalentTo(new[]
+            table1.HeaderRows.Should().Equal(new[]
             {
-                new [] { "Value", "Length" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Length"),
+                },
             });
-            table1.Rows.Should().BeEquivalentTo(new[]
+            table1.Rows.Should().Equal(new[]
             {
-                new object[]{ "Test", 4 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Test"),
+                    ReportCellHelper.CreateReportCell(4),
+                },
             });
-            table2.HeaderRows.Should().BeEquivalentTo(new[]
+            table2.HeaderRows.Should().Equal(new[]
             {
-                new [] { "Value", "Length" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Length"),
+                },
             });
-            table2.Rows.Should().BeEquivalentTo(new[]
+            table2.Rows.Should().Equal(new[]
             {
-                new object[]{ "String", 6 },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("String"),
+                    ReportCellHelper.CreateReportCell(6),
+                },
             });
         }
 

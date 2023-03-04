@@ -8,23 +8,27 @@ namespace XReports.PropertyHandlers.Excel
 {
     public class DecimalPrecisionPropertyExcelHandler : PropertyHandler<DecimalPrecisionProperty, ExcelReportCell>
     {
-        private readonly Dictionary<int, string> formatCache = new Dictionary<int, string>();
+        private readonly Dictionary<(bool, int), string> formatCache = new Dictionary<(bool, int), string>();
 
         protected override void HandleProperty(DecimalPrecisionProperty property, ExcelReportCell cell)
         {
-            string format = this.GetFormat(property.Precision);
+            // Ensure the value is convertible to decimal.
+            _ = cell.GetNullableValue<decimal>();
+
+            string format = this.GetFormat(property);
             cell.NumberFormat = format;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private string GetFormat(int precision)
+        private string GetFormat(DecimalPrecisionProperty property)
         {
-            if (!this.formatCache.ContainsKey(precision))
+            (bool, int) key = (property.PreserveTrailingZeros, property.Precision);
+            if (!this.formatCache.ContainsKey(key))
             {
-                this.formatCache[precision] = $"0.{string.Concat(Enumerable.Repeat('0', precision))}";
+                this.formatCache[key] = $"0.{string.Concat(Enumerable.Repeat(property.PreserveTrailingZeros ? '0' : '#', property.Precision))}";
             }
 
-            return this.formatCache[precision];
+            return this.formatCache[key];
         }
     }
 }

@@ -7,6 +7,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -27,8 +28,8 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
             rows.Insert(index, rowsName);
-            table.HeaderRows.Should().BeEquivalentTo(rows
-                .Select(row => new object[] { row })
+            table.HeaderRows.Should().Equal(rows
+                .Select(row => new[] { ReportCellHelper.CreateReportCell(row) })
                 .ToArray());
         }
 
@@ -40,11 +41,20 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.InsertHeaderRow(0, "Header0", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Header0" },
-                new[] { "Header1" },
-                new[] { "Header2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Header0"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Header1"),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Header2"),
+                },
             });
         }
 
@@ -58,9 +68,12 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             schemaBuilder.InsertHeaderRow(0, title, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new object[] { title },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(title),
+                },
             });
         }
 

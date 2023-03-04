@@ -7,6 +7,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
@@ -21,9 +22,14 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "TheColumn", "Column1", "Column2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("TheColumn"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
             });
         }
 
@@ -35,9 +41,14 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore("Column2", "Column1", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "Column1", "Column1", "Column2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
             });
         }
 
@@ -51,9 +62,14 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore("Column1", title, new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { title, "Column1", "Column2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(title),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
             });
         }
 
@@ -105,9 +121,15 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "TheColumn", "Column1", "Column2", "Column1" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("TheColumn"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                },
             });
         }
 
@@ -119,9 +141,14 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "TheColumn", "Column1", "Column2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("TheColumn"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
             });
         }
 
@@ -156,9 +183,14 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.HeaderRows.Should().BeEquivalentTo(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
-                new[] { "TheColumn", "Column1", "Column2" },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("TheColumn"),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
             });
         }
 

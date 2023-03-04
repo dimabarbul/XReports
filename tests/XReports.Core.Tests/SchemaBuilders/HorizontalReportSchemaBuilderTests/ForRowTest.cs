@@ -6,6 +6,7 @@ using XReports.Models;
 using XReports.ReportCellsProviders;
 using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
@@ -22,18 +23,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Row1")
-                    {
-                        Properties = new [] { property },
-                    },
+                    ReportCellHelper.CreateReportCell("Row1",  property),
                 },
-                new object[]
+                new[]
                 {
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
             });
         }
@@ -79,22 +77,19 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Row1")
-                    {
-                        Properties = new []{ property },
-                    },
+                    ReportCellHelper.CreateReportCell("Row1", property),
                 },
-                new object[]
+                new[]
                 {
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
-                new object[]
+                new[]
                 {
-                    "Row1",
+                    ReportCellHelper.CreateReportCell("Row1"),
                 },
             });
         }
@@ -109,18 +104,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Row1")
-                    {
-                        Properties = new [] { property },
-                    },
+                    ReportCellHelper.CreateReportCell("Row1", property),
                 },
-                new object[]
+                new[]
                 {
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
             });
         }
@@ -149,18 +141,15 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
             IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
-            table.Rows.Should().BeEquivalentTo(new[]
+            table.Rows.Should().Equal(new[]
             {
-                new object[]
+                new[]
                 {
-                    new ReportCellData("Row1")
-                    {
-                        Properties = new [] { property },
-                    },
+                    ReportCellHelper.CreateReportCell("Row1", property),
                 },
-                new object[]
+                new[]
                 {
-                    "Row2",
+                    ReportCellHelper.CreateReportCell("Row2"),
                 },
             });
         }
