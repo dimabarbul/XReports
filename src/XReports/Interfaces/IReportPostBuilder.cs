@@ -1,16 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
+using XReports.Models;
 
 namespace XReports.Interfaces
 {
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Interfaces have the same name")]
-    public interface IHorizontalReportPostBuilder<TSourceEntity>
+    public interface IReportPostBuilder<TSourceEntity>
     {
-        void Build(IHorizontalReportSchemaBuilder<TSourceEntity> builder);
+        void Build(IReportSchemaBuilder<TSourceEntity> builder, BuildOptions options);
     }
 
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Interfaces have the same name")]
-    public interface IHorizontalReportPostBuilder<TSourceEntity, in TBuildParameter>
+    public interface IReportPostBuilder<TSourceEntity, in TBuildParameter>
     {
-        void Build(IHorizontalReportSchemaBuilder<TSourceEntity> builder, TBuildParameter parameter);
+        void Build(IReportSchemaBuilder<TSourceEntity> builder, TBuildParameter parameter, BuildOptions options);
     }
 }

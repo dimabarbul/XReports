@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using XReports.Attributes;
 using XReports.Interfaces;
+using XReports.Models;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -26,7 +27,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IVerticalReportPostBuilder<ForVerticalReport>
+            public class PostBuilder : IReportPostBuilder<ForVerticalReport>
             {
                 private readonly Dependency dependency;
 
@@ -35,7 +36,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.dependency = dependency;
                 }
 
-                public void Build(IVerticalReportSchemaBuilder<ForVerticalReport> builder)
+                public void Build(IReportSchemaBuilder<ForVerticalReport> builder, BuildOptions options)
                 {
                     this.dependency.Call();
                 }
@@ -51,7 +52,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IHorizontalReportPostBuilder<ForHorizontalReport>
+            public class PostBuilder : IReportPostBuilder<ForHorizontalReport>
             {
                 private readonly Dependency dependency;
 
@@ -60,7 +61,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.dependency = dependency;
                 }
 
-                public void Build(IHorizontalReportSchemaBuilder<ForHorizontalReport> builder)
+                public void Build(IReportSchemaBuilder<ForHorizontalReport> builder, BuildOptions options)
                 {
                     this.dependency.Call();
                 }
@@ -79,7 +80,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public string Name { get; set; }
 
-            public class PostBuilder : IVerticalReportPostBuilder<VerticalWithTrackingPostBuilder>
+            public class PostBuilder : IReportPostBuilder<VerticalWithTrackingPostBuilder>
             {
                 private readonly List<Attribute> attributes;
 
@@ -88,7 +89,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.attributes = attributes;
                 }
 
-                public void Build(IVerticalReportSchemaBuilder<VerticalWithTrackingPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalWithTrackingPostBuilder> builder, BuildOptions options)
                 {
                     this.attributes.Add(null);
                 }
@@ -107,7 +108,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public string Name { get; set; }
 
-            public class PostBuilder : IHorizontalReportPostBuilder<HorizontalWithTrackingPostBuilder>
+            public class PostBuilder : IReportPostBuilder<HorizontalWithTrackingPostBuilder>
             {
                 private readonly List<Attribute> attributes;
 
@@ -116,7 +117,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.attributes = attributes;
                 }
 
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalWithTrackingPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalWithTrackingPostBuilder> builder, BuildOptions options)
                 {
                     this.attributes.Add(null);
                 }
@@ -136,9 +137,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(1, "ID")]
             public int Id { get; set; }
 
-            private class HorizontalPostBuilder : IHorizontalReportPostBuilder<VerticalWithWrongPostBuilderInterface>
+            private class HorizontalPostBuilder : IReportPostBuilder<VerticalWithWrongPostBuilderInterface, int>
             {
-                public void Build(IHorizontalReportSchemaBuilder<VerticalWithWrongPostBuilderInterface> builder)
+                public void Build(IReportSchemaBuilder<VerticalWithWrongPostBuilderInterface> builder, int parameter, BuildOptions options)
                 {
                 }
             }
@@ -164,9 +165,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(1, "ID")]
             public int Id { get; set; }
 
-            private class VerticalPostBuilder : IVerticalReportPostBuilder<HorizontalWithWrongPostBuilderInterface>
+            private class VerticalPostBuilder : IReportPostBuilder<HorizontalWithWrongPostBuilderInterface, int>
             {
-                public void Build(IVerticalReportSchemaBuilder<HorizontalWithWrongPostBuilderInterface> builder)
+                public void Build(IReportSchemaBuilder<HorizontalWithWrongPostBuilderInterface> builder, int parameter, BuildOptions options)
                 {
                 }
             }
@@ -188,7 +189,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IVerticalReportPostBuilder<VerticalWithDisposablePostBuilder>, IDisposable
+            public class PostBuilder : IReportPostBuilder<VerticalWithDisposablePostBuilder>, IDisposable
             {
                 private readonly Dependency dependency;
 
@@ -197,7 +198,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.dependency = dependency;
                 }
 
-                public void Build(IVerticalReportSchemaBuilder<VerticalWithDisposablePostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalWithDisposablePostBuilder> builder, BuildOptions options)
                 {
                 }
 
@@ -218,7 +219,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Name")]
             public string Name { get; set; }
 
-            public class PostBuilder : IHorizontalReportPostBuilder<HorizontalWithDisposablePostBuilder>, IDisposable
+            public class PostBuilder : IReportPostBuilder<HorizontalWithDisposablePostBuilder>, IDisposable
             {
                 private readonly Dependency dependency;
 
@@ -227,7 +228,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     this.dependency = dependency;
                 }
 
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalWithDisposablePostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalWithDisposablePostBuilder> builder, BuildOptions options)
                 {
                 }
 

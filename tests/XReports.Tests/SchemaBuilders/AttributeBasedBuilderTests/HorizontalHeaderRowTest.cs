@@ -167,13 +167,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [Fact]
-        public void BuildSchemaShouldThrowWhenReportIsVertical()
+        public void BuildSchemaShouldNotThrowWhenReportIsVertical()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
 
             Action action = () => builderHelper.BuildSchema<Vertical>();
 
-            action.Should().ThrowExactly<InvalidOperationException>();
+            action.Should().NotThrow();
         }
     }
 }

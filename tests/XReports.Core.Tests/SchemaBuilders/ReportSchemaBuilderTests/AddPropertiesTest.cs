@@ -6,7 +6,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddPropertiesTest"/>
     public class AddPropertiesTest
@@ -14,11 +14,11 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddPropertiesShouldAddPropertiesToAllRows()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
                 .AddProperties(new CustomProperty1(), new CustomProperty2());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "Test",
                 "Test2",
@@ -40,6 +40,31 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 },
                 new[]
                 {
+                    ReportCellHelper.CreateReportCell("Test2", expectedProperties),
+                },
+            });
+        }
+
+        [Fact]
+        public void AddPropertiesShouldAddPropertiesToAllRowsForHorizontal()
+        {
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            reportBuilder.AddColumn("Value", s => s)
+                .AddProperties(new CustomProperty1(), new CustomProperty2());
+
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
+            {
+                "Test",
+                "Test2",
+            });
+
+            ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell("Test", expectedProperties),
                     ReportCellHelper.CreateReportCell("Test2", expectedProperties),
                 },
             });

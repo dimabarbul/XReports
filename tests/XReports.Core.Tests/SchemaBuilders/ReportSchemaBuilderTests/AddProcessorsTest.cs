@@ -8,45 +8,62 @@ using XReports.SchemaBuilders;
 using XReports.Tests.Common.Assertions;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddProcessorsTest"/>
-    public class AddHeaderRowProcessorsTest
+    public class AddProcessorsTest
     {
         [Fact]
-        public void AddHeaderRowProcessorsShouldAddProcessorsToBeCalledDuringForEachColumn()
+        public void AddProcessorsShouldAddProcessorsToBeCalledDuringForEachRow()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
-            reportBuilder.AddRow("Value", s => s);
-            reportBuilder.AddHeaderRow("Header", s => s.ToUpperInvariant())
+            reportBuilder.AddColumn("Value", s => s)
                 .AddProcessors(processor1, processor2);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "Test",
                 "Test2",
             });
             table.Enumerate();
 
-            processor1.ProcessedData.Should().Equal("TEST", "TEST2");
-            processor2.ProcessedData.Should().Equal("TEST", "TEST2");
+            processor1.ProcessedData.Should().Equal("Test", "Test2");
+            processor2.ProcessedData.Should().Equal("Test", "Test2");
         }
 
         [Fact]
-        public void AddHeaderRowProcessorsShouldHaveAccessToAllProperties()
+        public void AddProcessorsShouldAddProcessorsToBeCalledDuringForEachRowForHorizontal()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            CustomProcessor1 processor1 = new CustomProcessor1();
+            CustomProcessor2 processor2 = new CustomProcessor2();
+            reportBuilder.AddColumn("Value", s => s)
+                .AddProcessors(processor1, processor2);
+
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
+            {
+                "Test",
+                "Test2",
+            });
+            table.Enumerate();
+
+            processor1.ProcessedData.Should().Equal("Test", "Test2");
+            processor2.ProcessedData.Should().Equal("Test", "Test2");
+        }
+
+        [Fact]
+        public void AddProcessorsShouldHaveAccessToAllProperties()
+        {
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             PropertyCheckProcessor processor = new PropertyCheckProcessor();
-            reportBuilder.AddRow("Value", s => s);
-            reportBuilder.AddHeaderRow("Value", s => s.ToUpperInvariant())
+            reportBuilder.AddColumn("Value", s => s)
                 .AddProperties(new CustomProperty1())
                 .AddProcessors(processor);
-            // global property won't be available as it's not added to header cells
             reportBuilder.AddGlobalProperties(new CustomProperty2());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "Test",
             });
@@ -55,6 +72,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
             processor.Properties.Should().BeEquivalentTo(new ReportCellProperty[]
             {
                 new CustomProperty1(),
+                new CustomProperty2(),
             });
         }
 
@@ -64,7 +82,7 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
 
             public void Process(ReportCell cell, string entity)
             {
-                this.ProcessedData.Add(cell.GetValue<string>());
+                this.ProcessedData.Add(entity);
             }
         }
 

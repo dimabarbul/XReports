@@ -8,20 +8,52 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     public class AddTablePropertiesTest
     {
         [Fact]
         public void AddTablesPropertiesShouldAddPropertiesToReportTable()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             CustomTableProperty1 tableProperty1 = new CustomTableProperty1();
             CustomTableProperty2 tableProperty2 = new CustomTableProperty2();
-            reportBuilder.AddRow("Value", s => s);
+            reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddTableProperties(tableProperty1, tableProperty2);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
+            {
+                "Test",
+            });
+
+            ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
+            table.HeaderRows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                },
+            });
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
+            });
+            table.Properties.Should().BeEquivalentTo(expectedProperties);
+        }
+
+        [Fact]
+        public void AddTablesPropertiesShouldAddPropertiesToReportTableForHorizontal()
+        {
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            CustomTableProperty1 tableProperty1 = new CustomTableProperty1();
+            CustomTableProperty2 tableProperty2 = new CustomTableProperty2();
+            reportBuilder.AddColumn("Value", s => s);
+            reportBuilder.AddTableProperties(tableProperty1, tableProperty2);
+
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
             {
                 "Test",
             });
@@ -41,23 +73,29 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
         [Fact]
         public void AddTablesPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             CustomTableProperty1 tableProperty1 = new CustomTableProperty1();
             CustomTableProperty1 tableProperty2 = new CustomTableProperty1();
-            reportBuilder.AddRow("Value", s => s);
+            reportBuilder.AddColumn("Value", s => s);
             reportBuilder.AddTableProperties(tableProperty1, tableProperty2);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "Test",
             });
 
             ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
-            table.Rows.Should().Equal(new[]
+            table.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
                     ReportCellHelper.CreateReportCell("Value"),
+                },
+            });
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
                     ReportCellHelper.CreateReportCell("Test"),
                 },
             });
@@ -67,8 +105,8 @@ namespace XReports.Core.Tests.SchemaBuilders.HorizontalReportSchemaBuilderTests
         [Fact]
         public void AddTablesPropertiesShouldThrowWhenSomePropertyIsNull()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
-            reportBuilder.AddRow("Value", s => s);
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            reportBuilder.AddColumn("Value", s => s);
 
             Action action = () => reportBuilder.AddTableProperties(new CustomTableProperty1(), new CustomTableProperty2(), null);
 

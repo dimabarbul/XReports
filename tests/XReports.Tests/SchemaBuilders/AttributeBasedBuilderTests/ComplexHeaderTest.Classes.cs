@@ -1,5 +1,6 @@
 using XReports.Attributes;
 using XReports.Interfaces;
+using XReports.Models;
 using XReports.ReportCellsProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -179,9 +180,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByIndexesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
                     builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByIndexesWithColumnFromPostBuilder>());
                 }
@@ -198,11 +199,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByIndexesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByIndexesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<HorizontalByIndexesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -217,9 +218,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByTitlesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
                     builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByTitlesWithColumnFromPostBuilder>());
                 }
@@ -236,11 +237,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByTitlesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<HorizontalByTitlesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -255,9 +256,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
                     builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByPropertyNamesWithColumnFromPostBuilder>());
                 }
@@ -274,11 +275,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportVariable(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
                 }
             }
         }

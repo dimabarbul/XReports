@@ -7,11 +7,10 @@ using XReports.Helpers;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.ReportSchemaCellsProviders;
-using ColumnId = XReports.Models.ColumnId;
 
 namespace XReports.SchemaBuilders
 {
-    public abstract class ReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
+    public class ReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
     {
         protected ComplexHeaderBuilder ComplexHeaderBuilder { get; } = new ComplexHeaderBuilder();
 
@@ -156,33 +155,13 @@ namespace XReports.SchemaBuilders
             return (int)index;
         }
 
-        protected int GetCellsProviderIndex(RowId rowId)
-        {
-            Validation.NotNull(nameof(rowId), rowId);
-
-            int? index = null;
-            for (int i = 0; i < this.CellsProviders.Count; i++)
-            {
-                if (rowId.Equals(this.CellsProviders[i].Id.RowId))
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index == null)
-            {
-                throw new ArgumentException($"Cells provider with row ID {rowId} is not found", nameof(rowId));
-            }
-
-            return (int)index;
-        }
-
-        protected ComplexHeaderCell[,] BuildComplexHeader(bool transpose)
+        protected ComplexHeaderCell[,] BuildComplexHeader(
+            IList<IdentifiableCellsProvider> cellsProviders,
+            bool transpose)
         {
             ComplexHeaderCell[,] complexHeader = this.ComplexHeaderBuilder.Build(
-                this.CellsProviders.Select(p => p.Id.Title).ToArray(),
-                this.GetColumnIds());
+                cellsProviders.Select(p => p.Id.Title).ToArray(),
+                this.GetColumnIds(cellsProviders));
 
             return transpose ? complexHeader.Transpose() : complexHeader;
         }
@@ -202,23 +181,16 @@ namespace XReports.SchemaBuilders
             {
                 throw new ArgumentException($"Column ID {id.ColumnId} already exists");
             }
-
-            if (id.RowId != null
-                && this.CellsProviders.Any(p => id.RowId.Equals(p.Id.RowId)))
-            {
-                throw new ArgumentException($"Row ID {id.RowId} already exists");
-            }
         }
 
-        private IReadOnlyList<ComplexHeader.ColumnId> GetColumnIds()
+        private IReadOnlyList<ColumnId> GetColumnIds(
+            IList<IdentifiableCellsProvider> cellsProviders)
         {
-            return this.CellsProviders
+            return cellsProviders
                 .Select(p =>
                     p.Id.ColumnId != null ?
-                        new ComplexHeader.ColumnId(p.Id.ColumnId.Value) :
-                        (p.Id.RowId != null ?
-                            new ComplexHeader.ColumnId(p.Id.RowId.Value) :
-                            null))
+                        new ColumnId(p.Id.ColumnId.Value) :
+                        null)
                 .ToArray();
         }
 
@@ -236,23 +208,155 @@ namespace XReports.SchemaBuilders
 
         protected class CellsProviderId
         {
-            public CellsProviderId(string title, ColumnId columnId = null, RowId rowId = null)
+            public CellsProviderId(string title, ColumnId columnId = null)
             {
-                if (columnId != null && rowId != null)
-                {
-                    throw new ArgumentException($"Only one of {nameof(columnId)} and {nameof(rowId)} can be specified");
-                }
-
                 Validation.NotNull(nameof(title), title);
 
                 this.Title = title;
                 this.ColumnId = columnId;
-                this.RowId = rowId;
             }
 
             public ColumnId ColumnId { get; }
-            public RowId RowId { get; }
             public string Title { get; }
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> AddColumn(string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.CellsProviders.Count, title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertCellsProvider(index, new CellsProviderId(title), provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.GetCellsProviderIndex(beforeTitle), title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.GetCellsProviderIndex(beforeId), title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> AddColumn(ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.CellsProviders.Count, id, title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumn(int index, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            Validation.NotNull(nameof(id), id);
+
+            return this.InsertCellsProvider(index, new CellsProviderId(title, columnId: id), provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.GetCellsProviderIndex(beforeTitle), id, title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider)
+        {
+            return this.InsertColumn(this.GetCellsProviderIndex(beforeId), id, title, provider);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(string title)
+        {
+            return this.GetProvider(title);
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(int index)
+        {
+            if (index < 0 || index >= this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this.CellsProviders[index].Provider;
+        }
+
+        public IReportSchemaCellsProviderBuilder<TSourceEntity> ForColumn(ColumnId id)
+        {
+            Validation.NotNull(nameof(id), id);
+
+            return this.CellsProviders[this.GetCellsProviderIndex(id)].Provider;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn = null)
+        {
+            this.ComplexHeaderBuilder.AddGroup(
+                rowIndex,
+                title,
+                new ColumnId(fromColumn.Value),
+                toColumn == null ?
+                    null :
+                    new ColumnId(toColumn.Value));
+
+            return this;
+        }
+
+        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null)
+        {
+            this.ComplexHeaderBuilder.AddGroup(
+                rowIndex,
+                rowSpan,
+                title,
+                new ColumnId(fromColumn.Value),
+                toColumn == null ?
+                    null :
+                    new ColumnId(toColumn.Value));
+
+            return this;
+        }
+
+        public VerticalReportSchema<TSourceEntity> BuildVerticalSchema()
+        {
+            if (this.CellsProviders.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot build schema for table with no columns.");
+            }
+
+            return new VerticalReportSchema<TSourceEntity>(
+                this.CellsProviders
+                    .Select(c => c.Provider.Build(this.GlobalProperties))
+                    .ToArray(),
+                this.TableProperties.ToArray(),
+                this.BuildComplexHeader(this.CellsProviders, transpose: false),
+                this.ComplexHeadersProperties
+                    .ToDictionary(x => x.Key, x => x.Value.ToArray()),
+                this.CommonComplexHeadersProperties.ToArray());
+        }
+
+        public HorizontalReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount)
+        {
+            if (this.CellsProviders.Count == 0)
+            {
+                throw new InvalidOperationException("Cannot build schema for table with no columns.");
+            }
+
+            Validation.NotNegative(nameof(headerRowsCount), headerRowsCount);
+
+            if (headerRowsCount >= this.CellsProviders.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(headerRowsCount), $"Count of header rows {headerRowsCount} cannot be greater than or equal to rows count {this.CellsProviders.Count}");
+            }
+
+            return new HorizontalReportSchema<TSourceEntity>(
+                this.CellsProviders
+                    .Take(headerRowsCount)
+                    .Select(c => c.Provider.Build(Array.Empty<ReportCellProperty>()))
+                    .ToArray(),
+                this.CellsProviders
+                    .Skip(headerRowsCount)
+                    .Select(c => c.Provider.Build(this.GlobalProperties))
+                    .ToArray(),
+                this.TableProperties.ToArray(),
+                this.BuildComplexHeader(this.CellsProviders.Skip(headerRowsCount).ToArray(), transpose: true),
+                this.ComplexHeadersProperties
+                    .ToDictionary(x => x.Key, x => x.Value.ToArray()),
+                this.CommonComplexHeadersProperties.ToArray());
         }
     }
 }

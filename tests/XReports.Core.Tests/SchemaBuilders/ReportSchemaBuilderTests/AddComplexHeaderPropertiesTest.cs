@@ -9,20 +9,20 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     public class AddComplexHeaderPropertiesTest
     {
         [Fact]
         public void AddComplexHeaderPropertiesShouldAddPropertiesToAllComplexHeaderCells()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group1", 0, 2);
             schemaBuilder.AddComplexHeader(1, "Group2", 0, 1);
 
             schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty2());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             ReportCellProperty[] expectedProperties = new ReportCellProperty[]
             {
                 new CustomProperty1(),
@@ -52,15 +52,53 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         }
 
         [Fact]
+        public void AddComplexHeaderPropertiesShouldAddPropertiesToAllComplexHeaderCellsForHorizontal()
+        {
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            schemaBuilder.AddComplexHeader(0, "Group1", 0, 2);
+            schemaBuilder.AddComplexHeader(1, "Group2", 0, 1);
+
+            schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty2());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Empty<int>());
+            ReportCellProperty[] expectedProperties = new ReportCellProperty[]
+            {
+                new CustomProperty1(),
+                new CustomProperty2(),
+            };
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Group1", rowSpan: 3, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Group2", rowSpan: 2, properties: expectedProperties),
+                    ReportCellHelper.CreateReportCell("Column1"),
+                },
+                new[]
+                {
+                    null,
+                    null,
+                    ReportCellHelper.CreateReportCell("Column2"),
+                },
+                new[]
+                {
+                    null,
+                    ReportCellHelper.CreateReportCell("Column3", columnSpan: 2),
+                    null,
+                },
+            });
+        }
+
+        [Fact]
         public void AddComplexHeaderPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group1", 0, 2);
             schemaBuilder.AddComplexHeader(1, "Group2", 0, 1);
 
             schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty1());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             ReportCellProperty[] expectedProperties = new ReportCellProperty[]
             {
                 new CustomProperty1(),
@@ -92,7 +130,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddComplexHeaderPropertiesWithTitleShouldAddPropertiesToAllComplexHeaderCellsWithTheTitleCaseSensitively()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
             schemaBuilder.AddColumn("TheGroup", new EmptyCellsProvider<int>());
             schemaBuilder
                 .AddComplexHeader(0, "TheGroup", 0, 2)
@@ -103,7 +141,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 .AddComplexHeader(2, "Group3", 2);
 
             schemaBuilder.AddComplexHeaderProperties("TheGroup", new CustomProperty1(), new CustomProperty2());
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             ReportCellProperty[] expectedProperties = new ReportCellProperty[]
             {
                 new CustomProperty1(),
@@ -141,7 +179,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddComplexHeaderPropertiesWithTitleShouldThrowWhenTitleIsNull()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group", 0, 2);
 
             Action action = () => schemaBuilder.AddComplexHeaderProperties(title: null, new CustomProperty1(), new CustomProperty2());
@@ -152,12 +190,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddComplexHeaderPropertiesWithTitleShouldIgnorePropertiesWhenTitleDoesNotExist()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group", 0, 2);
 
             schemaBuilder.AddComplexHeaderProperties("AnotherGroup", new CustomProperty1());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -178,7 +216,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddComplexHeaderPropertiesShouldThrowWhenSomePropertyIsNull()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group", 0, 2);
 
             Action action = () => schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty2(), null);
@@ -186,9 +224,9 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private VerticalReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)
+        private ReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
 
             for (int i = 0; i < columnsCount; i++)
             {

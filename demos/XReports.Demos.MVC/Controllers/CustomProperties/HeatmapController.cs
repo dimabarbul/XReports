@@ -46,12 +46,12 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             HeatmapProperty heatmapProperty = new HeatmapProperty(0, Color.IndianRed, 100, Color.SkyBlue);
 
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(heatmapProperty);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

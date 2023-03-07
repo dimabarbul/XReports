@@ -5,7 +5,6 @@ using FluentAssertions;
 using XReports.ComplexHeader;
 using XReports.Models;
 using Xunit;
-using ColumnId = XReports.ComplexHeader.ColumnId;
 
 namespace XReports.Core.Tests.ComplexHeader
 {

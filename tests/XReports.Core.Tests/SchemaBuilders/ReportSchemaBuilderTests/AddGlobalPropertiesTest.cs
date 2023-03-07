@@ -7,7 +7,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddGlobalPropertiesTest"/>
     public class AddGlobalPropertiesTest
@@ -15,13 +15,13 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRows()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
             schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
             schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
 
             schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 1,
                 2,
@@ -49,6 +49,42 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 new[]
                 {
                     ReportCellHelper.CreateReportCell(2, expectedProperties),
+                    ReportCellHelper.CreateReportCell("2", expectedProperties),
+                },
+            });
+        }
+
+        [Fact]
+        public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRowsForHorizontal()
+        {
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
+            schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
+            schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
+
+            schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
+            {
+                1,
+                2,
+            });
+            ReportCellProperty[] expectedProperties =
+            {
+                new CustomProperty1(),
+                new CustomProperty2(),
+            };
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Value"),
+                    ReportCellHelper.CreateReportCell(1, expectedProperties),
+                    ReportCellHelper.CreateReportCell(2, expectedProperties),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("As string"),
+                    ReportCellHelper.CreateReportCell("1", expectedProperties),
                     ReportCellHelper.CreateReportCell("2", expectedProperties),
                 },
             });

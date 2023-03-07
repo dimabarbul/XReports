@@ -6,7 +6,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddHeaderPropertiesTest"/>
     public class AddHeaderPropertiesTest
@@ -14,11 +14,11 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddHeaderPropertiesShouldAddCustomHeaderProperties()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s)
                 .AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "Test",
             });
@@ -35,6 +35,29 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             {
                 new[]
                 {
+                    ReportCellHelper.CreateReportCell("Test"),
+                },
+            });
+        }
+
+        [Fact]
+        public void AddHeaderPropertiesShouldAddCustomHeaderPropertiesForHorizontal()
+        {
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            reportBuilder.AddColumn("Value", s => s)
+                .AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
+
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
+            {
+                "Test",
+            });
+
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(
+                        "Value", new CustomHeaderProperty1(), new CustomHeaderProperty2()),
                     ReportCellHelper.CreateReportCell("Test"),
                 },
             });

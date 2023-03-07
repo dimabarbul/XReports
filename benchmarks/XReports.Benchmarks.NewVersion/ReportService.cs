@@ -309,7 +309,7 @@ public class ReportService : IReportService, IDisposable
 
     private IReportTable<ReportCell> BuildVerticalReportFromEntities()
     {
-        VerticalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
 
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
@@ -325,14 +325,14 @@ public class ReportService : IReportService, IDisposable
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.data);
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildVerticalReportFromDataReader()
     {
-        VerticalReportSchemaBuilder<IDataReader> reportBuilder = new();
+        ReportSchemaBuilder<IDataReader> reportBuilder = new();
 
         foreach (ReportCellsSource<IDataReader> source in this.reportStructureProvider.GetDataReaderCellsSources())
         {
@@ -349,14 +349,14 @@ public class ReportService : IReportService, IDisposable
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         this.dataReader = new DataTableReader(this.dataTable);
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.dataReader);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader);
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildHorizontalReport()
     {
-        HorizontalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
 
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
@@ -367,12 +367,12 @@ public class ReportService : IReportService, IDisposable
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddRow(source.Title, row).AddProperties(this.MapProperties(source.Properties));
+            reportBuilder.AddColumn(source.Title, row).AddProperties(this.MapProperties(source.Properties));
         }
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(this.data);
 
         return reportTable;
     }

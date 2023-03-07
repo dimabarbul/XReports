@@ -7,7 +7,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddDynamicPropertiesTest"/>
     public class AddDynamicPropertiesTest
@@ -15,13 +15,13 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void AddDynamicPropertiesShouldAddProperties()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
             IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(new[] { 0, 1 });
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(new[] { 0, 1 });
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -37,6 +37,27 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
                 },
                 new[]
                 {
+                    ReportCellHelper.CreateReportCell(1, new CustomProperty2()),
+                },
+            });
+        }
+
+        [Fact]
+        public void AddDynamicPropertiesShouldAddPropertiesForHorizontal()
+        {
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
+            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
+                schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+
+            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(new[] { 0, 1 });
+            table.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Column"),
+                    ReportCellHelper.CreateReportCell(0, new CustomProperty1()),
                     ReportCellHelper.CreateReportCell(1, new CustomProperty2()),
                 },
             });

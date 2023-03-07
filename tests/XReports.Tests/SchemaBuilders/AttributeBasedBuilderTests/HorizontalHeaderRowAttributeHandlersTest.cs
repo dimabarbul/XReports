@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using XReports.AttributeHandlers;
 using XReports.Interfaces;
@@ -170,6 +171,19 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                     ReportCellHelper.CreateReportCell("Jane Doe"),
                 },
             });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldNotThrowWhenVerticalReportHasHeaderRows()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(new[]
+            {
+                new CommonAttributeHandler(),
+            });
+
+            Action action = () => builder.BuildSchema<VerticalWithHeaderRowAttribute>();
+
+            action.Should().NotThrow();
         }
     }
 }

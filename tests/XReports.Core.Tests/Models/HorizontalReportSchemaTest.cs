@@ -15,12 +15,12 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void ReportShouldHaveHeaderWhenThereAreNoRows()
         {
-            HorizontalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
-                new HorizontalReportSchemaBuilder<(string FirstName, string LastName)>();
-            reportBuilder.AddRow("First name", x => x.FirstName);
-            reportBuilder.AddRow("Last name", x => x.LastName);
+            ReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
+                new ReportSchemaBuilder<(string FirstName, string LastName)>();
+            reportBuilder.AddColumn("First name", x => x.FirstName);
+            reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(Array.Empty<(string, string)>());
 
             table.HeaderRows.Should().BeEmpty();
             table.Rows.Should().Equal(new[]
@@ -39,10 +39,10 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void EnumeratingReportMultipleTimesShouldWork()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder = new HorizontalReportSchemaBuilder<string>();
-            reportBuilder.AddRow("Value", s => s);
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
+            reportBuilder.AddColumn("Value", s => s);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(new[]
             {
                 "test",
             });
@@ -64,13 +64,13 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void SchemaShouldBeAvailableForBuildingMultipleReportsWithDifferentData()
         {
-            HorizontalReportSchemaBuilder<string> reportBuilder =
-                new HorizontalReportSchemaBuilder<string>();
-            reportBuilder.AddRow("Value", x => x);
-            reportBuilder.AddRow("Length", x => x.Length);
+            ReportSchemaBuilder<string> reportBuilder =
+                new ReportSchemaBuilder<string>();
+            reportBuilder.AddColumn("Value", x => x);
+            reportBuilder.AddColumn("Length", x => x.Length);
 
             HorizontalReportSchema<string> schema =
-                reportBuilder.BuildSchema();
+                reportBuilder.BuildHorizontalSchema(0);
             IReportTable<ReportCell> table1 = schema.BuildReportTable(new[]
             {
                 "Test",

@@ -17,12 +17,12 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void ReportShouldHaveHeaderWhenThereAreNoRows()
         {
-            VerticalReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
-                new VerticalReportSchemaBuilder<(string FirstName, string LastName)>();
+            ReportSchemaBuilder<(string FirstName, string LastName)> reportBuilder =
+                new ReportSchemaBuilder<(string FirstName, string LastName)>();
             reportBuilder.AddColumn("First name", x => x.FirstName);
             reportBuilder.AddColumn("Last name", x => x.LastName);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(Array.Empty<(string, string)>());
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(Array.Empty<(string, string)>());
 
             table.HeaderRows.Should().Equal(new[]
             {
@@ -38,10 +38,10 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void EnumeratingReportMultipleTimesShouldWork()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder = new VerticalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder = new ReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", s => s);
 
-            IReportTable<ReportCell> table = reportBuilder.BuildSchema().BuildReportTable(new[]
+            IReportTable<ReportCell> table = reportBuilder.BuildVerticalSchema().BuildReportTable(new[]
             {
                 "test",
             });
@@ -68,7 +68,7 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void BuildReportTableShouldSupportDataReaderAsDataSource()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
 
             builder.AddColumn("Name", x => x.GetString(0));
             builder.AddColumn("Age", x => x.GetInt32(1));
@@ -84,7 +84,7 @@ namespace XReports.Core.Tests.Models
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(dataReader);
+                    IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(dataReader);
 
                     reportTable.Rows.Should().Equal(new[]
                     {
@@ -106,7 +106,7 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void BuildReportTableShouldThrowWhenDataReaderIsDataSourceButSourceTypeIsDifferent()
         {
-            VerticalReportSchemaBuilder<string> builder = new VerticalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> builder = new ReportSchemaBuilder<string>();
 
             builder.AddColumn("Value", s => s);
 
@@ -118,7 +118,7 @@ namespace XReports.Core.Tests.Models
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    Action action = () => _ = builder.BuildSchema().BuildReportTable(dataReader);
+                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(dataReader);
 
                     action.Should().ThrowExactly<ArgumentException>();
                 }
@@ -128,7 +128,7 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void BuildReportTableShouldThrowWhenDataReaderIsSourceTypeButDataSourceIsDifferent()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
 
             builder.AddColumn("Value", x => x.GetString(0));
 
@@ -140,7 +140,7 @@ namespace XReports.Core.Tests.Models
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    Action action = () => _ = builder.BuildSchema().BuildReportTable(new[] { dataReader });
+                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(new[] { dataReader });
 
                     action.Should().ThrowExactly<ArgumentException>();
                 }
@@ -150,13 +150,13 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void SchemaShouldBeAvailableForBuildingMultipleReportsWithDifferentData()
         {
-            VerticalReportSchemaBuilder<string> reportBuilder =
-                new VerticalReportSchemaBuilder<string>();
+            ReportSchemaBuilder<string> reportBuilder =
+                new ReportSchemaBuilder<string>();
             reportBuilder.AddColumn("Value", x => x);
             reportBuilder.AddColumn("Length", x => x.Length);
 
             VerticalReportSchema<string> schema =
-                reportBuilder.BuildSchema();
+                reportBuilder.BuildVerticalSchema();
             IReportTable<ReportCell> table1 = schema.BuildReportTable(new[]
             {
                 "Test",
@@ -203,7 +203,7 @@ namespace XReports.Core.Tests.Models
         [Fact]
         public void BuildReportTableShouldThrowWhenDataReaderIsClosed()
         {
-            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
 
             builder.AddColumn("Value", x => x.GetString(0));
 
@@ -217,7 +217,7 @@ namespace XReports.Core.Tests.Models
                 {
                     dataReader.Close();
 
-                    Action action = () => _ = builder.BuildSchema().BuildReportTable(dataReader);
+                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(dataReader);
 
                     action.Should().ThrowExactly<InvalidOperationException>();
                 }

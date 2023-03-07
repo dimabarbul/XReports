@@ -47,7 +47,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name)
                 .AddHeaderProperties(new AlignmentProperty(Alignment.Right));
             reportBuilder.AddColumn("Email", e => e.Email)
@@ -55,7 +55,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddHeaderProperties(new AlignmentProperty(Alignment.Center));
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

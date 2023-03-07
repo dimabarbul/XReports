@@ -26,10 +26,10 @@ namespace XReports.Demos.FromDb.Controllers
         {
             await using SqliteConnection connection = new SqliteConnection("Data Source=Test.db");
             IDataReader dataReader = await connection.ExecuteReaderAsync("SELECT Id, Title FROM Products", CommandBehavior.CloseConnection);
-            VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
             builder.AddColumn("ID", x => x.GetInt32(0));
             builder.AddColumn("Title", x => x.GetString(1));
-            IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildSchema().BuildReportTable(dataReader));
+            IReportTable<HtmlReportCell> reportTable = this.htmlConverter.Convert(builder.BuildVerticalSchema().BuildReportTable(dataReader));
             string tableHtml = this.htmlStringWriter.WriteToString(reportTable);
 
             return this.View(new ReportViewModel()

@@ -4,6 +4,16 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
     public partial class HorizontalHeaderRowAttributeHandlersTest
     {
+        private class VerticalWithHeaderRowAttribute
+        {
+            [HeaderRow(1, "ID")]
+            [Custom]
+            public int Id { get; set; }
+
+            [ReportVariable(1, "Name")]
+            public string Name { get; set; }
+        }
+
         [HorizontalReport]
         private class WithCustomAttribute
         {

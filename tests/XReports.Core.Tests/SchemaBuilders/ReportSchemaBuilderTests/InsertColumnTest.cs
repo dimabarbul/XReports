@@ -10,7 +10,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
     public class InsertColumnTest
     {
@@ -21,12 +21,12 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         public void InsertColumnShouldInsertColumnAtSpecifiedPosition(int index)
         {
             List<string> columns = new List<string>(new[] { "Column1", "Column2" });
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(columns);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(columns);
             const string columnName = "TheColumn";
 
             schemaBuilder.InsertColumn(index, columnName, new EmptyCellsProvider<int>());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             columns.Insert(index, columnName);
             table.HeaderRows.Should().Equal(new[]
             {
@@ -34,14 +34,32 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             });
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void InsertColumnShouldInsertColumnAtSpecifiedPositionForHorizontal(int index)
+        {
+            List<string> columns = new List<string>(new[] { "Column1", "Column2" });
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(columns);
+            const string columnName = "TheColumn";
+
+            schemaBuilder.InsertColumn(index, columnName, new EmptyCellsProvider<int>());
+
+            IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Empty<int>());
+            columns.Insert(index, columnName);
+            table.Rows.Should().Equal(
+                columns.Select(c => new[] { ReportCellHelper.CreateReportCell(c) }).ToArray());
+        }
+
         [Fact]
         public void InsertColumnShouldInsertColumnWithExistingTitle()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
             schemaBuilder.InsertColumn(0, "Column2", new EmptyCellsProvider<int>());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -58,11 +76,11 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [InlineData(" ")]
         public void InsertColumnShouldInsertColumnWithEmptyTitle(string title)
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
             schemaBuilder.InsertColumn(0, title, new EmptyCellsProvider<int>());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -75,7 +93,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldThrowWhenTitleIsNull()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(1);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(1);
 
             Action action = () => schemaBuilder.InsertColumn(0, null, new EmptyCellsProvider<int>());
 
@@ -85,7 +103,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldThrowWhenIndexIsGreaterThanColumnCount()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
             Action action = () => schemaBuilder.InsertColumn(3, "Column", new EmptyCellsProvider<int>());
 
@@ -95,7 +113,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldThrowWhenIndexIsLessThanZero()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
             Action action = () => schemaBuilder.InsertColumn(-1, "Column", new EmptyCellsProvider<int>());
 
@@ -105,11 +123,11 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldInsertColumnWithId()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Column1", "Column2" });
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Column1", "Column2" });
 
             schemaBuilder.InsertColumn(0, new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
 
-            IReportTable<ReportCell> table = schemaBuilder.BuildSchema().BuildReportTable(Enumerable.Empty<int>());
+            IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -124,7 +142,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldThrowWhenIdIsNull()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
             Action action = () => schemaBuilder.InsertColumn(0, null, "TheColumn", new EmptyCellsProvider<int>());
 
@@ -134,7 +152,7 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
         [Fact]
         public void InsertColumnShouldThrowWhenIdExists()
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
+            ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
             schemaBuilder.AddColumn(new ColumnId("Column"), "Column1", new EmptyCellsProvider<int>());
 
             Action action = () => schemaBuilder.InsertColumn(0, new ColumnId("Column"), "Column2", new EmptyCellsProvider<int>());
@@ -142,9 +160,9 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private VerticalReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)
+        private ReportSchemaBuilder<int> CreateSchemaBuilder(int columnsCount)
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
 
             for (int i = 0; i < columnsCount; i++)
             {
@@ -154,9 +172,9 @@ namespace XReports.Core.Tests.SchemaBuilders.VerticalReportSchemaBuilderTests
             return schemaBuilder;
         }
 
-        private VerticalReportSchemaBuilder<int> CreateSchemaBuilder(IEnumerable<string> columns)
+        private ReportSchemaBuilder<int> CreateSchemaBuilder(IEnumerable<string> columns)
         {
-            VerticalReportSchemaBuilder<int> schemaBuilder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
 
             foreach (string column in columns)
             {

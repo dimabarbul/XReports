@@ -58,26 +58,26 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             BoldProperty bold = new BoldProperty();
             IndentationProperty indentation = new IndentationProperty();
 
-            HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
 
             reportBuilder.AddGlobalProperties(centerAlignment);
 
             reportBuilder
-                .AddHeaderRow(string.Empty, e => e.Name)
+                .AddColumn(string.Empty, e => e.Name)
                 .AddProperties(centerAlignment);
-            reportBuilder.AddRow("Age", e => e.Age)
+            reportBuilder.AddColumn("Age", e => e.Age)
                 .AddHeaderProperties(bold);
-            reportBuilder.AddRow("Score", new EmptyCellsProvider<Entity>())
+            reportBuilder.AddColumn("Score", new EmptyCellsProvider<Entity>())
                 .AddHeaderProperties(bold);
-            reportBuilder.AddRow("Min. Score", e => e.MinScore)
+            reportBuilder.AddColumn("Min. Score", e => e.MinScore)
                 .AddHeaderProperties(indentation);
-            reportBuilder.AddRow("Max. Score", e => e.MaxScore)
+            reportBuilder.AddColumn("Max. Score", e => e.MaxScore)
                 .AddHeaderProperties(indentation);
-            reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
+            reportBuilder.AddColumn("Avg. Score", e => e.AverageScore)
                 .AddHeaderProperties(indentation)
                 .AddProperties(new DecimalPrecisionProperty(2));
 
-            return reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            return reportBuilder.BuildHorizontalSchema(1).BuildReportTable(this.GetData());
         }
 
         private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)

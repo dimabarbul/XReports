@@ -172,9 +172,9 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Alignment(Alignment.Center)]
             public int Id { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<WithPostBuilder>
+            private class PostBuilder : IReportPostBuilder<WithPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<WithPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<WithPostBuilder> builder, BuildOptions options)
                 {
                     builder.AddColumn("From PostBuilder", new EmptyCellsProvider<WithPostBuilder>());
                 }

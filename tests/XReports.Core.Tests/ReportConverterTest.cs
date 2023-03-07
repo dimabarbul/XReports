@@ -21,12 +21,12 @@ namespace XReports.Core.Tests
         [Fact]
         public void ConvertShouldConvertAllCellsForVertical()
         {
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i).AddProperties(new MyProperty());
             builder.AddColumn("Square", i => i * i).AddHeaderProperties(new MyProperty());
             builder.AddComplexHeader(0, "Header", 0, 1);
             builder.AddComplexHeaderProperties(new MyAnotherProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new[] { 1, 2 });
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(new[] { 1, 2 });
 
             IReportTable<NewReportCell> converted = new ReportConverter<NewReportCell>().Convert(reportTable);
 
@@ -61,18 +61,18 @@ namespace XReports.Core.Tests
         [Fact]
         public void ConvertShouldConvertAllCellsForHorizontal()
         {
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddHeaderRow("#", i => i.ToString(CultureInfo.InvariantCulture))
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("#", i => i.ToString(CultureInfo.InvariantCulture))
                 .AddProperties(new MyAnotherProperty());
-            builder.AddRow("Value", i => i).AddProperties(new MyProperty());
-            builder.AddRow("Square", i => i * i).AddHeaderProperties(new MyProperty());
+            builder.AddColumn("Value", i => i).AddProperties(new MyProperty());
+            builder.AddColumn("Square", i => i * i).AddHeaderProperties(new MyProperty());
             builder.AddComplexHeader(0, "Header", 0, 1);
             builder.AddComplexHeaderProperties(new MyAnotherProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(new[] { 1, 2 });
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(1).BuildReportTable(new[] { 1, 2 });
 
             IReportTable<NewReportCell> converted = new ReportConverter<NewReportCell>().Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEquivalentTo(new object[]
+            converted.HeaderRows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -82,7 +82,7 @@ namespace XReports.Core.Tests
                     this.CreateCell("2", properties: new MyAnotherProperty()),
                 },
             });
-            converted.Rows.Clone().Should().BeEquivalentTo(new object[]
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {
@@ -111,10 +111,10 @@ namespace XReports.Core.Tests
             }
 
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>();
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i);
             bool enumerated = false;
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(GetData(() => enumerated = true));
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(GetData(() => enumerated = true));
 
             _ = reportConverter.Convert(reportTable);
 
@@ -131,10 +131,10 @@ namespace XReports.Core.Tests
             }
 
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>();
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i);
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i);
             bool enumerated = false;
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(GetData(() => enumerated = true));
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(GetData(() => enumerated = true));
 
             _ = reportConverter.Convert(reportTable);
 
@@ -148,10 +148,10 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddHeaderProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
@@ -181,14 +181,14 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddHeaderProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEmpty();
+            converted.HeaderRows.Should().BeEmpty();
             converted.Rows.Should().Equal(new[]
             {
                 new[]
@@ -209,10 +209,10 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, false, (handler, property) => breadcrumbs.Add(handler));
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             _ = reportConverter.Convert(reportTable);
 
@@ -226,10 +226,10 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, false, (handler, property) => breadcrumbs.Add(handler));
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             _ = reportConverter.Convert(reportTable);
 
@@ -243,10 +243,10 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
@@ -276,14 +276,14 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEmpty();
+            converted.HeaderRows.Should().BeEmpty();
             converted.Rows.Should().Equal(new[]
             {
                 new[]
@@ -305,10 +305,10 @@ namespace XReports.Core.Tests
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
             int dataCount = 2;
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty(), new MyAnotherProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Range(1, dataCount));
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(Enumerable.Range(1, dataCount));
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
             converted.Enumerate();
@@ -326,10 +326,10 @@ namespace XReports.Core.Tests
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
             int dataCount = 2;
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty(), new MyAnotherProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(Enumerable.Range(1, dataCount));
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Range(1, dataCount));
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
             converted.Enumerate();
@@ -346,10 +346,10 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, true);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
@@ -378,14 +378,14 @@ namespace XReports.Core.Tests
             MyHandler secondHandler = new MyHandler("2", 1, true);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { secondHandler, firstHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEmpty();
+            converted.HeaderRows.Should().BeEmpty();
             converted.Rows.Should().Equal(new[]
             {
                 new[]
@@ -404,10 +404,10 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
@@ -433,14 +433,14 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, false);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEmpty();
+            converted.HeaderRows.Should().BeEmpty();
             converted.Rows.Should().Equal(new[]
             {
                 new[]
@@ -457,10 +457,10 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, true);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
             builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
@@ -486,15 +486,15 @@ namespace XReports.Core.Tests
             MyHandler myHandler = new MyHandler(0, true);
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
-            HorizontalReportSchemaBuilder<int> builder = new HorizontalReportSchemaBuilder<int>();
-            builder.AddRow("Value", i => i)
+            ReportSchemaBuilder<int> builder = new ReportSchemaBuilder<int>();
+            builder.AddColumn("Value", i => i)
                 .AddProperties(new MyProperty());
-            IReportTable<ReportCell> reportTable = builder.BuildSchema().BuildReportTable(this.singleItemSource);
+            IReportTable<ReportCell> reportTable = builder.BuildHorizontalSchema(0).BuildReportTable(this.singleItemSource);
 
             IReportTable<NewReportCell> converted = reportConverter.Convert(reportTable);
 
-            converted.HeaderRows.Clone().Should().BeEmpty();
-            converted.Rows.Clone().Should().BeEquivalentTo(new object[]
+            converted.HeaderRows.Should().BeEmpty();
+            converted.Rows.Should().Equal(new[]
             {
                 new[]
                 {

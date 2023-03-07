@@ -3,6 +3,7 @@ using XReports.Demos.FromDb.XReports.Properties;
 using XReports.Enums;
 using XReports.Extensions;
 using XReports.Interfaces;
+using XReports.Models;
 using XReports.Properties;
 using XReports.ValueProviders;
 
@@ -34,9 +35,9 @@ namespace XReports.Demos.FromDb.ReportModels
         [CustomProperty(typeof(YesNoProperty))]
         public bool IsActive { get; set; }
 
-        private class ProductListReportPostBuilder : IVerticalReportPostBuilder<ProductListReport>
+        private class ProductListReportPostBuilder : IReportPostBuilder<ProductListReport>
         {
-            public void Build(IVerticalReportSchemaBuilder<ProductListReport> builder)
+            public void Build(IReportSchemaBuilder<ProductListReport> builder, BuildOptions options)
             {
                 builder.InsertColumn(0, "#", new SequentialNumberValueProvider(10000))
                     .AddHeaderProperties(new AlignmentProperty(Alignment.Center));

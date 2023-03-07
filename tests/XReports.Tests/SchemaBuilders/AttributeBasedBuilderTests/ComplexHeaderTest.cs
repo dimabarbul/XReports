@@ -12,9 +12,8 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
     /// <summary>
     /// Adding complex header using attributes is just a wrapper around adding
-    /// complex header using <see cref="VerticalReportSchemaBuilder{TSourceEntity}"/>
-    /// or <see cref="HorizontalReportSchemaBuilder{TSourceEntity}"/>, so these tests
-    /// are not covering all scenarios.
+    /// complex header using <see cref="ReportSchemaBuilder{TSourceEntity}"/>
+    /// , so these tests are not covering all scenarios.
     /// </summary>
     public partial class ComplexHeaderTest
     {
