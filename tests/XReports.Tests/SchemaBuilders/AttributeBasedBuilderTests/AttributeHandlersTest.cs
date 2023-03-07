@@ -63,25 +63,25 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
         private class WithCustomAttribute
         {
-            [ReportVariable(1, "Title")]
+            [ReportColumn(1, "Title")]
             [Custom]
             public string Title { get; set; }
         }
 
         private class WithoutCustomAttribute
         {
-            [ReportVariable(1, "Title")]
+            [ReportColumn(1, "Title")]
             public string Title { get; set; }
         }
 
         [Custom]
         private class WithMultipleAttributes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Bold]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Title")]
+            [ReportColumn(2, "Title")]
             [Alignment(Alignment.Left)]
             public string Title { get; set; }
         }

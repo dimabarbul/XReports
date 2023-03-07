@@ -3,9 +3,9 @@ using System;
 namespace XReports.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class ReportVariableAttribute : Attribute
+    public sealed class ReportColumnAttribute : Attribute
     {
-        public ReportVariableAttribute(int order, string title)
+        public ReportColumnAttribute(int order, string title)
         {
             this.Order = order;
             this.Title = title ?? throw new ArgumentNullException(nameof(title));

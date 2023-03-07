@@ -13,10 +13,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class Vertical
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<Vertical>
@@ -33,10 +33,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class Horizontal
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<Horizontal>
@@ -54,11 +54,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [MyTable]
         private class VerticalWithTrackingPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [My]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             [My]
             public string Name { get; set; }
 
@@ -77,11 +77,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [MyTable]
         private class HorizontalWithTrackingPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [My]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             [My]
             public string Name { get; set; }
 
@@ -99,14 +99,14 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(Vertical.PostBuilder))]
         private class VerticalWithWrongPostBuilderEntityType
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
         }
 
         [VerticalReport(PostBuilder = typeof(HorizontalPostBuilder))]
         private class VerticalWithWrongPostBuilderInterface
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
             private class HorizontalPostBuilder : IReportPostBuilder<VerticalWithWrongPostBuilderInterface, int>
@@ -120,21 +120,21 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(int))]
         private class VerticalWithWrongPostBuilderType
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
         }
 
         [HorizontalReport(PostBuilder = typeof(Horizontal.PostBuilder))]
         private class HorizontalWithWrongPostBuilderEntityType
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
         }
 
         [HorizontalReport(PostBuilder = typeof(VerticalPostBuilder))]
         private class HorizontalWithWrongPostBuilderInterface
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
             private class VerticalPostBuilder : IReportPostBuilder<HorizontalWithWrongPostBuilderInterface, int>
@@ -148,17 +148,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(int))]
         private class HorizontalWithWrongPostBuilderType
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
         }
 
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class VerticalWithDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<VerticalWithDisposablePostBuilder>, IDisposable
@@ -180,10 +180,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithDisposablePostBuilder>, IDisposable
@@ -205,10 +205,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class VerticalWithAsyncDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<VerticalWithAsyncDisposablePostBuilder>, IAsyncDisposable
@@ -228,10 +228,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithAsyncDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithAsyncDisposablePostBuilder>, IAsyncDisposable
@@ -251,10 +251,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class VerticalWithDisposableAndAsyncDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<VerticalWithDisposableAndAsyncDisposablePostBuilder>, IAsyncDisposable, IDisposable
@@ -285,10 +285,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithDisposableAndAsyncDisposablePostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithDisposableAndAsyncDisposablePostBuilder>, IAsyncDisposable, IDisposable
@@ -329,10 +329,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class VerticalWithDisposablePostBuilderWithDependency
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<VerticalWithDisposablePostBuilderWithDependency>, IDisposable
@@ -359,10 +359,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithDisposablePostBuilderWithDependency
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithDisposablePostBuilderWithDependency>, IDisposable
@@ -389,10 +389,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class VerticalForColumnByPropertyName
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<VerticalForColumnByPropertyName>
@@ -408,10 +408,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalForRowByPropertyName
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalForRowByPropertyName>
@@ -427,10 +427,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithNewHeaderRowInPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithNewHeaderRowInPostBuilder>
@@ -446,10 +446,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [HorizontalReport(PostBuilder = typeof(PostBuilder))]
         private class HorizontalWithChangedTypeInPostBuilder
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
 
             public class PostBuilder : IReportPostBuilder<HorizontalWithChangedTypeInPostBuilder>

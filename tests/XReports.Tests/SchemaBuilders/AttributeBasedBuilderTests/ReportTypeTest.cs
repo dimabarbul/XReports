@@ -42,30 +42,30 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
         private class WithNoReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
 
         [VerticalReport]
         private class WithVerticalReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
 
         [HorizontalReport]
         private class WithHorizontalReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
     }

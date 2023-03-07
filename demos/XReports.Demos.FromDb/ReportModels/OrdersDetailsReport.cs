@@ -7,50 +7,50 @@ namespace XReports.Demos.FromDb.ReportModels
     [ComplexHeader(1, "User Info", 10, 15)]
     public class OrdersDetailsReport
     {
-        [ReportVariable(1, "Item #")]
+        [ReportColumn(1, "Item #")]
         public int LineItemId { get; set; }
 
-        [ReportVariable(2, "Order #")]
+        [ReportColumn(2, "Order #")]
         public int OrderId { get; set; }
 
-        [ReportVariable(3, "Ordered On")]
+        [ReportColumn(3, "Ordered On")]
         [DateTimeFormat("dd MMM yyyy")]
         public DateTime CreatedOn { get; set; }
 
-        [ReportVariable(4, "Bought at Price")]
+        [ReportColumn(4, "Bought at Price")]
         public decimal PriceWhenAdded { get; set; }
 
-        [ReportVariable(5, "Product #")]
+        [ReportColumn(5, "Product #")]
         public int ProductId { get; set; }
 
-        [ReportVariable(6, "Title")]
+        [ReportColumn(6, "Title")]
         public string ProductTitle { get; set; }
 
-        [ReportVariable(7, "Description")]
+        [ReportColumn(7, "Description")]
         public string ProductDescription { get; set; }
 
-        [ReportVariable(8, "Price")]
+        [ReportColumn(8, "Price")]
         public decimal ProductPrice { get; set; }
 
-        [ReportVariable(9, "Active")]
+        [ReportColumn(9, "Active")]
         public bool ProductIsActive { get; set; }
 
-        [ReportVariable(10, "First Name")]
+        [ReportColumn(10, "First Name")]
         public string UserFirstName { get; set; }
 
-        [ReportVariable(11, "Last Name")]
+        [ReportColumn(11, "Last Name")]
         public string UserLastName { get; set; }
 
-        [ReportVariable(12, "Email")]
+        [ReportColumn(12, "Email")]
         public string UserEmail { get; set; }
 
-        [ReportVariable(13, "Date of Birth")]
+        [ReportColumn(13, "Date of Birth")]
         public DateTime UserDateOfBirth { get; set; }
 
-        [ReportVariable(14, "Registered On")]
+        [ReportColumn(14, "Registered On")]
         public DateTime UserCreatedOn { get; set; }
 
-        [ReportVariable(15, "Active")]
+        [ReportColumn(15, "Active")]
         public bool UserIsActive { get; set; }
     }
 }
