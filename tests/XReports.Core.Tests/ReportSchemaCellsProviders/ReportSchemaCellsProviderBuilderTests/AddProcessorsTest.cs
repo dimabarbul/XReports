@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.ReportSchemaCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using Xunit;
 
 namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
@@ -14,12 +14,12 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddProcessorsShouldAddProcessorsToBeCalledDuringForEachRow()
         {
-            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+            ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
                 "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
             builder.AddProcessors(processor1, processor2);
-            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
 
             provider.CreateCell("Test");
             provider.CreateCell("Test2");
@@ -31,7 +31,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddProcessorsShouldThrowWhenSomeProcessorIsNull()
         {
-            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+            ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
                 "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
 
             Action action = () => builder.AddProcessors(new CustomProcessor1(), new CustomProcessor2(), null);

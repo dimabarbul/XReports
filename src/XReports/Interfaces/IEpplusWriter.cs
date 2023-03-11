@@ -1,5 +1,6 @@
 using System.IO;
 using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Interfaces
 {

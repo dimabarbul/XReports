@@ -1,9 +1,9 @@
 using System.Linq;
 using FluentAssertions;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests

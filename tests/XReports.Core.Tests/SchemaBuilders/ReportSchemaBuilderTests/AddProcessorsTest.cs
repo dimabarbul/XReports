@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using FluentAssertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using Xunit;
 

@@ -1,5 +1,6 @@
 using System;
 using XReports.Interfaces;
+using XReports.SchemaBuilder;
 
 namespace XReports.AttributeHandlers
 {
@@ -8,7 +9,7 @@ namespace XReports.AttributeHandlers
     {
         public void Handle<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
             Attribute attribute)
         {
             if (attribute is TAttribute typedAttribute)
@@ -19,7 +20,7 @@ namespace XReports.AttributeHandlers
 
         protected abstract void HandleAttribute<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> builder,
-            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
             TAttribute attribute);
     }
 }

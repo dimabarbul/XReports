@@ -1,7 +1,8 @@
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ReportCellsProviders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

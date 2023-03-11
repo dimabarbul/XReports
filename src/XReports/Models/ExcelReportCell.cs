@@ -1,9 +1,10 @@
 using System.Drawing;
 using XReports.Enums;
+using XReports.Table;
 
 namespace XReports.Models
 {
-    public class ExcelReportCell : BaseReportCell
+    public class ExcelReportCell : ReportCell
     {
         public Alignment? HorizontalAlignment { get; set; }
 

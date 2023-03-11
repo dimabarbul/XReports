@@ -1,8 +1,9 @@
 using System;
 using FluentAssertions;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.ReportSchemaCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -14,10 +15,10 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRows()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(x => x));
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(
+            IReportColumn<int> provider = builder.Build(
                 new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() });
 
             ReportCellProperty[] expectedProperties =
@@ -32,11 +33,11 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddGlobalPropertiesShouldAddOnlyPropertiesOfTypesNotAddedPreviously()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             builder.AddProperties(new CustomProperty1() { Value = true });
-            ReportSchemaCellsProvider<int> provider = builder.Build(
+            IReportColumn<int> provider = builder.Build(
                 new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() });
 
             ReportCellProperty[] expectedProperties =
@@ -51,10 +52,10 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddGlobalPropertiesShouldAddOnlyFirstPropertyOfTypeFromGlobalPropertiesList()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(x => x));
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(
+            IReportColumn<int> provider = builder.Build(
                 new ReportCellProperty[] { new CustomProperty1(), new CustomProperty1() });
 
             ReportCellProperty[] expectedProperties =
@@ -68,7 +69,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddGlobalPropertiesShouldThrowWhenSomePropertyIsNull()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             Action action = () => builder.Build(

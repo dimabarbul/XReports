@@ -1,3 +1,5 @@
+using XReports.Schema;
+
 namespace XReports.Interfaces
 {
     public interface IAttributeBasedBuilder

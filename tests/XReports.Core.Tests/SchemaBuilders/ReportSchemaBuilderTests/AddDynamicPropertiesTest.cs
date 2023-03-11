@@ -1,8 +1,7 @@
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -16,7 +15,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddDynamicPropertiesShouldAddProperties()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
+            IReportColumnBuilder<int> cellsProviderBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
@@ -46,7 +45,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddDynamicPropertiesShouldAddPropertiesForHorizontal()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder =
+            IReportColumnBuilder<int> cellsProviderBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());

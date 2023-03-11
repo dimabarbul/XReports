@@ -1,8 +1,9 @@
 using System;
 using FluentAssertions;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.ReportSchemaCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -14,13 +15,13 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddPropertiesShouldAddPropertiesToAllCells()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty2());
 
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
-            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
             provider.CreateCell(1).Should().Equal(ReportCellHelper.CreateReportCell(1, expectedProperties));
         }
@@ -28,12 +29,12 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty1());
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty1() };
             provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
@@ -41,7 +42,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddPropertiesShouldThrowWhenSomePropertyIsNull()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
 
             Action action = () => builder.AddProperties(new CustomProperty1(), new CustomProperty2(), null);

@@ -1,10 +1,12 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.FromDb.Services;
 using XReports.Demos.FromDb.ViewModels;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Demos.FromDb.Controllers
 {

@@ -1,5 +1,5 @@
 using System;
-using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Attributes
 {

@@ -4,19 +4,19 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Enums;
 using XReports.EpplusFormatters;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.PropertyHandlers;
 using XReports.PropertyHandlers.Excel;
 using XReports.PropertyHandlers.Html;
-using XReports.ReportCellsProviders;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.HorizontalReports

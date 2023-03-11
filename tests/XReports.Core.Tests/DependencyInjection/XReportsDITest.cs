@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using XReports.Converter;
 using XReports.DependencyInjection;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Table;
 using Xunit;
 
 namespace XReports.Core.Tests.DependencyInjection
@@ -327,7 +327,7 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         private IPropertyHandler<TReportCell>[] GetPropertyHandlers<TReportCell>(IReportConverter<TReportCell> converter)
-            where TReportCell : BaseReportCell, new()
+            where TReportCell : ReportCell, new()
         {
             ReportConverter<TReportCell> reportConverter = (ReportConverter<TReportCell>)converter;
 

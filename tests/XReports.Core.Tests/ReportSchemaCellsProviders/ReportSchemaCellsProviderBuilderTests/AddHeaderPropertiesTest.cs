@@ -1,8 +1,9 @@
 using System;
 using FluentAssertions;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.ReportSchemaCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -14,12 +15,12 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddHeaderPropertiesShouldAddCustomHeaderProperties()
         {
-            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+            ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
                 "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
 
-            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
                 "Value", new CustomHeaderProperty1(), new CustomHeaderProperty2()));
@@ -28,12 +29,12 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddHeaderPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
-            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+            ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
                 "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty1());
 
-            ReportSchemaCellsProvider<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
                 "Value", new CustomHeaderProperty1(), new CustomHeaderProperty1()));
@@ -42,7 +43,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddHeaderPropertiesShouldThrowWhenSomePropertyIsNull()
         {
-            ReportSchemaCellsProviderBuilder<string> builder = new ReportSchemaCellsProviderBuilder<string>(
+            ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
                 "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
 
             Action action = () => builder.AddHeaderProperties(

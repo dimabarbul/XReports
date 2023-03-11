@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.EpplusFormatters;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
-using XReports.PropertyHandlers;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions

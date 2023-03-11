@@ -2,7 +2,7 @@ using System;
 
 namespace XReports.Helpers
 {
-    public static class Validation
+    internal static class Validation
     {
         public static void NotNegative(string parameterName, int parameter)
         {

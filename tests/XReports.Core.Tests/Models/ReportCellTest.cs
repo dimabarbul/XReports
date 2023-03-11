@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 using FluentAssertions;
-using XReports.Models;
+using XReports.Table;
 using Xunit;
 
 namespace XReports.Core.Tests.Models

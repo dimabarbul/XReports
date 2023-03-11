@@ -1,14 +1,15 @@
 using System;
 using XReports.Attributes;
 using XReports.Interfaces;
-using XReports.Models;
 using XReports.Properties;
+using XReports.SchemaBuilder;
+using XReports.Table;
 
 namespace XReports.AttributeHandlers
 {
     public class CommonAttributeHandler : IAttributeHandler
     {
-        public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder, Attribute attribute)
+        public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> cellsProviderBuilder, Attribute attribute)
         {
             ReportCellProperty property = this.GetCellProperty(attribute);
             if (property == null)

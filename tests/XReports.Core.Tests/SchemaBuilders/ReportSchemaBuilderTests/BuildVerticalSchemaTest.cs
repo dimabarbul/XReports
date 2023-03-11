@@ -1,6 +1,6 @@
 using System;
 using FluentAssertions;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
 using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests

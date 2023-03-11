@@ -5,7 +5,8 @@ using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
-using XReports.ValueProviders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ValueProviders;
 
 namespace XReports.Demos.FromDb.ReportModels
 {

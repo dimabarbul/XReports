@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Core.Tests
 {
@@ -26,7 +26,7 @@ namespace XReports.Core.Tests
             return cell;
         }
 
-        internal class NewReportCell : BaseReportCell
+        internal class NewReportCell : ReportCell
         {
             public List<string> Data { get; private set; } = new List<string>();
 
@@ -37,7 +37,7 @@ namespace XReports.Core.Tests
                 this.Data.Clear();
             }
 
-            public override BaseReportCell Clone()
+            public override ReportCell Clone()
             {
                 NewReportCell reportCell = (NewReportCell)base.Clone();
 

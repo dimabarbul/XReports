@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
+using XReports.Converter;
 using XReports.Core.Tests.Assertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using Xunit;
 

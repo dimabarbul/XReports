@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Interfaces
 {

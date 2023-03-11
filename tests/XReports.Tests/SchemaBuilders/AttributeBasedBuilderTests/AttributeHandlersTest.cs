@@ -5,6 +5,8 @@ using XReports.AttributeHandlers;
 using XReports.Attributes;
 using XReports.Enums;
 using XReports.Interfaces;
+using XReports.Schema;
+using XReports.SchemaBuilder;
 using XReports.SchemaBuilders;
 using Xunit;
 
@@ -97,7 +99,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
                 CustomAttribute attribute)
             {
                 this.CallsCount++;
@@ -108,7 +110,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         {
             public List<Type> Types { get; } = new List<Type>();
 
-            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
                 Attribute attribute)
             {
                 this.Types.Add(attribute.GetType());

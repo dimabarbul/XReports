@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using XReports.AttributeHandlers;
 using XReports.Attributes;
-using XReports.Interfaces;
+using XReports.SchemaBuilder;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -29,7 +29,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
                 MyTableAttribute attribute)
             {
                 this.attributes.Add(attribute);
@@ -47,7 +47,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
                 MyAttribute attribute)
             {
                 this.attributes.Add(attribute);

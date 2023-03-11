@@ -1,4 +1,5 @@
 using System;
+using XReports.SchemaBuilder;
 
 namespace XReports.Interfaces
 {
@@ -6,7 +7,7 @@ namespace XReports.Interfaces
     {
         void Handle<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
             Attribute attribute);
     }
 }

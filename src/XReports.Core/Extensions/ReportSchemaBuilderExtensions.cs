@@ -1,13 +1,12 @@
 using System;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellsProviders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
 
 namespace XReports.Extensions
 {
     public static class ReportSchemaBuilderExtensions
     {
-        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string title,
             Func<TEntity, TValue> valueSelector)
@@ -17,7 +16,7 @@ namespace XReports.Extensions
             return builder.AddColumn(title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string title,
             IValueProvider<TValue> valueProvider)
@@ -27,7 +26,7 @@ namespace XReports.Extensions
             return builder.AddColumn(title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId id,
             string title,
@@ -38,7 +37,7 @@ namespace XReports.Extensions
             return builder.AddColumn(id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> AddColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> AddColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId id,
             string title,
@@ -49,7 +48,7 @@ namespace XReports.Extensions
             return builder.AddColumn(id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
@@ -60,7 +59,7 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             int index,
             string title,
@@ -71,7 +70,7 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             int index,
             ColumnId id,
@@ -83,7 +82,7 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumn<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumn<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             int index,
             ColumnId id,
@@ -95,7 +94,7 @@ namespace XReports.Extensions
             return builder.InsertColumn(index, id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
@@ -106,7 +105,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             string title,
@@ -117,7 +116,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId beforeId,
             string title,
@@ -128,7 +127,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeId, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId beforeId,
             string title,
@@ -139,7 +138,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeId, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             ColumnId id,
@@ -151,7 +150,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeTitle, id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             string beforeTitle,
             ColumnId id,
@@ -163,7 +162,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeTitle, id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId beforeId,
             ColumnId id,
@@ -175,7 +174,7 @@ namespace XReports.Extensions
             return builder.InsertColumnBefore(beforeId, id, title, provider);
         }
 
-        public static IReportSchemaCellsProviderBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
+        public static IReportColumnBuilder<TEntity> InsertColumnBefore<TEntity, TValue>(
             this IReportSchemaBuilder<TEntity> builder,
             ColumnId beforeId,
             ColumnId id,

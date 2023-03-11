@@ -4,7 +4,8 @@ using XReports.Attributes;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ValueProviders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ValueProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

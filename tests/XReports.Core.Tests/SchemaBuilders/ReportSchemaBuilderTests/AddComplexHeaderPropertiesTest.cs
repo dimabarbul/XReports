@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;

@@ -1,4 +1,4 @@
-using XReports.Interfaces;
+using XReports.Converter;
 using XReports.Models;
 
 namespace XReports.Demos.FromDb.XReports

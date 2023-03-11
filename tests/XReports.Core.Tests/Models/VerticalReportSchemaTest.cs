@@ -3,9 +3,9 @@ using System.Data;
 using FluentAssertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -155,8 +155,7 @@ namespace XReports.Core.Tests.Models
             reportBuilder.AddColumn("Value", x => x);
             reportBuilder.AddColumn("Length", x => x.Length);
 
-            VerticalReportSchema<string> schema =
-                reportBuilder.BuildVerticalSchema();
+            IVerticalReportSchema<string> schema = reportBuilder.BuildVerticalSchema();
             IReportTable<ReportCell> table1 = schema.BuildReportTable(new[]
             {
                 "Test",

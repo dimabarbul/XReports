@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -18,7 +17,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2");
 
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
+            IReportColumnBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
 
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
@@ -38,7 +37,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2");
 
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
+            IReportColumnBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
 
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
@@ -92,7 +91,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2", "Column1");
 
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
+            IReportColumnBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn("Column1");
 
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
@@ -113,7 +112,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder("Column1", "Column2");
 
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn(0);
+            IReportColumnBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn(0);
 
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);
@@ -147,7 +146,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
             schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
 
-            IReportSchemaCellsProviderBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn(new ColumnId("1"));
+            IReportColumnBuilder<int> cellsProviderBuilder = schemaBuilder.ForColumn(new ColumnId("1"));
 
             CustomProperty property = new CustomProperty();
             cellsProviderBuilder.AddHeaderProperties(property);

@@ -1,8 +1,9 @@
 using System;
 using XReports.Extensions;
-using XReports.Models;
-using XReports.ReportCellsProviders;
-using XReports.ReportSchemaCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -14,15 +15,15 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddDynamicPropertiesShouldAddProperties()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>(
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             builder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell headerCell = provider.CreateHeaderCell();
-            ReportCell zeroCell = (ReportCell)provider.CreateCell(0).Clone();
-            ReportCell oneCell = (ReportCell)provider.CreateCell(1).Clone();
+            ReportCell zeroCell = provider.CreateCell(0).Clone();
+            ReportCell oneCell = provider.CreateCell(1).Clone();
 
             headerCell.Should().Equal(ReportCellHelper.CreateReportCell("Column"));
             zeroCell.Should().Equal(ReportCellHelper.CreateReportCell(0, new CustomProperty1()));
@@ -32,7 +33,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
         [Fact]
         public void AddDynamicPropertiesShouldIgnoreNulls()
         {
-            ReportSchemaCellsProviderBuilder<int> builder = new ReportSchemaCellsProviderBuilder<int>("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
 
             builder.AddDynamicProperties(_ => new ReportCellProperty[]
             {
@@ -41,7 +42,7 @@ namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProvid
                 null,
             });
 
-            ReportSchemaCellsProvider<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
             ReportCell cell = provider.CreateCell(0);
 
             cell.Should().Equal(ReportCellHelper.CreateReportCell(0, new CustomProperty1(), new CustomProperty2()));

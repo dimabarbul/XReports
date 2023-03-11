@@ -1,11 +1,11 @@
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Converter;
+using XReports.Table;
 
 namespace XReports.Core.Tests.DependencyInjection
 {
     public partial class XReportsDITest
     {
-        private class HtmlCell : BaseReportCell
+        private class HtmlCell : ReportCell
         {
         }
 

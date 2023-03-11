@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using FluentAssertions.Collections;
 using FluentAssertions.Execution;
-using XReports.Models;
+using XReports.Table;
 using XReports.Tests.Common.Helpers;
 
 namespace XReports.Tests.Common.Assertions

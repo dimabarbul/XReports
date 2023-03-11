@@ -4,13 +4,13 @@ using System.Drawing;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
-using XReports.PropertyHandlers;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.CustomProperties

@@ -1,6 +1,7 @@
 using OfficeOpenXml;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.Table;
 
 namespace XReports.EpplusFormatters
 {

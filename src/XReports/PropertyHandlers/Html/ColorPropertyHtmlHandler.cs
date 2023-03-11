@@ -1,4 +1,5 @@
 using System.Drawing;
+using XReports.Converter;
 using XReports.Models;
 using XReports.Properties;
 

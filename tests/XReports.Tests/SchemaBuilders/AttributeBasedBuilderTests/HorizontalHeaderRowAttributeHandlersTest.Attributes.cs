@@ -1,6 +1,6 @@
 using System;
 using XReports.AttributeHandlers;
-using XReports.Interfaces;
+using XReports.SchemaBuilder;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -17,7 +17,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
                 CustomAttribute attribute)
             {
                 this.CallsCount++;

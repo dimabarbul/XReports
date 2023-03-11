@@ -2,8 +2,8 @@ using System;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
-using XReports.ComplexHeader;
-using XReports.Models;
+using XReports.Schema;
+using XReports.SchemaBuilder;
 using Xunit;
 
 namespace XReports.Core.Tests.ComplexHeader

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using XReports.Models;
+using XReports.SchemaBuilder;
 
 namespace XReports.Interfaces
 {

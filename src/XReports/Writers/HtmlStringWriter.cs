@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using XReports.Interfaces;
 using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Writers
 {

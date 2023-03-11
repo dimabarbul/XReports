@@ -15,6 +15,16 @@ namespace XReports.DependencyInjection
 
         public IReadOnlyCollection<Type> Types => this.LoadTypes();
 
+        public IEnumerator<Type> GetEnumerator()
+        {
+            return this.Types.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
         public TypesCollection<TBaseType> Add(params Type[] types)
         {
             foreach (Type type in types)
@@ -133,16 +143,6 @@ namespace XReports.DependencyInjection
         private bool IsBaseTypeValid(Type baseType)
         {
             return typeof(TBaseType).IsAssignableFrom(baseType);
-        }
-
-        public IEnumerator<Type> GetEnumerator()
-        {
-            return this.Types.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
     }
 }

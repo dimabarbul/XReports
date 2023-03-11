@@ -5,10 +5,11 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using XReports.Converter;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions

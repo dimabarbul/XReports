@@ -8,6 +8,7 @@ using XReports.Enums;
 using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
+using XReports.Table;
 
 namespace XReports.Writers
 {

@@ -1,4 +1,4 @@
-using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Demos.FromDb.XReports.Properties
 {

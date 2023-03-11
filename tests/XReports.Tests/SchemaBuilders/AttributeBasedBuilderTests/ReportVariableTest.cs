@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.Attributes;
 using XReports.Interfaces;
-using XReports.Models;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;

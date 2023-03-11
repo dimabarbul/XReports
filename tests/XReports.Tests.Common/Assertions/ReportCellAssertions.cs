@@ -1,6 +1,6 @@
 using FluentAssertions;
 using FluentAssertions.Primitives;
-using XReports.Models;
+using XReports.Table;
 using XReports.Tests.Common.Helpers;
 
 namespace XReports.Tests.Common.Assertions

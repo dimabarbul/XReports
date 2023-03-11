@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using FluentAssertions;
-using XReports.Models;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 
 namespace XReports.Tests.Common.Helpers
@@ -32,7 +32,7 @@ namespace XReports.Tests.Common.Helpers
             return CreateReportCell(value, 1, 1, properties);
         }
 
-        public static Action<BaseReportCell> GetCellInspector(BaseReportCell expectedCell)
+        public static Action<ReportCell> GetCellInspector(ReportCell expectedCell)
         {
             if (expectedCell == null)
             {

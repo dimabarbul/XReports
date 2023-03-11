@@ -1,4 +1,4 @@
-using XReports.Models;
+using XReports.Schema;
 
 namespace XReports.Extensions
 {

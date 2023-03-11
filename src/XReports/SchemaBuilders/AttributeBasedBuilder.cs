@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using XReports.Attributes;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.ReportCellsProviders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.SchemaBuilder.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {
@@ -137,7 +139,7 @@ namespace XReports.SchemaBuilders
         {
             IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(propertyAttribute.Property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(propertyAttribute.Attribute.Title, cellsProvider);
+            IReportColumnBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(propertyAttribute.Attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, propertyAttribute.Property, Array.Empty<Attribute>());
         }
@@ -218,14 +220,14 @@ namespace XReports.SchemaBuilders
         {
             IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
 
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellsProvider);
+            IReportColumnBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellsProvider);
 
             this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
         }
 
         private void ApplyAttributes<TEntity>(
             IReportSchemaBuilder<TEntity> builder,
-            IReportSchemaCellsProviderBuilder<TEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TEntity> cellsProviderBuilder,
             PropertyInfo property,
             Attribute[] globalAttributes)
         {

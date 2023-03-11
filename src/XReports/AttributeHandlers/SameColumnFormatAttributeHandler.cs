@@ -1,6 +1,6 @@
 using XReports.Attributes;
-using XReports.Interfaces;
 using XReports.Properties;
+using XReports.SchemaBuilder;
 
 namespace XReports.AttributeHandlers
 {
@@ -8,7 +8,7 @@ namespace XReports.AttributeHandlers
     {
         protected override void HandleAttribute<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> builder,
-            IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
             SameColumnFormatAttribute attribute)
         {
             cellsProviderBuilder.AddProperties(new SameColumnFormatProperty());

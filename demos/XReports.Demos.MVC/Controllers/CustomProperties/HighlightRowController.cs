@@ -3,15 +3,17 @@ using System.Drawing;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
 using XReports.Properties;
 using XReports.PropertyHandlers.Excel;
 using XReports.PropertyHandlers.Html;
-using XReports.SchemaBuilders;
+using XReports.Schema;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.CustomProperties

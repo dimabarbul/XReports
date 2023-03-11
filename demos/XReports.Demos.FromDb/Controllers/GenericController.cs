@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using XReports.Converter;
 using XReports.Demos.FromDb.ViewModels;
 using XReports.Extensions;
 using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 
 namespace XReports.Demos.FromDb.Controllers
 {

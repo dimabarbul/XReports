@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.StringWriterExtensions.CustomTableClass;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
-using XReports.Interfaces;
 using XReports.Models;
-using XReports.SchemaBuilders;
+using XReports.SchemaBuilder;
+using XReports.Table;
 using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.StringWriterExtensions

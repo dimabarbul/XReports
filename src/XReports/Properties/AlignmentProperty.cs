@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 using XReports.Enums;
-using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Properties
 {

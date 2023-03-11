@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using XReports.Table;
 
 namespace XReports.Models
 {
-    public class HtmlReportCell : BaseReportCell
+    public class HtmlReportCell : ReportCell
     {
         // True if cell content should not be escaped.
         public bool IsHtml { get; set; }
@@ -23,7 +24,7 @@ namespace XReports.Models
             this.Attributes.Clear();
         }
 
-        public override BaseReportCell Clone()
+        public override ReportCell Clone()
         {
             HtmlReportCell reportCell = (HtmlReportCell)base.Clone();
 
