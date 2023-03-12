@@ -8,7 +8,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddDynamicPropertiesTest"/>
+    /// <seealso cref="ReportColumnBuilderTests.AddDynamicPropertiesTest"/>
     public class AddDynamicPropertiesTest
     {
         [Fact]

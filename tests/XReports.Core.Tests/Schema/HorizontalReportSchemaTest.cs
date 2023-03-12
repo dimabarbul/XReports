@@ -8,7 +8,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.Models
+namespace XReports.Core.Tests.Schema
 {
     public class HorizontalReportSchemaTest
     {

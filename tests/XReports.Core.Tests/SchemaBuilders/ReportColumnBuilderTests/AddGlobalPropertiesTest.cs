@@ -8,7 +8,7 @@ using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
 
-namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 {
     public class AddGlobalPropertiesTest
     {

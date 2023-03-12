@@ -10,7 +10,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddProcessorsTest"/>
+    /// <seealso cref="ReportColumnBuilderTests.AddProcessorsTest"/>
     public class AddProcessorsTest
     {
         [Fact]

@@ -12,7 +12,7 @@ using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using Xunit;
 
-namespace XReports.Core.Tests
+namespace XReports.Core.Tests.Converter
 {
     public partial class ReportConverterTest
     {

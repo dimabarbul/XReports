@@ -5,7 +5,7 @@ using XReports.Excel.PropertyHandlers;
 using XReports.ReportCellProperties;
 using Xunit;
 
-namespace XReports.Tests.PropertyHandlers.Excel
+namespace XReports.Tests.Excel.PropertyHandlers
 {
     public class DateTimeFormatPropertyExcelHandlerTest
     {

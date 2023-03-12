@@ -7,7 +7,7 @@ using XReports.Html.PropertyHandlers;
 using XReports.ReportCellProperties;
 using Xunit;
 
-namespace XReports.Tests.PropertyHandlers.Html
+namespace XReports.Tests.Html.PropertyHandlers
 {
     public class PercentFormatPropertyHtmlHandlerTest
     {

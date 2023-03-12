@@ -7,7 +7,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddPropertiesTest"/>
+    /// <seealso cref="ReportColumnBuilderTests.AddPropertiesTest"/>
     public class AddPropertiesTest
     {
         [Fact]

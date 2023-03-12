@@ -6,7 +6,7 @@ using XReports.SchemaBuilders.ReportCellsProviders;
 using XReports.Table;
 using Xunit;
 
-namespace XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests
+namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 {
     public class AddHeaderProcessorsTest
     {

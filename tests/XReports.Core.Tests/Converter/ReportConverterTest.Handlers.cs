@@ -1,7 +1,7 @@
 using XReports.Converter;
 using XReports.Table;
 
-namespace XReports.Core.Tests
+namespace XReports.Core.Tests.Converter
 {
     public partial class ReportConverterTest
     {

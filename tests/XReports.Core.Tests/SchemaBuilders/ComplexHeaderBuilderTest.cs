@@ -6,7 +6,7 @@ using XReports.Schema;
 using XReports.SchemaBuilders;
 using Xunit;
 
-namespace XReports.Core.Tests.ComplexHeader
+namespace XReports.Core.Tests.SchemaBuilders
 {
     public class ComplexHeaderBuilderTest
     {

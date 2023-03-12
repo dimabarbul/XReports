@@ -1,19 +1,19 @@
 using FluentAssertions;
-using XReports.Excel;
-using XReports.Excel.PropertyHandlers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
 using XReports.ReportCellProperties;
 using Xunit;
 
-namespace XReports.Tests.PropertyHandlers.Excel
+namespace XReports.Tests.Html.PropertyHandlers
 {
-    public class MaxLengthPropertyExcelHandlerTest
+    public class MaxLengthPropertyHtmlHandlerTest
     {
         [Fact]
         public void HandleShouldNotChangeValueWhenLengthIsMaxLength()
         {
-            MaxLengthPropertyExcelHandler handler = new MaxLengthPropertyExcelHandler();
+            MaxLengthPropertyHtmlHandler handler = new MaxLengthPropertyHtmlHandler();
             MaxLengthProperty property = new MaxLengthProperty(5);
-            ExcelReportCell cell = new ExcelReportCell();
+            HtmlReportCell cell = new HtmlReportCell();
             string value = "Short";
             cell.SetValue(value);
 
@@ -26,9 +26,9 @@ namespace XReports.Tests.PropertyHandlers.Excel
         [Fact]
         public void HandleShouldChangeValueWhenLengthIsGreaterThanMaxLength()
         {
-            MaxLengthPropertyExcelHandler handler = new MaxLengthPropertyExcelHandler();
+            MaxLengthPropertyHtmlHandler handler = new MaxLengthPropertyHtmlHandler();
             MaxLengthProperty property = new MaxLengthProperty(5);
-            ExcelReportCell cell = new ExcelReportCell();
+            HtmlReportCell cell = new HtmlReportCell();
             string value = "Very long";
             cell.SetValue(value);
 
@@ -41,9 +41,9 @@ namespace XReports.Tests.PropertyHandlers.Excel
         [Fact]
         public void HandleShouldChangeValueWhenLengthIsGreaterThanMaxLengthAndCustomPropertyText()
         {
-            MaxLengthPropertyExcelHandler handler = new MaxLengthPropertyExcelHandler();
+            MaxLengthPropertyHtmlHandler handler = new MaxLengthPropertyHtmlHandler();
             MaxLengthProperty property = new MaxLengthProperty(5, "...");
-            ExcelReportCell cell = new ExcelReportCell();
+            HtmlReportCell cell = new HtmlReportCell();
             string value = "Very long";
             cell.SetValue(value);
 
@@ -58,9 +58,9 @@ namespace XReports.Tests.PropertyHandlers.Excel
         [InlineData(null)]
         public void HandleShouldChangeValueWhenLengthIsGreaterThanMaxLengthAndCustomPropertyTextIsEmpty(string text)
         {
-            MaxLengthPropertyExcelHandler handler = new MaxLengthPropertyExcelHandler();
+            MaxLengthPropertyHtmlHandler handler = new MaxLengthPropertyHtmlHandler();
             MaxLengthProperty property = new MaxLengthProperty(5, text);
-            ExcelReportCell cell = new ExcelReportCell();
+            HtmlReportCell cell = new HtmlReportCell();
             string value = "Very long";
             cell.SetValue(value);
 

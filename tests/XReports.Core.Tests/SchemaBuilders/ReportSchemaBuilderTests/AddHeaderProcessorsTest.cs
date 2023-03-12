@@ -8,7 +8,7 @@ using Xunit;
 
 namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 {
-    /// <seealso cref="XReports.Core.Tests.ReportSchemaCellsProviders.ReportSchemaCellsProviderBuilderTests.AddHeaderProcessorsTest"/>
+    /// <seealso cref="ReportColumnBuilderTests.AddHeaderProcessorsTest"/>
     public class AddHeaderProcessorsTest
     {
         [Fact]

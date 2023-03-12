@@ -1,5 +1,4 @@
 using System.Linq;
-using XReports.Core.Tests.ComplexHeader;
 using XReports.Extensions;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.ReportCellsProviders;

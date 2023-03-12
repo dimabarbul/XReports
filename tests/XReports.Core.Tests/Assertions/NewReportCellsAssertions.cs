@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Collections;
+using XReports.Core.Tests.Converter;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 

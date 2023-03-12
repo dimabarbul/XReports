@@ -5,7 +5,7 @@ using FluentAssertions;
 using XReports.Table;
 using Xunit;
 
-namespace XReports.Core.Tests.Models
+namespace XReports.Core.Tests.Table
 {
     public class ReportCellTest
     {
