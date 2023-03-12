@@ -6,9 +6,9 @@ using Microsoft.Data.Sqlite;
 using XReports.Converter;
 using XReports.Demos.FromDb.ViewModels;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilder;
+using XReports.Html;
+using XReports.Html.Writers;
+using XReports.SchemaBuilders;
 using XReports.Table;
 
 namespace XReports.Demos.FromDb.Controllers

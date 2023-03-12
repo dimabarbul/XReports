@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using XReports.Interfaces;
 using XReports.Schema;
+using XReports.SchemaBuilders;
 using XReports.Table;
 
 namespace XReports.Demos.FromDb.Services

@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.Interfaces;
 using XReports.Schema;
-using XReports.SchemaBuilder;
 using XReports.SchemaBuilders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;

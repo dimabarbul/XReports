@@ -1,8 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using XReports.Interfaces;
-using XReports.Writers;
+using XReports.Excel.Writers;
 
 namespace XReports.DependencyInjection
 {

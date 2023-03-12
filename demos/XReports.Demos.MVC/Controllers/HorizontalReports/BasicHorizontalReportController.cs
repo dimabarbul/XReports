@@ -7,17 +7,17 @@ using OfficeOpenXml.Style;
 using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.Enums;
-using XReports.EpplusFormatters;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Excel.Writers;
 using XReports.Extensions;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.Html.Writers;
+using XReports.ReportCellProperties;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.ReportCellsProviders;
 using XReports.Table;
-using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.HorizontalReports
 {

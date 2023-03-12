@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Interfaces;
-using XReports.Writers;
+using XReports.Html.Writers;
 
 namespace XReports.DependencyInjection
 {

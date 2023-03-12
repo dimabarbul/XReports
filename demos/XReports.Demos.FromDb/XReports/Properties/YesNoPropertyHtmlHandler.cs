@@ -1,6 +1,6 @@
 using XReports.Converter;
-using XReports.Enums;
-using XReports.Models;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
 
 namespace XReports.Demos.FromDb.XReports.Properties
 {

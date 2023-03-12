@@ -10,9 +10,10 @@ using XReports.Demos.FromDb.Data;
 using XReports.Demos.FromDb.Services;
 using XReports.Demos.FromDb.XReports;
 using XReports.DependencyInjection;
-using XReports.Models;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
 
 namespace XReports.Demos.FromDb
 {

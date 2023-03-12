@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using XReports.Schema;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 using Xunit;
 
 namespace XReports.Core.Tests.ComplexHeader

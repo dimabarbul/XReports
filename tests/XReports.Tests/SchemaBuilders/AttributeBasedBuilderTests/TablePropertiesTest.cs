@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Interfaces;
 using XReports.Schema;
-using XReports.SchemaBuilder;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests

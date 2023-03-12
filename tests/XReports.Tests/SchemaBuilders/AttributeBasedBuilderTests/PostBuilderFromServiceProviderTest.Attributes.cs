@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

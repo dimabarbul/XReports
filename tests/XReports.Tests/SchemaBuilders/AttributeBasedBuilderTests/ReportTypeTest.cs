@@ -1,9 +1,8 @@
 using System.Linq;
 using FluentAssertions;
-using XReports.Attributes;
-using XReports.Interfaces;
 using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests

@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using XReports.Converter;
+using XReports.Excel;
+using XReports.Excel.Writers;
 using XReports.Extensions;
-using XReports.Models;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 using XReports.Table;
-using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellProcessors;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.ReportCellProcessors;
 using XReports.Table;
 
 namespace XReports.Extensions

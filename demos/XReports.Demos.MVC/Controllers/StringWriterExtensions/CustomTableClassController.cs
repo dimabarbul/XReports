@@ -6,10 +6,10 @@ using XReports.Converter;
 using XReports.Demos.MVC.Models.StringWriterExtensions.CustomTableClass;
 using XReports.Demos.MVC.XReports;
 using XReports.Extensions;
-using XReports.Models;
-using XReports.SchemaBuilder;
+using XReports.Html;
+using XReports.Html.Writers;
+using XReports.SchemaBuilders;
 using XReports.Table;
-using XReports.Writers;
 
 namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
 {

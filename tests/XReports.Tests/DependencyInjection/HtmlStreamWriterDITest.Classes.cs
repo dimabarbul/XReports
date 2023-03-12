@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.Table;
 
 namespace XReports.Tests.DependencyInjection

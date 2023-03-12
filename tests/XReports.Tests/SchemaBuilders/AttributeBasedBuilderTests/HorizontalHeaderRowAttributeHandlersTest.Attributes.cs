@@ -1,6 +1,6 @@
 using System;
-using XReports.AttributeHandlers;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

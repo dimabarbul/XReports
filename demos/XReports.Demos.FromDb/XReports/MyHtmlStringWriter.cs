@@ -1,6 +1,5 @@
 using System.Text;
-using XReports.Interfaces;
-using XReports.Writers;
+using XReports.Html.Writers;
 
 namespace XReports.Demos.FromDb.XReports
 {

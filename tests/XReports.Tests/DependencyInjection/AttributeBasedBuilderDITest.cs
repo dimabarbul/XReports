@@ -6,7 +6,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.DependencyInjection;
-using XReports.Interfaces;
 using XReports.SchemaBuilders;
 using XReports.Tests.Assertions;
 using Xunit;

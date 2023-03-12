@@ -1,12 +1,9 @@
-using XReports.Attributes;
 using XReports.Demos.FromDb.XReports.Properties;
-using XReports.Enums;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ValueProviders;
+using XReports.ReportCellProperties;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ValueProviders;
 
 namespace XReports.Demos.FromDb.ReportModels
 {

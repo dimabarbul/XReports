@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using XReports.Schema;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.ReportCellsProviders;
 using XReports.Table;
 using Xunit;
 

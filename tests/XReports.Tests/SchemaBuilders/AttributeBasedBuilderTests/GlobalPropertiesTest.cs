@@ -1,13 +1,9 @@
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Enums;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
+using XReports.ReportCellProperties;
 using XReports.Schema;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ReportCellsProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;

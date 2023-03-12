@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Excel;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.ReportCellProperties;
 using Xunit;
 
 namespace XReports.Tests.PropertyHandlers.Excel

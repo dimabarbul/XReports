@@ -1,11 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using XReports.Attributes;
 using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ValueProviders;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ValueProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

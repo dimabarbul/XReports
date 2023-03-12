@@ -2,7 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.Schema;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 using XReports.Table;
 using Xunit;
 

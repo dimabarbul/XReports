@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.Table;
 
 namespace XReports.Tests.DependencyInjection

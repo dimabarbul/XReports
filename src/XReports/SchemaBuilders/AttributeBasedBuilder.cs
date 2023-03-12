@@ -4,12 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Attributes;
-using XReports.Interfaces;
-using XReports.Models;
 using XReports.Schema;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ReportCellsProviders;
 
 namespace XReports.SchemaBuilders
 {

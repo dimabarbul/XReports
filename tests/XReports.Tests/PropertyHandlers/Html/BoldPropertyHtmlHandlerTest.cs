@@ -1,7 +1,7 @@
 using FluentAssertions;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Html;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.ReportCellProperties;
 using Xunit;
 
 namespace XReports.Tests.PropertyHandlers.Html

@@ -1,6 +1,6 @@
 using System;
 using System.Drawing;
-using XReports.Attributes;
+using XReports.SchemaBuilders.Attributes;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -8,8 +8,8 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
     {
         private class Data
         {
-            [Alignment(Enums.Alignment.Left)]
-            [Alignment(Enums.Alignment.Left, IsHeader = true)]
+            [Alignment(ReportCellProperties.Alignment.Left)]
+            [Alignment(ReportCellProperties.Alignment.Left, IsHeader = true)]
             [ReportColumn(1, nameof(Alignment))]
             public string Alignment { get; set; }
 

@@ -1,5 +1,5 @@
 using XReports.Converter;
-using XReports.Models;
+using XReports.Html;
 
 namespace XReports.Demos.FromDb.XReports
 {

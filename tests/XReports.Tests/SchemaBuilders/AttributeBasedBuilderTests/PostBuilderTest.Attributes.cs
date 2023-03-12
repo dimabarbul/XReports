@@ -1,7 +1,7 @@
 using System;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
 using XReports.Table;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests

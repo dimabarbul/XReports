@@ -1,6 +1,6 @@
 using System;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.ReportCellsProviders;
 
 namespace XReports.Extensions
 {

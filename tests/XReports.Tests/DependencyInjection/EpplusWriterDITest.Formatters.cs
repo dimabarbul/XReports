@@ -1,8 +1,7 @@
 using OfficeOpenXml;
-using XReports.EpplusFormatters;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
+using XReports.Excel;
+using XReports.Excel.Writers;
+using XReports.ReportCellProperties;
 
 namespace XReports.Tests.DependencyInjection
 {

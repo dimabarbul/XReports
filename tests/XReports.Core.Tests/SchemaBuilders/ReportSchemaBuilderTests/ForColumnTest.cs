@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.SchemaBuilder;
-using XReports.SchemaBuilder.ReportCellsProviders;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.ReportCellsProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;

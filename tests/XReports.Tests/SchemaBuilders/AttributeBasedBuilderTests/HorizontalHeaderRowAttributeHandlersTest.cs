@@ -1,9 +1,9 @@
 using System;
 using FluentAssertions;
-using XReports.AttributeHandlers;
-using XReports.Properties;
+using XReports.ReportCellProperties;
 using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;

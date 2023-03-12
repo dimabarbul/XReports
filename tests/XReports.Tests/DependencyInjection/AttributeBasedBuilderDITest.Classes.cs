@@ -1,6 +1,5 @@
 using System;
-using XReports.Interfaces;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 
 namespace XReports.Tests.DependencyInjection
 {

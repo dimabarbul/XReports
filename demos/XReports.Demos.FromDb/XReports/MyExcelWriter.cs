@@ -1,6 +1,6 @@
 using System;
 using OfficeOpenXml;
-using XReports.Writers;
+using XReports.Excel.Writers;
 
 namespace XReports.Demos.FromDb.XReports
 {

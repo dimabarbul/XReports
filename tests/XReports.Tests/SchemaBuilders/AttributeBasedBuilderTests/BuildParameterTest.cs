@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Interfaces;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;

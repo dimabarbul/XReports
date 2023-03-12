@@ -1,4 +1,4 @@
-using XReports.Attributes;
+using XReports.SchemaBuilders.Attributes;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

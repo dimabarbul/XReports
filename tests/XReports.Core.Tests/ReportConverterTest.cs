@@ -7,7 +7,7 @@ using XReports.Converter;
 using XReports.Core.Tests.Assertions;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using Xunit;

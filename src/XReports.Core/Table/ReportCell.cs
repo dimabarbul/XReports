@@ -98,9 +98,9 @@ namespace XReports.Table
         {
             for (int i = 0; i < this.Properties.Count; i++)
             {
-                if (this.Properties[i] is TProperty cellProperty)
+                if (this.Properties[i].GetType() == typeof(TProperty))
                 {
-                    return cellProperty;
+                    return (TProperty)this.Properties[i];
                 }
             }
 

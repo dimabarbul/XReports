@@ -1,6 +1,6 @@
 using System.Globalization;
 using XReports.Converter;
-using XReports.Models;
+using XReports.Html;
 
 namespace XReports.Benchmarks.NewVersion.XReportsProperties;
 

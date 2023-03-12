@@ -2,7 +2,7 @@ using System;
 using XReports.Core.Tests.Extensions;
 using XReports.Extensions;
 using XReports.Schema;
-using XReports.SchemaBuilder;
+using XReports.SchemaBuilders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
