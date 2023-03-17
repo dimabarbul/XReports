@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using FluentAssertions;
 using XReports.Extensions;
 using XReports.SchemaBuilders;
@@ -17,17 +16,6 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void BuildHorizontalSchemaShouldThrowWhenNoRowsAdded()
         {
             ReportSchemaBuilder<string> schemaBuilder = new ReportSchemaBuilder<string>();
-
-            Action action = () => schemaBuilder.BuildHorizontalSchema(0);
-
-            action.Should().ThrowExactly<InvalidOperationException>();
-        }
-
-        [Fact]
-        public void BuildHorizontalSchemaShouldThrowWhenDataSourceIsDataReader()
-        {
-            ReportSchemaBuilder<IDataReader> schemaBuilder = new ReportSchemaBuilder<IDataReader>();
-            schemaBuilder.AddColumn("Value", dr => dr.GetString(0));
 
             Action action = () => schemaBuilder.BuildHorizontalSchema(0);
 

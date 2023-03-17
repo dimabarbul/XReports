@@ -40,7 +40,7 @@ namespace XReports.SchemaBuilders
             IReportSchemaBuilder<TEntity> schemaBuilder = this.CreateSchemaBuilder<TEntity>(reportAttribute, options);
 
             return options.IsVertical ?
-                (IReportSchema<TEntity>)schemaBuilder.BuildVerticalSchema() :
+                schemaBuilder.BuildVerticalSchema() :
                 schemaBuilder.BuildHorizontalSchema(options.HeaderRowsCount);
         }
 
@@ -57,7 +57,7 @@ namespace XReports.SchemaBuilders
             IReportSchemaBuilder<TEntity> schemaBuilder = this.CreateSchemaBuilder<TEntity, TBuildParameter>(reportAttribute, parameter, options);
 
             return options.IsVertical ?
-                (IReportSchema<TEntity>)schemaBuilder.BuildVerticalSchema() :
+                schemaBuilder.BuildVerticalSchema() :
                 schemaBuilder.BuildHorizontalSchema(options.HeaderRowsCount);
         }
 

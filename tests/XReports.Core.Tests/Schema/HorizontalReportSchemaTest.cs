@@ -69,7 +69,7 @@ namespace XReports.Core.Tests.Schema
             reportBuilder.AddColumn("Value", x => x);
             reportBuilder.AddColumn("Length", x => x.Length);
 
-            IHorizontalReportSchema<string> schema = reportBuilder.BuildHorizontalSchema(0);
+            IReportSchema<string> schema = reportBuilder.BuildHorizontalSchema(0);
             IReportTable<ReportCell> table1 = schema.BuildReportTable(new[]
             {
                 "Test",

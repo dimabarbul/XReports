@@ -16,7 +16,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithNoReportAttribute> reportSchema = builder.BuildSchema<WithNoReportAttribute>();
 
-            reportSchema.Should().BeAssignableTo<IVerticalReportSchema<WithNoReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithNoReportAttribute>>();
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithVerticalReportAttribute> reportSchema = builder.BuildSchema<WithVerticalReportAttribute>();
 
-            reportSchema.Should().BeAssignableTo<IVerticalReportSchema<WithVerticalReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithVerticalReportAttribute>>();
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithHorizontalReportAttribute> reportSchema = builder.BuildSchema<WithHorizontalReportAttribute>();
 
-            reportSchema.Should().BeAssignableTo<IHorizontalReportSchema<WithHorizontalReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithHorizontalReportAttribute>>();
         }
 
         private class WithNoReportAttribute

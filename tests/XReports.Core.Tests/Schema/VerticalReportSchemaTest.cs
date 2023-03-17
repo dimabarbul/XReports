@@ -1,7 +1,7 @@
 using System;
 using System.Data;
-using FluentAssertions;
 using XReports.Core.Tests.Extensions;
+using XReports.DataReader;
 using XReports.Extensions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
@@ -84,7 +84,7 @@ namespace XReports.Core.Tests.Schema
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(dataReader);
+                    IReportTable<ReportCell> reportTable = builder.BuildVerticalSchema().BuildReportTable(dataReader.AsEnumerable());
 
                     reportTable.Rows.Should().Equal(new[]
                     {
@@ -104,50 +104,6 @@ namespace XReports.Core.Tests.Schema
         }
 
         [Fact]
-        public void BuildReportTableShouldThrowWhenDataReaderIsDataSourceButSourceTypeIsDifferent()
-        {
-            ReportSchemaBuilder<string> builder = new ReportSchemaBuilder<string>();
-
-            builder.AddColumn("Value", s => s);
-
-            using (DataTable dataTable = new DataTable())
-            {
-                dataTable.Columns.AddRange(new[] { new DataColumn("Value", typeof(string)) });
-                dataTable.Rows.Add("John");
-                dataTable.Rows.Add("Jane");
-
-                using (IDataReader dataReader = new DataTableReader(dataTable))
-                {
-                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(dataReader);
-
-                    action.Should().ThrowExactly<ArgumentException>();
-                }
-            }
-        }
-
-        [Fact]
-        public void BuildReportTableShouldThrowWhenDataReaderIsSourceTypeButDataSourceIsDifferent()
-        {
-            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
-
-            builder.AddColumn("Value", x => x.GetString(0));
-
-            using (DataTable dataTable = new DataTable())
-            {
-                dataTable.Columns.AddRange(new[] { new DataColumn("Value", typeof(string)), });
-                dataTable.Rows.Add("John");
-                dataTable.Rows.Add("Jane");
-
-                using (IDataReader dataReader = new DataTableReader(dataTable))
-                {
-                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(new[] { dataReader });
-
-                    action.Should().ThrowExactly<ArgumentException>();
-                }
-            }
-        }
-
-        [Fact]
         public void SchemaShouldBeAvailableForBuildingMultipleReportsWithDifferentData()
         {
             ReportSchemaBuilder<string> reportBuilder =
@@ -155,7 +111,7 @@ namespace XReports.Core.Tests.Schema
             reportBuilder.AddColumn("Value", x => x);
             reportBuilder.AddColumn("Length", x => x.Length);
 
-            IVerticalReportSchema<string> schema = reportBuilder.BuildVerticalSchema();
+            IReportSchema<string> schema = reportBuilder.BuildVerticalSchema();
             IReportTable<ReportCell> table1 = schema.BuildReportTable(new[]
             {
                 "Test",
@@ -197,30 +153,6 @@ namespace XReports.Core.Tests.Schema
                     ReportCellHelper.CreateReportCell(6),
                 },
             });
-        }
-
-        [Fact]
-        public void BuildReportTableShouldThrowWhenDataReaderIsClosed()
-        {
-            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
-
-            builder.AddColumn("Value", x => x.GetString(0));
-
-            using (DataTable dataTable = new DataTable())
-            {
-                dataTable.Columns.AddRange(new[] { new DataColumn("Value", typeof(string)), });
-                dataTable.Rows.Add("John");
-                dataTable.Rows.Add("Jane");
-
-                using (IDataReader dataReader = new DataTableReader(dataTable))
-                {
-                    dataReader.Close();
-
-                    Action action = () => _ = builder.BuildVerticalSchema().BuildReportTable(dataReader);
-
-                    action.Should().ThrowExactly<InvalidOperationException>();
-                }
-            }
         }
     }
 }

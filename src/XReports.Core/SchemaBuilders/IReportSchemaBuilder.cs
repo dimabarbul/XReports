@@ -54,8 +54,8 @@ namespace XReports.SchemaBuilders
         IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
             int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null);
 
-        IVerticalReportSchema<TSourceEntity> BuildVerticalSchema();
+        IReportSchema<TSourceEntity> BuildVerticalSchema();
 
-        IHorizontalReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount);
+        IReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount);
     }
 }

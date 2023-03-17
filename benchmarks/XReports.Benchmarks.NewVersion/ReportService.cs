@@ -6,6 +6,7 @@ using XReports.Benchmarks.Core.ReportStructure.Models;
 using XReports.Benchmarks.Core.Utils;
 using XReports.Benchmarks.NewVersion.XReportsProperties;
 using XReports.Converter;
+using XReports.DataReader;
 using XReports.Excel;
 using XReports.Excel.PropertyHandlers;
 using XReports.Excel.Writers;
@@ -352,7 +353,7 @@ public class ReportService : IReportService, IDisposable
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         this.dataReader = new DataTableReader(this.dataTable);
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader.AsEnumerable());
 
         return reportTable;
     }

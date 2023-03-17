@@ -1,12 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using XReports.Helpers;
 using XReports.Table;
 
 namespace XReports.Schema
 {
-    internal class HorizontalReportSchema<TSourceEntity> : ReportSchema<TSourceEntity>, IHorizontalReportSchema<TSourceEntity>
+    internal class HorizontalReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
     {
         private readonly IReadOnlyList<IReportColumn<TSourceEntity>> headerRows;
+        private readonly IReadOnlyList<IReportColumn<TSourceEntity>> columns;
+        private readonly IReadOnlyList<ReportTableProperty> tableProperties;
+        private readonly ComplexHeaderCell[,] complexHeader;
+        private readonly IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties;
+        private readonly IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties;
 
         public HorizontalReportSchema(
             IReadOnlyList<IReportColumn<TSourceEntity>> headerRows,
@@ -15,23 +21,27 @@ namespace XReports.Schema
             ComplexHeaderCell[,] complexHeader,
             IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
             IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties)
-            : base(
-                columns,
-                tableProperties,
-                complexHeader,
-                complexHeaderProperties,
-                commonComplexHeaderProperties)
         {
             this.headerRows = headerRows;
+            this.columns = columns;
+            this.tableProperties = tableProperties;
+            this.complexHeader = complexHeader;
+            this.complexHeaderProperties = complexHeaderProperties;
+            this.commonComplexHeaderProperties = commonComplexHeaderProperties;
         }
 
-        public override IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
+        public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
-            ReportCell[][] complexHeader = this.CreateComplexHeader(isTransposed: true);
+            ReportCell[][] complexHeader = ComplexHeaderHelper.CreateCells(
+                this.columns,
+                this.complexHeader,
+                this.complexHeaderProperties,
+                this.commonComplexHeaderProperties,
+                isTransposed: true);
 
             return new ReportTable<ReportCell>
             {
-                Properties = this.TableProperties,
+                Properties = this.tableProperties,
                 HeaderRows = this.GetHeaderRows(source, complexHeader),
                 Rows = this.GetRows(source, complexHeader),
             };
@@ -54,7 +64,7 @@ namespace XReports.Schema
 
         private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source, ReportCell[][] complexHeader)
         {
-            return this.Columns
+            return this.columns
                 .Select(
                     (row, rowIndex) =>
                         complexHeader[rowIndex]

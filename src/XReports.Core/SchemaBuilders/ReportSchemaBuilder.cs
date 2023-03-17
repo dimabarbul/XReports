@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using XReports.Extensions;
 using XReports.Helpers;
@@ -176,7 +175,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IVerticalReportSchema<TSourceEntity> BuildVerticalSchema()
+        public IReportSchema<TSourceEntity> BuildVerticalSchema()
         {
             if (this.cellsProviders.Count == 0)
             {
@@ -194,13 +193,8 @@ namespace XReports.SchemaBuilders
                 this.commonComplexHeadersProperties.ToArray());
         }
 
-        public IHorizontalReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount)
+        public IReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount)
         {
-            if (typeof(IDataReader).IsAssignableFrom(typeof(TSourceEntity)))
-            {
-                throw new InvalidOperationException($"Please, use vertical report for data source of type {typeof(IDataReader)}");
-            }
-
             if (this.cellsProviders.Count == 0)
             {
                 throw new InvalidOperationException("Cannot build schema for table with no columns.");
