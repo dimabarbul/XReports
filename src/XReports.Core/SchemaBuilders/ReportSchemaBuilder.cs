@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using XReports.Extensions;
 using XReports.Helpers;
 using XReports.Schema;
 using XReports.Table;

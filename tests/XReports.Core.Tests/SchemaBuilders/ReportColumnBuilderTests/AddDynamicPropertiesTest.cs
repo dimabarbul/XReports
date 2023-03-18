@@ -1,5 +1,4 @@
 using System;
-using XReports.Extensions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.ReportCellsProviders;

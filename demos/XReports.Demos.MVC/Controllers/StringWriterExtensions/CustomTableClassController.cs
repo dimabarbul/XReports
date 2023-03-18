@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using XReports.Converter;
 using XReports.Demos.MVC.Models.StringWriterExtensions.CustomTableClass;
 using XReports.Demos.MVC.XReports;
-using XReports.Extensions;
 using XReports.Html;
 using XReports.Html.Writers;
 using XReports.SchemaBuilders;

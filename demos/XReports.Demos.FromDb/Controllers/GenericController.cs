@@ -6,7 +6,6 @@ using Microsoft.Data.Sqlite;
 using XReports.Converter;
 using XReports.DataReader;
 using XReports.Demos.FromDb.ViewModels;
-using XReports.Extensions;
 using XReports.Html;
 using XReports.Html.Writers;
 using XReports.SchemaBuilders;

@@ -1,5 +1,4 @@
 using XReports.Demos.FromDb.XReports.Properties;
-using XReports.Extensions;
 using XReports.ReportCellProperties;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.Attributes;

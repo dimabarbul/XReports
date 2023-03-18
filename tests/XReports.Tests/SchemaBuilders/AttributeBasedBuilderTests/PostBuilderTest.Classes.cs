@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using XReports.Extensions;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.Attributes;
 using XReports.SchemaBuilders.ValueProviders;

@@ -7,7 +7,6 @@ using OfficeOpenXml;
 using XReports.Converter;
 using XReports.Excel;
 using XReports.Excel.Writers;
-using XReports.Extensions;
 using XReports.SchemaBuilders;
 using XReports.Table;
 

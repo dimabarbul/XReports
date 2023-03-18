@@ -1,6 +1,5 @@
 using System;
 using XReports.Core.Tests.Extensions;
-using XReports.Extensions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;

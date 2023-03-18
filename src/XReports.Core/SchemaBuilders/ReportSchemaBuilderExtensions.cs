@@ -1,8 +1,7 @@
 using System;
-using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.ReportCellsProviders;
 
-namespace XReports.Extensions
+namespace XReports.SchemaBuilders
 {
     public static class ReportSchemaBuilderExtensions
     {

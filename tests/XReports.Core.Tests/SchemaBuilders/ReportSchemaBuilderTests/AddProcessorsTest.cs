@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using XReports.Core.Tests.Extensions;
-using XReports.Extensions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;

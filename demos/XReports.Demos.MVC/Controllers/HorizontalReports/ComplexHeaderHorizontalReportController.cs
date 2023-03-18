@@ -9,7 +9,6 @@ using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.PropertyHandlers;
 using XReports.Excel.Writers;
-using XReports.Extensions;
 using XReports.Html;
 using XReports.Html.PropertyHandlers;
 using XReports.Html.Writers;

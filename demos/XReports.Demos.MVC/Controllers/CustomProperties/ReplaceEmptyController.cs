@@ -8,7 +8,6 @@ using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.Writers;
-using XReports.Extensions;
 using XReports.Html;
 using XReports.Html.Writers;
 using XReports.SchemaBuilders;

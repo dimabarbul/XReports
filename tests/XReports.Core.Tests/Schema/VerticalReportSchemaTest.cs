@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using XReports.Core.Tests.Extensions;
 using XReports.DataReader;
-using XReports.Extensions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;

@@ -1,6 +1,4 @@
-using XReports.Schema;
-
-namespace XReports.Extensions
+namespace XReports.Schema
 {
     public static class ComplexHeaderCellsExtensions
     {

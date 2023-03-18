@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.ReportCellProcessors;
 using XReports.Table;
 
-namespace XReports.Extensions
+namespace XReports.SchemaBuilders
 {
     public static class ReportColumnBuilderExtensions
     {
