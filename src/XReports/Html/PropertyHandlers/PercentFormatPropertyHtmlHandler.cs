@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using XReports.Converter;
 using XReports.ReportCellProperties;
 
@@ -25,7 +24,6 @@ namespace XReports.Html.PropertyHandlers
             cell.SetValue((value.Value * 100).ToString(format, CultureInfo.CurrentCulture) + property.PostfixText);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetFormat(PercentFormatProperty property)
         {
             (bool, int) key = (property.PreserveTrailingZeros, property.Precision);

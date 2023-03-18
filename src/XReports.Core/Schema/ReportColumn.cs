@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using XReports.Table;
 
 namespace XReports.Schema
@@ -51,7 +50,6 @@ namespace XReports.Schema
             return this.headerCell;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddProperties(ReportCell cell)
         {
             if (this.cellProperties.Length > 0)
@@ -60,7 +58,6 @@ namespace XReports.Schema
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunProcessors(ReportCell cell, TSourceEntity entity)
         {
             for (int i = 0; i < this.cellProcessors.Length; i++)
@@ -69,7 +66,6 @@ namespace XReports.Schema
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void AddHeaderProperties(ReportCell cell)
         {
             if (this.headerProperties.Length > 0)
@@ -78,7 +74,6 @@ namespace XReports.Schema
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RunHeaderProcessors(ReportCell cell)
         {
             for (int i = 0; i < this.headerProcessors.Length; i++)

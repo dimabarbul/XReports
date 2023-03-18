@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using XReports.Converter;
 using XReports.ReportCellProperties;
 
@@ -19,7 +18,6 @@ namespace XReports.Excel.PropertyHandlers
             cell.NumberFormat = format;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetFormat(DecimalPrecisionProperty property)
         {
             (bool, int) key = (property.PreserveTrailingZeros, property.Precision);

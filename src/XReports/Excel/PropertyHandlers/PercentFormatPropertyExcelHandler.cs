@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using XReports.Converter;
 using XReports.ReportCellProperties;
 
@@ -26,7 +25,6 @@ namespace XReports.Excel.PropertyHandlers
             cell.NumberFormat = this.GetFormat(property);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetFormat(PercentFormatProperty property)
         {
             if (!this.formatCache.ContainsKey(property))

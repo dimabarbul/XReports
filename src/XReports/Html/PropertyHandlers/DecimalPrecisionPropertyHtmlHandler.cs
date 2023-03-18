@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using XReports.Converter;
 using XReports.ReportCellProperties;
 
@@ -17,7 +16,6 @@ namespace XReports.Html.PropertyHandlers
             cell.SetValue(cell.GetNullableValue<decimal>()?.ToString(format, CultureInfo.CurrentCulture));
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string GetFormat(DecimalPrecisionProperty property)
         {
             (bool, int) key = (property.PreserveTrailingZeros, property.Precision);
