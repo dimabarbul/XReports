@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -167,13 +167,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         }
 
         [Fact]
-        public void BuildSchemaShouldThrowWhenReportIsVertical()
+        public void BuildSchemaShouldNotThrowWhenReportIsVertical()
         {
             AttributeBasedBuilder builderHelper = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
 
             Action action = () => builderHelper.BuildSchema<Vertical>();
 
-            action.Should().ThrowExactly<InvalidOperationException>();
+            action.Should().NotThrow();
         }
     }
 }

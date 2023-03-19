@@ -4,14 +4,15 @@ using System.Drawing;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.PropertyHandlers;
+using XReports.Excel;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.CustomProperties
 {
@@ -46,12 +47,12 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             HeatmapProperty heatmapProperty = new HeatmapProperty(0, Color.IndianRed, 100, Color.SkyBlue);
 
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(heatmapProperty);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

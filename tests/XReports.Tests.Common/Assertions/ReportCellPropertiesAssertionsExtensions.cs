@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using XReports.Models;
+using XReports.Table;
 
 namespace XReports.Tests.Common.Assertions
 {

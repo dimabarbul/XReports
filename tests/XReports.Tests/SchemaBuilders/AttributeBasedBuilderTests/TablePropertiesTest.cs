@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Interfaces;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -60,16 +60,16 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [CustomTable]
         private class WithCustomTableAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Title")]
+            [ReportColumn(2, "Title")]
             public string Title { get; set; }
         }
 
         private class WithoutCustomTableAttribute
         {
-            [ReportVariable(1, "Title")]
+            [ReportColumn(1, "Title")]
             public string Title { get; set; }
         }
 
@@ -84,7 +84,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 CustomTableAttribute attribute)
             {
                 this.CallsCount++;
@@ -95,7 +95,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         {
             public List<Type> Types { get; } = new List<Type>();
 
-            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> columnBuilder,
                 Attribute attribute)
             {
                 this.Types.Add(attribute.GetType());

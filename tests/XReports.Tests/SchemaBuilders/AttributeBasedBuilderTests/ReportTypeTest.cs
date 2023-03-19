@@ -1,9 +1,8 @@
 using System.Linq;
 using FluentAssertions;
-using XReports.Attributes;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -17,7 +16,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithNoReportAttribute> reportSchema = builder.BuildSchema<WithNoReportAttribute>();
 
-            reportSchema.Should().BeOfType<VerticalReportSchema<WithNoReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithNoReportAttribute>>();
         }
 
         [Fact]
@@ -27,7 +26,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithVerticalReportAttribute> reportSchema = builder.BuildSchema<WithVerticalReportAttribute>();
 
-            reportSchema.Should().BeOfType<VerticalReportSchema<WithVerticalReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithVerticalReportAttribute>>();
         }
 
         [Fact]
@@ -37,35 +36,35 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             IReportSchema<WithHorizontalReportAttribute> reportSchema = builder.BuildSchema<WithHorizontalReportAttribute>();
 
-            reportSchema.Should().BeOfType<HorizontalReportSchema<WithHorizontalReportAttribute>>();
+            reportSchema.Should().BeAssignableTo<IReportSchema<WithHorizontalReportAttribute>>();
         }
 
         private class WithNoReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
 
         [VerticalReport]
         private class WithVerticalReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
 
         [HorizontalReport]
         private class WithHorizontalReportAttribute
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string Name { get; set; }
         }
     }

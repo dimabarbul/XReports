@@ -1,5 +1,5 @@
-using XReports.Models;
-using XReports.PropertyHandlers;
+using XReports.Converter;
+using XReports.Excel;
 
 namespace XReports.Benchmarks.NewVersion.XReportsProperties;
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Attributes;
-using XReports.Interfaces;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -232,19 +232,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             Action action = () =>
             {
-                try
-                {
-                    builder.GetType().GetMethod(nameof(AttributeBasedBuilder.BuildSchema), Array.Empty<Type>())
-                        .MakeGenericMethod(entityType)
-                        .Invoke(builder, Array.Empty<object>());
-                }
-                catch (TargetInvocationException e)
-                {
-                    throw e.InnerException;
-                }
+                builder.GetType().GetMethod(nameof(AttributeBasedBuilder.BuildSchema), Array.Empty<Type>())
+                    .MakeGenericMethod(entityType)
+                    .Invoke(builder, Array.Empty<object>());
             };
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<TargetInvocationException>()
+                .WithInnerExceptionExactly<ArgumentException>($"type {entityType} is incorrectly set up");
         }
 
         [Theory]

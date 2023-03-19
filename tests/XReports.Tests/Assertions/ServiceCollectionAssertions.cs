@@ -16,22 +16,22 @@ namespace XReports.Tests.Assertions
 
         protected override string Identifier => "service collection";
 
-        public AndConstraint<ServiceCollectionAssertions> ContainDescriptor<TServiceType, TImplementationType>(ServiceLifetime lifetime)
-            where TImplementationType : TServiceType
+        public AndConstraint<ServiceCollectionAssertions> ContainDescriptor<TService, TImplementation>(ServiceLifetime lifetime)
+            where TImplementation : TService
         {
-            ServiceDescriptor serviceDescriptor = this.Subject.FirstOrDefault(sd => sd.ServiceType == typeof(TServiceType));
-            serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TServiceType));
+            ServiceDescriptor serviceDescriptor = this.Subject.FirstOrDefault(sd => sd.ServiceType == typeof(TService));
+            serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TService));
 
             serviceDescriptor.Lifetime.Should().Be(lifetime);
-            serviceDescriptor.ImplementationType.Should().Be<TImplementationType>();
+            serviceDescriptor.ImplementationType.Should().Be<TImplementation>();
 
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }
 
-        public AndConstraint<ServiceCollectionAssertions> ContainDescriptors<TServiceType>(ServiceLifetime lifetime, params Type[] implementationTypes)
+        public AndConstraint<ServiceCollectionAssertions> ContainDescriptors<TService>(ServiceLifetime lifetime, params Type[] implementationTypes)
         {
             ServiceDescriptor[] descriptors = this.Subject
-                .Where(sd => sd.ServiceType == typeof(TServiceType))
+                .Where(sd => sd.ServiceType == typeof(TService))
                 .ToArray();
 
             descriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
@@ -41,9 +41,9 @@ namespace XReports.Tests.Assertions
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }
 
-        public AndConstraint<ServiceCollectionAssertions> NotContainDescriptor<TServiceType>()
+        public AndConstraint<ServiceCollectionAssertions> NotContainDescriptor<TService>()
         {
-            this.Subject.Should().NotContain(sd => sd.ServiceType == typeof(TServiceType));
+            this.Subject.Should().NotContain(sd => sd.ServiceType == typeof(TService));
 
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }

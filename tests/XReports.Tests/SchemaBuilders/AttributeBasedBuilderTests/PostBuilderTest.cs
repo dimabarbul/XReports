@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -96,19 +96,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             Action action = () =>
             {
-                try
-                {
-                    builder.GetType().GetMethod(nameof(AttributeBasedBuilder.BuildSchema), Array.Empty<Type>())
-                        .MakeGenericMethod(entityType)
-                        .Invoke(builder, Array.Empty<object>());
-                }
-                catch (TargetInvocationException e)
-                {
-                    throw e.InnerException;
-                }
+                builder.GetType().GetMethod(nameof(AttributeBasedBuilder.BuildSchema), Array.Empty<Type>())
+                    .MakeGenericMethod(entityType)
+                    .Invoke(builder, Array.Empty<object>());
             };
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<TargetInvocationException>()
+                .WithInnerExceptionExactly<ArgumentException>();
         }
 
         [Fact]
@@ -280,6 +274,77 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
                 new[]
                 {
                     ReportCellHelper.CreateReportCell("Name"),
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldAllowAddingHeaderRowsInPostBuilder()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<HorizontalWithNewHeaderRowInPostBuilder> schema = builder.BuildSchema<HorizontalWithNewHeaderRowInPostBuilder>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            {
+                new HorizontalWithNewHeaderRowInPostBuilder()
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                },
+            });
+            reportTable.HeaderRows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("#"),
+                    ReportCellHelper.CreateReportCell(1),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1),
+                },
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldAllowChangingReportTypeInPostBuilder()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<HorizontalWithChangedTypeInPostBuilder> schema = builder.BuildSchema<HorizontalWithChangedTypeInPostBuilder>();
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            {
+                new HorizontalWithChangedTypeInPostBuilder()
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                },
+            });
+            reportTable.HeaderRows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell("John Doe"),
                 },
             });
         }

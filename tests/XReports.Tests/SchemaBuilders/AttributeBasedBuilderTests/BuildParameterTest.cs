@@ -3,8 +3,11 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Interfaces;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.Table;
+using XReports.Tests.Common.Assertions;
+using XReports.Tests.Common.Helpers;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -27,24 +30,18 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             Action action = () =>
             {
-                try
-                {
-                    builder.GetType()
-                        .GetMethods()
-                        .First(mi =>
-                            mi.Name == nameof(AttributeBasedBuilder.BuildSchema)
-                            && mi.IsGenericMethodDefinition
-                            && mi.GetGenericArguments().Length == 1)
-                        .MakeGenericMethod(entityType, expectedParameterType)
-                        .Invoke(builder, new object[] { 1 });
-                }
-                catch (TargetInvocationException e)
-                {
-                    throw e.InnerException;
-                }
+                builder.GetType()
+                    .GetMethods()
+                    .First(mi =>
+                        mi.Name == nameof(AttributeBasedBuilder.BuildSchema)
+                        && mi.IsGenericMethodDefinition
+                        && mi.GetGenericArguments().Length == 2)
+                    .MakeGenericMethod(entityType, expectedParameterType)
+                    .Invoke(builder, new object[] { 1 });
             };
 
-            action.Should().ThrowExactly<ArgumentException>();
+            action.Should().ThrowExactly<TargetInvocationException>()
+                .WithInnerExceptionExactly<ArgumentException>();
         }
 
         [Fact]
@@ -93,6 +90,72 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             Dependency dependency = serviceProvider.GetRequiredService<Dependency>();
             dependency.Parameter.Should().Be(1);
+        }
+
+        [Fact]
+        public void BuildSchemaShouldAllowAddingHeaderRowsInPostBuilder()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<HorizontalWithNewHeaderRowInPostBuilder> schema = builder.BuildSchema<HorizontalWithNewHeaderRowInPostBuilder, int>(1);
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            {
+                new HorizontalWithNewHeaderRowInPostBuilder()
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                },
+            });
+            reportTable.HeaderRows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell(1),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("Name"),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                },
+            });
+        }
+
+        [Fact]
+        public void BuildSchemaShouldAllowChangingReportTypeInPostBuilder()
+        {
+            AttributeBasedBuilder builder = new AttributeBasedBuilder(Enumerable.Empty<IAttributeHandler>());
+
+            IReportSchema<HorizontalWithChangedTypeInPostBuilder> schema = builder.BuildSchema<HorizontalWithChangedTypeInPostBuilder, bool>(true);
+
+            IReportTable<ReportCell> reportTable = schema.BuildReportTable(new[]
+            {
+                new HorizontalWithChangedTypeInPostBuilder()
+                {
+                    Id = 1,
+                    Name = "John Doe",
+                },
+            });
+            reportTable.HeaderRows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell("ID"),
+                    ReportCellHelper.CreateReportCell("Name"),
+                },
+            });
+            reportTable.Rows.Should().Equal(new[]
+            {
+                new[]
+                {
+                    ReportCellHelper.CreateReportCell(1),
+                    ReportCellHelper.CreateReportCell("John Doe"),
+                },
+            });
         }
     }
 }

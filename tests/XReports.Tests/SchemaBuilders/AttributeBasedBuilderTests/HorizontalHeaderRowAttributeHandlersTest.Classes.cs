@@ -1,17 +1,29 @@
-using XReports.Attributes;
+using XReports.SchemaBuilders.Attributes;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
     public partial class HorizontalHeaderRowAttributeHandlersTest
     {
-        [HorizontalReport]
-        private class WithCustomAttribute
+        private class VerticalWithHeaderRowAttribute
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             [Custom]
             public int Id { get; set; }
 
-            [ReportVariable(1, "Name")]
+            [ReportColumn(1, "Name")]
+            public string Name { get; set; }
+        }
+
+        [HorizontalReport]
+        private class WithCustomAttribute
+        {
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
+            [Custom]
+            public int Id { get; set; }
+
+            [ReportColumn(1, "Name")]
             public string Name { get; set; }
         }
 
@@ -19,10 +31,11 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [Custom]
         private class WithGlobalCustomAttribute
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(1, "Name")]
+            [ReportColumn(1, "Name")]
             public string Name { get; set; }
         }
 
@@ -31,32 +44,35 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [Bold(IsHeader = true)]
         private class WithGlobalAttribute
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(1, "Name")]
+            [ReportColumn(1, "Name")]
             public string Name { get; set; }
         }
 
         [HorizontalReport]
         private class WithCommonAttribute
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             [Bold]
             public int Id { get; set; }
 
-            [ReportVariable(1, "Name")]
+            [ReportColumn(1, "Name")]
             public string Name { get; set; }
         }
 
         [HorizontalReport]
         private class WithCommonHeaderAttribute
         {
-            [HeaderRow(1, "ID")]
+            [HeaderRow]
+            [ReportColumn(1, "ID")]
             [Bold(IsHeader = true)]
             public int Id { get; set; }
 
-            [ReportVariable(1, "Name")]
+            [ReportColumn(1, "Name")]
             public string Name { get; set; }
         }
     }

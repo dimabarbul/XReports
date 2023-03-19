@@ -1,11 +1,10 @@
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Enums;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
-using XReports.ReportCellsProviders;
+using XReports.ReportCellProperties;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ReportCellProviders;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;
@@ -159,7 +158,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [Bold]
         private class WithGlobalProperties
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Alignment(Alignment.Center)]
             public int Id { get; set; }
         }
@@ -168,15 +167,15 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [VerticalReport(PostBuilder = typeof(PostBuilder))]
         private class WithPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Alignment(Alignment.Center)]
             public int Id { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<WithPostBuilder>
+            private class PostBuilder : IReportPostBuilder<WithPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<WithPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<WithPostBuilder> builder, BuildOptions options)
                 {
-                    builder.AddColumn("From PostBuilder", new EmptyCellsProvider<WithPostBuilder>());
+                    builder.AddColumn("From PostBuilder", new EmptyCellProvider<WithPostBuilder>());
                 }
             }
         }
@@ -184,7 +183,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [DecimalPrecision(2)]
         private class WithOverwrittenGlobalProperties
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [DecimalPrecision(0)]
             public int Id { get; set; }
         }
@@ -192,7 +191,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [Alignment(Alignment.Center)]
         private class VerticalWithOverwrittenForHeaderGlobalProperties
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Alignment(Alignment.Right, IsHeader = true)]
             public int Id { get; set; }
         }
@@ -201,7 +200,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [Alignment(Alignment.Center)]
         private class HorizontalWithOverwrittenForHeaderGlobalProperties
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Alignment(Alignment.Right, IsHeader = true)]
             public int Id { get; set; }
         }

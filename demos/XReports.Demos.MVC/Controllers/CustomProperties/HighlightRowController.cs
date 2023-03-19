@@ -3,16 +3,19 @@ using System.Drawing;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.Html.Writers;
+using XReports.ReportCellProperties;
+using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.CustomProperties
 {
@@ -47,11 +50,11 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             HighlightCellProcessor highlightCellProcessor = new HighlightCellProcessor();
 
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name).AddProcessors(highlightCellProcessor);
             reportBuilder.AddColumn("Score", e => e.Score).AddProcessors(highlightCellProcessor);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

@@ -13,11 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Builders\VerticalReportBuilder.ComplexHeader.cs">
-      <DependentUpon>VerticalReportBuilder.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Models\ReportSchema.ComplexHeader.cs">
-      <DependentUpon>ReportSchema.cs</DependentUpon>
+    <Compile Update="SchemaBuilders\ComplexHeaderBuilder.Validation.cs">
+      <DependentUpon>ComplexHeaderBuilder.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

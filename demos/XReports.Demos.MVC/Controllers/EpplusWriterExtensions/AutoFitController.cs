@@ -4,11 +4,11 @@ using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Converter;
+using XReports.Excel;
+using XReports.Excel.Writers;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -39,12 +39,12 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Last Score", e => e.LastScore);
             reportBuilder.AddColumn("Score", e => e.Score);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

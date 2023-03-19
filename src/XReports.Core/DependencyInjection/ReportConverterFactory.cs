@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Converter;
+using XReports.Table;
 
 namespace XReports.DependencyInjection
 {
     internal class ReportConverterFactory<TReportCell> : IReportConverterFactory<TReportCell>
-        where TReportCell : BaseReportCell, new()
+        where TReportCell : ReportCell, new()
     {
         private readonly ReportConverterFactoryOptions<TReportCell> options;
         private readonly IServiceProvider serviceProvider;
@@ -16,7 +16,9 @@ namespace XReports.DependencyInjection
         private readonly Dictionary<string, IReportConverter<TReportCell>> converters =
             new Dictionary<string, IReportConverter<TReportCell>>();
 
-        public ReportConverterFactory(IServiceProvider serviceProvider, IOptions<ReportConverterFactoryOptions<TReportCell>> options)
+        public ReportConverterFactory(
+            IServiceProvider serviceProvider,
+            IOptions<ReportConverterFactoryOptions<TReportCell>> options)
         {
             this.serviceProvider = serviceProvider;
             this.options = options?.Value ??

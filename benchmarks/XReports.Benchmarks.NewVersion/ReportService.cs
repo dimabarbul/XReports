@@ -5,15 +5,19 @@ using XReports.Benchmarks.Core.ReportStructure;
 using XReports.Benchmarks.Core.ReportStructure.Models;
 using XReports.Benchmarks.Core.Utils;
 using XReports.Benchmarks.NewVersion.XReportsProperties;
-using XReports.Enums;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
-using XReports.ReportCellsProviders;
+using XReports.Converter;
+using XReports.DataReader;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.Html.Writers;
+using XReports.ReportCellProperties;
+using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.SchemaBuilders.ReportCellProviders;
+using XReports.Table;
 using Source = XReports.Benchmarks.Core.ReportStructure.Models.Properties;
 using SourceEnums = XReports.Benchmarks.Core.ReportStructure.Enums;
 
@@ -309,13 +313,13 @@ public class ReportService : IReportService, IDisposable
 
     private IReportTable<ReportCell> BuildVerticalReportFromEntities()
     {
-        VerticalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
 
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> column = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> column = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
@@ -325,20 +329,20 @@ public class ReportService : IReportService, IDisposable
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.data);
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildVerticalReportFromDataReader()
     {
-        VerticalReportSchemaBuilder<IDataReader> reportBuilder = new();
+        ReportSchemaBuilder<IDataReader> reportBuilder = new();
 
         foreach (ReportCellsSource<IDataReader> source in this.reportStructureProvider.GetDataReaderCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<IDataReader> column = (IReportCellsProvider<IDataReader>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<IDataReader> column = (IReportCellProvider<IDataReader>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(IDataReader), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
@@ -349,30 +353,30 @@ public class ReportService : IReportService, IDisposable
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
         this.dataReader = new DataTableReader(this.dataTable);
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.dataReader);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader.AsEnumerable());
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildHorizontalReport()
     {
-        HorizontalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
 
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> row = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> row = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddRow(source.Title, row).AddProperties(this.MapProperties(source.Properties));
+            reportBuilder.AddColumn(source.Title, row).AddProperties(this.MapProperties(source.Properties));
         }
 
         reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(this.data);
 
         return reportTable;
     }

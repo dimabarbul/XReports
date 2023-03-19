@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using XReports.Core.Tests.Converter;
 
 namespace XReports.Core.Tests.Assertions
 {

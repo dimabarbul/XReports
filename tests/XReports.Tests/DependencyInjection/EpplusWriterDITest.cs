@@ -6,9 +6,8 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.DependencyInjection;
-using XReports.Interfaces;
+using XReports.Excel.Writers;
 using XReports.Tests.Assertions;
-using XReports.Writers;
 using Xunit;
 
 namespace XReports.Tests.DependencyInjection

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using XReports.Interfaces;
-using XReports.Writers;
+using XReports.Excel.Writers;
 
 namespace XReports.Tests.DependencyInjection
 {

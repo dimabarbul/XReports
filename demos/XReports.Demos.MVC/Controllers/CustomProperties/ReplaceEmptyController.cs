@@ -3,14 +3,15 @@ using System.IO;
 using Bogus;
 using Bogus.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.PropertyHandlers;
+using XReports.Excel;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.CustomProperties
 {
@@ -43,7 +44,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("First Name", e => e.FirstName);
             reportBuilder.AddColumn("Last Name", e => e.LastName);
             reportBuilder.AddColumn("Email", e => e.Email)
@@ -51,7 +52,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(new ReplaceEmptyProperty("(no score)"));
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

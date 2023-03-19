@@ -3,17 +3,18 @@ using System.Drawing;
 using System.IO;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.Enums;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.Html.Writers;
+using XReports.ReportCellProperties;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.HorizontalReports
 {
@@ -50,23 +51,23 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
             ReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
             BoldProperty bold = new BoldProperty();
 
-            HorizontalReportSchemaBuilder<Entity> reportBuilder = new HorizontalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddGlobalProperties(centerAlignment);
             reportBuilder
-                .AddHeaderRow("Metrics", e => e.Name)
+                .AddColumn("Metrics", e => e.Name)
                 .AddProperties(centerAlignment)
                 .AddHeaderProperties(centerAlignment);
-            reportBuilder.AddRow("Age", e => e.Age)
+            reportBuilder.AddColumn("Age", e => e.Age)
                 .AddHeaderProperties(bold);
-            reportBuilder.AddRow("Min. Score", e => e.MinScore);
-            reportBuilder.AddRow("Max. Score", e => e.MaxScore);
-            reportBuilder.AddRow("Avg. Score", e => e.AverageScore)
+            reportBuilder.AddColumn("Min. Score", e => e.MinScore);
+            reportBuilder.AddColumn("Max. Score", e => e.MaxScore);
+            reportBuilder.AddColumn("Avg. Score", e => e.AverageScore)
                 .AddProperties(new DecimalPrecisionProperty(2));
 
             reportBuilder.AddComplexHeader(0, "Score", "Min. Score", "Avg. Score");
             reportBuilder.AddComplexHeaderProperties("Score", new ColorProperty(Color.Blue));
 
-            return reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            return reportBuilder.BuildHorizontalSchema(1).BuildReportTable(this.GetData());
         }
 
         private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)

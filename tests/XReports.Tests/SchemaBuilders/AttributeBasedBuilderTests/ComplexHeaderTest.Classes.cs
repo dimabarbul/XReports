@@ -1,6 +1,6 @@
-using XReports.Attributes;
-using XReports.Interfaces;
-using XReports.ReportCellsProviders;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.Attributes;
+using XReports.SchemaBuilders.ReportCellProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -9,39 +9,39 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 2, 3)]
         private class VerticalOneComplexHeaderByIndexes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
         [ComplexHeader(0, "Personal", "Name", "Age")]
         private class VerticalOneComplexHeaderByTitles
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
         [ComplexHeader(0, "Personal", nameof(FullName), nameof(Age), true)]
         private class VerticalOneComplexHeaderByPropertyNames
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
@@ -49,13 +49,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 2, 3)]
         private class HorizontalOneComplexHeaderByIndexes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
@@ -63,13 +63,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", "Name", "Age")]
         private class HorizontalOneComplexHeaderByTitles
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
@@ -77,26 +77,26 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", nameof(FullName), nameof(Age), true)]
         private class HorizontalOneComplexHeaderByPropertyNames
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
         [ComplexHeader(0, "Personal", 3, 5)]
         private class VerticalByIndexesWithGapsInIndexes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(3, "Name")]
+            [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(5, "Age")]
+            [ReportColumn(5, "Age")]
             public int Age { get; set; }
         }
 
@@ -104,13 +104,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 3, 5)]
         private class HorizontalByIndexesWithGapsInIndexes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(3, "Name")]
+            [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(5, "Age")]
+            [ReportColumn(5, "Age")]
             public int Age { get; set; }
         }
 
@@ -122,22 +122,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(2, "Sensitive", "Salary")]
         private class VerticalMultipleLevelsOfComplexHeader
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
 
-            [ReportVariable(4, "Job Title")]
+            [ReportColumn(4, "Job Title")]
             public string JobTitle { get; set; }
 
-            [ReportVariable(5, "Salary")]
+            [ReportColumn(5, "Salary")]
             public decimal Salary { get; set; }
 
-            [ReportVariable(6, "Employee # in Department")]
+            [ReportColumn(6, "Employee # in Department")]
             public int DepartmentEmployeeCount { get; set; }
         }
 
@@ -150,22 +150,22 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(2, "Sensitive", "Salary")]
         private class HorizontalMultipleLevelsOfComplexHeader
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
 
-            [ReportVariable(4, "Job Title")]
+            [ReportColumn(4, "Job Title")]
             public string JobTitle { get; set; }
 
-            [ReportVariable(5, "Salary")]
+            [ReportColumn(5, "Salary")]
             public decimal Salary { get; set; }
 
-            [ReportVariable(6, "Employee # in Department")]
+            [ReportColumn(6, "Employee # in Department")]
             public int DepartmentEmployeeCount { get; set; }
         }
 
@@ -173,17 +173,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", 1, 2)]
         private class VerticalByIndexesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByIndexesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByIndexesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<VerticalByIndexesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -192,17 +192,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", 1, 2)]
         private class HorizontalByIndexesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByIndexesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByIndexesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<HorizontalByIndexesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -211,17 +211,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", "ID", "Age")]
         private class VerticalByTitlesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByTitlesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByTitlesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<VerticalByTitlesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -230,17 +230,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", "ID", "Age")]
         private class HorizontalByTitlesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByTitlesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<HorizontalByTitlesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -249,17 +249,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", nameof(Id), nameof(Age), true)]
         private class VerticalByPropertyNamesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IVerticalReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
             {
-                public void Build(IVerticalReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertColumnBefore("Age", "Name", new EmptyCellsProvider<VerticalByPropertyNamesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<VerticalByPropertyNamesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -268,17 +268,17 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Complex Header", nameof(Id), nameof(Age), true)]
         private class HorizontalByPropertyNamesWithColumnFromPostBuilder
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Age")]
+            [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IHorizontalReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
             {
-                public void Build(IHorizontalReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder)
+                public void Build(IReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
-                    builder.InsertRowBefore("Age", "Name", new EmptyCellsProvider<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
+                    builder.InsertColumnBefore("Age", "Name", new EmptyCellProvider<HorizontalByPropertyNamesWithColumnFromPostBuilder>());
                 }
             }
         }
@@ -286,26 +286,26 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 0, 1)]
         private class VerticalWithWrongStartIndex
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
         [ComplexHeader(0, "Personal", 1, 2)]
         private class VerticalWithWrongEndIndex
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(3, "Name")]
+            [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(5, "Age")]
+            [ReportColumn(5, "Age")]
             public int Age { get; set; }
         }
 
@@ -313,13 +313,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 0, 1)]
         private class HorizontalWithWrongStartIndex
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Name")]
+            [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(3, "Age")]
+            [ReportColumn(3, "Age")]
             public int Age { get; set; }
         }
 
@@ -327,13 +327,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         [ComplexHeader(0, "Personal", 1, 2)]
         private class HorizontalWithWrongEndIndex
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportVariable(3, "Name")]
+            [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportVariable(5, "Age")]
+            [ReportColumn(5, "Age")]
             public int Age { get; set; }
         }
     }

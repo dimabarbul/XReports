@@ -1,13 +1,12 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using XReports.AttributeHandlers;
 using XReports.DependencyInjection;
-using XReports.Enums;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.Properties;
+using XReports.ReportCellProperties;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
 using Xunit;

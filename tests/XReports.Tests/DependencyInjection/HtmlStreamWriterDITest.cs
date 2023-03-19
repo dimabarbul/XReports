@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using XReports.DependencyInjection;
-using XReports.Interfaces;
+using XReports.Html.Writers;
 using XReports.Tests.Assertions;
-using XReports.Writers;
 using Xunit;
 
 namespace XReports.Tests.DependencyInjection

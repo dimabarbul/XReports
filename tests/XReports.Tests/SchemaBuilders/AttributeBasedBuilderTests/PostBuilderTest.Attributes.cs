@@ -1,8 +1,8 @@
 using System;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
+using XReports.Table;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
@@ -29,7 +29,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 MyTableAttribute attribute)
             {
                 this.OnHandle?.Invoke(attribute);
@@ -47,7 +47,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 MyAttribute attribute)
             {
                 this.OnHandle?.Invoke(attribute);

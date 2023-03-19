@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using XReports.AttributeHandlers;
-using XReports.Attributes;
-using XReports.Enums;
-using XReports.Interfaces;
+using XReports.ReportCellProperties;
+using XReports.Schema;
 using XReports.SchemaBuilders;
+using XReports.SchemaBuilders.AttributeHandlers;
+using XReports.SchemaBuilders.Attributes;
 using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
@@ -63,25 +63,25 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
         private class WithCustomAttribute
         {
-            [ReportVariable(1, "Title")]
+            [ReportColumn(1, "Title")]
             [Custom]
             public string Title { get; set; }
         }
 
         private class WithoutCustomAttribute
         {
-            [ReportVariable(1, "Title")]
+            [ReportColumn(1, "Title")]
             public string Title { get; set; }
         }
 
         [Custom]
         private class WithMultipleAttributes
         {
-            [ReportVariable(1, "ID")]
+            [ReportColumn(1, "ID")]
             [Bold]
             public int Id { get; set; }
 
-            [ReportVariable(2, "Title")]
+            [ReportColumn(2, "Title")]
             [Alignment(Alignment.Left)]
             public string Title { get; set; }
         }
@@ -97,7 +97,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
             protected override void HandleAttribute<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> builder,
-                IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 CustomAttribute attribute)
             {
                 this.CallsCount++;
@@ -108,7 +108,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
         {
             public List<Type> Types { get; } = new List<Type>();
 
-            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportSchemaCellsProviderBuilder<TSourceEntity> cellsProviderBuilder,
+            public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> columnBuilder,
                 Attribute attribute)
             {
                 this.Types.Add(attribute.GetType());

@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
 using XReports.Demos.MVC.XReports;
-using XReports.EpplusFormatters;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.PropertyHandlers;
+using XReports.Excel;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
@@ -56,14 +56,14 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             ThreeColorHeatmapProperty scoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 50, Color.Yellow, 100, Color.Lime);
             ThreeColorHeatmapProperty lastScoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 5, Color.Yellow, 10, Color.Lime);
 
-            VerticalReportSchemaBuilder<Entity> reportBuilder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
             reportBuilder.AddColumn("Name", e => e.Name);
             reportBuilder.AddColumn("Last Score", e => e.LastScore)
                 .AddProperties(lastScoreHeatmapProperty);
             reportBuilder.AddColumn("Score", e => e.Score)
                 .AddProperties(scoreHeatmapProperty);
 
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.GetData());
+            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
             return reportTable;
         }
 

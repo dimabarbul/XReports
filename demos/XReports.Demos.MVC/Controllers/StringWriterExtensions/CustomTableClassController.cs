@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
+using XReports.Converter;
 using XReports.Demos.MVC.Models.StringWriterExtensions.CustomTableClass;
 using XReports.Demos.MVC.XReports;
-using XReports.Extensions;
-using XReports.Interfaces;
-using XReports.Models;
+using XReports.Html;
+using XReports.Html.Writers;
 using XReports.SchemaBuilders;
-using XReports.Writers;
+using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
 {
@@ -33,13 +33,13 @@ namespace XReports.Demos.MVC.Controllers.StringWriterExtensions
 
         private IReportTable<ReportCell> BuildReport()
         {
-            VerticalReportSchemaBuilder<Entity> builder = new VerticalReportSchemaBuilder<Entity>();
+            ReportSchemaBuilder<Entity> builder = new ReportSchemaBuilder<Entity>();
             builder.AddColumn("First name", e => e.FirstName);
             builder.AddColumn("Last name", e => e.LastName);
             builder.AddColumn("Email", e => e.Email);
             builder.AddColumn("Age", e => e.Age);
 
-            return builder.BuildSchema().BuildReportTable(this.GetData());
+            return builder.BuildVerticalSchema().BuildReportTable(this.GetData());
         }
 
         private IEnumerable<Entity> GetData()
