@@ -1,13 +1,13 @@
 using System;
 using XReports.Table;
 
-namespace XReports.SchemaBuilders.ReportCellsProviders
+namespace XReports.SchemaBuilders.ReportCellProviders
 {
-    public class ComputedValueReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
+    public class ComputedValueReportCellProvider<TSourceEntity, TValue> : ReportCellProvider<TSourceEntity, TValue>
     {
         private readonly Func<TSourceEntity, TValue> valueSelector;
 
-        public ComputedValueReportCellsProvider(Func<TSourceEntity, TValue> valueSelector)
+        public ComputedValueReportCellProvider(Func<TSourceEntity, TValue> valueSelector)
         {
             this.valueSelector = valueSelector;
         }

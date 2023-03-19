@@ -23,7 +23,7 @@ namespace XReports.SchemaBuilders
                 if (group.EndIndex >= columnsCount)
                 {
                     throw new ArgumentException(
-                        $"Group {group.Group.Title} has too big end index {group.EndIndex}, columns count: {columnsCount}");
+                        $"Group {group.Group.Title} has end index {group.EndIndex} which is greater than columns count {columnsCount}");
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace XReports.SchemaBuilders
                 {
                     if (header[i, j] == null)
                     {
-                        throw new ArgumentException($"Cell ({i + 1};{j + 1}) is unrelated");
+                        throw new ArgumentException($"Cell ({i + 1};{j + 1}) is not related to any group");
                     }
                 }
             }

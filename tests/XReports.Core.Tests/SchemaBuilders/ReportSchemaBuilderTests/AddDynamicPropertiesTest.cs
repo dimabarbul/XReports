@@ -1,5 +1,5 @@
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -14,10 +14,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddDynamicPropertiesShouldAddProperties()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            IReportColumnBuilder<int> cellsProviderBuilder =
-                schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+            IReportColumnBuilder<int> columnBuilder =
+                schemaBuilder.AddColumn("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+            columnBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(new[] { 0, 1 });
             table.HeaderRows.Should().Equal(new[]
@@ -44,10 +44,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddDynamicPropertiesShouldAddPropertiesForHorizontal()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            IReportColumnBuilder<int> cellsProviderBuilder =
-                schemaBuilder.AddColumn("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+            IReportColumnBuilder<int> columnBuilder =
+                schemaBuilder.AddColumn("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            cellsProviderBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+            columnBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(new[] { 0, 1 });
             table.Rows.Should().Equal(new[]

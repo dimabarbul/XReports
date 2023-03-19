@@ -17,10 +17,10 @@ namespace XReports.SchemaBuilders.ReportCellProcessors
             this.propertiesSelector = null;
         }
 
-        public DynamicPropertiesCellProcessor(Func<TSourceEntity, IEnumerable<ReportCellProperty>> propertySelector)
+        public DynamicPropertiesCellProcessor(Func<TSourceEntity, IEnumerable<ReportCellProperty>> propertiesSelector)
         {
             this.propertySelector = null;
-            this.propertiesSelector = propertySelector;
+            this.propertiesSelector = propertiesSelector;
         }
 
         public void Process(ReportCell cell, TSourceEntity entity)

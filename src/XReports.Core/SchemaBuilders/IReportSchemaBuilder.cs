@@ -26,21 +26,21 @@ namespace XReports.SchemaBuilders
 
         IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties);
 
-        IReportColumnBuilder<TSourceEntity> AddColumn(string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> AddColumn(string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> AddColumn(ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> AddColumn(ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellsProvider<TSourceEntity> provider);
+        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
 
         IReportColumnBuilder<TSourceEntity> ForColumn(string title);
 

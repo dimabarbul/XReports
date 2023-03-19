@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using Xunit;
 
@@ -14,7 +14,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddHeaderProcessorsShouldAddProcessorsToBeCalledForHeaderCell()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "#", new ComputedValueReportCellsProvider<int, int>(i => i));
+                "#", new ComputedValueReportCellProvider<int, int>(i => i));
             CustomHeaderCellProcessor1 processor1 = new CustomHeaderCellProcessor1();
             CustomHeaderCellProcessor2 processor2 = new CustomHeaderCellProcessor2();
 
@@ -31,16 +31,16 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddProcessorsShouldThrowWhenSomeProcessorIsNull()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "#", new ComputedValueReportCellsProvider<int, int>(i => i));
+                "#", new ComputedValueReportCellProvider<int, int>(i => i));
 
             Action action = () => builder.AddHeaderProcessors(new CustomHeaderCellProcessor1(), new CustomHeaderCellProcessor2(), null);
 
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private abstract class CustomHeaderCellProcessor : IReportCellProcessor<int>
+        private abstract class CustomHeaderCellProcessor : IHeaderReportCellProcessor
         {
-            public void Process(ReportCell cell, int data)
+            public void Process(ReportCell cell)
             {
                 this.CallsCount++;
             }

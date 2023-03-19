@@ -1,5 +1,5 @@
 using System;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 
 namespace XReports.SchemaBuilders
 {
@@ -10,7 +10,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.AddColumn(title, provider);
         }
@@ -20,7 +20,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.AddColumn(title, provider);
         }
@@ -31,7 +31,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.AddColumn(id, title, provider);
         }
@@ -42,7 +42,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.AddColumn(id, title, provider);
         }
@@ -53,7 +53,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumn(index, title, provider);
         }
@@ -64,7 +64,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumn(index, title, provider);
         }
@@ -76,7 +76,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumn(index, id, title, provider);
         }
@@ -88,7 +88,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumn(index, id, title, provider);
         }
@@ -99,7 +99,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
@@ -110,7 +110,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumnBefore(beforeTitle, title, provider);
         }
@@ -121,7 +121,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumnBefore(beforeId, title, provider);
         }
@@ -132,7 +132,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumnBefore(beforeId, title, provider);
         }
@@ -144,7 +144,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumnBefore(beforeTitle, id, title, provider);
         }
@@ -156,7 +156,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumnBefore(beforeTitle, id, title, provider);
         }
@@ -168,7 +168,7 @@ namespace XReports.SchemaBuilders
             string title,
             Func<TEntity, TValue> valueSelector)
         {
-            ComputedValueReportCellsProvider<TEntity, TValue> provider = new ComputedValueReportCellsProvider<TEntity, TValue>(valueSelector);
+            ComputedValueReportCellProvider<TEntity, TValue> provider = new ComputedValueReportCellProvider<TEntity, TValue>(valueSelector);
 
             return builder.InsertColumnBefore(beforeId, id, title, provider);
         }
@@ -180,7 +180,7 @@ namespace XReports.SchemaBuilders
             string title,
             IValueProvider<TValue> valueProvider)
         {
-            ValueProviderReportCellsProvider<TEntity, TValue> provider = new ValueProviderReportCellsProvider<TEntity, TValue>(valueProvider);
+            ValueProviderReportCellProvider<TEntity, TValue> provider = new ValueProviderReportCellProvider<TEntity, TValue>(valueProvider);
 
             return builder.InsertColumnBefore(beforeId, id, title, provider);
         }

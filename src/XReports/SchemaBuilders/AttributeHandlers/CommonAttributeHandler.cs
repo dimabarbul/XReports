@@ -7,7 +7,7 @@ namespace XReports.SchemaBuilders.AttributeHandlers
 {
     public class CommonAttributeHandler : IAttributeHandler
     {
-        public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> cellsProviderBuilder, Attribute attribute)
+        public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> columnBuilder, Attribute attribute)
         {
             ReportCellProperty property = this.GetCellProperty(attribute);
             if (property == null)
@@ -18,11 +18,11 @@ namespace XReports.SchemaBuilders.AttributeHandlers
             if (attribute is BasePropertyAttribute basePropertyAttribute
                 && basePropertyAttribute.IsHeader)
             {
-                cellsProviderBuilder.AddHeaderProperties(property);
+                columnBuilder.AddHeaderProperties(property);
             }
             else
             {
-                cellsProviderBuilder.AddProperties(property);
+                columnBuilder.AddProperties(property);
             }
         }
 

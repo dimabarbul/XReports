@@ -8,18 +8,18 @@ namespace XReports.SchemaBuilders.AttributeHandlers
     {
         protected override void HandleAttribute<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> builder,
-            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> columnBuilder,
             CustomPropertyAttribute attribute)
         {
             ReportCellProperty property = (ReportCellProperty)Activator.CreateInstance(attribute.PropertyType);
 
             if (attribute.IsHeader)
             {
-                cellsProviderBuilder.AddHeaderProperties(property);
+                columnBuilder.AddHeaderProperties(property);
             }
             else
             {
-                cellsProviderBuilder.AddProperties(property);
+                columnBuilder.AddProperties(property);
             }
         }
     }

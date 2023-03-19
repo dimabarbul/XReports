@@ -7,18 +7,18 @@ namespace XReports.SchemaBuilders.AttributeHandlers
     {
         public void Handle<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> columnBuilder,
             Attribute attribute)
         {
             if (attribute is TAttribute typedAttribute)
             {
-                this.HandleAttribute(schemaBuilder, cellsProviderBuilder, typedAttribute);
+                this.HandleAttribute(schemaBuilder, columnBuilder, typedAttribute);
             }
         }
 
         protected abstract void HandleAttribute<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> builder,
-            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> columnBuilder,
             TAttribute attribute);
     }
 }

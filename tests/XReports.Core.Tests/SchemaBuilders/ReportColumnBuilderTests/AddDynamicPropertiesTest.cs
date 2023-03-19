@@ -1,7 +1,7 @@
 using System;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -15,7 +15,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddDynamicPropertiesShouldAddProperties()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+                "Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
             builder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
@@ -32,7 +32,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         [Fact]
         public void AddDynamicPropertiesShouldIgnoreNulls()
         {
-            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>("Column", new ComputedValueReportCellsProvider<int, int>(x => x));
+            ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
             builder.AddDynamicProperties(_ => new ReportCellProperty[]
             {

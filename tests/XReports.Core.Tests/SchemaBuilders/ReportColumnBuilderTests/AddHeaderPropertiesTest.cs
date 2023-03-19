@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -16,7 +16,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddHeaderPropertiesShouldAddCustomHeaderProperties()
         {
             ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
-                "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
+                "Value", new ComputedValueReportCellProvider<string, string>(s => s));
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
 
@@ -30,7 +30,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddHeaderPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
             ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
-                "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
+                "Value", new ComputedValueReportCellProvider<string, string>(s => s));
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty1());
 
@@ -44,7 +44,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddHeaderPropertiesShouldThrowWhenSomePropertyIsNull()
         {
             ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
-                "Value", new ComputedValueReportCellsProvider<string, string>(s => s));
+                "Value", new ComputedValueReportCellProvider<string, string>(s => s));
 
             Action action = () => builder.AddHeaderProperties(
                 new CustomHeaderProperty1(), new CustomHeaderProperty2(), null);

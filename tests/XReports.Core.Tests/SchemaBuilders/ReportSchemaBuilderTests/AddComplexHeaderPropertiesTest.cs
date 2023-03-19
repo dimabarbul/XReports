@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -130,7 +130,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddComplexHeaderPropertiesWithTitleShouldAddPropertiesToAllComplexHeaderCellsWithTheTitleCaseSensitively()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
-            schemaBuilder.AddColumn("TheGroup", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn("TheGroup", new EmptyCellProvider<int>());
             schemaBuilder
                 .AddComplexHeader(0, "TheGroup", 0, 2)
                 .AddComplexHeader(1, "thegroup", 0, 1)
@@ -229,7 +229,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 
             for (int i = 0; i < columnsCount; i++)
             {
-                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellsProvider<int>());
+                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellProvider<int>());
             }
 
             return schemaBuilder;

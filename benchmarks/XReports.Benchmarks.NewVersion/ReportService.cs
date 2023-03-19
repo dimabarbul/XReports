@@ -16,7 +16,7 @@ using XReports.Html.Writers;
 using XReports.ReportCellProperties;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using Source = XReports.Benchmarks.Core.ReportStructure.Models.Properties;
 using SourceEnums = XReports.Benchmarks.Core.ReportStructure.Enums;
@@ -318,8 +318,8 @@ public class ReportService : IReportService, IDisposable
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> column = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> column = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
@@ -341,8 +341,8 @@ public class ReportService : IReportService, IDisposable
         foreach (ReportCellsSource<IDataReader> source in this.reportStructureProvider.GetDataReaderCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<IDataReader> column = (IReportCellsProvider<IDataReader>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<IDataReader> column = (IReportCellProvider<IDataReader>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(IDataReader), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
@@ -365,8 +365,8 @@ public class ReportService : IReportService, IDisposable
         foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> row = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> row = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );

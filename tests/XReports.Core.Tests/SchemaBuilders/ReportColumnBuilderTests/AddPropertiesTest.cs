@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -16,7 +16,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddPropertiesShouldAddPropertiesToAllCells()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
+                "Value", new ComputedValueReportCellProvider<int, int>(s => s));
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty2());
 
@@ -30,7 +30,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddPropertiesShouldNotThrowWhenPropertyOfSameTypeAddedMultipleTimes()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
+                "Value", new ComputedValueReportCellProvider<int, int>(s => s));
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty1());
 
@@ -43,7 +43,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddPropertiesShouldThrowWhenSomePropertyIsNull()
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
-                "Value", new ComputedValueReportCellsProvider<int, int>(s => s));
+                "Value", new ComputedValueReportCellProvider<int, int>(s => s));
 
             Action action = () => builder.AddProperties(new CustomProperty1(), new CustomProperty2(), null);
 

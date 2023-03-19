@@ -35,7 +35,10 @@ namespace XReports.Converter
                 return null;
             }
 
-            this.resultCell.CopyFrom(cell);
+            this.resultCell.Clear();
+            this.resultCell.ColumnSpan = cell.ColumnSpan;
+            this.resultCell.RowSpan = cell.RowSpan;
+            this.resultCell.CopyValueFrom(cell);
 
             this.ProcessProperties(cell.Properties);
 
@@ -64,7 +67,7 @@ namespace XReports.Converter
             }
         }
 
-        private sealed class HeaderRowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
+        private class HeaderRowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
         {
             private readonly IReportTable<ReportCell> reportTable;
             private readonly ReportConverter<TResultReportCell> reportConverter;
@@ -88,7 +91,7 @@ namespace XReports.Converter
             }
         }
 
-        private sealed class HeaderRowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
+        private class HeaderRowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
         {
             private readonly IEnumerator<IEnumerable<ReportCell>> tableRowsEnumerator;
             private readonly CellsEnumerator cellsEnumerator;
@@ -122,7 +125,7 @@ namespace XReports.Converter
             }
         }
 
-        private sealed class RowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
+        private class RowsCollection : IEnumerable<IEnumerable<TResultReportCell>>
         {
             private readonly IReportTable<ReportCell> reportTable;
             private readonly ReportConverter<TResultReportCell> reportConverter;
@@ -146,7 +149,7 @@ namespace XReports.Converter
             }
         }
 
-        private sealed class RowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
+        private class RowsEnumerator : IEnumerator<IEnumerable<TResultReportCell>>
         {
             private readonly IEnumerator<IEnumerable<ReportCell>> tableRowsEnumerator;
             private readonly CellsEnumerator cellsEnumerator;
@@ -180,7 +183,7 @@ namespace XReports.Converter
             }
         }
 
-        private sealed class CellsEnumerator : IEnumerable<TResultReportCell>, IEnumerator<TResultReportCell>
+        private class CellsEnumerator : IEnumerable<TResultReportCell>, IEnumerator<TResultReportCell>
         {
             private readonly ReportConverter<TResultReportCell> reportConverter;
             private IEnumerator<ReportCell> enumerator;

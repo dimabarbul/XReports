@@ -1,8 +1,8 @@
 using XReports.Table;
 
-namespace XReports.SchemaBuilders.ReportCellsProviders
+namespace XReports.SchemaBuilders.ReportCellProviders
 {
-    public class EmptyCellsProvider<TSourceEntity> : ReportCellsProvider<TSourceEntity, string>
+    public class EmptyCellProvider<TSourceEntity> : ReportCellProvider<TSourceEntity, string>
     {
         public override ReportCell GetCell(TSourceEntity entity)
         {

@@ -7,8 +7,14 @@ namespace XReports.DependencyInjection
     internal class ReportConverterRegistration<TReportCell>
         where TReportCell : ReportCell, new()
     {
-        public string Name { get; set; }
+        public ReportConverterRegistration(string name, Action<TypesCollection<IPropertyHandler<TReportCell>>> configureOptions)
+        {
+            this.Name = name;
+            this.ConfigureOptions = configureOptions;
+        }
 
-        public Action<TypesCollection<IPropertyHandler<TReportCell>>> ConfigureOptions { get; set; }
+        public string Name { get; }
+
+        public Action<TypesCollection<IPropertyHandler<TReportCell>>> ConfigureOptions { get; }
     }
 }

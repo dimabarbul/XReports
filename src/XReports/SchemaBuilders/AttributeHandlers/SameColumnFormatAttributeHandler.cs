@@ -7,10 +7,10 @@ namespace XReports.SchemaBuilders.AttributeHandlers
     {
         protected override void HandleAttribute<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> builder,
-            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> columnBuilder,
             SameColumnFormatAttribute attribute)
         {
-            cellsProviderBuilder.AddProperties(new SameColumnFormatProperty());
+            columnBuilder.AddProperties(new SameColumnFormatProperty());
         }
     }
 }

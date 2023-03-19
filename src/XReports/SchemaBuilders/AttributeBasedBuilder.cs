@@ -6,7 +6,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using XReports.Schema;
 using XReports.SchemaBuilders.Attributes;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 
 namespace XReports.SchemaBuilders
 {
@@ -68,17 +68,17 @@ namespace XReports.SchemaBuilders
                 .Count(p => p.GetCustomAttribute<HeaderRowAttribute>() != null);
         }
 
-        private IReportCellsProvider<TEntity> CreateCellsProvider<TEntity>(PropertyInfo property)
+        private IReportCellProvider<TEntity> CreateCellProvider<TEntity>(PropertyInfo property)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(TEntity));
             MemberExpression memberExpression = Expression.Property(parameter, typeof(TEntity), property.Name);
             LambdaExpression lambdaExpression = Expression.Lambda(memberExpression, parameter);
 
-            IReportCellsProvider<TEntity> cellsProvider = (IReportCellsProvider<TEntity>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<TEntity> cellProvider = (IReportCellProvider<TEntity>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(TEntity), property.PropertyType),
                 lambdaExpression.Compile());
-            return cellsProvider;
+            return cellProvider;
         }
 
         private IReportSchemaBuilder<TEntity> CreateSchemaBuilder<TEntity>(ReportAttribute reportAttribute, BuildOptions options)
@@ -134,11 +134,11 @@ namespace XReports.SchemaBuilders
 
         private void AddHeaderRow<TEntity>(IReportSchemaBuilder<TEntity> builder, PropertyAttribute propertyAttribute)
         {
-            IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(propertyAttribute.Property);
+            IReportCellProvider<TEntity> cellProvider = this.CreateCellProvider<TEntity>(propertyAttribute.Property);
 
-            IReportColumnBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(propertyAttribute.Attribute.Title, cellsProvider);
+            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(propertyAttribute.Attribute.Title, cellProvider);
 
-            this.ApplyAttributes(builder, cellsProviderBuilder, propertyAttribute.Property, Array.Empty<Attribute>());
+            this.ApplyAttributes(builder, columnBuilder, propertyAttribute.Property, Array.Empty<Attribute>());
         }
 
         private void AddColumns<TEntity>(IReportSchemaBuilder<TEntity> builder, PropertyAttribute[] properties, Attribute[] globalAttributes)
@@ -215,16 +215,16 @@ namespace XReports.SchemaBuilders
 
         private void AddColumn<TEntity>(IReportSchemaBuilder<TEntity> builder, PropertyInfo property, ReportColumnAttribute attribute, Attribute[] globalAttributes)
         {
-            IReportCellsProvider<TEntity> cellsProvider = this.CreateCellsProvider<TEntity>(property);
+            IReportCellProvider<TEntity> cellProvider = this.CreateCellProvider<TEntity>(property);
 
-            IReportColumnBuilder<TEntity> cellsProviderBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellsProvider);
+            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellProvider);
 
-            this.ApplyAttributes(builder, cellsProviderBuilder, property, globalAttributes);
+            this.ApplyAttributes(builder, columnBuilder, property, globalAttributes);
         }
 
         private void ApplyAttributes<TEntity>(
             IReportSchemaBuilder<TEntity> builder,
-            IReportColumnBuilder<TEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TEntity> columnBuilder,
             PropertyInfo property,
             Attribute[] globalAttributes)
         {
@@ -235,7 +235,7 @@ namespace XReports.SchemaBuilders
             {
                 foreach (IAttributeHandler handler in this.handlers)
                 {
-                    handler.Handle(builder, cellsProviderBuilder, attribute);
+                    handler.Handle(builder, columnBuilder, attribute);
                 }
             }
         }
@@ -322,21 +322,21 @@ namespace XReports.SchemaBuilders
                 .ToArray();
         }
 
-        private void ExecutePostBuilder<TPostBuilderType>(Type postBuilderType, params object[] arguments)
+        private void ExecutePostBuilder<TPostBuilder>(Type postBuilderType, params object[] arguments)
         {
-            if (!typeof(TPostBuilderType).IsAssignableFrom(postBuilderType))
+            if (!typeof(TPostBuilder).IsAssignableFrom(postBuilderType))
             {
-                throw new ArgumentException($"Type {postBuilderType} should implement {typeof(TPostBuilderType)}");
+                throw new ArgumentException($"Type {postBuilderType} should implement {typeof(TPostBuilder)}");
             }
 
-            MethodInfo buildMethod = typeof(TPostBuilderType).GetMethod(
+            MethodInfo buildMethod = typeof(TPostBuilder).GetMethod(
                 "Build", arguments.Select(a => a.GetType()).ToArray());
             if (buildMethod == null)
             {
-                throw new ArgumentException($"Cannot find method \"Build\" in type {typeof(TPostBuilderType)}");
+                throw new ArgumentException($"Cannot find method \"Build\" in type {typeof(TPostBuilder)}");
             }
 
-            (TPostBuilderType postBuilder, bool shouldDispose) = this.CreatePostBuilder<TPostBuilderType>(postBuilderType);
+            (TPostBuilder postBuilder, bool shouldDispose) = this.CreatePostBuilder<TPostBuilder>(postBuilderType);
 
             buildMethod.Invoke(postBuilder, arguments);
 
@@ -346,30 +346,30 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private (TPostBuilderType postBuilder, bool shouldDispose) CreatePostBuilder<TPostBuilderType>(Type postBuilderType)
+        private (TPostBuilder postBuilder, bool shouldDispose) CreatePostBuilder<TPostBuilder>(Type postBuilderType)
         {
             bool shouldDispose;
-            TPostBuilderType postBuilder;
+            TPostBuilder postBuilder;
 
             if (this.serviceProvider == null)
             {
-                postBuilder = (TPostBuilderType)Activator.CreateInstance(postBuilderType);
+                postBuilder = (TPostBuilder)Activator.CreateInstance(postBuilderType);
                 shouldDispose = true;
             }
-            else if ((postBuilder = (TPostBuilderType)this.serviceProvider.GetService(postBuilderType)) != null)
+            else if ((postBuilder = (TPostBuilder)this.serviceProvider.GetService(postBuilderType)) != null)
             {
                 shouldDispose = false;
             }
             else
             {
-                postBuilder = (TPostBuilderType)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, postBuilderType);
+                postBuilder = (TPostBuilder)ActivatorUtilities.GetServiceOrCreateInstance(this.serviceProvider, postBuilderType);
                 shouldDispose = true;
             }
 
             return (postBuilder, shouldDispose);
         }
 
-        private void DisposePostBuilder<TPostBuilderType>(TPostBuilderType postBuilder)
+        private void DisposePostBuilder<TPostBuilder>(TPostBuilder postBuilder)
         {
             if (postBuilder is IAsyncDisposable && !(postBuilder is IDisposable))
             {

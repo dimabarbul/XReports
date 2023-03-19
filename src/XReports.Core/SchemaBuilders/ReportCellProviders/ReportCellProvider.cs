@@ -1,9 +1,9 @@
 using XReports.Schema;
 using XReports.Table;
 
-namespace XReports.SchemaBuilders.ReportCellsProviders
+namespace XReports.SchemaBuilders.ReportCellProviders
 {
-    public abstract class ReportCellsProvider<TSourceEntity, TValue> : IReportCellsProvider<TSourceEntity>
+    public abstract class ReportCellProvider<TSourceEntity, TValue> : IReportCellProvider<TSourceEntity>
     {
         private readonly ReportCell reportCell = new ReportCell();
 

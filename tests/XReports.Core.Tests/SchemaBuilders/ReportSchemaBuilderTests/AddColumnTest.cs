@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -18,7 +18,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
             const string columnName = "TheColumn";
 
-            schemaBuilder.AddColumn(columnName, new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(columnName, new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -38,7 +38,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
             const string columnName = "TheColumn";
 
-            schemaBuilder.AddColumn(columnName, new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(columnName, new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Empty<int>());
             table.Rows.Should().Equal(new[]
@@ -63,7 +63,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.AddColumn("Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn("Column1", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -84,7 +84,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
-            schemaBuilder.AddColumn(title, new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(title, new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -101,7 +101,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
 
-            Action action = () => schemaBuilder.AddColumn(null, new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.AddColumn(null, new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -113,7 +113,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             ColumnId id = new ColumnId("Column");
             const string columnName = "TheColumn";
 
-            schemaBuilder.AddColumn(id, columnName, new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(id, columnName, new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -132,7 +132,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.AddColumn(null, "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.AddColumn(null, "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -142,9 +142,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
             ColumnId id = new ColumnId("Column");
-            schemaBuilder.AddColumn(id, "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(id, "Column1", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.AddColumn(id, "Column2", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.AddColumn(id, "Column2", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -155,7 +155,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 
             for (int i = 0; i < columnsCount; i++)
             {
-                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellsProvider<int>());
+                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellProvider<int>());
             }
 
             return schemaBuilder;

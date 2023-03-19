@@ -126,7 +126,8 @@ namespace XReports.SchemaBuilders
         }
 
         /// <summary>
-        /// Makes minimum index 0 and all indexes to go without gaps.
+        /// Normalizes indexes in the groups, i.e. makes minimum index 0 and
+        /// all indexes to go without gaps.
         /// For example, if groups have indexes: 1, 3, 4, 6, after this method they will be:
         /// 0, 1, 2, 3.
         /// </summary>
@@ -173,7 +174,7 @@ namespace XReports.SchemaBuilders
             {
                 for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
                 {
-                    if (ReferenceEquals(header[rowIndex, columnIndex], this.spannedCell))
+                    if (header[rowIndex, columnIndex] == this.spannedCell)
                     {
                         header[rowIndex, columnIndex] = null;
                     }

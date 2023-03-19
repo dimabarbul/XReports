@@ -95,12 +95,7 @@ namespace XReports.DependencyInjection
                         throw new ArgumentException($"Report converter for type {typeof(TReportCell)} and name \"{name}\" has already been registered.", nameof(name));
                     }
 
-                    o.Registrations.Add(
-                        new ReportConverterRegistration<TReportCell>()
-                        {
-                            Name = name,
-                            ConfigureOptions = configure,
-                        });
+                    o.Registrations.Add(new ReportConverterRegistration<TReportCell>(name, configure));
                 });
         }
 

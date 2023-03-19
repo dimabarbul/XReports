@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -21,7 +22,7 @@ namespace XReports.DataReader
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public IDataReader Current => this.dataReader;

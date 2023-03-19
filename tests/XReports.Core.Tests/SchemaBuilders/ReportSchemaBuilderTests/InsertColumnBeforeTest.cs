@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -18,7 +18,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -37,7 +37,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Empty<int>());
             table.Rows.Should().Equal(new[]
@@ -62,7 +62,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.InsertColumnBefore("Column2", "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column2", "Column1", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -83,7 +83,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.InsertColumnBefore("Column1", title, new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column1", title, new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -102,7 +102,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -112,7 +112,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertColumnBefore((string)null, "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore((string)null, "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -122,7 +122,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertColumnBefore("Column1".ToUpperInvariant(), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1".ToUpperInvariant(), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -132,7 +132,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            Action action = () => schemaBuilder.InsertColumnBefore("ColumnX".ToUpperInvariant(), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore("ColumnX".ToUpperInvariant(), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -142,7 +142,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(new[] { "Column1", "Column2", "Column1" });
 
-            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column1", "TheColumn", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -162,7 +162,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(2);
 
-            schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -181,7 +181,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(1);
 
-            Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1", null, "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -190,9 +190,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByTitleShouldThrowWhenIdExists()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("Column"), "Column1", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("Column"), "Column1", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore("Column1", new ColumnId("Column"), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -201,10 +201,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByIdShouldInsertColumnWithId()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
 
-            schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+            schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("3"), "TheColumn", new EmptyCellProvider<int>());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
             table.HeaderRows.Should().Equal(new[]
@@ -222,10 +222,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByIdShouldThrowWhenIdIsNull()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), null, "3", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), null, "3", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -234,10 +234,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByIdShouldThrowWhenIdExists()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("2"), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("1"), new ColumnId("2"), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -246,10 +246,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByIdShouldThrowWhenBeforeIdIsNull()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.InsertColumnBefore((ColumnId)null, new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore((ColumnId)null, new ColumnId("3"), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }
@@ -258,10 +258,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void InsertColumnBeforeByIdShouldThrowWhenBeforeIdDoesNotExist()
         {
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(0);
-            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            schemaBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
 
-            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("0"), new ColumnId("3"), "TheColumn", new EmptyCellsProvider<int>());
+            Action action = () => schemaBuilder.InsertColumnBefore(new ColumnId("0"), new ColumnId("3"), "TheColumn", new EmptyCellProvider<int>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
@@ -272,7 +272,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 
             for (int i = 0; i < columnsCount; i++)
             {
-                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellsProvider<int>());
+                schemaBuilder.AddColumn($"Column{i + 1}", new EmptyCellProvider<int>());
             }
 
             return schemaBuilder;
@@ -284,7 +284,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 
             foreach (string column in columns)
             {
-                schemaBuilder.AddColumn(column, new EmptyCellsProvider<int>());
+                schemaBuilder.AddColumn(column, new EmptyCellProvider<int>());
             }
 
             return schemaBuilder;

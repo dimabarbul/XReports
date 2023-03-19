@@ -1,6 +1,6 @@
 using System.Globalization;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -15,8 +15,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRows()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
-            schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
+            schemaBuilder.AddColumn("Value", new ComputedValueReportCellProvider<int, int>(x => x));
+            schemaBuilder.AddColumn("As string", new ComputedValueReportCellProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
 
             schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
 
@@ -57,8 +57,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddGlobalPropertiesShouldAddPropertiesToAllColumnsAndRowsForHorizontal()
         {
             ReportSchemaBuilder<int> schemaBuilder = new ReportSchemaBuilder<int>();
-            schemaBuilder.AddColumn("Value", new ComputedValueReportCellsProvider<int, int>(x => x));
-            schemaBuilder.AddColumn("As string", new ComputedValueReportCellsProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
+            schemaBuilder.AddColumn("Value", new ComputedValueReportCellProvider<int, int>(x => x));
+            schemaBuilder.AddColumn("As string", new ComputedValueReportCellProvider<int, string>(x => x.ToString(CultureInfo.InvariantCulture)));
 
             schemaBuilder.AddGlobalProperties(new CustomProperty1(), new CustomProperty2());
 

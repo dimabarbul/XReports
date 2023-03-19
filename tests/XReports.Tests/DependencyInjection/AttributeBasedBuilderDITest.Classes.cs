@@ -13,7 +13,7 @@ namespace XReports.Tests.DependencyInjection
         {
             public void Handle<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 Attribute attribute)
             {
                 throw new NotImplementedException();
@@ -24,7 +24,7 @@ namespace XReports.Tests.DependencyInjection
         {
             public void Handle<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 Attribute attribute)
             {
                 throw new NotImplementedException();
@@ -39,7 +39,7 @@ namespace XReports.Tests.DependencyInjection
 
             public void Handle<TSourceEntity>(
                 IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-                IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+                IReportColumnBuilder<TSourceEntity> columnBuilder,
                 Attribute attribute)
             {
                 throw new NotImplementedException();

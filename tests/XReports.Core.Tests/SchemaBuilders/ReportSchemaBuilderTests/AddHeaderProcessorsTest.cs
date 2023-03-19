@@ -40,9 +40,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             processor2.CallsCount.Should().Be(1);
         }
 
-        private abstract class CustomHeaderCellProcessor : IReportCellProcessor<int>
+        private abstract class CustomHeaderCellProcessor : IHeaderReportCellProcessor
         {
-            public void Process(ReportCell cell, int data)
+            public void Process(ReportCell cell)
             {
                 this.CallsCount++;
             }

@@ -9,13 +9,13 @@ namespace XReports.SchemaBuilders
     public class ReportColumnBuilder<TSourceEntity> : IReportColumnBuilder<TSourceEntity>
     {
         private readonly string title;
-        private readonly IReportCellsProvider<TSourceEntity> provider;
+        private readonly IReportCellProvider<TSourceEntity> provider;
         private readonly List<ReportCellProperty> cellProperties = new List<ReportCellProperty>();
         private readonly List<ReportCellProperty> headerProperties = new List<ReportCellProperty>();
         private readonly List<IReportCellProcessor<TSourceEntity>> cellProcessors = new List<IReportCellProcessor<TSourceEntity>>();
-        private readonly List<IReportCellProcessor<TSourceEntity>> headerProcessors = new List<IReportCellProcessor<TSourceEntity>>();
+        private readonly List<IHeaderReportCellProcessor> headerProcessors = new List<IHeaderReportCellProcessor>();
 
-        public ReportColumnBuilder(string title, IReportCellsProvider<TSourceEntity> provider)
+        public ReportColumnBuilder(string title, IReportCellProvider<TSourceEntity> provider)
         {
             this.title = title;
             this.provider = provider;
@@ -48,7 +48,7 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddHeaderProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
+        public IReportColumnBuilder<TSourceEntity> AddHeaderProcessors(params IHeaderReportCellProcessor[] processors)
         {
             this.ValidateAllItemsNotNull(processors);
 

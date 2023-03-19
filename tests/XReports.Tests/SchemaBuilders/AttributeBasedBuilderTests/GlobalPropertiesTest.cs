@@ -3,7 +3,7 @@ using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.AttributeHandlers;
 using XReports.SchemaBuilders.Attributes;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -175,7 +175,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             {
                 public void Build(IReportSchemaBuilder<WithPostBuilder> builder, BuildOptions options)
                 {
-                    builder.AddColumn("From PostBuilder", new EmptyCellsProvider<WithPostBuilder>());
+                    builder.AddColumn("From PostBuilder", new EmptyCellProvider<WithPostBuilder>());
                 }
             }
         }

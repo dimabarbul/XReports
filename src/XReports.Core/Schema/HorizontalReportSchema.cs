@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using XReports.Helpers;
 using XReports.Table;
 
 namespace XReports.Schema
@@ -32,9 +31,8 @@ namespace XReports.Schema
 
         public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
         {
-            ReportCell[][] complexHeader = ComplexHeaderHelper.CreateCells(
+            ReportCell[][] complexHeader = this.complexHeader.CreateCells(
                 this.columns,
-                this.complexHeader,
                 this.complexHeaderProperties,
                 this.commonComplexHeaderProperties,
                 isTransposed: true);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using Xunit;
 
@@ -15,7 +15,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddProcessorsShouldAddProcessorsToBeCalledDuringForEachRow()
         {
             ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
-                "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
+                "Value", new ComputedValueReportCellProvider<string, string>(x => x));
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
             builder.AddProcessors(processor1, processor2);
@@ -32,7 +32,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         public void AddProcessorsShouldThrowWhenSomeProcessorIsNull()
         {
             ReportColumnBuilder<string> builder = new ReportColumnBuilder<string>(
-                "Value", new ComputedValueReportCellsProvider<string, string>(x => x));
+                "Value", new ComputedValueReportCellProvider<string, string>(x => x));
 
             Action action = () => builder.AddProcessors(new CustomProcessor1(), new CustomProcessor2(), null);
 

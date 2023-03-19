@@ -5,21 +5,21 @@ namespace XReports.Schema
     internal class ReportColumn<TSourceEntity> : IReportColumn<TSourceEntity>
     {
         private readonly string title;
-        private readonly IReportCellsProvider<TSourceEntity> provider;
+        private readonly IReportCellProvider<TSourceEntity> provider;
         private readonly ReportCellProperty[] cellProperties;
         private readonly ReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
-        private readonly IReportCellProcessor<TSourceEntity>[] headerProcessors;
+        private readonly IHeaderReportCellProcessor[] headerProcessors;
 
         private readonly ReportCell headerCell = new ReportCell();
 
         public ReportColumn(
             string title,
-            IReportCellsProvider<TSourceEntity> provider,
+            IReportCellProvider<TSourceEntity> provider,
             ReportCellProperty[] cellProperties,
             ReportCellProperty[] headerProperties,
             IReportCellProcessor<TSourceEntity>[] cellProcessors,
-            IReportCellProcessor<TSourceEntity>[] headerProcessors)
+            IHeaderReportCellProcessor[] headerProcessors)
         {
             this.title = title;
             this.provider = provider;
@@ -78,7 +78,7 @@ namespace XReports.Schema
         {
             for (int i = 0; i < this.headerProcessors.Length; i++)
             {
-                this.headerProcessors[i].Process(cell, default);
+                this.headerProcessors[i].Process(cell);
             }
         }
     }

@@ -15,7 +15,7 @@ using XReports.Html.PropertyHandlers;
 using XReports.Html.Writers;
 using XReports.ReportCellProperties;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 
 namespace XReports.Demos.MVC.Controllers.HorizontalReports
@@ -66,7 +66,7 @@ namespace XReports.Demos.MVC.Controllers.HorizontalReports
                 .AddProperties(centerAlignment);
             reportBuilder.AddColumn("Age", e => e.Age)
                 .AddHeaderProperties(bold);
-            reportBuilder.AddColumn("Score", new EmptyCellsProvider<Entity>())
+            reportBuilder.AddColumn("Score", new EmptyCellProvider<Entity>())
                 .AddHeaderProperties(bold);
             reportBuilder.AddColumn("Min. Score", e => e.MinScore)
                 .AddHeaderProperties(indentation);

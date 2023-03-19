@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -50,7 +50,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<string> schemaBuilder = new ReportSchemaBuilder<string>();
             schemaBuilder.AddComplexHeader(0, "Complex Header", "Header");
-            schemaBuilder.AddColumn("Header", new EmptyCellsProvider<string>());
+            schemaBuilder.AddColumn("Header", new EmptyCellProvider<string>());
             schemaBuilder.AddColumn("Value", s => s);
 
             Action action = () => schemaBuilder.BuildHorizontalSchema(1);
@@ -63,7 +63,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             ReportSchemaBuilder<string> schemaBuilder = new ReportSchemaBuilder<string>();
             schemaBuilder.AddComplexHeader(0, "Complex Header", "Value");
-            schemaBuilder.AddColumn("Header", new EmptyCellsProvider<string>());
+            schemaBuilder.AddColumn("Header", new EmptyCellProvider<string>());
             schemaBuilder.AddColumn("Value", s => s);
 
             IReportTable<ReportCell> reportTable = schemaBuilder.BuildHorizontalSchema(1)

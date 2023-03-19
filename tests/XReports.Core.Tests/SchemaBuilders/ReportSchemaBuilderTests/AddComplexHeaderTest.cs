@@ -1,6 +1,6 @@
 using System.Linq;
 using XReports.SchemaBuilders;
-using XReports.SchemaBuilders.ReportCellsProviders;
+using XReports.SchemaBuilders.ReportCellProviders;
 using XReports.Table;
 using XReports.Tests.Common.Assertions;
 using XReports.Tests.Common.Helpers;
@@ -141,10 +141,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         public void AddComplexHeaderByColumnIdsShouldAddCorrectHeader()
         {
             ReportSchemaBuilder<int> reportBuilder = this.CreateSchemaBuilder(0);
-            reportBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellsProvider<int>());
-            reportBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellsProvider<int>());
-            reportBuilder.AddColumn(new ColumnId("3"), "Column3", new EmptyCellsProvider<int>());
-            reportBuilder.AddColumn(new ColumnId("4"), "Column4", new EmptyCellsProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("1"), "Column1", new EmptyCellProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("2"), "Column2", new EmptyCellProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("3"), "Column3", new EmptyCellProvider<int>());
+            reportBuilder.AddColumn(new ColumnId("4"), "Column4", new EmptyCellProvider<int>());
             reportBuilder.AddComplexHeader(0, 2, "Group1", new ColumnId("1"), new ColumnId("2"));
             reportBuilder.AddComplexHeader(0, "Group2", new ColumnId("3"), new ColumnId("4"));
             reportBuilder.AddComplexHeader(1, "Group3", new ColumnId("3"));

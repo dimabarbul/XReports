@@ -18,9 +18,9 @@ namespace XReports.SchemaBuilders
 
         public static IReportColumnBuilder<TEntity> AddDynamicProperties<TEntity>(
             this IReportColumnBuilder<TEntity> builder,
-            Func<TEntity, IEnumerable<ReportCellProperty>> propertySelector)
+            Func<TEntity, IEnumerable<ReportCellProperty>> propertiesSelector)
         {
-            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertySelector));
+            builder.AddProcessors(new DynamicPropertiesCellProcessor<TEntity>(propertiesSelector));
 
             return builder;
         }

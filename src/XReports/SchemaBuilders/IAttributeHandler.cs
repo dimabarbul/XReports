@@ -6,7 +6,7 @@ namespace XReports.SchemaBuilders
     {
         void Handle<TSourceEntity>(
             IReportSchemaBuilder<TSourceEntity> schemaBuilder,
-            IReportColumnBuilder<TSourceEntity> cellsProviderBuilder,
+            IReportColumnBuilder<TSourceEntity> columnBuilder,
             Attribute attribute);
     }
 }

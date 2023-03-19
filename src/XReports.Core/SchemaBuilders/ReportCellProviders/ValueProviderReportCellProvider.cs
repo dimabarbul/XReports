@@ -1,12 +1,12 @@
 using XReports.Table;
 
-namespace XReports.SchemaBuilders.ReportCellsProviders
+namespace XReports.SchemaBuilders.ReportCellProviders
 {
-    public class ValueProviderReportCellsProvider<TSourceEntity, TValue> : ReportCellsProvider<TSourceEntity, TValue>
+    public class ValueProviderReportCellProvider<TSourceEntity, TValue> : ReportCellProvider<TSourceEntity, TValue>
     {
         private readonly IValueProvider<TValue> provider;
 
-        public ValueProviderReportCellsProvider(IValueProvider<TValue> provider)
+        public ValueProviderReportCellProvider(IValueProvider<TValue> provider)
         {
             this.provider = provider;
         }

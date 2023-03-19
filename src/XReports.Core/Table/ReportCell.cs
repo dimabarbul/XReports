@@ -25,11 +25,8 @@ namespace XReports.Table
             return cell;
         }
 
-        public void CopyFrom(ReportCell reportCell)
+        public void CopyValueFrom(ReportCell reportCell)
         {
-            this.Clear();
-            this.ColumnSpan = reportCell.ColumnSpan;
-            this.RowSpan = reportCell.RowSpan;
             this.ValueType = reportCell.ValueType;
             this.value = reportCell.value;
         }
@@ -69,15 +66,7 @@ namespace XReports.Table
         public bool HasProperty<TProperty>()
             where TProperty : ReportCellProperty
         {
-            for (int i = 0; i < this.Properties.Count; i++)
-            {
-                if (this.Properties[i].GetType() == typeof(TProperty))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return this.HasProperty(typeof(TProperty));
         }
 
         public bool HasProperty(Type propertyType)
