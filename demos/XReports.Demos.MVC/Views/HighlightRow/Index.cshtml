@@ -19,10 +19,10 @@
 
 @section Code
 {
-   class HighlightCellProcessor : IReportCellProcessor&lt;Entity&gt;
+    class HighlightCellProcessor : IReportCellProcessor&lt;Entity&gt;
     {
-        private static readonly ColorProperty Bad = new ColorProperty(Color.Red);
-        private static readonly ColorProperty Good = new ColorProperty(Color.Lime);
+        private static readonly ColorProperty Bad = new ColorProperty(null, Color.Red);
+        private static readonly ColorProperty Good = new ColorProperty(null, Color.Lime);
 
         public void Process(ReportCell cell, Entity entity)
         {

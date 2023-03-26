@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Bogus;
@@ -53,7 +52,7 @@ public class NamedConvertersController : Controller
     {
         Stream excelStream = this.GetExcelStream();
 
-        return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DefaultInjections.xlsx");
+        return this.File(excelStream, Constants.ContentTypeExcel, "NamedConverters.xlsx");
     }
 
     private string GetReportHtml()
@@ -82,7 +81,7 @@ public class NamedConvertersController : Controller
     {
         return new Faker<Entity>()
             .RuleFor(e => e.Name, f => f.Name.FullName())
-            .RuleFor(e => e.Score, f => Math.Round(f.Random.Decimal(0, 100), 4))
+            .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
             .Generate(RecordsCount);
     }
 

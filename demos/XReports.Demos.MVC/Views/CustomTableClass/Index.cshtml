@@ -20,11 +20,21 @@
 
 @section Code
 {
-    public class BootstrapStringWriter : StringWriter
+    public class BootstrapHtmlStringWriter : HtmlStringWriter
     {
-        protected override async Task BeginTableAsync()
+        public BootstrapHtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
+            : base(htmlStringCellWriter)
         {
-            await this.WriteTextAsync(@@"&lt;table class=""table table-sm""&gt;");
+        }
+
+        protected override void BeginTable(StringBuilder stringBuilder)
+        {
+            stringBuilder.Append(@@"&lt;table class=""table table-sm""&gt;");
+        }
+
+        protected override void BeginHead(StringBuilder stringBuilder)
+        {
+            stringBuilder.Append(@@"&lt;thead class=""thead-dark""&gt;");
         }
     }
 }

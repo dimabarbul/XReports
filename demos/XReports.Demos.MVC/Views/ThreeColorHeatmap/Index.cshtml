@@ -68,7 +68,7 @@
         }
     }
 
-    class ThreeColorHeatmapPropertyHtmlHandler : SingleTypePropertyHandler&lt;ThreeColorHeatmapProperty, HtmlReportCell&gt;
+    class ThreeColorHeatmapPropertyHtmlHandler : PropertyHandler&lt;ThreeColorHeatmapProperty, HtmlReportCell&gt;
     {
         protected override void HandleProperty(ThreeColorHeatmapProperty property, HtmlReportCell cell)
         {
@@ -78,7 +78,7 @@
         }
     }
 
-    class ThreeColorHeatmapPropertyExcelHandler : SingleTypePropertyHandler&lt;ThreeColorHeatmapProperty, ExcelReportCell&gt;
+    class ThreeColorHeatmapPropertyExcelHandler : PropertyHandler&lt;ThreeColorHeatmapProperty, ExcelReportCell&gt;
     {
         protected override void HandleProperty(ThreeColorHeatmapProperty property, ExcelReportCell cell)
         {

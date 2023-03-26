@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using XReports.Demos.MVC;
 using XReports.Demos.MVC.Data;
 using XReports.Demos.MVC.XReports;
 using XReports.DependencyInjection;

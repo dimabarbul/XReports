@@ -22,13 +22,6 @@
 {
     class ThreeColorHeatmapProperty : ReportCellProperty
     {
-        public decimal MinimumValue { get; set; }
-        public Color MinimumColor { get; set; }
-        public decimal MiddleValue { get; set; }
-        public Color MiddleColor { get; set; }
-        public decimal MaximumValue { get; set; }
-        public Color MaximumColor { get; set; }
-
         public ThreeColorHeatmapProperty(decimal minimumValue, Color minimumColor, decimal middleValue, Color middleColor, decimal maximumValue, Color maximumColor)
         {
             this.MinimumValue = minimumValue;
@@ -38,21 +31,67 @@
             this.MaximumValue = maximumValue;
             this.MaximumColor = maximumColor;
         }
+
+        public decimal MinimumValue { get; set; }
+        public Color MinimumColor { get; set; }
+        public decimal MiddleValue { get; set; }
+        public Color MiddleColor { get; set; }
+        public decimal MaximumValue { get; set; }
+        public Color MaximumColor { get; set; }
+
+        public Color GetColorForValue(decimal value)
+        {
+            if (value &lt; this.MiddleValue)
+            {
+                return this.GetColorForValue(value, this.MinimumValue, this.MinimumColor, this.MiddleValue, this.MiddleColor);
+            }
+            else
+            {
+                return this.GetColorForValue(value, this.MiddleValue, this.MiddleColor, this.MaximumValue, this.MaximumColor);
+            }
+        }
+
+        private Color GetColorForValue(decimal value, decimal min, Color minColor, decimal max, Color maxColor)
+        {
+            decimal valueDelta = max - min;
+            decimal valuePercentage = (value - min) / valueDelta;
+
+            byte cellRed = this.GetProportionalValue(valuePercentage, minColor.R, maxColor.R);
+            byte cellGreen = this.GetProportionalValue(valuePercentage, minColor.G, maxColor.G);
+            byte cellBlue = this.GetProportionalValue(valuePercentage, minColor.B, maxColor.B);
+
+            return Color.FromArgb(cellRed, cellGreen, cellBlue);
+        }
+
+        private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
+        {
+            return (byte)(min + (valuePercentage * (max - min)));
+        }
     }
 
-    private class ConditionalFormattingThreeColorScaleFormatter : EpplusFormatter&lt;ThreeColorHeatmapProperty&gt;
+    class ThreeColorHeatmapPropertyHtmlHandler : PropertyHandler&lt;ThreeColorHeatmapProperty, HtmlReportCell&gt;
+    {
+        protected override void HandleProperty(ThreeColorHeatmapProperty property, HtmlReportCell cell)
+        {
+            decimal value = cell.GetValue&lt;decimal&gt;();
+
+            cell.Styles.Add("background-color", ColorTranslator.ToHtml(property.GetColorForValue(value)));
+        }
+    }
+
+    class ConditionalFormattingThreeColorScaleFormatter : EpplusFormatter&lt;ThreeColorHeatmapProperty&gt;
     {
         protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, ThreeColorHeatmapProperty property)
         {
             IExcelConditionalFormattingThreeColorScale threeColorScale = worksheetCell.ConditionalFormatting.AddThreeColorScale();
             threeColorScale.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            threeColorScale.LowValue.Value = (double) property.MinimumValue;
+            threeColorScale.LowValue.Value = (double)property.MinimumValue;
             threeColorScale.LowValue.Color = property.MinimumColor;
             threeColorScale.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            threeColorScale.MiddleValue.Value = (double) property.MiddleValue;
+            threeColorScale.MiddleValue.Value = (double)property.MiddleValue;
             threeColorScale.MiddleValue.Color = property.MiddleColor;
             threeColorScale.HighValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-            threeColorScale.HighValue.Value = (double) property.MaximumValue;
+            threeColorScale.HighValue.Value = (double)property.MaximumValue;
             threeColorScale.HighValue.Color = property.MaximumColor;
         }
     }
@@ -61,10 +100,9 @@
     ThreeColorHeatmapProperty lastScoreHeatmapProperty = new ThreeColorHeatmapProperty(0, Color.Red, 5, Color.Yellow, 10, Color.Lime);
 
     ReportSchemaBuilder&lt;Entity&gt; reportBuilder = new ReportSchemaBuilder&lt;Entity&gt;();
-    reportBuilder
-        .AddColumn("Name", e => e.Name)
-        .AddColumn("Last Score", e => e.LastScore)
+    reportBuilder.AddColumn("Name", e =&gt; e.Name);
+    reportBuilder.AddColumn("Last Score", e =&gt; e.LastScore)
         .AddProperties(lastScoreHeatmapProperty);
-    reportBuilder.AddColumn("Score", e => e.Score)
+    reportBuilder.AddColumn("Score", e =&gt; e.Score)
         .AddProperties(scoreHeatmapProperty);
 }

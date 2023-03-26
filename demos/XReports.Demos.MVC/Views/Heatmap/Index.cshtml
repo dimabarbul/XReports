@@ -28,10 +28,10 @@
 
         public HeatmapProperty(decimal minimumValue, Color minimumColor, decimal maximumValue, Color maximumColor)
         {
-            this.MinimumValue = minimumValue;
-            this.MinimumColor = minimumColor;
-            this.MaximumValue = maximumValue;
-            this.MaximumColor = maximumColor;
+            this.minimumValue = minimumValue;
+            this.minimumColor = minimumColor;
+            this.maximumValue = maximumValue;
+            this.maximumColor = maximumColor;
         }
 
         public Color GetColorForValue(decimal value)
@@ -52,7 +52,7 @@
         }
     }
 
-    class HeatmapPropertyHtmlHandler : SingleTypePropertyHandler&lt;HeatmapProperty, HtmlReportCell&gt;
+    class HeatmapPropertyHtmlHandler : PropertyHandler&lt;HeatmapProperty, HtmlReportCell&gt;
     {
         protected override void HandleProperty(HeatmapProperty property, HtmlReportCell cell)
         {
@@ -62,7 +62,7 @@
         }
     }
 
-    class HeatmapPropertyExcelHandler : SingleTypePropertyHandler&lt;HeatmapProperty, ExcelReportCell&gt;
+    class HeatmapPropertyExcelHandler : PropertyHandler&lt;HeatmapProperty, ExcelReportCell&gt;
     {
         protected override void HandleProperty(HeatmapProperty property, ExcelReportCell cell)
         {

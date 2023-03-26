@@ -9,7 +9,6 @@ using XReports.DataReader;
 using XReports.Demos.MVC.Data;
 using XReports.Demos.MVC.Filters;
 using XReports.Demos.MVC.Models.Shared;
-using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.Writers;
 using XReports.Html;
@@ -52,7 +51,7 @@ namespace XReports.Demos.MVC.Controllers.DataSources
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DataReader.xlsx");
+            return this.File(excelStream, Constants.ContentTypeExcel, "DataReader.xlsx");
         }
 
         private IReportTable<ReportCell> BuildReport(IDataReader dataReader)
@@ -84,7 +83,7 @@ namespace XReports.Demos.MVC.Controllers.DataSources
 
         private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
         }
 
         private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)

@@ -21,42 +21,41 @@
 {
     class ReplaceEmptyProperty : ReportCellProperty
     {
-        public string Text { get; }
-
         public ReplaceEmptyProperty(string text)
         {
             this.Text = text;
         }
+
+        public string Text { get; }
     }
 
-    class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler&lt;ReplaceEmptyProperty, HtmlReportCell&gt;
+    class CustomFormatPropertyHtmlHandler : PropertyHandler&lt;ReplaceEmptyProperty, HtmlReportCell&gt;
     {
         protected override void HandleProperty(ReplaceEmptyProperty property, HtmlReportCell cell)
         {
             if (string.IsNullOrEmpty(cell.GetValue&lt;string&gt;()))
             {
-                cell.Value = property.Text;
+                cell.SetValue(property.Text);
             }
         }
     }
 
-    class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler&lt;ReplaceEmptyProperty, ExcelReportCell&gt;
+    class CustomFormatPropertyExcelHandler : PropertyHandler&lt;ReplaceEmptyProperty, ExcelReportCell&gt;
     {
         protected override void HandleProperty(ReplaceEmptyProperty property, ExcelReportCell cell)
         {
             if (string.IsNullOrEmpty(cell.GetValue&lt;string&gt;()))
             {
-                cell.Value = property.Text;
+                cell.SetValue(property.Text);
             }
         }
     }
 
-    VerticalReportBuilder&lt;Entity&gt; reportBuilder = new VerticalReportBuilder&lt;Entity&gt;();
-    reportBuilder
-        .AddColumn("First Name", e => e.FirstName)
-        .AddColumn("Last Name", e => e.LastName)
-        .AddColumn("Email", e => e.Email)
+    ReportSchemaBuilder&lt;Entity&gt; reportBuilder = new ReportSchemaBuilder&lt;Entity&gt;();
+    reportBuilder.AddColumn("First Name", e =&gt; e.FirstName);
+    reportBuilder.AddColumn("Last Name", e =&gt; e.LastName);
+    reportBuilder.AddColumn("Email", e =&gt; e.Email)
         .AddProperties(new ReplaceEmptyProperty("-"));
-    reportBuilder.AddColumn("Score", e => e.Score)
+    reportBuilder.AddColumn("Score", e =&gt; e.Score)
         .AddProperties(new ReplaceEmptyProperty("(no score)"));
 }

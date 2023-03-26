@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using XReports.Demos.MVC.Data;
 
 namespace XReports.Demos.MVC.Filters;
 

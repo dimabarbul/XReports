@@ -6,7 +6,6 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
-using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.Writers;
 using XReports.Html;
@@ -24,7 +23,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = this.WriteReportToString(htmlReportTable);
+            string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
 
             return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
@@ -35,12 +34,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom format.xlsx");
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            return new EpplusWriter().WriteToStream(reportTable);
+            return this.File(excelStream, Constants.ContentTypeExcel, "Custom format.xlsx");
         }
 
         private IReportTable<ReportCell> BuildReport()
@@ -74,9 +68,14 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return excelConverter.Convert(reportTable);
         }
 
-        private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+        private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+        }
+
+        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+        {
+            return new EpplusWriter().WriteToStream(reportTable);
         }
 
         private IEnumerable<Entity> GetData()

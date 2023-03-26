@@ -9,7 +9,6 @@ using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.ConditionalFormatting.Contracts;
 using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
-using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.Writers;
 using XReports.Html;
@@ -21,13 +20,13 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
     public class ThreeColorHeatmapConditionalController : Controller
     {
-        private const int RecordsCount = 20;
+        private const int RecordsCount = 10;
 
         public IActionResult Index()
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = this.WriteReportToString(htmlReportTable);
+            string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
 
             return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
@@ -38,17 +37,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "3-color Heatmap Using Conditional Formatting.xlsx");
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            EpplusWriter writer = new EpplusWriter(new[]
-            {
-                new ConditionalFormattingThreeColorScaleFormatter(),
-            });
-
-            return writer.WriteToStream(reportTable);
+            return this.File(excelStream, Constants.ContentTypeExcel, "3-color Heatmap Using Conditional Formatting.xlsx");
         }
 
         private IReportTable<ReportCell> BuildReport()
@@ -84,9 +73,19 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             return excelConverter.Convert(reportTable);
         }
 
-        private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+        private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+        }
+
+        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+        {
+            EpplusWriter writer = new EpplusWriter(new[]
+            {
+                new ConditionalFormattingThreeColorScaleFormatter(),
+            });
+
+            return writer.WriteToStream(reportTable);
         }
 
         private IEnumerable<Entity> GetData()
@@ -94,7 +93,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             return new Faker<Entity>()
                 .RuleFor(e => e.Name, f => f.Name.FullName())
                 .RuleFor(e => e.LastScore, f => f.Random.Int(1, 10))
-                .RuleFor(e => e.Score, f => Math.Round(f.Random.Decimal(0, 100), 2))
+                .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
                 .Generate(RecordsCount);
         }
 
@@ -120,15 +119,10 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             }
 
             public decimal MinimumValue { get; set; }
-
             public Color MinimumColor { get; set; }
-
             public decimal MiddleValue { get; set; }
-
             public Color MiddleColor { get; set; }
-
             public decimal MaximumValue { get; set; }
-
             public Color MaximumColor { get; set; }
 
             public Color GetColorForValue(decimal value)

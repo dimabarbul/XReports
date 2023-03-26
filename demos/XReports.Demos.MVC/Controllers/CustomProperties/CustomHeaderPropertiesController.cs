@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -6,7 +5,6 @@ using Bogus;
 using Microsoft.AspNetCore.Mvc;
 using XReports.Converter;
 using XReports.Demos.MVC.Models.Shared;
-using XReports.Demos.MVC.XReports;
 using XReports.Excel;
 using XReports.Excel.PropertyHandlers;
 using XReports.Excel.Writers;
@@ -27,7 +25,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
         {
             IReportTable<ReportCell> reportTable = this.BuildReport();
             IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = this.WriteReportToString(htmlReportTable);
+            string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
 
             return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
         }
@@ -38,12 +36,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Custom Header Properties.xlsx");
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            return new EpplusWriter().WriteToStream(reportTable);
+            return this.File(excelStream, Constants.ContentTypeExcel, "Custom Header Properties.xlsx");
         }
 
         private IReportTable<ReportCell> BuildReport()
@@ -82,9 +75,14 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return excelConverter.Convert(reportTable);
         }
 
-        private string WriteReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+        private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
         {
-            return new BootstrapHtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+        }
+
+        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+        {
+            return new EpplusWriter().WriteToStream(reportTable);
         }
 
         private IEnumerable<Entity> GetData()
@@ -92,7 +90,7 @@ namespace XReports.Demos.MVC.Controllers.CustomProperties
             return new Faker<Entity>()
                 .RuleFor(e => e.Name, f => f.Name.FullName())
                 .RuleFor(e => e.Email, (f, e) => f.Internet.Email(e.Name))
-                .RuleFor(e => e.Score, f => Math.Round(f.Random.Decimal(80, 100), 2))
+                .RuleFor(e => e.Score, f => f.Random.Decimal(80, 100))
                 .Generate(RecordsCount);
         }
 

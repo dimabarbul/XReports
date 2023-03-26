@@ -14,7 +14,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
 {
     public class AutoFitController : Controller
     {
-        private const int RecordsCount = 20;
+        private const int RecordsCount = 10;
 
         public IActionResult Index()
         {
@@ -27,14 +27,7 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
             Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "AutoFit.xlsx");
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            EpplusWriter writer = new AutoFitExcelWriter();
-
-            return writer.WriteToStream(reportTable);
+            return this.File(excelStream, Constants.ContentTypeExcel, "AutoFit.xlsx");
         }
 
         private IReportTable<ReportCell> BuildReport()
@@ -55,12 +48,19 @@ namespace XReports.Demos.MVC.Controllers.EpplusWriterExtensions
             return excelConverter.Convert(reportTable);
         }
 
+        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+        {
+            EpplusWriter writer = new AutoFitExcelWriter();
+
+            return writer.WriteToStream(reportTable);
+        }
+
         private IEnumerable<Entity> GetData()
         {
             return new Faker<Entity>()
                 .RuleFor(e => e.Name, f => f.Name.FullName())
                 .RuleFor(e => e.LastScore, f => f.Random.Int(1, 10))
-                .RuleFor(e => e.Score, f => Math.Round(f.Random.Decimal(0, 100), 2))
+                .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
                 .Generate(RecordsCount);
         }
 

@@ -23,19 +23,18 @@
     class CustomFormatProperty : ReportCellProperty { }
 
     // The property handler processes cells during conversion to Html having custom property added.
-    class CustomFormatPropertyHtmlHandler : SingleTypePropertyHandler&lt;CustomFormatProperty, HtmlReportCell&gt;
+    class CustomFormatPropertyHtmlHandler : PropertyHandler&lt;CustomFormatProperty, HtmlReportCell&gt;
     {
         protected override void HandleProperty(CustomFormatProperty property, HtmlReportCell cell)
         {
             decimal value = cell.GetValue&lt;decimal&gt;();
             string format = value == 100m ? "F0" : "F2";
 
-            cell.Value = value.ToString(format);
+            cell.SetValue(value.ToString(format, CultureInfo.CurrentCulture));
         }
     }
 
-    // The property handler processes cells during conversion to Excel having custom property added.
-    class CustomFormatPropertyExcelHandler : SingleTypePropertyHandler&lt;CustomFormatProperty, ExcelReportCell&gt;
+    class CustomFormatPropertyExcelHandler : PropertyHandler&lt;CustomFormatProperty, ExcelReportCell&gt;
     {
         protected override void HandleProperty(CustomFormatProperty property, ExcelReportCell cell)
         {
