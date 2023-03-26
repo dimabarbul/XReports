@@ -1,0 +1,74 @@
+@model XReports.Demos.Models.Shared.ReportViewModel
+
+@{
+    ViewBag.Title = "Horizontal";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>Example of horizontal report.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    class IndentationProperty : ReportCellProperty
+    {
+        public IndentationProperty(int indentLevel = 1)
+        {
+            this.IndentLevel = indentLevel;
+        }
+
+        public int IndentLevel { get; }
+    }
+
+    class HtmlIndentationPropertyHandler : PropertyHandler&lt;IndentationProperty, HtmlReportCell&gt;
+    {
+        protected override void HandleProperty(IndentationProperty property, HtmlReportCell cell)
+        {
+            cell.Styles.Add("padding-left", $"{2 * property.IndentLevel}em");
+        }
+    }
+
+    class ExcelIndentationPropertyFormatter : EpplusFormatter&lt;IndentationProperty&gt;
+    {
+        protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, IndentationProperty property)
+        {
+            worksheetCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            worksheetCell.Style.Indent = property.IndentLevel;
+        }
+    }
+
+    ReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
+    BoldProperty bold = new BoldProperty();
+    IndentationProperty indentation = new IndentationProperty();
+
+    ReportSchemaBuilder&lt;Entity&gt; reportBuilder = new ReportSchemaBuilder&lt;Entity&gt;();
+
+    reportBuilder.AddGlobalProperties(centerAlignment);
+
+    reportBuilder
+        .AddColumn(string.Empty, e =&gt; e.Name)
+        .AddProperties(centerAlignment);
+    reportBuilder.AddColumn("Age", e =&gt; e.Age)
+        .AddHeaderProperties(bold);
+    reportBuilder.AddColumn("Score", new EmptyCellProvider&lt;Entity&gt;())
+        .AddHeaderProperties(bold);
+    reportBuilder.AddColumn("Min. Score", e =&gt; e.MinScore)
+        .AddHeaderProperties(indentation);
+    reportBuilder.AddColumn("Max. Score", e =&gt; e.MaxScore)
+        .AddHeaderProperties(indentation);
+    reportBuilder.AddColumn("Avg. Score", e =&gt; e.AverageScore)
+        .AddHeaderProperties(indentation)
+        .AddProperties(new DecimalPrecisionProperty(2));
+
+    IReportTable&lt;ReportCell&gt; reportTable = reportBuilder.BuildHorizontalSchema(1)
+        .BuildReportTable(GetData());
+}

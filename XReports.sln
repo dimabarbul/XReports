@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{26DBFC2D-CE5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Core", "src\XReports.Core\XReports.Core.csproj", "{1A08F77C-F8A2-4742-9365-E2F98AAB183D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Demos.MVC", "demos\XReports.Demos.MVC\XReports.Demos.MVC.csproj", "{10C08E20-75E1-41E5-B5EC-574F469770F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.Demos", "demos\XReports.Demos\XReports.Demos.csproj", "{10C08E20-75E1-41E5-B5EC-574F469770F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports", "src\XReports\XReports.csproj", "{B7B563B3-D050-4221-B6EE-3ADC1711A229}"
 EndProject
