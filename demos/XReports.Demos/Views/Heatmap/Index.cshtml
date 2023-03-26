@@ -1,0 +1,73 @@
+@model XReports.Demos.Models.Shared.ReportViewModel
+
+@{
+    ViewBag.Title = "Heatmap";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>If we want to highlight some cells depending on their value, we can use custom property. In current implementation we highlight values closer to 0 in light red, closer to 100 - light blue.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    class HeatmapProperty : ReportCellProperty
+    {
+        private readonly decimal minimumValue;
+        private readonly Color minimumColor;
+        private readonly decimal maximumValue;
+        private readonly Color maximumColor;
+
+        public HeatmapProperty(decimal minimumValue, Color minimumColor, decimal maximumValue, Color maximumColor)
+        {
+            this.minimumValue = minimumValue;
+            this.minimumColor = minimumColor;
+            this.maximumValue = maximumValue;
+            this.maximumColor = maximumColor;
+        }
+
+        public Color GetColorForValue(decimal value)
+        {
+            decimal heatmapValueDelta = this.maximumValue - this.minimumValue;
+            decimal valuePercentage = (value - this.minimumValue) / heatmapValueDelta;
+
+            byte cellRed = this.GetProportionalValue(valuePercentage, this.minimumColor.R, this.maximumColor.R);
+            byte cellGreen = this.GetProportionalValue(valuePercentage, this.minimumColor.G, this.maximumColor.G);
+            byte cellBlue = this.GetProportionalValue(valuePercentage, this.minimumColor.B, this.maximumColor.B);
+
+            return Color.FromArgb(cellRed, cellGreen, cellBlue);
+        }
+
+        private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
+        {
+            return (byte)(min + (valuePercentage * (max - min)));
+        }
+    }
+
+    class HeatmapPropertyHtmlHandler : PropertyHandler&lt;HeatmapProperty, HtmlReportCell&gt;
+    {
+        protected override void HandleProperty(HeatmapProperty property, HtmlReportCell cell)
+        {
+            decimal value = cell.GetValue&lt;decimal&gt;();
+
+            cell.Styles.Add("background-color", ColorTranslator.ToHtml(property.GetColorForValue(value)));
+        }
+    }
+
+    class HeatmapPropertyExcelHandler : PropertyHandler&lt;HeatmapProperty, ExcelReportCell&gt;
+    {
+        protected override void HandleProperty(HeatmapProperty property, ExcelReportCell cell)
+        {
+            decimal value = cell.GetValue&lt;decimal&gt;();
+            cell.BackgroundColor = property.GetColorForValue(value);
+        }
+    }
+}

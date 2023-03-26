@@ -1,0 +1,88 @@
+@model XReports.Demos.Models.Shared.ReportViewModel
+
+@{
+    ViewBag.Title = "Default Injections";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>XReports classes can be registered in DI and injected from there. This gives opportunity to configure them in one place.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    // In Program.cs
+    services
+        // custom implementation for IHtmlStringWriter
+        .AddHtmlStringWriter&lt;BootstrapHtmlStringWriter&gt;()
+        // default implementation for IEpplusWriter
+        .AddEpplusWriter()
+        .AddReportConverter&lt;HtmlReportCell&gt;(o =>
+        {
+            o.AddFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
+        })
+        .AddReportConverter&lt;ExcelReportCell&gt;(o =>
+        {
+            o.AddFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
+        })
+        .AddAttributeBasedBuilder();
+
+    // In MyController.cs
+    private readonly IAttributeBasedBuilder attributeBasedBuilder;
+    private readonly IReportConverter&lt;HtmlReportCell&gt; htmlConverter;
+    private readonly IReportConverter&lt;ExcelReportCell&gt; excelConverter;
+    private readonly IHtmlStringWriter htmlWriter;
+    private readonly IEpplusWriter excelWriter;
+
+    public MyController(
+        IAttributeBasedBuilder attributeBasedBuilder,
+        IReportConverter&lt;HtmlReportCell&gt; htmlConverter,
+        IReportConverter&lt;ExcelReportCell&gt; excelConverter,
+        IHtmlStringWriter htmlWriter,
+        IEpplusWriter excelWriter)
+    {
+        this.attributeBasedBuilder = attributeBasedBuilder;
+        this.htmlConverter = htmlConverter;
+        this.excelConverter = excelConverter;
+        this.htmlWriter = htmlWriter;
+        this.excelWriter = excelWriter;
+    }
+
+    private string GetReportHtml()
+    {
+        IReportTable&lt;ReportCell&gt; reportTable = this.attributeBasedBuilder.BuildSchema&lt;Entity&gt;()
+            .BuildReportTable(this.GetData());
+        IReportTable&lt;HtmlReportCell&gt; htmlReportTable = this.htmlConverter.Convert(reportTable);
+        string html = this.htmlWriter.WriteToString(htmlReportTable);
+
+        return html;
+    }
+
+    private Stream GetExcelStream()
+    {
+        IReportTable&lt;ReportCell&gt; reportTable = this.attributeBasedBuilder.BuildSchema&lt;Entity&gt;()
+            .BuildReportTable(this.GetData());
+        IReportTable&lt;ExcelReportCell&gt; excelReportTable = this.excelConverter.Convert(reportTable);
+        Stream excelStream = this.excelWriter.WriteToStream(excelReportTable);
+
+        return excelStream;
+    }
+
+    private class Entity
+    {
+        [ReportColumn(1, "Full name")]
+        public string Name { get; set; }
+
+        [ReportColumn(2, "Score")]
+        [DecimalPrecision(1)]
+        public decimal Score { get; set; }
+    }
+}

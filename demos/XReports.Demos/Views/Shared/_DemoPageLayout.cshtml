@@ -1,0 +1,21 @@
+@{
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+@RenderSection("Description")
+
+@RenderSection("ReportTable")
+
+@RenderBody()
+
+<div>
+    <button class="btn btn-primary" data-toggle="collapse" data-target="#code">Show/hide code</button>
+    <div id="code" class="collapse">
+        <pre><code class="c#">
+            @RenderSection("Code")
+        </code></pre>
+
+        <em>Code highlight is done using <a href="https://highlightjs.org/" target="_blank">highlight.js</a></em>
+    </div>
+</div>
