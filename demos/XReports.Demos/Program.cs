@@ -34,22 +34,22 @@ app.Run();
 static void AddXReports(IServiceCollection services)
 {
     services
-        // custom implementation for IHtmlStringWriter
+    // custom implementation for IHtmlStringWriter
         .AddHtmlStringWriter<BootstrapHtmlStringWriter>()
-        // default implementation for IEpplusWriter
+    // default implementation for IEpplusWriter
         .AddEpplusWriter()
-        // will be available by injecting IReportConverterFactory<HtmlReportCell>
-        // and calling Get("no-handlers")
+    // will be available by injecting IReportConverterFactory<HtmlReportCell>
+    // and calling Get("no-handlers")
         .AddReportConverter<HtmlReportCell>("no-handlers")
-        // will be available by injecting IReportConverterFactory<ExcelReportCell>
-        // and calling Get("no-handlers")
+    // will be available by injecting IReportConverterFactory<ExcelReportCell>
+    // and calling Get("no-handlers")
         .AddReportConverter<ExcelReportCell>("no-handlers")
-        // default converter will be available by injecting IReportConverter<HtmlReportCell>
+    // default converter will be available by injecting IReportConverter<HtmlReportCell>
         .AddReportConverter<HtmlReportCell>(o =>
         {
             o.AddFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly);
         })
-        // default converter will be available by injecting IReportConverter<ExcelReportCell>
+    // default converter will be available by injecting IReportConverter<ExcelReportCell>
         .AddReportConverter<ExcelReportCell>(o =>
         {
             o.AddFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly);
