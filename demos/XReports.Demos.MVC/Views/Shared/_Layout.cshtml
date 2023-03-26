@@ -54,6 +54,19 @@
                                 <a class="dropdown-item" asp-controller="CustomTableClass" asp-action="Index">Custom Table Class</a>
                             </div>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Data Sources</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="DataReader" asp-action="Index">IDataReader</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">DI</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="DefaultInjections" asp-action="Index">Default</a>
+                                <a class="dropdown-item" asp-controller="NamedConverters" asp-action="Index">Named Converters</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -67,7 +80,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - XReports.Demos.MVC
+            &copy; 2023 - XReports.Demos.MVC
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

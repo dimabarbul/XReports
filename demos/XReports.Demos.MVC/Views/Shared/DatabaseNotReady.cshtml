@@ -1,0 +1,13 @@
+@{
+    ViewBag.Title = "Database Not Ready";
+    Layout = "_Layout";
+}
+
+<p class="text-center">Database is being set up. Please, be patient.</p>
+
+@section Scripts
+{
+    <script>
+    setTimeout(() => window.location.reload(), 2000);
+    </script>
+}
