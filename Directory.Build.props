@@ -1,7 +1,8 @@
 <Project>
     <PropertyGroup>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AnalysisMode>All</AnalysisMode>
+        <AnalysisMode>Recommended</AnalysisMode>
+        <AnalysisLevel>6.0</AnalysisLevel>
         <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>

@@ -185,7 +185,7 @@ namespace XReports.SchemaBuilders
         private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             foreach (GroupWithPosition group in this.groups
-                .Select(g => this.GetGroupWithPosition(g, columnNames, columnIds))
+                .Select(g => GetGroupWithPosition(g, columnNames, columnIds))
                 .OrderBy(h => h.Group.RowIndex)
                 .ThenBy(h => h.StartIndex))
             {
@@ -216,47 +216,6 @@ namespace XReports.SchemaBuilders
                     headerCells[group.Group.RowIndex + j, group.StartIndex] = this.spannedCell;
                 }
             }
-        }
-
-        private GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
-        {
-            switch (group)
-            {
-                case ComplexHeaderGroupByIndex groupByIndex:
-                    return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
-                case ComplexHeaderGroupByName groupByName:
-                    return new GroupWithPosition(group, this.GetColumnIndex(groupByName.FromColumn, columnNames), this.GetColumnIndex(groupByName.ToColumn, columnNames));
-                case ComplexHeaderGroupByColumnId groupByColumnId:
-                    return new GroupWithPosition(group, this.GetColumnIndex(groupByColumnId.FromColumn, columnIds), this.GetColumnIndex(groupByColumnId.ToColumn, columnIds));
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(group), $"Unexpected type of group: {group.GetType()}");
-            }
-        }
-
-        private int GetColumnIndex(string columnName, IReadOnlyList<string> columnNames)
-        {
-            for (int i = 0; i < columnNames.Count; i++)
-            {
-                if (columnNames[i].Equals(columnName, StringComparison.Ordinal))
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException($"Column name {columnName} not found");
-        }
-
-        private int GetColumnIndex(ColumnId columnId, IReadOnlyList<ColumnId> columnIds)
-        {
-            for (int i = 0; i < columnIds.Count; i++)
-            {
-                if (columnId.Equals(columnIds[i]))
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException($"Column ID {columnId} not found");
         }
 
         private void AddRegularHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
@@ -328,6 +287,47 @@ namespace XReports.SchemaBuilders
             }
 
             return null;
+        }
+
+        private static GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
+        {
+            switch (group)
+            {
+                case ComplexHeaderGroupByIndex groupByIndex:
+                    return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
+                case ComplexHeaderGroupByName groupByName:
+                    return new GroupWithPosition(group, GetColumnIndex(groupByName.FromColumn, columnNames), GetColumnIndex(groupByName.ToColumn, columnNames));
+                case ComplexHeaderGroupByColumnId groupByColumnId:
+                    return new GroupWithPosition(group, GetColumnIndex(groupByColumnId.FromColumn, columnIds), GetColumnIndex(groupByColumnId.ToColumn, columnIds));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(group), $"Unexpected type of group: {group.GetType()}");
+            }
+        }
+
+        private static int GetColumnIndex(string columnName, IReadOnlyList<string> columnNames)
+        {
+            for (int i = 0; i < columnNames.Count; i++)
+            {
+                if (columnNames[i].Equals(columnName, StringComparison.Ordinal))
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException($"Column name {columnName} not found");
+        }
+
+        private static int GetColumnIndex(ColumnId columnId, IReadOnlyList<ColumnId> columnIds)
+        {
+            for (int i = 0; i < columnIds.Count; i++)
+            {
+                if (columnId.Equals(columnIds[i]))
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException($"Column ID {columnId} not found");
         }
 
         private abstract class ComplexHeaderGroup

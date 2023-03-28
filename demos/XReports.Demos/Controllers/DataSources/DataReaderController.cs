@@ -17,78 +17,77 @@ using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;
 
-namespace XReports.Demos.Controllers.DataSources
+namespace XReports.Demos.Controllers.DataSources;
+
+[DatabaseDependent]
+public class DataReaderController : Controller
 {
-    [DatabaseDependent]
-    public class DataReaderController : Controller
+    private readonly AppDbContext appDbContext;
+
+    public DataReaderController(AppDbContext appDbContext)
     {
-        private readonly AppDbContext appDbContext;
+        this.appDbContext = appDbContext;
+    }
 
-        public DataReaderController(AppDbContext appDbContext)
+    public async Task<IActionResult> Index()
+    {
+        using IDataReader dataReader = await this.appDbContext.Database.GetDbConnection()
+            .ExecuteReaderAsync("SELECT Id, FirstName, LastName, Email FROM Users LIMIT 10");
+        IReportTable<ReportCell> reportTable = this.BuildReport(dataReader);
+        IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
+
+        return this.View(new ReportViewModel()
         {
-            this.appDbContext = appDbContext;
-        }
+            ReportTableHtml = tableHtml,
+        });
+    }
 
-        public async Task<IActionResult> Index()
-        {
-            using IDataReader dataReader = await this.appDbContext.Database.GetDbConnection()
-                .ExecuteReaderAsync("SELECT Id, FirstName, LastName, Email FROM Users LIMIT 10");
-            IReportTable<ReportCell> reportTable = this.BuildReport(dataReader);
-            IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
+    public async Task<IActionResult> Download()
+    {
+        using IDataReader dataReader = await this.appDbContext.Database.GetDbConnection()
+            .ExecuteReaderAsync("SELECT Id, FirstName, LastName, Email FROM Users");
+        IReportTable<ReportCell> reportTable = this.BuildReport(dataReader);
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
-            return this.View(new ReportViewModel()
-            {
-                ReportTableHtml = tableHtml,
-            });
-        }
+        Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
+        return this.File(excelStream, Constants.ContentTypeExcel, "DataReader.xlsx");
+    }
 
-        public async Task<IActionResult> Download()
-        {
-            using IDataReader dataReader = await this.appDbContext.Database.GetDbConnection()
-                .ExecuteReaderAsync("SELECT Id, FirstName, LastName, Email FROM Users");
-            IReportTable<ReportCell> reportTable = this.BuildReport(dataReader);
-            IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+    private IReportTable<ReportCell> BuildReport(IDataReader dataReader)
+    {
+        ReportSchemaBuilder<IDataReader> builder = new();
+        builder.AddColumn("ID", x => x.GetInt32(0));
+        builder.AddColumn("First Name", x => x.GetString(1));
+        builder.AddColumn("Last Name", x => x.GetString(2));
+        builder.AddColumn("Email", x => x.GetString(3));
 
-            Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, Constants.ContentTypeExcel, "DataReader.xlsx");
-        }
+        IReportSchema<IDataReader> schema = builder.BuildVerticalSchema();
+        IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataReader.AsEnumerable());
+        return reportTable;
+    }
 
-        private IReportTable<ReportCell> BuildReport(IDataReader dataReader)
-        {
-            ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
-            builder.AddColumn("ID", x => x.GetInt32(0));
-            builder.AddColumn("First Name", x => x.GetString(1));
-            builder.AddColumn("Last Name", x => x.GetString(2));
-            builder.AddColumn("Email", x => x.GetString(3));
+    private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)
+    {
+        ReportConverter<HtmlReportCell> htmlConverter = new();
 
-            IReportSchema<IDataReader> schema = builder.BuildVerticalSchema();
-            IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataReader.AsEnumerable());
-            return reportTable;
-        }
+        return htmlConverter.Convert(reportTable);
+    }
 
-        private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)
-        {
-            ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>();
+    private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
+    {
+        ReportConverter<ExcelReportCell> excelConverter = new();
 
-            return htmlConverter.Convert(reportTable);
-        }
+        return excelConverter.Convert(reportTable);
+    }
 
-        private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
-        {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>();
+    private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+    {
+        return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+    }
 
-            return excelConverter.Convert(reportTable);
-        }
-
-        private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
-        {
-            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            return new EpplusWriter().WriteToStream(reportTable);
-        }
+    private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+    {
+        return new EpplusWriter().WriteToStream(reportTable);
     }
 }

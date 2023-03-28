@@ -15,10 +15,10 @@ namespace XReports.Html.PropertyHandlers
 
         protected override void HandleProperty(AlignmentProperty property, HtmlReportCell cell)
         {
-            cell.Styles.Add("text-align", this.GetAlignmentString(property.Alignment));
+            cell.Styles.Add("text-align", GetAlignmentString(property.Alignment));
         }
 
-        private string GetAlignmentString(Alignment alignment)
+        private static string GetAlignmentString(Alignment alignment)
         {
             return Alignments[alignment];
         }

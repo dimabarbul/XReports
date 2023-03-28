@@ -34,7 +34,6 @@ public class ReportService : IReportService, IDisposable
     private readonly IHtmlStreamWriter htmlStreamWriter;
 
     private readonly Dictionary<Source.ReportCellsSourceProperty, ReportCellProperty> mappedProperties = new();
-    private readonly ReportStructureProvider reportStructureProvider = new();
 
     private IDataReader dataReader;
 
@@ -315,7 +314,7 @@ public class ReportService : IReportService, IDisposable
     {
         ReportSchemaBuilder<Person> reportBuilder = new();
 
-        foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
+        foreach (ReportCellsSource<Person> source in ReportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
             IReportCellProvider<Person> column = (IReportCellProvider<Person>)Activator.CreateInstance(
@@ -327,7 +326,7 @@ public class ReportService : IReportService, IDisposable
             reportBuilder.AddColumn(source.Title, column).AddProperties(this.MapProperties(source.Properties));
         }
 
-        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
+        reportBuilder.AddGlobalProperties(this.MapProperties(ReportStructureProvider.GetGlobalProperties()));
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.data);
 
@@ -338,7 +337,7 @@ public class ReportService : IReportService, IDisposable
     {
         ReportSchemaBuilder<IDataReader> reportBuilder = new();
 
-        foreach (ReportCellsSource<IDataReader> source in this.reportStructureProvider.GetDataReaderCellsSources())
+        foreach (ReportCellsSource<IDataReader> source in ReportStructureProvider.GetDataReaderCellsSources())
         {
             Type valueType = source.ValueType;
             IReportCellProvider<IDataReader> column = (IReportCellProvider<IDataReader>)Activator.CreateInstance(
@@ -350,7 +349,7 @@ public class ReportService : IReportService, IDisposable
             reportBuilder.AddColumn(source.Title, column).AddProperties(this.MapProperties(source.Properties));
         }
 
-        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
+        reportBuilder.AddGlobalProperties(this.MapProperties(ReportStructureProvider.GetGlobalProperties()));
 
         this.dataReader = new DataTableReader(this.dataTable);
         IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader.AsEnumerable());
@@ -362,7 +361,7 @@ public class ReportService : IReportService, IDisposable
     {
         ReportSchemaBuilder<Person> reportBuilder = new();
 
-        foreach (ReportCellsSource<Person> source in this.reportStructureProvider.GetEntitiesCellsSources())
+        foreach (ReportCellsSource<Person> source in ReportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
             IReportCellProvider<Person> row = (IReportCellProvider<Person>)Activator.CreateInstance(
@@ -374,7 +373,7 @@ public class ReportService : IReportService, IDisposable
             reportBuilder.AddColumn(source.Title, row).AddProperties(this.MapProperties(source.Properties));
         }
 
-        reportBuilder.AddGlobalProperties(this.MapProperties(this.reportStructureProvider.GetGlobalProperties()));
+        reportBuilder.AddGlobalProperties(this.MapProperties(ReportStructureProvider.GetGlobalProperties()));
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(this.data);
 

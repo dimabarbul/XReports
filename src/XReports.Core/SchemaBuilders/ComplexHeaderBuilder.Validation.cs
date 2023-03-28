@@ -10,7 +10,7 @@ namespace XReports.SchemaBuilders
         private void Validate(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             GroupWithPosition[] groupsWithPositions = this.groups
-                .Select(g => this.GetGroupWithPosition(g, columnNames, columnIds))
+                .Select(g => GetGroupWithPosition(g, columnNames, columnIds))
                 .ToArray();
 
             this.ValidateColumnIndexes(groupsWithPositions, columnNames.Count);

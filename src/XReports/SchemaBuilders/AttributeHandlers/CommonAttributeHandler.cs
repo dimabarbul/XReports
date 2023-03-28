@@ -9,7 +9,7 @@ namespace XReports.SchemaBuilders.AttributeHandlers
     {
         public void Handle<TSourceEntity>(IReportSchemaBuilder<TSourceEntity> schemaBuilder, IReportColumnBuilder<TSourceEntity> columnBuilder, Attribute attribute)
         {
-            ReportCellProperty property = this.GetCellProperty(attribute);
+            ReportCellProperty property = GetCellProperty(attribute);
             if (property == null)
             {
                 return;
@@ -26,7 +26,7 @@ namespace XReports.SchemaBuilders.AttributeHandlers
             }
         }
 
-        private ReportCellProperty GetCellProperty(Attribute attribute)
+        private static ReportCellProperty GetCellProperty(Attribute attribute)
         {
             ReportCellProperty property = null;
 

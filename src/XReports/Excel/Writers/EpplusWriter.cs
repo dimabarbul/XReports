@@ -195,7 +195,7 @@ namespace XReports.Excel.Writers
         {
             if (cell.HorizontalAlignment != null)
             {
-                worksheetCell.Style.HorizontalAlignment = this.GetAlignment(cell.HorizontalAlignment.Value);
+                worksheetCell.Style.HorizontalAlignment = GetAlignment(cell.HorizontalAlignment.Value);
             }
 
             if (!string.IsNullOrEmpty(cell.NumberFormat))
@@ -260,7 +260,7 @@ namespace XReports.Excel.Writers
             this.WriteReportToWorksheet(table, worksheet, this.StartRow, this.StartColumn);
         }
 
-        private ExcelHorizontalAlignment GetAlignment(Alignment alignment)
+        private static ExcelHorizontalAlignment GetAlignment(Alignment alignment)
         {
             switch (alignment)
             {

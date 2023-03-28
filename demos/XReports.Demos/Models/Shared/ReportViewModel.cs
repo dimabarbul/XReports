@@ -1,7 +1,6 @@
-namespace XReports.Demos.Models.Shared
+namespace XReports.Demos.Models.Shared;
+
+public class ReportViewModel
 {
-    public class ReportViewModel
-    {
-        public string ReportTableHtml { get; set; }
-    }
+    public string ReportTableHtml { get; set; }
 }

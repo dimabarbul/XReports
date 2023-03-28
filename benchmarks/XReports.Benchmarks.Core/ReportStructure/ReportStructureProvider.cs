@@ -7,9 +7,9 @@ using XReports.Benchmarks.Core.ReportStructure.Models.Properties;
 
 namespace XReports.Benchmarks.Core.ReportStructure;
 
-public class ReportStructureProvider
+public static class ReportStructureProvider
 {
-    public IEnumerable<ReportCellsSource<Person>> GetEntitiesCellsSources()
+    public static IEnumerable<ReportCellsSource<Person>> GetEntitiesCellsSources()
     {
         CustomFormatProperty customFormatProperty = new();
         BoldProperty boldProperty = new();
@@ -60,7 +60,7 @@ public class ReportStructureProvider
         yield return new TypedReportCellsSource<Person, string>("Type", e => e.Vehicle.Type);
     }
 
-    public IEnumerable<ReportCellsSource<IDataReader>> GetDataReaderCellsSources()
+    public static IEnumerable<ReportCellsSource<IDataReader>> GetDataReaderCellsSources()
     {
         CustomFormatProperty customFormatProperty = new();
         BoldProperty boldProperty = new();
@@ -111,7 +111,7 @@ public class ReportStructureProvider
         yield return new TypedReportCellsSource<IDataReader, string>("Type", e => e.GetString(35));
     }
 
-    public IEnumerable<ReportCellsSourceProperty> GetGlobalProperties()
+    public static IEnumerable<ReportCellsSourceProperty> GetGlobalProperties()
     {
         yield return new SameColumnFormatProperty();
     }

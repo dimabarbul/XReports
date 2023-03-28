@@ -39,7 +39,7 @@ namespace XReports.Html.Writers
             stringBuilder.Append("</").Append(tableCellTagName).Append('>');
         }
 
-        protected void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
+        protected virtual void WriteAttributes(StringBuilder stringBuilder, HtmlReportCell cell)
         {
             if (cell.RowSpan > 1)
             {
@@ -73,7 +73,7 @@ namespace XReports.Html.Writers
             }
         }
 
-        protected void WriteContent(StringBuilder stringBuilder, HtmlReportCell cell)
+        protected virtual void WriteContent(StringBuilder stringBuilder, HtmlReportCell cell)
         {
             string value = cell.GetValue<string>();
             if (!cell.IsHtml)
@@ -84,7 +84,7 @@ namespace XReports.Html.Writers
             stringBuilder.Append(value);
         }
 
-        protected void WriteAttribute(StringBuilder stringBuilder, string name, string value)
+        protected virtual void WriteAttribute(StringBuilder stringBuilder, string name, string value)
         {
             stringBuilder.Append(name).Append(@"=""").Append(HttpUtility.HtmlAttributeEncode(value)).Append(@""" ");
         }

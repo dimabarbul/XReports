@@ -10,75 +10,74 @@ using XReports.Excel.Writers;
 using XReports.SchemaBuilders;
 using XReports.Table;
 
-namespace XReports.Demos.Controllers.EpplusWriterExtensions
+namespace XReports.Demos.Controllers.EpplusWriterExtensions;
+
+public class AutoFitController : Controller
 {
-    public class AutoFitController : Controller
+    private const int RecordsCount = 10;
+
+    public IActionResult Index()
     {
-        private const int RecordsCount = 10;
+        return this.View();
+    }
 
-        public IActionResult Index()
+    public IActionResult Download()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
+        return this.File(excelStream, Constants.ContentTypeExcel, "AutoFit.xlsx");
+    }
+
+    private IReportTable<ReportCell> BuildReport()
+    {
+        ReportSchemaBuilder<Entity> reportBuilder = new();
+        reportBuilder.AddColumn("Name", e => e.Name);
+        reportBuilder.AddColumn("Last Score", e => e.LastScore);
+        reportBuilder.AddColumn("Score", e => e.Score);
+
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
+        return reportTable;
+    }
+
+    private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
+    {
+        ReportConverter<ExcelReportCell> excelConverter = new(Array.Empty<IPropertyHandler<ExcelReportCell>>());
+
+        return excelConverter.Convert(reportTable);
+    }
+
+    private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+    {
+        EpplusWriter writer = new AutoFitExcelWriter();
+
+        return writer.WriteToStream(reportTable);
+    }
+
+    private IEnumerable<Entity> GetData()
+    {
+        return new Faker<Entity>()
+            .RuleFor(e => e.Name, f => f.Name.FullName())
+            .RuleFor(e => e.LastScore, f => f.Random.Int(1, 10))
+            .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
+            .Generate(RecordsCount);
+    }
+
+    private class Entity
+    {
+        public string Name { get; set; }
+
+        public int LastScore { get; set; }
+
+        public decimal Score { get; set; }
+    }
+
+    private class AutoFitExcelWriter : EpplusWriter
+    {
+        protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress header, ExcelAddress body)
         {
-            return this.View();
-        }
-
-        public IActionResult Download()
-        {
-            IReportTable<ReportCell> reportTable = this.BuildReport();
-            IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
-
-            Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, Constants.ContentTypeExcel, "AutoFit.xlsx");
-        }
-
-        private IReportTable<ReportCell> BuildReport()
-        {
-            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
-            reportBuilder.AddColumn("Last Score", e => e.LastScore);
-            reportBuilder.AddColumn("Score", e => e.Score);
-
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
-            return reportTable;
-        }
-
-        private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
-        {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(Array.Empty<IPropertyHandler<ExcelReportCell>>());
-
-            return excelConverter.Convert(reportTable);
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            EpplusWriter writer = new AutoFitExcelWriter();
-
-            return writer.WriteToStream(reportTable);
-        }
-
-        private IEnumerable<Entity> GetData()
-        {
-            return new Faker<Entity>()
-                .RuleFor(e => e.Name, f => f.Name.FullName())
-                .RuleFor(e => e.LastScore, f => f.Random.Int(1, 10))
-                .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
-                .Generate(RecordsCount);
-        }
-
-        private class Entity
-        {
-            public string Name { get; set; }
-
-            public int LastScore { get; set; }
-
-            public decimal Score { get; set; }
-        }
-
-        private class AutoFitExcelWriter : EpplusWriter
-        {
-            protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress header, ExcelAddress body)
-            {
-                worksheet.Cells[header.Start.Row, header.Start.Column, body.End.Row, body.End.Column].AutoFitColumns();
-            }
+            worksheet.Cells[header.Start.Row, header.Start.Column, body.End.Row, body.End.Column].AutoFitColumns();
         }
     }
 }

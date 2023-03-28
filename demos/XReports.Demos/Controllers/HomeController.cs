@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace XReports.Demos.Controllers
+namespace XReports.Demos.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return this.View();
-        }
+        return this.View();
     }
 }

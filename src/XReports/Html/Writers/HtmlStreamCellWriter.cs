@@ -42,7 +42,7 @@ namespace XReports.Html.Writers
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
 
-        protected async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        protected virtual async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             if (cell.RowSpan != 1)
             {
@@ -76,7 +76,7 @@ namespace XReports.Html.Writers
             }
         }
 
-        protected Task WriteContentAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        protected virtual Task WriteContentAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             string value = cell.GetValue<string>();
             if (!cell.IsHtml)
@@ -87,7 +87,7 @@ namespace XReports.Html.Writers
             return streamWriter.WriteAsync(value);
         }
 
-        protected async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
+        protected virtual async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
         {
             await streamWriter.WriteAsync(name).ConfigureAwait(false);
             await streamWriter.WriteAsync(@"=""").ConfigureAwait(false);

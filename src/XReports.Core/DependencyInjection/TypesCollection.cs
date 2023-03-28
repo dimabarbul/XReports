@@ -29,7 +29,7 @@ namespace XReports.DependencyInjection
         {
             foreach (Type type in types)
             {
-                this.ValidateType(type);
+                ValidateType(type);
             }
 
             this.types.AddRange(types);
@@ -50,7 +50,7 @@ namespace XReports.DependencyInjection
 
         public TypesCollection<TBaseType> AddFromAssembly(Assembly assembly, Type baseType)
         {
-            this.ValidateBaseType(baseType);
+            ValidateBaseType(baseType);
 
             this.assemblies.Add((assembly, baseType));
 
@@ -64,7 +64,7 @@ namespace XReports.DependencyInjection
 
         public TypesCollection<TBaseType> AddByBaseType(Type type)
         {
-            this.ValidateBaseType(type);
+            ValidateBaseType(type);
 
             this.baseTypes.Add(type);
 
@@ -80,7 +80,7 @@ namespace XReports.DependencyInjection
         {
             foreach (Type type in types)
             {
-                this.ValidateType(type);
+                ValidateType(type);
             }
 
             this.exclusions.AddRange(types);
@@ -103,7 +103,7 @@ namespace XReports.DependencyInjection
             return AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(this.IsTypeValid)
+                .Where(IsTypeValid)
                 .Where(interfaceType.IsAssignableFrom)
                 .ToArray();
         }
@@ -111,18 +111,18 @@ namespace XReports.DependencyInjection
         private IEnumerable<Type> GetTypesInAssembly((Assembly, Type) assemblyLoadInfo)
         {
             return assemblyLoadInfo.Item1.GetTypes()
-                .Where(this.IsTypeValid)
+                .Where(IsTypeValid)
                 .Where(assemblyLoadInfo.Item2.IsAssignableFrom);
         }
 
-        private bool IsTypeValid(Type type)
+        private static bool IsTypeValid(Type type)
         {
             return type.IsClass && !type.IsAbstract && typeof(TBaseType).IsAssignableFrom(type);
         }
 
-        private void ValidateType(Type type)
+        private static void ValidateType(Type type)
         {
-            if (!this.IsTypeValid(type))
+            if (!IsTypeValid(type))
             {
                 throw new ArgumentException(
                     $"Type {type} is invalid. It should be non-abstract class that implements {typeof(TBaseType)}.",
@@ -130,9 +130,9 @@ namespace XReports.DependencyInjection
             }
         }
 
-        private void ValidateBaseType(Type baseType)
+        private static void ValidateBaseType(Type baseType)
         {
-            if (!this.IsBaseTypeValid(baseType))
+            if (!IsBaseTypeValid(baseType))
             {
                 throw new ArgumentException(
                     $"{baseType} should be assignable to {typeof(TBaseType)}",
@@ -140,7 +140,7 @@ namespace XReports.DependencyInjection
             }
         }
 
-        private bool IsBaseTypeValid(Type baseType)
+        private static bool IsBaseTypeValid(Type baseType)
         {
             return typeof(TBaseType).IsAssignableFrom(baseType);
         }
