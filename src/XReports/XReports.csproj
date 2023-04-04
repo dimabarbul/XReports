@@ -9,6 +9,7 @@
     <PackageProjectUrl>https://github.com/dimabarbul/XReports</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dimabarbul/XReports</RepositoryUrl>
     <Description>Extensible library for building reports. Includes some general properties, writers etc.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

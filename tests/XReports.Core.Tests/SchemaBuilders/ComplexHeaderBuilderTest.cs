@@ -816,7 +816,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         {
             return new ComplexHeaderCell()
             {
-                Title = title,
+                Content = title,
                 ColumnSpan = columnSpan,
                 RowSpan = rowSpan,
                 IsComplexHeaderCell = true,
@@ -827,7 +827,7 @@ namespace XReports.Core.Tests.SchemaBuilders
         {
             return new ComplexHeaderCell()
             {
-                Title = title,
+                Content = title,
                 ColumnSpan = columnSpan,
                 RowSpan = rowSpan,
                 IsComplexHeaderCell = false,

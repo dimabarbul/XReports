@@ -5,7 +5,10 @@ using XReports.Schema;
 
 namespace XReports.SchemaBuilders
 {
-    public partial class ComplexHeaderBuilder : IComplexHeaderBuilder
+    /// <summary>
+    /// Validation methods.
+    /// </summary>
+    public partial class ComplexHeaderBuilder
     {
         private void Validate(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
@@ -23,7 +26,7 @@ namespace XReports.SchemaBuilders
                 if (group.EndIndex >= columnsCount)
                 {
                     throw new ArgumentException(
-                        $"Group {group.Group.Title} has end index {group.EndIndex} which is greater than columns count {columnsCount}");
+                        $"Group {group.Group.Content} has end index {group.EndIndex} which is greater than columns count {columnsCount}");
                 }
             }
         }

@@ -30,13 +30,23 @@ namespace XReports.Core.Tests.Table
         }
 
         [Fact]
-        public void GetValueShouldThrowWhenValueIsNull()
+        public void GetValueShouldThrowWhenValueIsNullAndTargetTypeIsValueType()
         {
             ReportCell reportCell = new ReportCell();
             reportCell.SetValue<string>(null);
 
             Action action = () => reportCell.GetValue<int>();
             action.Should().ThrowExactly<InvalidCastException>();
+        }
+
+        [Fact]
+        public void GetValueShouldReturnNullWhenValueIsNullAndTargetTypeIsReferenceType()
+        {
+            ReportCell reportCell = new ReportCell();
+            reportCell.SetValue<string>(null);
+
+            object actual = reportCell.GetValue<object>();
+            actual.Should().BeNull();
         }
 
         [Fact]

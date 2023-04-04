@@ -4,7 +4,7 @@ using System.Data;
 
 namespace XReports.DataReader
 {
-    public class EnumerableDataReader : IEnumerable<IDataReader>
+    internal class EnumerableDataReader : IEnumerable<IDataReader>
     {
         private readonly IDataReader dataReader;
 

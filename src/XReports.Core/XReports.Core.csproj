@@ -10,6 +10,7 @@
     <RootNamespace>XReports</RootNamespace>
     <Title>XReports.Core</Title>
     <Description>Extensible library for building reports. Only basic classes and abstractions are included.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

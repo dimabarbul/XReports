@@ -4,18 +4,18 @@ using XReports.Table;
 
 namespace XReports.Schema
 {
-    internal class HorizontalReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
+    internal class HorizontalReportSchema<TSourceItem> : IReportSchema<TSourceItem>
     {
-        private readonly IReadOnlyList<IReportColumn<TSourceEntity>> headerRows;
-        private readonly IReadOnlyList<IReportColumn<TSourceEntity>> columns;
+        private readonly IReadOnlyList<IReportColumn<TSourceItem>> headerRows;
+        private readonly IReadOnlyList<IReportColumn<TSourceItem>> columns;
         private readonly IReadOnlyList<ReportTableProperty> tableProperties;
         private readonly ComplexHeaderCell[,] complexHeader;
         private readonly IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties;
         private readonly IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties;
 
         public HorizontalReportSchema(
-            IReadOnlyList<IReportColumn<TSourceEntity>> headerRows,
-            IReadOnlyList<IReportColumn<TSourceEntity>> columns,
+            IReadOnlyList<IReportColumn<TSourceItem>> headerRows,
+            IReadOnlyList<IReportColumn<TSourceItem>> columns,
             IReadOnlyList<ReportTableProperty> tableProperties,
             ComplexHeaderCell[,] complexHeader,
             IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
@@ -29,7 +29,7 @@ namespace XReports.Schema
             this.commonComplexHeaderProperties = commonComplexHeaderProperties;
         }
 
-        public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
+        public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceItem> source)
         {
             ReportCell[][] complexHeader = this.complexHeader.CreateCells(
                 this.columns,
@@ -45,7 +45,7 @@ namespace XReports.Schema
             };
         }
 
-        private IEnumerable<IEnumerable<ReportCell>> GetHeaderRows(IEnumerable<TSourceEntity> source, ReportCell[][] complexHeader)
+        private IEnumerable<IEnumerable<ReportCell>> GetHeaderRows(IEnumerable<TSourceItem> source, ReportCell[][] complexHeader)
         {
             return this.headerRows
                 .Select(row =>
@@ -60,7 +60,7 @@ namespace XReports.Schema
                 });
         }
 
-        private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceEntity> source, ReportCell[][] complexHeader)
+        private IEnumerable<IEnumerable<ReportCell>> GetRows(IEnumerable<TSourceItem> source, ReportCell[][] complexHeader)
         {
             return this.columns
                 .Select(

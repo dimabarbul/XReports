@@ -29,12 +29,12 @@ namespace XReports.Schema
             this.headerProcessors = headerProcessors;
         }
 
-        public ReportCell CreateCell(TSourceEntity entity)
+        public ReportCell CreateCell(TSourceEntity item)
         {
-            ReportCell cell = this.provider.GetCell(entity);
+            ReportCell cell = this.provider.GetCell(item);
 
             this.AddProperties(cell);
-            this.RunProcessors(cell, entity);
+            this.RunProcessors(cell, item);
 
             return cell;
         }

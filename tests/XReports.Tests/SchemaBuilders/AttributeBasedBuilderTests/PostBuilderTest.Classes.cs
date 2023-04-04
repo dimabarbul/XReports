@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using XReports.SchemaBuilders;
 using XReports.SchemaBuilders.Attributes;
-using XReports.SchemaBuilders.ValueProviders;
+using XReports.SchemaBuilders.ReportCellProviders.ValueProviders;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {

@@ -181,7 +181,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             ReportSchemaBuilder<int> schemaBuilder = this.CreateSchemaBuilder(3);
             schemaBuilder.AddComplexHeader(0, "Group", 0, 2);
 
-            Action action = () => schemaBuilder.AddComplexHeaderProperties(title: null, new CustomProperty1(), new CustomProperty2());
+            Action action = () => schemaBuilder.AddComplexHeaderProperties(content: null, new CustomProperty1(), new CustomProperty2());
 
             action.Should().ThrowExactly<ArgumentNullException>();
         }

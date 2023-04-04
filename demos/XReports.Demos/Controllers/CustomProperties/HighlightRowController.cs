@@ -102,13 +102,13 @@ public class HighlightRowController : Controller
         private static readonly ColorProperty Bad = new(null, Color.Red);
         private static readonly ColorProperty Good = new(null, Color.Lime);
 
-        public void Process(ReportCell cell, Entity entity)
+        public void Process(ReportCell cell, Entity item)
         {
-            if (entity.Score < 3)
+            if (item.Score < 3)
             {
                 cell.AddProperty(Bad);
             }
-            else if (entity.Score >= 9)
+            else if (item.Score >= 9)
             {
                 cell.AddProperty(Good);
             }

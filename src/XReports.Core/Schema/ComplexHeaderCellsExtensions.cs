@@ -3,8 +3,16 @@ using XReports.Table;
 
 namespace XReports.Schema
 {
+    /// <summary>
+    /// Extensions for complex header which is a two-dimensional array of complex header cells.
+    /// </summary>
     public static class ComplexHeaderCellsExtensions
     {
+        /// <summary>
+        /// Transposes complex header, so columns become rows and vice versa.
+        /// </summary>
+        /// <param name="header">Complex header to transpose.</param>
+        /// <returns>Transposed complex header.</returns>
         public static ComplexHeaderCell[,] Transpose(this ComplexHeaderCell[,] header)
         {
             int rowsCount = header.GetLength(0);
@@ -22,7 +30,7 @@ namespace XReports.Schema
 
                     result[columnIndex, rowIndex] = new ComplexHeaderCell()
                     {
-                        Title = header[rowIndex, columnIndex].Title,
+                        Content = header[rowIndex, columnIndex].Content,
                         ColumnSpan = header[rowIndex, columnIndex].RowSpan,
                         RowSpan = header[rowIndex, columnIndex].ColumnSpan,
                         IsComplexHeaderCell = header[rowIndex, columnIndex].IsComplexHeaderCell,
@@ -33,9 +41,19 @@ namespace XReports.Schema
             return result;
         }
 
-        public static ReportCell[][] CreateCells<TSourceEntity>(
+        /// <summary>
+        /// Creates report cells for complex header.
+        /// </summary>
+        /// <param name="complexHeader">Complex header to create cells for.</param>
+        /// <param name="columns">Report columns.</param>
+        /// <param name="complexHeaderProperties">Complex header properties. Dictionary has following structure: key is content of cell to apply properties, value - properties to apply. Applies only to cells generated from complex header groups, not from report column headers.</param>
+        /// <param name="commonComplexHeaderProperties">Properties to apply to all complex header cells. Applies only to cells generated from complex header groups, not from report column headers.</param>
+        /// <param name="isTransposed">Is complex header transposed. This impacts how report column is determined for complex header cell.</param>
+        /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
+        /// <returns>Report cells for complex header.</returns>
+        public static ReportCell[][] CreateCells<TSourceItem>(
             this ComplexHeaderCell[,] complexHeader,
-            IReadOnlyList<IReportColumn<TSourceEntity>> columns,
+            IReadOnlyList<IReportColumn<TSourceItem>> columns,
             IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
             IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties,
             bool isTransposed)
@@ -82,7 +100,8 @@ namespace XReports.Schema
             IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
             ComplexHeaderCell headerCell)
         {
-            ReportCell cell = ReportCell.FromValue(headerCell.Title);
+            ReportCell cell = new ReportCell();
+            cell.SetValue(headerCell.Content);
             cell.ColumnSpan = headerCell.ColumnSpan;
             cell.RowSpan = headerCell.RowSpan;
 
@@ -91,9 +110,9 @@ namespace XReports.Schema
                 cell.AddProperty(property);
             }
 
-            if (complexHeaderProperties.ContainsKey(headerCell.Title))
+            if (complexHeaderProperties.ContainsKey(headerCell.Content))
             {
-                foreach (ReportCellProperty property in complexHeaderProperties[headerCell.Title])
+                foreach (ReportCellProperty property in complexHeaderProperties[headerCell.Content])
                 {
                     cell.AddProperty(property);
                 }

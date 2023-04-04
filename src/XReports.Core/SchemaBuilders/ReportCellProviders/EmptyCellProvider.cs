@@ -2,11 +2,16 @@ using XReports.Table;
 
 namespace XReports.SchemaBuilders.ReportCellProviders
 {
-    public class EmptyCellProvider<TSourceEntity> : ReportCellProvider<TSourceEntity, string>
+    /// <summary>
+    /// Provider of empty cells.
+    /// </summary>
+    /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
+    public class EmptyCellProvider<TSourceItem> : ReportCellProvider<TSourceItem, string>
     {
-        public override ReportCell GetCell(TSourceEntity entity)
+        /// <inheritdoc/>
+        public override ReportCell GetCell(TSourceItem item)
         {
-            return this.CreateCell(string.Empty);
+            return this.GetCell(string.Empty);
         }
     }
 }
