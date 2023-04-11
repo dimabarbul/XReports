@@ -4,8 +4,12 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Excel.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="DateTimeFormatProperty"/> during conversion to Excel.
+    /// </summary>
     public class DateTimeFormatPropertyExcelHandler : PropertyHandler<DateTimeFormatProperty, ExcelReportCell>
     {
+        /// <inheritdoc />
         protected override void HandleProperty(DateTimeFormatProperty property, ExcelReportCell cell)
         {
             object value = cell.GetUnderlyingValue();

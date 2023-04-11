@@ -8,14 +8,14 @@ using XReports.Table;
 namespace XReports.DependencyInjection
 {
     /// <summary>
-    /// Extension methods for registering XReport class in dependency injection service collection.
+    /// Extension methods for registering XReport classes in dependency injection service collection.
     /// </summary>
     public static class XReportsDI
     {
         /// <summary>
         /// Registers report converter in <see cref="IServiceCollection"/>.
         /// </summary>
-        /// <param name="services">Service collection to register classes int.</param>
+        /// <param name="services">Service collection to register classes in.</param>
         /// <param name="configure">Action that configures property handlers that will be used by the report converter.</param>
         /// <param name="lifetime">Service lifetime of the report converter.</param>
         /// <typeparam name="TReportCell">Type of cells of report the converter converts to.</typeparam>
@@ -37,7 +37,7 @@ namespace XReports.DependencyInjection
         /// <summary>
         /// Registers report converter in <see cref="IServiceCollection"/>.
         /// </summary>
-        /// <param name="services">Service collection to register classes int.</param>
+        /// <param name="services">Service collection to register classes in.</param>
         /// <param name="lifetime">Service lifetime of the report converter.</param>
         /// <typeparam name="TReportCell">Type of cells of report the converter converts to.</typeparam>
         /// <typeparam name="TPropertyHandler">Base type of handlers to use in the converter. All assemblies into current application domain are scanned.</typeparam>
@@ -59,7 +59,7 @@ namespace XReports.DependencyInjection
         /// <summary>
         /// Registers named report converter in <see cref="IServiceCollection"/> through <see cref="IReportConverterFactory{TReportCell}"/>.
         /// </summary>
-        /// <param name="services">Service collection to register classes int.</param>
+        /// <param name="services">Service collection to register classes in.</param>
         /// <param name="name">Name by which the converter will be available in <see cref="IReportConverterFactory{TReportCell}"/>.</param>
         /// <param name="configure">Action that configures property handlers that will be used by the report converter.</param>
         /// <param name="lifetime">Service lifetime of the report converter.</param>
@@ -81,7 +81,7 @@ namespace XReports.DependencyInjection
         /// <summary>
         /// Registers named report converter in <see cref="IServiceCollection"/> through <see cref="IReportConverterFactory{TReportCell}"/>.
         /// </summary>
-        /// <param name="services">Service collection to register classes int.</param>
+        /// <param name="services">Service collection to register classes in.</param>
         /// <param name="name">Name by which the converter will be available in <see cref="IReportConverterFactory{TReportCell}"/>.</param>
         /// <param name="lifetime">Service lifetime of the report converter.</param>
         /// <typeparam name="TReportCell">Type of cells of report the converter converts to.</typeparam>

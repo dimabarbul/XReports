@@ -6,12 +6,14 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Html.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="PercentFormatProperty"/> during conversion to HTML.
+    /// </summary>
     public class PercentFormatPropertyHtmlHandler : PropertyHandler<PercentFormatProperty, HtmlReportCell>
     {
         private readonly Dictionary<(bool, int), string> formatCache = new Dictionary<(bool, int), string>();
 
-        public override int Priority => (int)HtmlPropertyHandlerPriority.Text;
-
+        /// <inheritdoc />
         protected override void HandleProperty(PercentFormatProperty property, HtmlReportCell cell)
         {
             decimal? value = cell.GetNullableValue<decimal>();

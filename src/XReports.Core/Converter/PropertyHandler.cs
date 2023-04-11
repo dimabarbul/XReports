@@ -11,10 +11,10 @@ namespace XReports.Converter
         where TProperty : ReportCellProperty
         where TReportCell : ReportCell
     {
-        /// <inheritdoc cref="IPropertyHandler{TResultReportCell}.Priority"/> />
+        /// <inheritdoc />
         public virtual int Priority => 0;
 
-        /// <inheritdoc cref="IPropertyHandler{TResultReportCell}.Handle" />
+        /// <inheritdoc />
         public bool Handle(ReportCellProperty property, TReportCell cell)
         {
             if (property is TProperty typedProperty)

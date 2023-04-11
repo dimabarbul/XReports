@@ -9,7 +9,7 @@ namespace XReports.Tests.DependencyInjection
     {
         private class Formatter : IEpplusFormatter
         {
-            public void Format(ExcelRange worksheetCell, ExcelReportCell cell)
+            public void Format(ExcelRange excelRange, ExcelReportCell cell)
             {
                 throw new System.NotImplementedException();
             }
@@ -17,7 +17,7 @@ namespace XReports.Tests.DependencyInjection
 
         private class BoldFormatter : EpplusFormatter<BoldProperty>
         {
-            protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, BoldProperty property)
+            protected override void Format(ExcelRange excelRange, ExcelReportCell cell, BoldProperty property)
             {
                 throw new System.NotImplementedException();
             }
@@ -25,7 +25,7 @@ namespace XReports.Tests.DependencyInjection
 
         private abstract class AbstractFormatter : IEpplusFormatter
         {
-            public abstract void Format(ExcelRange worksheetCell, ExcelReportCell cell);
+            public abstract void Format(ExcelRange excelRange, ExcelReportCell cell);
         }
     }
 }

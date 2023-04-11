@@ -171,7 +171,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Alignment(Alignment.Center)]
             public int Id { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<WithPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<WithPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<WithPostBuilder> builder, BuildOptions options)
                 {

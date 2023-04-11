@@ -157,10 +157,10 @@ public class BasicHorizontalReportController : Controller
 
     private class ExcelIndentationPropertyFormatter : EpplusFormatter<IndentationProperty>
     {
-        protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, IndentationProperty property)
+        protected override void Format(ExcelRange excelRange, ExcelReportCell cell, IndentationProperty property)
         {
-            worksheetCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-            worksheetCell.Style.Indent = property.IndentLevel;
+            excelRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            excelRange.Style.Indent = property.IndentLevel;
         }
     }
 }

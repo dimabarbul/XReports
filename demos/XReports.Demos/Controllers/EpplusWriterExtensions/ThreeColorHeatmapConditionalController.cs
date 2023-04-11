@@ -167,9 +167,9 @@ public class ThreeColorHeatmapConditionalController : Controller
 
     private class ConditionalFormattingThreeColorScaleFormatter : EpplusFormatter<ThreeColorHeatmapProperty>
     {
-        protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, ThreeColorHeatmapProperty property)
+        protected override void Format(ExcelRange excelRange, ExcelReportCell cell, ThreeColorHeatmapProperty property)
         {
-            IExcelConditionalFormattingThreeColorScale threeColorScale = worksheetCell.ConditionalFormatting.AddThreeColorScale();
+            IExcelConditionalFormattingThreeColorScale threeColorScale = excelRange.ConditionalFormatting.AddThreeColorScale();
             threeColorScale.LowValue.Type = eExcelConditionalFormattingValueObjectType.Num;
             threeColorScale.LowValue.Value = (double)property.MinimumValue;
             threeColorScale.LowValue.Color = property.MinimumColor;

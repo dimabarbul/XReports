@@ -5,10 +5,14 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Excel.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="DecimalPrecisionProperty"/> during conversion to Excel.
+    /// </summary>
     public class DecimalPrecisionPropertyExcelHandler : PropertyHandler<DecimalPrecisionProperty, ExcelReportCell>
     {
         private readonly Dictionary<(bool, int), string> formatCache = new Dictionary<(bool, int), string>();
 
+        /// <inheritdoc />
         protected override void HandleProperty(DecimalPrecisionProperty property, ExcelReportCell cell)
         {
             // Ensure the value is convertible to decimal.

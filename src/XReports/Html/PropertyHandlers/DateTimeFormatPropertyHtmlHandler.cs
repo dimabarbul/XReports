@@ -5,8 +5,12 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Html.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="DateTimeFormatProperty"/> during conversion to HTML.
+    /// </summary>
     public class DateTimeFormatPropertyHtmlHandler : PropertyHandler<DateTimeFormatProperty, HtmlReportCell>
     {
+        /// <inheritdoc />
         protected override void HandleProperty(DateTimeFormatProperty property, HtmlReportCell cell)
         {
             object value = cell.GetUnderlyingValue();

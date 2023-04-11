@@ -6,10 +6,14 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Excel.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="PercentFormatProperty"/> during conversion to Excel.
+    /// </summary>
     public class PercentFormatPropertyExcelHandler : PropertyHandler<PercentFormatProperty, ExcelReportCell>
     {
         private readonly Dictionary<PercentFormatProperty, string> formatCache = new Dictionary<PercentFormatProperty, string>();
 
+        /// <inheritdoc />
         protected override void HandleProperty(PercentFormatProperty property, ExcelReportCell cell)
         {
             // Ensure the value is convertible to decimal.

@@ -3,8 +3,12 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Excel.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="MaxLengthProperty"/> during conversion to Excel.
+    /// </summary>
     public class MaxLengthPropertyExcelHandler : PropertyHandler<MaxLengthProperty, ExcelReportCell>
     {
+        /// <inheritdoc />
         protected override void HandleProperty(MaxLengthProperty property, ExcelReportCell cell)
         {
             string text = cell.GetValue<string>();

@@ -4,11 +4,15 @@ using XReports.Table;
 
 namespace XReports.SchemaBuilders.AttributeHandlers
 {
+    /// <summary>
+    /// Handler of <see cref="CustomPropertyAttribute"/>. Assigns property of type specified by <see cref="CustomPropertyAttribute.PropertyType"/>.
+    /// </summary>
     public class CustomPropertyAttributeHandler : AttributeHandler<CustomPropertyAttribute>
     {
-        protected override void HandleAttribute<TSourceEntity>(
-            IReportSchemaBuilder<TSourceEntity> builder,
-            IReportColumnBuilder<TSourceEntity> columnBuilder,
+        /// <inheritdoc />
+        protected override void HandleAttribute<TSourceItem>(
+            IReportSchemaBuilder<TSourceItem> schemaBuilder,
+            IReportColumnBuilder<TSourceItem> columnBuilder,
             CustomPropertyAttribute attribute)
         {
             ReportCellProperty property = (ReportCellProperty)Activator.CreateInstance(attribute.PropertyType);

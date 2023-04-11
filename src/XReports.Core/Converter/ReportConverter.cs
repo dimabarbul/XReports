@@ -36,7 +36,7 @@ namespace XReports.Converter
                 .ToArray();
         }
 
-        /// <inheritdoc cref="IReportConverter{TResultReportCell}.Convert"/>
+        /// <inheritdoc />
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
         {
             Validation.NotNull(nameof(table), table);

@@ -2,10 +2,17 @@ using System.Drawing;
 
 namespace XReports.SchemaBuilders.Attributes
 {
+    /// <summary>
+    /// Attribute that specifies cells color.
+    /// </summary>
     public sealed class ColorAttribute : BasePropertyAttribute
     {
 #pragma warning disable CA1019 // Color cannot be a type of attribute constructor argument
 #if NETSTANDARD2_1_OR_GREATER
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorAttribute"/> class.
+        /// </summary>
+        /// <param name="fontColor">Font known color.</param>
         public ColorAttribute(KnownColor fontColor)
             : this(
                 Color.FromKnownColor(fontColor),
@@ -13,6 +20,11 @@ namespace XReports.SchemaBuilders.Attributes
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorAttribute"/> class.
+        /// </summary>
+        /// <param name="fontColor">Font known color.</param>
+        /// <param name="backgroundColor">Background known color.</param>
         public ColorAttribute(KnownColor fontColor, KnownColor backgroundColor)
             : this(
                 Color.FromKnownColor(fontColor),
@@ -21,6 +33,11 @@ namespace XReports.SchemaBuilders.Attributes
         }
 #endif
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorAttribute"/> class.
+        /// </summary>
+        /// <param name="fontColor">Font color name.</param>
+        /// <param name="backgroundColor">Background color name.</param>
         public ColorAttribute(string fontColor, string backgroundColor = null)
             : this(
                 string.IsNullOrWhiteSpace(fontColor) ?
@@ -32,6 +49,10 @@ namespace XReports.SchemaBuilders.Attributes
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorAttribute"/> class.
+        /// </summary>
+        /// <param name="fontColor">Font color code.</param>
         public ColorAttribute(int fontColor)
             : this(
                 FromColorNumber(fontColor),
@@ -39,6 +60,11 @@ namespace XReports.SchemaBuilders.Attributes
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorAttribute"/> class.
+        /// </summary>
+        /// <param name="fontColor">Font color code.</param>
+        /// <param name="backgroundColor">Background color code.</param>
         public ColorAttribute(int fontColor, int backgroundColor)
             : this(
                 FromColorNumber(fontColor),
@@ -54,8 +80,14 @@ namespace XReports.SchemaBuilders.Attributes
             this.BackgroundColor = backgroundColor;
         }
 
+        /// <summary>
+        /// Gets font color.
+        /// </summary>
         public Color? FontColor { get; }
 
+        /// <summary>
+        /// Gets background color.
+        /// </summary>
         public Color? BackgroundColor { get; }
 
         private static Color FromColorNumber(int fontColor)
