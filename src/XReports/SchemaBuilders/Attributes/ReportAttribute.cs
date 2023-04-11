@@ -2,6 +2,9 @@ using System;
 
 namespace XReports.SchemaBuilders.Attributes
 {
+    /// <summary>
+    /// Base attribute that specifies report type.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public abstract class ReportAttribute : Attribute
     {
@@ -10,8 +13,11 @@ namespace XReports.SchemaBuilders.Attributes
             this.Type = type;
         }
 
-        internal ReportType Type { get; }
-
+        /// <summary>
+        /// Gets or sets type of report schema post-builder class.
+        /// </summary>
         public virtual Type PostBuilder { get; set; }
+
+        internal ReportType Type { get; }
     }
 }

@@ -10,23 +10,36 @@ using XReports.SchemaBuilders.ReportCellProviders;
 
 namespace XReports.SchemaBuilders
 {
+    /// <summary>
+    /// Builder of report schema based on class attributes.
+    /// </summary>
     public class AttributeBasedBuilder : IAttributeBasedBuilder
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IAttributeHandler[] handlers;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttributeBasedBuilder"/> class.
+        /// </summary>
+        /// <param name="handlers">Attribute handlers to use for building report schema.</param>
         public AttributeBasedBuilder(IEnumerable<IAttributeHandler> handlers)
         {
             this.serviceProvider = null;
             this.handlers = handlers.ToArray();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AttributeBasedBuilder"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">Service provider that can be used for creating post-builder.</param>
+        /// <param name="handlers">Attribute handlers to use for building report schema.</param>
         public AttributeBasedBuilder(IServiceProvider serviceProvider, IEnumerable<IAttributeHandler> handlers)
         {
             this.serviceProvider = serviceProvider;
             this.handlers = handlers.ToArray();
         }
 
+        /// <inheritdoc />
         public IReportSchema<TEntity> BuildSchema<TEntity>()
         {
             ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
@@ -44,6 +57,7 @@ namespace XReports.SchemaBuilders
                 schemaBuilder.BuildHorizontalSchema(options.HeaderRowsCount);
         }
 
+        /// <inheritdoc />
         public IReportSchema<TEntity> BuildSchema<TEntity, TBuildParameter>(TBuildParameter parameter)
         {
             ReportAttribute reportAttribute = typeof(TEntity).GetCustomAttribute<ReportAttribute>();
@@ -87,7 +101,7 @@ namespace XReports.SchemaBuilders
 
             if (reportAttribute?.PostBuilder != null)
             {
-                this.ExecutePostBuilder<IReportPostBuilder<TEntity>>(
+                this.ExecutePostBuilder<IReportSchemaPostBuilder<TEntity>>(
                     reportAttribute.PostBuilder, builder, options);
             }
 
@@ -103,7 +117,7 @@ namespace XReports.SchemaBuilders
                 throw new InvalidOperationException($"Type {typeof(TEntity)} does not have post-builder.");
             }
 
-            this.ExecutePostBuilder<IReportPostBuilder<TEntity, TBuildParameter>>(
+            this.ExecutePostBuilder<IReportSchemaPostBuilder<TEntity, TBuildParameter>>(
                 reportAttribute.PostBuilder, builder, parameter, options);
 
             return builder;
@@ -161,8 +175,8 @@ namespace XReports.SchemaBuilders
             {
                 if (attribute.UseIndexes)
                 {
-                    int startIndex = normalizedIndexes.ContainsKey(attribute.StartIndex) ?
-                        normalizedIndexes[attribute.StartIndex] :
+                    int startIndex = normalizedIndexes.ContainsKey(attribute.StartIndex.Value) ?
+                        normalizedIndexes[attribute.StartIndex.Value] :
                         throw new ArgumentException($"Start index {attribute.StartIndex} does not exist for type {typeof(TEntity)}");
                     int? endIndex = attribute.EndIndex == null ?
                         (int?)null :
@@ -173,7 +187,7 @@ namespace XReports.SchemaBuilders
                     builder.AddComplexHeader(
                         attribute.RowIndex,
                         attribute.RowSpan,
-                        attribute.Title,
+                        attribute.Content,
                         startIndex,
                         endIndex);
                 }
@@ -182,7 +196,7 @@ namespace XReports.SchemaBuilders
                     builder.AddComplexHeader(
                         attribute.RowIndex,
                         attribute.RowSpan,
-                        attribute.Title,
+                        attribute.Content,
                         new ColumnId(attribute.StartTitle),
                         attribute.EndTitle == null ?
                             null :
@@ -193,7 +207,7 @@ namespace XReports.SchemaBuilders
                     builder.AddComplexHeader(
                         attribute.RowIndex,
                         attribute.RowSpan,
-                        attribute.Title,
+                        attribute.Content,
                         attribute.StartTitle,
                         attribute.EndTitle);
                 }
@@ -346,7 +360,7 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private (TPostBuilder postBuilder, bool shouldDispose) CreatePostBuilder<TPostBuilder>(Type postBuilderType)
+        private (TPostBuilder PostBuilder, bool ShouldDispose) CreatePostBuilder<TPostBuilder>(Type postBuilderType)
         {
             bool shouldDispose;
             TPostBuilder postBuilder;

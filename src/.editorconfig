@@ -2,5 +2,5 @@
 [*.cs]
 csharp_style_namespace_declarations = block_scoped
 
-dotnet_diagnostic.CA1307.severity = none
+# CA2007: Do not directly await a Task
 dotnet_diagnostic.CA2007.severity = error

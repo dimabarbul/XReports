@@ -1,9 +1,8 @@
-namespace XReports.Demos.Models.Shared
-{
-    public class ErrorViewModel
-    {
-        public string RequestId { get; set; }
+namespace XReports.Demos.Models.Shared;
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
-    }
+public class ErrorViewModel
+{
+    public string RequestId { get; set; }
+
+    public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
 }

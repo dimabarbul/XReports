@@ -6,22 +6,32 @@ using XReports.Table;
 
 namespace XReports.SchemaBuilders
 {
-    public class ReportColumnBuilder<TSourceEntity> : IReportColumnBuilder<TSourceEntity>
+    /// <summary>
+    /// Report column builder.
+    /// </summary>
+    /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
+    public class ReportColumnBuilder<TSourceItem> : IReportColumnBuilder<TSourceItem>
     {
         private readonly string title;
-        private readonly IReportCellProvider<TSourceEntity> provider;
+        private readonly IReportCellProvider<TSourceItem> provider;
         private readonly List<ReportCellProperty> cellProperties = new List<ReportCellProperty>();
         private readonly List<ReportCellProperty> headerProperties = new List<ReportCellProperty>();
-        private readonly List<IReportCellProcessor<TSourceEntity>> cellProcessors = new List<IReportCellProcessor<TSourceEntity>>();
+        private readonly List<IReportCellProcessor<TSourceItem>> cellProcessors = new List<IReportCellProcessor<TSourceItem>>();
         private readonly List<IHeaderReportCellProcessor> headerProcessors = new List<IHeaderReportCellProcessor>();
 
-        public ReportColumnBuilder(string title, IReportCellProvider<TSourceEntity> provider)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReportColumnBuilder{TSourceItem}" /> class.
+        /// </summary>
+        /// <param name="title">Report column title. Will be used as content of header cell.</param>
+        /// <param name="provider">Report cell provider to use to create cells.</param>
+        public ReportColumnBuilder(string title, IReportCellProvider<TSourceItem> provider)
         {
             this.title = title;
             this.provider = provider;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddProperties(params ReportCellProperty[] properties)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddProperties(params ReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -30,7 +40,8 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddHeaderProperties(params ReportCellProperty[] properties)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddHeaderProperties(params ReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -39,7 +50,8 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddProcessors(params IReportCellProcessor<TSourceEntity>[] processors)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddProcessors(params IReportCellProcessor<TSourceItem>[] processors)
         {
             this.ValidateAllItemsNotNull(processors);
 
@@ -48,7 +60,8 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddHeaderProcessors(params IHeaderReportCellProcessor[] processors)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddHeaderProcessors(params IHeaderReportCellProcessor[] processors)
         {
             this.ValidateAllItemsNotNull(processors);
 
@@ -57,11 +70,12 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumn<TSourceEntity> Build(IReadOnlyList<ReportCellProperty> globalProperties)
+        /// <inheritdoc />
+        public IReportColumn<TSourceItem> Build(IReadOnlyList<ReportCellProperty> globalProperties)
         {
             this.ValidateAllItemsNotNull(globalProperties);
 
-            return new ReportColumn<TSourceEntity>(
+            return new ReportColumn<TSourceItem>(
                 this.title,
                 this.provider,
                 this.MergeGlobalProperties(globalProperties),

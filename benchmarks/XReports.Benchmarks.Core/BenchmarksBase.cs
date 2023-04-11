@@ -14,7 +14,7 @@ public abstract class BenchmarksBase
     [ParamsSource(nameof(GetRowCounts))]
     public int RowCount { get; set; }
 
-    public IEnumerable<int> GetRowCounts()
+    public static IEnumerable<int> GetRowCounts()
     {
         string sizes = Environment.GetEnvironmentVariable("RowCounts") ?? "10000";
 

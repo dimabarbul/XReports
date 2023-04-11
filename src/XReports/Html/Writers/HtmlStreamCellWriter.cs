@@ -7,18 +7,30 @@ using System.Web;
 
 namespace XReports.Html.Writers
 {
+    /// <summary>
+    /// Writer of HTML report to stream.
+    /// </summary>
     public class HtmlStreamCellWriter : IHtmlStreamCellWriter
     {
+        /// <inheritdoc />
         public Task WriteHeaderCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             return this.WriteCellAsync(streamWriter, cell, "th");
         }
 
+        /// <inheritdoc />
         public Task WriteBodyCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             return this.WriteCellAsync(streamWriter, cell, "td");
         }
 
+        /// <summary>
+        /// Writes HTML report cell ding stream writer.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="cell">HTML report cell to write.</param>
+        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
+        /// <returns>Task.</returns>
         protected virtual async Task WriteCellAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
         {
             await this.BeginWrappingElementAsync(streamWriter, cell, tableCellTagName).ConfigureAwait(false);
@@ -26,6 +38,13 @@ namespace XReports.Html.Writers
             await this.EndWrappingElementAsync(streamWriter, tableCellTagName).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Writes beginning of HTML wrap around cell. By default it is HTML tag for table cell ("td" or "th") with report cell attributes, classes etc.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="cell">HTML report cell to write.</param>
+        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
+        /// <returns>Task.</returns>
         protected virtual async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
         {
             await streamWriter.WriteAsync('<').ConfigureAwait(false);
@@ -35,6 +54,12 @@ namespace XReports.Html.Writers
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Writes ending of HTML wrap around cell. By default it is closing HTML tag for table cell ("td" or "th").
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
+        /// <returns>Task.</returns>
         protected virtual async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
         {
             await streamWriter.WriteAsync("</").ConfigureAwait(false);
@@ -42,7 +67,13 @@ namespace XReports.Html.Writers
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
 
-        protected async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        /// <summary>
+        /// Writes HTML report cell HTML attributes.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="cell">HTML report cell to write.</param>
+        /// <returns>Task.</returns>
+        protected virtual async Task WriteAttributesAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             if (cell.RowSpan != 1)
             {
@@ -76,7 +107,13 @@ namespace XReports.Html.Writers
             }
         }
 
-        protected Task WriteContentAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        /// <summary>
+        /// Writes HTML report cell content.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="cell">HTML report cell to write.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task WriteContentAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
             string value = cell.GetValue<string>();
             if (!cell.IsHtml)
@@ -87,7 +124,14 @@ namespace XReports.Html.Writers
             return streamWriter.WriteAsync(value);
         }
 
-        protected async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
+        /// <summary>
+        /// Writes single attribute.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="name">Attribute name.</param>
+        /// <param name="value">Attribute value.</param>
+        /// <returns>Task.</returns>
+        protected virtual async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
         {
             await streamWriter.WriteAsync(name).ConfigureAwait(false);
             await streamWriter.WriteAsync(@"=""").ConfigureAwait(false);

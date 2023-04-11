@@ -3,10 +3,15 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Html.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="MaxLengthProperty"/> during conversion to HTML.
+    /// </summary>
     public class MaxLengthPropertyHtmlHandler : PropertyHandler<MaxLengthProperty, HtmlReportCell>
     {
-        public override int Priority => (int)HtmlPropertyHandlerPriority.Text;
+        /// <inheritdoc />
+        public override int Priority => 1;
 
+        /// <inheritdoc />
         protected override void HandleProperty(MaxLengthProperty property, HtmlReportCell cell)
         {
             string value = cell.GetValue<string>();

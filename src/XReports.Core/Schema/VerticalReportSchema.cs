@@ -4,16 +4,16 @@ using XReports.Table;
 
 namespace XReports.Schema
 {
-    internal class VerticalReportSchema<TSourceEntity> : IReportSchema<TSourceEntity>
+    internal class VerticalReportSchema<TSourceItem> : IReportSchema<TSourceItem>
     {
-        private readonly IReadOnlyList<IReportColumn<TSourceEntity>> columns;
+        private readonly IReadOnlyList<IReportColumn<TSourceItem>> columns;
         private readonly IReadOnlyList<ReportTableProperty> tableProperties;
         private readonly ComplexHeaderCell[,] complexHeader;
         private readonly IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties;
         private readonly IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties;
 
         public VerticalReportSchema(
-            IReadOnlyList<IReportColumn<TSourceEntity>> columns,
+            IReadOnlyList<IReportColumn<TSourceItem>> columns,
             IReadOnlyList<ReportTableProperty> tableProperties,
             ComplexHeaderCell[,] complexHeader,
             IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
@@ -26,7 +26,7 @@ namespace XReports.Schema
             this.commonComplexHeaderProperties = commonComplexHeaderProperties;
         }
 
-        public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceEntity> source)
+        public IReportTable<ReportCell> BuildReportTable(IEnumerable<TSourceItem> source)
         {
             ReportTable<ReportCell> table = new ReportTable<ReportCell>
             {
@@ -44,10 +44,10 @@ namespace XReports.Schema
 
         private class RowsCollection : IEnumerable<IEnumerable<ReportCell>>
         {
-            private readonly VerticalReportSchema<TSourceEntity> schema;
-            private readonly IEnumerable<TSourceEntity> source;
+            private readonly VerticalReportSchema<TSourceItem> schema;
+            private readonly IEnumerable<TSourceItem> source;
 
-            public RowsCollection(VerticalReportSchema<TSourceEntity> schema, IEnumerable<TSourceEntity> source)
+            public RowsCollection(VerticalReportSchema<TSourceItem> schema, IEnumerable<TSourceItem> source)
             {
                 this.schema = schema;
                 this.source = source;
@@ -66,10 +66,10 @@ namespace XReports.Schema
 
         private class RowsEnumerator : IEnumerator<IEnumerable<ReportCell>>
         {
-            private readonly IEnumerator<TSourceEntity> enumerator;
+            private readonly IEnumerator<TSourceItem> enumerator;
             private readonly CellsEnumerator cellsEnumerator;
 
-            public RowsEnumerator(VerticalReportSchema<TSourceEntity> schema, IEnumerable<TSourceEntity> source)
+            public RowsEnumerator(VerticalReportSchema<TSourceItem> schema, IEnumerable<TSourceItem> source)
             {
                 this.enumerator = source.GetEnumerator();
                 this.cellsEnumerator = new CellsEnumerator(schema);
@@ -99,11 +99,11 @@ namespace XReports.Schema
 
         private class CellsEnumerator : IEnumerator<ReportCell>, IEnumerable<ReportCell>
         {
-            private readonly VerticalReportSchema<TSourceEntity> schema;
-            private TSourceEntity entity;
+            private readonly VerticalReportSchema<TSourceItem> schema;
+            private TSourceItem entity;
             private int index = -1;
 
-            public CellsEnumerator(VerticalReportSchema<TSourceEntity> schema)
+            public CellsEnumerator(VerticalReportSchema<TSourceItem> schema)
             {
                 this.schema = schema;
             }
@@ -112,7 +112,7 @@ namespace XReports.Schema
 
             object IEnumerator.Current => this.Current;
 
-            public IEnumerable<ReportCell> WithEntity(TSourceEntity entity)
+            public IEnumerable<ReportCell> WithEntity(TSourceItem entity)
             {
                 this.entity = entity;
                 this.Reset();

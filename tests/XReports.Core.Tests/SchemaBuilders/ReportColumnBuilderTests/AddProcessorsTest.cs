@@ -43,9 +43,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         {
             public List<string> ProcessedData { get; } = new List<string>();
 
-            public void Process(ReportCell cell, string entity)
+            public void Process(ReportCell cell, string item)
             {
-                this.ProcessedData.Add(entity);
+                this.ProcessedData.Add(item);
             }
         }
 

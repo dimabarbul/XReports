@@ -12,138 +12,137 @@ using XReports.Html.Writers;
 using XReports.SchemaBuilders;
 using XReports.Table;
 
-namespace XReports.Demos.Controllers.CustomProperties
+namespace XReports.Demos.Controllers.CustomProperties;
+
+public class HeatmapController : Controller
 {
-    public class HeatmapController : Controller
+    private const int RecordsCount = 10;
+
+    public IActionResult Index()
     {
-        private const int RecordsCount = 10;
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
 
-        public IActionResult Index()
+        return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
+    }
+
+    public IActionResult Download()
+    {
+        IReportTable<ReportCell> reportTable = this.BuildReport();
+        IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+
+        Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
+        return this.File(excelStream, Constants.ContentTypeExcel, "Heatmap.xlsx");
+    }
+
+    private IReportTable<ReportCell> BuildReport()
+    {
+        HeatmapProperty heatmapProperty = new(0, Color.IndianRed, 100, Color.SkyBlue);
+
+        ReportSchemaBuilder<Entity> reportBuilder = new();
+        reportBuilder.AddColumn("Name", e => e.Name);
+        reportBuilder.AddColumn("Score", e => e.Score)
+            .AddProperties(heatmapProperty);
+
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
+        return reportTable;
+    }
+
+    private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)
+    {
+        ReportConverter<HtmlReportCell> htmlConverter = new(new[]
         {
-            IReportTable<ReportCell> reportTable = this.BuildReport();
-            IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
-            string tableHtml = this.WriteHtmlReportToString(htmlReportTable);
+            new HeatmapPropertyHtmlHandler(),
+        });
 
-            return this.View(new ReportViewModel() { ReportTableHtml = tableHtml });
+        return htmlConverter.Convert(reportTable);
+    }
+
+    private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
+    {
+        ReportConverter<ExcelReportCell> excelConverter = new(new[]
+        {
+            new HeatmapPropertyExcelHandler(),
+        });
+
+        return excelConverter.Convert(reportTable);
+    }
+
+    private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
+    {
+        return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+    }
+
+    private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
+    {
+        return new EpplusWriter().WriteToStream(reportTable);
+    }
+
+    private IEnumerable<Entity> GetData()
+    {
+        return new Faker<Entity>()
+            .RuleFor(e => e.Name, f => f.Name.FullName())
+            .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
+            .Generate(RecordsCount);
+    }
+
+    private class Entity
+    {
+        public string Name { get; set; }
+
+        public decimal Score { get; set; }
+    }
+
+    private class HeatmapProperty : ReportCellProperty
+    {
+        private readonly decimal minimumValue;
+        private readonly Color minimumColor;
+        private readonly decimal maximumValue;
+        private readonly Color maximumColor;
+
+        public HeatmapProperty(decimal minimumValue, Color minimumColor, decimal maximumValue, Color maximumColor)
+        {
+            this.minimumValue = minimumValue;
+            this.minimumColor = minimumColor;
+            this.maximumValue = maximumValue;
+            this.maximumColor = maximumColor;
         }
 
-        public IActionResult Download()
+        public Color GetColorForValue(decimal value)
         {
-            IReportTable<ReportCell> reportTable = this.BuildReport();
-            IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
+            decimal heatmapValueDelta = this.maximumValue - this.minimumValue;
+            decimal valuePercentage = (value - this.minimumValue) / heatmapValueDelta;
 
-            Stream excelStream = this.WriteExcelReportToStream(excelReportTable);
-            return this.File(excelStream, Constants.ContentTypeExcel, "Heatmap.xlsx");
+            byte cellRed = this.GetProportionalValue(valuePercentage, this.minimumColor.R, this.maximumColor.R);
+            byte cellGreen = this.GetProportionalValue(valuePercentage, this.minimumColor.G, this.maximumColor.G);
+            byte cellBlue = this.GetProportionalValue(valuePercentage, this.minimumColor.B, this.maximumColor.B);
+
+            return Color.FromArgb(cellRed, cellGreen, cellBlue);
         }
 
-        private IReportTable<ReportCell> BuildReport()
+        private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
         {
-            HeatmapProperty heatmapProperty = new HeatmapProperty(0, Color.IndianRed, 100, Color.SkyBlue);
-
-            ReportSchemaBuilder<Entity> reportBuilder = new ReportSchemaBuilder<Entity>();
-            reportBuilder.AddColumn("Name", e => e.Name);
-            reportBuilder.AddColumn("Score", e => e.Score)
-                .AddProperties(heatmapProperty);
-
-            IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
-            return reportTable;
+            return (byte)(min + (valuePercentage * (max - min)));
         }
+    }
 
-        private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)
+    private class HeatmapPropertyHtmlHandler : PropertyHandler<HeatmapProperty, HtmlReportCell>
+    {
+        protected override void HandleProperty(HeatmapProperty property, HtmlReportCell cell)
         {
-            ReportConverter<HtmlReportCell> htmlConverter = new ReportConverter<HtmlReportCell>(new[]
-            {
-                new HeatmapPropertyHtmlHandler(),
-            });
+            decimal value = cell.GetValue<decimal>();
 
-            return htmlConverter.Convert(reportTable);
+            cell.Styles.Add("background-color", ColorTranslator.ToHtml(property.GetColorForValue(value)));
         }
+    }
 
-        private IReportTable<ExcelReportCell> ConvertToExcel(IReportTable<ReportCell> reportTable)
+    private class HeatmapPropertyExcelHandler : PropertyHandler<HeatmapProperty, ExcelReportCell>
+    {
+        protected override void HandleProperty(HeatmapProperty property, ExcelReportCell cell)
         {
-            ReportConverter<ExcelReportCell> excelConverter = new ReportConverter<ExcelReportCell>(new[]
-            {
-                new HeatmapPropertyExcelHandler(),
-            });
-
-            return excelConverter.Convert(reportTable);
-        }
-
-        private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
-        {
-            return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
-        }
-
-        private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)
-        {
-            return new EpplusWriter().WriteToStream(reportTable);
-        }
-
-        private IEnumerable<Entity> GetData()
-        {
-            return new Faker<Entity>()
-                .RuleFor(e => e.Name, f => f.Name.FullName())
-                .RuleFor(e => e.Score, f => f.Random.Decimal(0, 100))
-                .Generate(RecordsCount);
-        }
-
-        private class Entity
-        {
-            public string Name { get; set; }
-
-            public decimal Score { get; set; }
-        }
-
-        private class HeatmapProperty : ReportCellProperty
-        {
-            private readonly decimal minimumValue;
-            private readonly Color minimumColor;
-            private readonly decimal maximumValue;
-            private readonly Color maximumColor;
-
-            public HeatmapProperty(decimal minimumValue, Color minimumColor, decimal maximumValue, Color maximumColor)
-            {
-                this.minimumValue = minimumValue;
-                this.minimumColor = minimumColor;
-                this.maximumValue = maximumValue;
-                this.maximumColor = maximumColor;
-            }
-
-            public Color GetColorForValue(decimal value)
-            {
-                decimal heatmapValueDelta = this.maximumValue - this.minimumValue;
-                decimal valuePercentage = (value - this.minimumValue) / heatmapValueDelta;
-
-                byte cellRed = this.GetProportionalValue(valuePercentage, this.minimumColor.R, this.maximumColor.R);
-                byte cellGreen = this.GetProportionalValue(valuePercentage, this.minimumColor.G, this.maximumColor.G);
-                byte cellBlue = this.GetProportionalValue(valuePercentage, this.minimumColor.B, this.maximumColor.B);
-
-                return Color.FromArgb(cellRed, cellGreen, cellBlue);
-            }
-
-            private byte GetProportionalValue(decimal valuePercentage, byte min, byte max)
-            {
-                return (byte)(min + (valuePercentage * (max - min)));
-            }
-        }
-
-        private class HeatmapPropertyHtmlHandler : PropertyHandler<HeatmapProperty, HtmlReportCell>
-        {
-            protected override void HandleProperty(HeatmapProperty property, HtmlReportCell cell)
-            {
-                decimal value = cell.GetValue<decimal>();
-
-                cell.Styles.Add("background-color", ColorTranslator.ToHtml(property.GetColorForValue(value)));
-            }
-        }
-
-        private class HeatmapPropertyExcelHandler : PropertyHandler<HeatmapProperty, ExcelReportCell>
-        {
-            protected override void HandleProperty(HeatmapProperty property, ExcelReportCell cell)
-            {
-                decimal value = cell.GetValue<decimal>();
-                cell.BackgroundColor = property.GetColorForValue(value);
-            }
+            decimal value = cell.GetValue<decimal>();
+            cell.BackgroundColor = property.GetColorForValue(value);
         }
     }
 }

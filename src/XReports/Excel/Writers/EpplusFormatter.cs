@@ -3,10 +3,15 @@ using XReports.Table;
 
 namespace XReports.Excel.Writers
 {
+    /// <summary>
+    /// Formatter used by <see cref="EpplusWriter"/> that handles one type of report property. Formats only cells that have property of <typeparamref name="TProperty"/>. Derived types are ignored.
+    /// </summary>
+    /// <typeparam name="TProperty">Type of property to handle.</typeparam>
     public abstract class EpplusFormatter<TProperty> : IEpplusFormatter
         where TProperty : ReportCellProperty
     {
-        public void Format(ExcelRange worksheetCell, ExcelReportCell cell)
+        /// <inheritdoc />
+        public void Format(ExcelRange excelRange, ExcelReportCell cell)
         {
             TProperty property = cell.GetProperty<TProperty>();
             if (property == null)
@@ -14,9 +19,15 @@ namespace XReports.Excel.Writers
                 return;
             }
 
-            this.Format(worksheetCell, cell, property);
+            this.Format(excelRange, cell, property);
         }
 
-        protected abstract void Format(ExcelRange worksheetCell, ExcelReportCell cell, TProperty property);
+        /// <summary>
+        /// Formats Excel cell range.
+        /// </summary>
+        /// <param name="excelRange">Excel cell range to format.</param>
+        /// <param name="cell">Report cell to take format from.</param>
+        /// <param name="property">Report cell property of type that the formatter can handle.</param>
+        protected abstract void Format(ExcelRange excelRange, ExcelReportCell cell, TProperty property);
     }
 }

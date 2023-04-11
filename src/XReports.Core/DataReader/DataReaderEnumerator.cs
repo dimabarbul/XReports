@@ -15,6 +15,10 @@ namespace XReports.DataReader
             this.dataReader = dataReader;
         }
 
+        public IDataReader Current => this.dataReader;
+
+        object IEnumerator.Current => this.Current;
+
         public bool MoveNext()
         {
             return this.dataReader.Read();
@@ -24,10 +28,6 @@ namespace XReports.DataReader
         {
             throw new InvalidOperationException();
         }
-
-        public IDataReader Current => this.dataReader;
-
-        object IEnumerator.Current => this.Current;
 
         public void Dispose()
         {

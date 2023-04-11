@@ -25,7 +25,7 @@ namespace XReports.Core.Tests.DataReader
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    EnumerableDataReader enumerable = new EnumerableDataReader(dataReader);
+                    IEnumerable<IDataReader> enumerable = dataReader.AsEnumerable();
 
                     enumerable
                         .Select(dr => new
@@ -63,7 +63,7 @@ namespace XReports.Core.Tests.DataReader
 
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
-                    EnumerableDataReader enumerable = new EnumerableDataReader(dataReader);
+                    IEnumerable<IDataReader> enumerable = dataReader.AsEnumerable();
 
                     _ = enumerable.ToArray();
 
@@ -84,7 +84,7 @@ namespace XReports.Core.Tests.DataReader
                 using (IDataReader dataReader = new DataTableReader(dataTable))
                 {
                     dataReader.Close();
-                    EnumerableDataReader enumerable = new EnumerableDataReader(dataReader);
+                    IEnumerable<IDataReader> enumerable = dataReader.AsEnumerable();
                     using (IEnumerator<IDataReader> enumerator = enumerable.GetEnumerator())
                     {
                         Action action = () => _ = enumerator.MoveNext();

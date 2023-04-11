@@ -79,9 +79,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             public List<string> ProcessedData { get; } = new List<string>();
 
-            public void Process(ReportCell cell, string entity)
+            public void Process(ReportCell cell, string item)
             {
-                this.ProcessedData.Add(entity);
+                this.ProcessedData.Add(item);
             }
         }
 
@@ -105,7 +105,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
             public IReadOnlyList<ReportCellProperty> Properties { get; set; }
 
-            public void Process(ReportCell cell, string entity)
+            public void Process(ReportCell cell, string item)
             {
                 this.Properties = new List<ReportCellProperty>(cell.Properties);
             }

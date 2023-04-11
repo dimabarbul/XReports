@@ -179,7 +179,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<VerticalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
@@ -198,7 +198,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<HorizontalByIndexesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
@@ -217,7 +217,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<VerticalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
@@ -236,7 +236,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<HorizontalByTitlesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
@@ -255,7 +255,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {
@@ -274,7 +274,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Age")]
             public string Age { get; set; }
 
-            private class PostBuilder : IReportPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
+            private class PostBuilder : IReportSchemaPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
             {
                 public void Build(IReportSchemaBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder> builder, BuildOptions options)
                 {

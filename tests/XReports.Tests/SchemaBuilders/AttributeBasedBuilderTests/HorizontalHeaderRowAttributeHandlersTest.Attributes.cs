@@ -16,7 +16,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int CallsCount { get; private set; }
 
             protected override void HandleAttribute<TSourceEntity>(
-                IReportSchemaBuilder<TSourceEntity> builder,
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
                 IReportColumnBuilder<TSourceEntity> columnBuilder,
                 CustomAttribute attribute)
             {

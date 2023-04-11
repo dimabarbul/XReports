@@ -3,59 +3,217 @@ using XReports.Table;
 
 namespace XReports.SchemaBuilders
 {
-    public interface IReportSchemaBuilder<TSourceEntity>
+    /// <summary>
+    /// Interface for report schema builder.
+    /// </summary>
+    /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
+    public interface IReportSchemaBuilder<TSourceItem>
     {
-        IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties);
+        /// <summary>
+        /// Adds report global properties. They will be applied to all columns.
+        /// </summary>
+        /// <param name="properties">Properties to add.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties);
 
-        IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties);
+        /// <summary>
+        /// Adds report table properties.
+        /// </summary>
+        /// <param name="properties">Table properties to add.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddTableProperties(params ReportTableProperty[] properties);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, string title, int fromColumn, int? toColumn = null);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,string,int,System.Nullable{int})"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">0-based index of left-most report column the group spans.</param>
+        /// <param name="toColumn">0-based index of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, string content, int fromColumn, int? toColumn = null);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, string title, string fromColumn, string toColumn = null);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,string,string,string)"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">Title of left-most report column the group spans.</param>
+        /// <param name="toColumn">Title of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, string content, string fromColumn, string toColumn = null);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,string,ColumnId,ColumnId)"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">Identifier of left-most report column the group spans.</param>
+        /// <param name="toColumn">Identifier of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, string content, ColumnId fromColumn, ColumnId toColumn = null);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,int,string,int,System.Nullable{int})"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="rowSpan">How many rows the group spans.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">0-based index of left-most report column the group spans.</param>
+        /// <param name="toColumn">0-based index of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, int rowSpan, string content, int fromColumn, int? toColumn = null);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(
-            string title, params ReportCellProperty[] properties);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,int,string,string,string)"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="rowSpan">How many rows the group spans.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">Title of left-most report column the group spans.</param>
+        /// <param name="toColumn">Title of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, int rowSpan, string content, string fromColumn, string toColumn = null);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties);
+        /// <summary>
+        /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,int,string,ColumnId,ColumnId)"/>
+        /// </summary>
+        /// <param name="rowIndex">Complex header row index to add to. The lower the index the higher the row.</param>
+        /// <param name="rowSpan">How many rows the group spans.</param>
+        /// <param name="content">Complex header cell content.</param>
+        /// <param name="fromColumn">Identifier of left-most report column the group spans.</param>
+        /// <param name="toColumn">Identifier of right-most report column the group spans.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeader(
+            int rowIndex, int rowSpan, string content, ColumnId fromColumn, ColumnId toColumn = null);
 
-        IReportColumnBuilder<TSourceEntity> AddColumn(string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Adds properties to complex header cells which content equals to <paramref name="content"/>. Properties are only added to cells generated from complex groups, not from report column headers.
+        /// </summary>
+        /// <param name="content">Complex header cell content to add properties to.</param>
+        /// <param name="properties">Properties to add.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(
+            string content, params ReportCellProperty[] properties);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Adds properties to all complex header cells. Properties are only added to cells generated from complex groups, not from report column headers.
+        /// </summary>
+        /// <param name="properties">Properties to add.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params ReportCellProperty[] properties);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Adds column to the end of the report.
+        /// </summary>
+        /// <param name="title">Report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for added column.</returns>
+        IReportColumnBuilder<TSourceItem> AddColumn(string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Adds column to the end of the report.
+        /// </summary>
+        /// <param name="id">Identifier of the column.</param>
+        /// <param name="title">Report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for added column.</returns>
+        IReportColumnBuilder<TSourceItem> AddColumn(ColumnId id, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> AddColumn(ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Inserts column at specified position.
+        /// </summary>
+        /// <param name="index">0-based index to insert column at.</param>
+        /// <param name="title">Report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumn(int index, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumn(int index, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Inserts column at specified position.
+        /// </summary>
+        /// <param name="index">0-based index to insert column at.</param>
+        /// <param name="id">Identifier of the column.</param>
+        /// <param name="title">Report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumn(int index, ColumnId id, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Inserts column before existing column with specified title.
+        /// </summary>
+        /// <param name="beforeTitle">Title of existing column to insert new column before.</param>
+        /// <param name="title">New report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumnBefore(string beforeTitle, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider);
+        /// <summary>
+        /// Inserts column before existing column with specified identifier.
+        /// </summary>
+        /// <param name="beforeId">Identifier of existing column to insert new column before.</param>
+        /// <param name="title">New report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumnBefore(ColumnId beforeId, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> ForColumn(string title);
+        /// <summary>
+        /// Inserts column before existing column with specified title.
+        /// </summary>
+        /// <param name="beforeTitle">Title of existing column to insert new column before.</param>
+        /// <param name="id">Identifier of the column.</param>
+        /// <param name="title">New report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> ForColumn(int index);
+        /// <summary>
+        /// Inserts column before existing column with specified identifier.
+        /// </summary>
+        /// <param name="beforeId">Identifier of existing column to insert new column before.</param>
+        /// <param name="id">Identifier of the column.</param>
+        /// <param name="title">New report column title.</param>
+        /// <param name="provider">Provider for cells of the report column.</param>
+        /// <returns>Builder for inserted column.</returns>
+        IReportColumnBuilder<TSourceItem> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellProvider<TSourceItem> provider);
 
-        IReportColumnBuilder<TSourceEntity> ForColumn(ColumnId id);
+        /// <summary>
+        /// Returns builder for report column with specified title.
+        /// </summary>
+        /// <param name="title">Report column title.</param>
+        /// <returns>Builder for report column.</returns>
+        IReportColumnBuilder<TSourceItem> ForColumn(string title);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn = null);
+        /// <summary>
+        /// Returns builder for report column at specified index.
+        /// </summary>
+        /// <param name="index">0-based index of report column.</param>
+        /// <returns>Builder for report column.</returns>
+        IReportColumnBuilder<TSourceItem> ForColumn(int index);
 
-        IReportSchemaBuilder<TSourceEntity> AddComplexHeader(
-            int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null);
+        /// <summary>
+        /// Returns builder for report column with specified title.
+        /// </summary>
+        /// <param name="id">Report column identifier.</param>
+        /// <returns>Builder for report column.</returns>
+        IReportColumnBuilder<TSourceItem> ForColumn(ColumnId id);
 
-        IReportSchema<TSourceEntity> BuildVerticalSchema();
+        /// <summary>
+        /// Builds schema for vertical report.
+        /// </summary>
+        /// <returns>Vertical report schema.</returns>
+        IReportSchema<TSourceItem> BuildVerticalSchema();
 
-        IReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount);
+        /// <summary>
+        /// Builds schema for horizontal report.
+        /// </summary>
+        /// <param name="headerRowsCount">Count of first columns that should be made header rows in horizontal report.</param>
+        /// <returns>Horizontal report schema.</returns>
+        IReportSchema<TSourceItem> BuildHorizontalSchema(int headerRowsCount);
     }
 }

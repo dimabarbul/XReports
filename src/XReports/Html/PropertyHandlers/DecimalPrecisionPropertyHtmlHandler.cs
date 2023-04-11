@@ -6,10 +6,14 @@ using XReports.ReportCellProperties;
 
 namespace XReports.Html.PropertyHandlers
 {
+    /// <summary>
+    /// Handler for <see cref="DecimalPrecisionProperty"/> during conversion to HTML.
+    /// </summary>
     public class DecimalPrecisionPropertyHtmlHandler : PropertyHandler<DecimalPrecisionProperty, HtmlReportCell>
     {
         private readonly Dictionary<(bool, int), string> formatCache = new Dictionary<(bool, int), string>();
 
+        /// <inheritdoc />
         protected override void HandleProperty(DecimalPrecisionProperty property, HtmlReportCell cell)
         {
             string format = this.GetFormat(property);

@@ -1,0 +1,6 @@
+# C# files
+[*.cs]
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0161: Use file-scoped namespace
+dotnet_diagnostic.IDE0161.severity = error

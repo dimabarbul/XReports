@@ -28,7 +28,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             }
 
             protected override void HandleAttribute<TSourceEntity>(
-                IReportSchemaBuilder<TSourceEntity> builder,
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
                 IReportColumnBuilder<TSourceEntity> columnBuilder,
                 MyTableAttribute attribute)
             {
@@ -46,7 +46,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             }
 
             protected override void HandleAttribute<TSourceEntity>(
-                IReportSchemaBuilder<TSourceEntity> builder,
+                IReportSchemaBuilder<TSourceEntity> schemaBuilder,
                 IReportColumnBuilder<TSourceEntity> columnBuilder,
                 MyAttribute attribute)
             {

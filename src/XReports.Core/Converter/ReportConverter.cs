@@ -2,24 +2,45 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using XReports.Helpers;
 using XReports.Table;
 
 namespace XReports.Converter
 {
+    /// <summary>
+    /// Converter of report with cells of type <see cref="ReportCell"/> to report with cells of type <typeparamref name="TResultReportCell"></typeparamref>.
+    /// </summary>
+    /// <typeparam name="TResultReportCell">Type of cells to convert to.</typeparam>
     public class ReportConverter<TResultReportCell> : IReportConverter<TResultReportCell>
         where TResultReportCell : ReportCell, new()
     {
         private readonly TResultReportCell resultCell = new TResultReportCell();
         private readonly IPropertyHandler<TResultReportCell>[] handlers;
 
-        public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReportConverter{TResultReportCell}" /> class with no handlers.
+        /// </summary>
+        public ReportConverter()
         {
-            this.handlers = propertyHandlers?.OrderBy(h => h.Priority).ToArray() ??
-                Array.Empty<IPropertyHandler<TResultReportCell>>();
+            this.handlers = Array.Empty<IPropertyHandler<TResultReportCell>>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReportConverter{TResultReportCell}" /> class.
+        /// </summary>
+        /// <param name="propertyHandlers">Property handlers to use during conversion.</param>
+        public ReportConverter(IEnumerable<IPropertyHandler<TResultReportCell>> propertyHandlers)
+        {
+            this.handlers = propertyHandlers
+                .OrderBy(h => h.Priority)
+                .ToArray();
+        }
+
+        /// <inheritdoc />
         public IReportTable<TResultReportCell> Convert(IReportTable<ReportCell> table)
         {
+            Validation.NotNull(nameof(table), table);
+
             return new ReportTable<TResultReportCell>
             {
                 Properties = table.Properties,

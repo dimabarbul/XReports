@@ -7,7 +7,11 @@ using XReports.Table;
 
 namespace XReports.SchemaBuilders
 {
-    public class ReportSchemaBuilder<TSourceEntity> : IReportSchemaBuilder<TSourceEntity>
+    /// <summary>
+    /// Report schema builder.
+    /// </summary>
+    /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
+    public class ReportSchemaBuilder<TSourceItem> : IReportSchemaBuilder<TSourceItem>
     {
         private readonly List<IdentifiableCellProvider> cellProviders = new List<IdentifiableCellProvider>();
         private readonly IComplexHeaderBuilder complexHeaderBuilder = new ComplexHeaderBuilder();
@@ -16,7 +20,8 @@ namespace XReports.SchemaBuilders
         private readonly List<ReportCellProperty> globalProperties = new List<ReportCellProperty>();
         private readonly List<ReportTableProperty> tableProperties = new List<ReportTableProperty>();
 
-        public IReportSchemaBuilder<TSourceEntity> AddGlobalProperties(params ReportCellProperty[] properties)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties)
         {
             this.ValidateAllPropertiesNotNull(properties);
 
@@ -25,7 +30,8 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddTableProperties(params ReportTableProperty[] properties)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddTableProperties(params ReportTableProperty[] properties)
         {
             this.ValidateAllPropertiesNotNull(properties);
 
@@ -34,49 +40,84 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, int fromColumn, int? toColumn = null)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, string content, int fromColumn, int? toColumn = null)
         {
-            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
+            this.complexHeaderBuilder.AddGroup(rowIndex, content, fromColumn, toColumn);
 
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, string fromColumn, string toColumn = null)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, string content, string fromColumn, string toColumn = null)
         {
-            this.complexHeaderBuilder.AddGroup(rowIndex, title, fromColumn, toColumn);
+            this.complexHeaderBuilder.AddGroup(rowIndex, content, fromColumn, toColumn);
 
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, string content, ColumnId fromColumn, ColumnId toColumn = null)
         {
-            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
+            this.complexHeaderBuilder.AddGroup(
+                rowIndex,
+                content,
+                new ColumnId(fromColumn.Value),
+                toColumn == null ?
+                    null :
+                    new ColumnId(toColumn.Value));
 
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, int rowSpan, string content, int fromColumn, int? toColumn = null)
         {
-            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, title, fromColumn, toColumn);
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, content, fromColumn, toColumn);
 
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(string title, params ReportCellProperty[] properties)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, int rowSpan, string content, string fromColumn, string toColumn = null)
         {
-            if (!this.complexHeadersProperties.ContainsKey(title))
+            this.complexHeaderBuilder.AddGroup(rowIndex, rowSpan, content, fromColumn, toColumn);
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeader(int rowIndex, int rowSpan, string content, ColumnId fromColumn, ColumnId toColumn = null)
+        {
+            this.complexHeaderBuilder.AddGroup(
+                rowIndex,
+                rowSpan,
+                content,
+                new ColumnId(fromColumn.Value),
+                toColumn == null ?
+                    null :
+                    new ColumnId(toColumn.Value));
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(string content, params ReportCellProperty[] properties)
+        {
+            if (!this.complexHeadersProperties.ContainsKey(content))
             {
-                this.complexHeadersProperties.Add(title, new List<ReportCellProperty>(properties));
+                this.complexHeadersProperties.Add(content, new List<ReportCellProperty>(properties));
             }
             else
             {
-                this.complexHeadersProperties[title].AddRange(properties);
+                this.complexHeadersProperties[content].AddRange(properties);
             }
 
             return this;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeaderProperties(params ReportCellProperty[] properties)
+        /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
             this.ValidateAllPropertiesNotNull(properties);
 
@@ -85,54 +126,64 @@ namespace XReports.SchemaBuilders
             return this;
         }
 
-        public IReportColumnBuilder<TSourceEntity> AddColumn(string title, IReportCellProvider<TSourceEntity> provider)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddColumn(string title, IReportCellProvider<TSourceItem> provider)
         {
             return this.InsertColumn(this.cellProviders.Count, title, provider);
         }
 
-        public IReportColumnBuilder<TSourceEntity> InsertColumn(int index, string title, IReportCellProvider<TSourceEntity> provider)
-        {
-            return this.InsertCellProvider(index, new CellProviderId(title), provider);
-        }
-
-        public IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, string title, IReportCellProvider<TSourceEntity> provider)
-        {
-            return this.InsertColumn(this.GetCellProviderIndex(beforeTitle), title, provider);
-        }
-
-        public IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, string title, IReportCellProvider<TSourceEntity> provider)
-        {
-            return this.InsertColumn(this.GetCellProviderIndex(beforeId), title, provider);
-        }
-
-        public IReportColumnBuilder<TSourceEntity> AddColumn(ColumnId id, string title, IReportCellProvider<TSourceEntity> provider)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> AddColumn(ColumnId id, string title, IReportCellProvider<TSourceItem> provider)
         {
             return this.InsertColumn(this.cellProviders.Count, id, title, provider);
         }
 
-        public IReportColumnBuilder<TSourceEntity> InsertColumn(int index, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumn(int index, string title, IReportCellProvider<TSourceItem> provider)
+        {
+            return this.InsertCellProvider(index, new CellProviderId(title), provider);
+        }
+
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumn(int index, ColumnId id, string title, IReportCellProvider<TSourceItem> provider)
         {
             Validation.NotNull(nameof(id), id);
 
             return this.InsertCellProvider(index, new CellProviderId(title, columnId: id), provider);
         }
 
-        public IReportColumnBuilder<TSourceEntity> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumnBefore(string beforeTitle, string title, IReportCellProvider<TSourceItem> provider)
+        {
+            return this.InsertColumn(this.GetCellProviderIndex(beforeTitle), title, provider);
+        }
+
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumnBefore(ColumnId beforeId, string title, IReportCellProvider<TSourceItem> provider)
+        {
+            return this.InsertColumn(this.GetCellProviderIndex(beforeId), title, provider);
+        }
+
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumnBefore(string beforeTitle, ColumnId id, string title, IReportCellProvider<TSourceItem> provider)
         {
             return this.InsertColumn(this.GetCellProviderIndex(beforeTitle), id, title, provider);
         }
 
-        public IReportColumnBuilder<TSourceEntity> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellProvider<TSourceEntity> provider)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> InsertColumnBefore(ColumnId beforeId, ColumnId id, string title, IReportCellProvider<TSourceItem> provider)
         {
             return this.InsertColumn(this.GetCellProviderIndex(beforeId), id, title, provider);
         }
 
-        public IReportColumnBuilder<TSourceEntity> ForColumn(string title)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> ForColumn(string title)
         {
             return this.GetProvider(title);
         }
 
-        public IReportColumnBuilder<TSourceEntity> ForColumn(int index)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> ForColumn(int index)
         {
             if (index < 0 || index >= this.cellProviders.Count)
             {
@@ -142,48 +193,23 @@ namespace XReports.SchemaBuilders
             return this.cellProviders[index].Provider;
         }
 
-        public IReportColumnBuilder<TSourceEntity> ForColumn(ColumnId id)
+        /// <inheritdoc />
+        public IReportColumnBuilder<TSourceItem> ForColumn(ColumnId id)
         {
             Validation.NotNull(nameof(id), id);
 
             return this.cellProviders[this.GetCellProviderIndex(id)].Provider;
         }
 
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn = null)
-        {
-            this.complexHeaderBuilder.AddGroup(
-                rowIndex,
-                title,
-                new ColumnId(fromColumn.Value),
-                toColumn == null ?
-                    null :
-                    new ColumnId(toColumn.Value));
-
-            return this;
-        }
-
-        public IReportSchemaBuilder<TSourceEntity> AddComplexHeader(int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null)
-        {
-            this.complexHeaderBuilder.AddGroup(
-                rowIndex,
-                rowSpan,
-                title,
-                new ColumnId(fromColumn.Value),
-                toColumn == null ?
-                    null :
-                    new ColumnId(toColumn.Value));
-
-            return this;
-        }
-
-        public IReportSchema<TSourceEntity> BuildVerticalSchema()
+        /// <inheritdoc />
+        public IReportSchema<TSourceItem> BuildVerticalSchema()
         {
             if (this.cellProviders.Count == 0)
             {
                 throw new InvalidOperationException("Cannot build schema for table with no columns.");
             }
 
-            return new VerticalReportSchema<TSourceEntity>(
+            return new VerticalReportSchema<TSourceItem>(
                 this.cellProviders
                     .Select(c => c.Provider.Build(this.globalProperties))
                     .ToArray(),
@@ -194,7 +220,8 @@ namespace XReports.SchemaBuilders
                 this.commonComplexHeadersProperties.ToArray());
         }
 
-        public IReportSchema<TSourceEntity> BuildHorizontalSchema(int headerRowsCount)
+        /// <inheritdoc />
+        public IReportSchema<TSourceItem> BuildHorizontalSchema(int headerRowsCount)
         {
             if (this.cellProviders.Count == 0)
             {
@@ -208,7 +235,7 @@ namespace XReports.SchemaBuilders
                 throw new ArgumentOutOfRangeException(nameof(headerRowsCount), $"Count of header rows {headerRowsCount} cannot be greater than or equal to rows count {this.cellProviders.Count}");
             }
 
-            return new HorizontalReportSchema<TSourceEntity>(
+            return new HorizontalReportSchema<TSourceItem>(
                 this.cellProviders
                     .Take(headerRowsCount)
                     .Select(c => c.Provider.Build(Array.Empty<ReportCellProperty>()))
@@ -224,7 +251,7 @@ namespace XReports.SchemaBuilders
                 this.commonComplexHeadersProperties.ToArray());
         }
 
-        private IReportColumnBuilder<TSourceEntity> InsertCellProvider(int index, CellProviderId id, IReportCellProvider<TSourceEntity> provider)
+        private IReportColumnBuilder<TSourceItem> InsertCellProvider(int index, CellProviderId id, IReportCellProvider<TSourceItem> provider)
         {
             if (index < 0 || index > this.cellProviders.Count)
             {
@@ -233,7 +260,7 @@ namespace XReports.SchemaBuilders
 
             this.ValidateIdUnique(id);
 
-            ReportColumnBuilder<TSourceEntity> builder = new ReportColumnBuilder<TSourceEntity>(id.Title, provider);
+            ReportColumnBuilder<TSourceItem> builder = new ReportColumnBuilder<TSourceItem>(id.Title, provider);
 
             this.cellProviders.Insert(index, new IdentifiableCellProvider(id, builder));
 
@@ -278,7 +305,7 @@ namespace XReports.SchemaBuilders
                 .ToArray();
         }
 
-        private IReportColumnBuilder<TSourceEntity> GetProvider(string title)
+        private IReportColumnBuilder<TSourceItem> GetProvider(string title)
         {
             return this.cellProviders[this.GetCellProviderIndex(title)].Provider;
         }
@@ -328,14 +355,14 @@ namespace XReports.SchemaBuilders
 
         private class IdentifiableCellProvider
         {
-            public IdentifiableCellProvider(CellProviderId id, IReportColumnBuilder<TSourceEntity> provider)
+            public IdentifiableCellProvider(CellProviderId id, IReportColumnBuilder<TSourceItem> provider)
             {
                 this.Id = id;
                 this.Provider = provider;
             }
 
             public CellProviderId Id { get; }
-            public IReportColumnBuilder<TSourceEntity> Provider { get; }
+            public IReportColumnBuilder<TSourceItem> Provider { get; }
         }
 
         private class CellProviderId

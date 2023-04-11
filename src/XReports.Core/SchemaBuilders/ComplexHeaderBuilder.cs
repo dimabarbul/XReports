@@ -6,12 +6,16 @@ using XReports.Schema;
 
 namespace XReports.SchemaBuilders
 {
-    public partial class ComplexHeaderBuilder
+    /// <summary>
+    /// Complex header builder.
+    /// </summary>
+    public partial class ComplexHeaderBuilder : IComplexHeaderBuilder
     {
         private readonly ComplexHeaderCell spannedCell = new ComplexHeaderCell();
         private readonly List<ComplexHeaderGroup> groups = new List<ComplexHeaderGroup>();
 
-        public void AddGroup(int rowIndex, string title, int fromColumn, int? toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, string content, int fromColumn, int? toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
             Validation.NotNegative(nameof(fromColumn), fromColumn);
@@ -24,41 +28,44 @@ namespace XReports.SchemaBuilders
             this.groups.Add(
                 new ComplexHeaderGroupByIndex(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn ?? fromColumn,
                     1));
         }
 
-        public void AddGroup(int rowIndex, string title, string fromColumn, string toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, string content, string fromColumn, string toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
 
             this.groups.Add(
                 new ComplexHeaderGroupByName(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn,
                     1
                 ));
         }
 
-        public void AddGroup(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, string content, ColumnId fromColumn, ColumnId toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
 
             this.groups.Add(
                 new ComplexHeaderGroupByColumnId(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn,
                     1
                 ));
         }
 
-        public void AddGroup(int rowIndex, int rowSpan, string title, int fromColumn, int? toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, int rowSpan, string content, int fromColumn, int? toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
             Validation.NotNegative(nameof(fromColumn), fromColumn);
@@ -72,13 +79,14 @@ namespace XReports.SchemaBuilders
             this.groups.Add(
                 new ComplexHeaderGroupByIndex(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn ?? fromColumn,
                     rowSpan));
         }
 
-        public void AddGroup(int rowIndex, int rowSpan, string title, string fromColumn, string toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, int rowSpan, string content, string fromColumn, string toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
             Validation.Positive(nameof(rowSpan), rowSpan);
@@ -86,14 +94,15 @@ namespace XReports.SchemaBuilders
             this.groups.Add(
                 new ComplexHeaderGroupByName(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn,
                     rowSpan
                 ));
         }
 
-        public void AddGroup(int rowIndex, int rowSpan, string title, ColumnId fromColumn, ColumnId toColumn = null)
+        /// <inheritdoc />
+        public void AddGroup(int rowIndex, int rowSpan, string content, ColumnId fromColumn, ColumnId toColumn = null)
         {
             Validation.NotNegative(nameof(rowIndex), rowIndex);
             Validation.Positive(nameof(rowSpan), rowSpan);
@@ -101,13 +110,14 @@ namespace XReports.SchemaBuilders
             this.groups.Add(
                 new ComplexHeaderGroupByColumnId(
                     rowIndex,
-                    title,
+                    content,
                     fromColumn,
                     toColumn,
                     rowSpan
                 ));
         }
 
+        /// <inheritdoc />
         public ComplexHeaderCell[,] Build(IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             if (columnNames.Count != columnIds.Count)
@@ -118,11 +128,52 @@ namespace XReports.SchemaBuilders
             this.Validate(columnNames, columnIds);
             this.NormalizeRowIndexes();
             ComplexHeaderCell[,] header = this.BuildHeaderCells(columnNames, columnIds);
-            this.MoveSpanHeaderTitleUp(header);
+            this.MoveSpanHeaderContentUp(header);
             this.ValidateAllCellsFilled(header);
             this.CleanUpHeaderCells(header);
 
             return header;
+        }
+
+        private static GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
+        {
+            switch (group)
+            {
+                case ComplexHeaderGroupByIndex groupByIndex:
+                    return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
+                case ComplexHeaderGroupByName groupByName:
+                    return new GroupWithPosition(group, GetColumnIndex(groupByName.FromColumn, columnNames), GetColumnIndex(groupByName.ToColumn, columnNames));
+                case ComplexHeaderGroupByColumnId groupByColumnId:
+                    return new GroupWithPosition(group, GetColumnIndex(groupByColumnId.FromColumn, columnIds), GetColumnIndex(groupByColumnId.ToColumn, columnIds));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(group), $"Unexpected type of group: {group.GetType()}");
+            }
+        }
+
+        private static int GetColumnIndex(string columnName, IReadOnlyList<string> columnNames)
+        {
+            for (int i = 0; i < columnNames.Count; i++)
+            {
+                if (columnNames[i].Equals(columnName, StringComparison.Ordinal))
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException($"Column name {columnName} not found");
+        }
+
+        private static int GetColumnIndex(ColumnId columnId, IReadOnlyList<ColumnId> columnIds)
+        {
+            for (int i = 0; i < columnIds.Count; i++)
+            {
+                if (columnId.Equals(columnIds[i]))
+                {
+                    return i;
+                }
+            }
+
+            throw new ArgumentException($"Column ID {columnId} not found");
         }
 
         /// <summary>
@@ -185,16 +236,16 @@ namespace XReports.SchemaBuilders
         private void AddComplexHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
         {
             foreach (GroupWithPosition group in this.groups
-                .Select(g => this.GetGroupWithPosition(g, columnNames, columnIds))
+                .Select(g => GetGroupWithPosition(g, columnNames, columnIds))
                 .OrderBy(h => h.Group.RowIndex)
                 .ThenBy(h => h.StartIndex))
             {
-                string errorMessage = $"Group {group.Group.Title} overlaps with another group";
+                string errorMessage = $"Group {group.Group.Content} overlaps with another group";
 
                 this.ValidateNull(headerCells[group.Group.RowIndex, group.StartIndex], errorMessage);
                 headerCells[group.Group.RowIndex, group.StartIndex] = new ComplexHeaderCell()
                 {
-                    Title = group.Group.Title,
+                    Content = group.Group.Content,
                     ColumnSpan = group.EndIndex - group.StartIndex + 1,
                     RowSpan = group.Group.RowSpan,
                     IsComplexHeaderCell = true,
@@ -218,47 +269,6 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private GroupWithPosition GetGroupWithPosition(ComplexHeaderGroup group, IReadOnlyList<string> columnNames, IReadOnlyList<ColumnId> columnIds)
-        {
-            switch (group)
-            {
-                case ComplexHeaderGroupByIndex groupByIndex:
-                    return new GroupWithPosition(group, groupByIndex.StartIndex, groupByIndex.EndIndex);
-                case ComplexHeaderGroupByName groupByName:
-                    return new GroupWithPosition(group, this.GetColumnIndex(groupByName.FromColumn, columnNames), this.GetColumnIndex(groupByName.ToColumn, columnNames));
-                case ComplexHeaderGroupByColumnId groupByColumnId:
-                    return new GroupWithPosition(group, this.GetColumnIndex(groupByColumnId.FromColumn, columnIds), this.GetColumnIndex(groupByColumnId.ToColumn, columnIds));
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(group), $"Unexpected type of group: {group.GetType()}");
-            }
-        }
-
-        private int GetColumnIndex(string columnName, IReadOnlyList<string> columnNames)
-        {
-            for (int i = 0; i < columnNames.Count; i++)
-            {
-                if (columnNames[i].Equals(columnName, StringComparison.Ordinal))
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException($"Column name {columnName} not found");
-        }
-
-        private int GetColumnIndex(ColumnId columnId, IReadOnlyList<ColumnId> columnIds)
-        {
-            for (int i = 0; i < columnIds.Count; i++)
-            {
-                if (columnId.Equals(columnIds[i]))
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException($"Column ID {columnId} not found");
-        }
-
         private void AddRegularHeaderCells(ComplexHeaderCell[,] headerCells, IReadOnlyList<string> columnNames)
         {
             int lastHeaderRowIndex = headerCells.GetLength(0) - 1;
@@ -266,7 +276,7 @@ namespace XReports.SchemaBuilders
             {
                 headerCells[lastHeaderRowIndex, i] = new ComplexHeaderCell()
                 {
-                    Title = columnNames[i],
+                    Content = columnNames[i],
                     IsComplexHeaderCell = false,
                     ColumnSpan = 1,
                     RowSpan = 1,
@@ -274,7 +284,7 @@ namespace XReports.SchemaBuilders
             }
         }
 
-        private void MoveSpanHeaderTitleUp(ComplexHeaderCell[,] header)
+        private void MoveSpanHeaderContentUp(ComplexHeaderCell[,] header)
         {
             int rowsCount = header.GetLength(0);
             int columnsCount = header.GetLength(1);
@@ -287,12 +297,12 @@ namespace XReports.SchemaBuilders
                         continue;
                     }
 
-                    this.MoveTitleUpForEmptyCell(header, rowIndex, columnIndex);
+                    this.MoveContentUpForEmptyCell(header, rowIndex, columnIndex);
                 }
             }
         }
 
-        private void MoveTitleUpForEmptyCell(ComplexHeaderCell[,] header, int rowIndex, int columnIndex)
+        private void MoveContentUpForEmptyCell(ComplexHeaderCell[,] header, int rowIndex, int columnIndex)
         {
             int? filledRowIndex = this.GetNextFilledRowIndex(header, rowIndex, columnIndex);
             if (filledRowIndex == null)
@@ -332,67 +342,63 @@ namespace XReports.SchemaBuilders
 
         private abstract class ComplexHeaderGroup
         {
-            public int RowIndex { get; set; }
-            public string Title { get; }
-            public int RowSpan { get; }
-
-            protected ComplexHeaderGroup(int rowIndex, string title, int rowSpan)
+            protected ComplexHeaderGroup(int rowIndex, string content, int rowSpan)
             {
                 this.RowIndex = rowIndex;
-                this.Title = title;
+                this.Content = content;
                 this.RowSpan = rowSpan;
             }
+
+            public int RowIndex { get; set; }
+            public string Content { get; }
+            public int RowSpan { get; }
         }
 
         private class ComplexHeaderGroupByName : ComplexHeaderGroup
         {
-            public string FromColumn { get; }
-            public string ToColumn { get; }
-
-            public ComplexHeaderGroupByName(int rowIndex, string title, string fromColumn, string toColumn, int rowSpan)
-                : base(rowIndex, title, rowSpan)
+            public ComplexHeaderGroupByName(int rowIndex, string content, string fromColumn, string toColumn, int rowSpan)
+                : base(rowIndex, content, rowSpan)
             {
                 Validation.NotNull(nameof(fromColumn), fromColumn);
 
                 this.FromColumn = fromColumn;
                 this.ToColumn = toColumn ?? fromColumn;
             }
+
+            public string FromColumn { get; }
+            public string ToColumn { get; }
         }
 
         private class ComplexHeaderGroupByIndex : ComplexHeaderGroup
         {
-            public int StartIndex { get; }
-            public int EndIndex { get; }
-
-            public ComplexHeaderGroupByIndex(int rowIndex, string title, int startIndex, int endIndex, int rowSpan)
-                : base(rowIndex, title, rowSpan)
+            public ComplexHeaderGroupByIndex(int rowIndex, string content, int startIndex, int endIndex, int rowSpan)
+                : base(rowIndex, content, rowSpan)
             {
                 this.StartIndex = startIndex;
                 this.EndIndex = endIndex;
             }
+
+            public int StartIndex { get; }
+            public int EndIndex { get; }
         }
 
         private class ComplexHeaderGroupByColumnId : ComplexHeaderGroup
         {
-            public ColumnId FromColumn { get; }
-            public ColumnId ToColumn { get; }
-
-            public ComplexHeaderGroupByColumnId(int rowIndex, string title, ColumnId fromColumn, ColumnId toColumn, int rowSpan)
-                : base(rowIndex, title, rowSpan)
+            public ComplexHeaderGroupByColumnId(int rowIndex, string content, ColumnId fromColumn, ColumnId toColumn, int rowSpan)
+                : base(rowIndex, content, rowSpan)
             {
                 Validation.NotNull(nameof(fromColumn), fromColumn);
 
                 this.FromColumn = fromColumn;
                 this.ToColumn = toColumn ?? fromColumn;
             }
+
+            public ColumnId FromColumn { get; }
+            public ColumnId ToColumn { get; }
         }
 
         private class GroupWithPosition
         {
-            public ComplexHeaderGroup Group { get; }
-            public int StartIndex { get; }
-            public int EndIndex { get; }
-
             public GroupWithPosition(ComplexHeaderGroup group, int startIndex, int endIndex)
             {
                 this.Group = group;
@@ -406,6 +412,10 @@ namespace XReports.SchemaBuilders
                     (this.StartIndex, this.EndIndex) = (endIndex, startIndex);
                 }
             }
+
+            public ComplexHeaderGroup Group { get; }
+            public int StartIndex { get; }
+            public int EndIndex { get; }
         }
     }
 }
