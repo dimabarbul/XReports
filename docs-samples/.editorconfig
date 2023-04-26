@@ -1,0 +1,14 @@
+[*.cs]
+csharp_style_namespace_declarations = file_scoped
+
+# CA1305: The behavior of 'string.Format(string, object)' could vary based on the current user's locale settings.
+dotnet_diagnostic.CA1305.severity = none
+
+# IDE0048: Parentheses should be added for clarity
+dotnet_diagnostic.IDE0048.severity = none
+
+# IDE0040: Accessibility modifiers required
+dotnet_diagnostic.IDE0040.severity = none
+
+# IDE0090: 'new' expression can be simplified
+dotnet_diagnostic.IDE0090.severity = none

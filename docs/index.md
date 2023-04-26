@@ -1,6 +1,8 @@
 # XReports Documentation
 
-XReports is a library intended to provide extendable way of building reports and exporting them to different formats: HTML, Excel etc. having the same data source. There are two libraries:
+XReports is a library that provides extensible way of building reports and exporting them to different formats: HTML, Excel etc. having the same data source. The main idea of the library is separating report schema and report presentation.
+
+There are two libraries:
 - **XReports.Core** - provides classes and interfaces required for the library to work
 - **XReports** - provides extra functionality:
     - basic properties: bold, color etc.
@@ -8,6 +10,8 @@ XReports is a library intended to provide extendable way of building reports and
     - AttributeBasedBuilder: class allowing building reports using C# attributes
     - StringWriter - class allowing writing Html report to string
     - EpplusWriter - class allowing writing Excel report to xlsx file or stream using [Epplus 4](https://github.com/JanKallman/EPPlus)
+
+Both libraries provide integration with [.NET DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection).
 
 ## Table of Contents
 1. XReports.Core
