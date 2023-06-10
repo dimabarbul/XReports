@@ -30,7 +30,7 @@ IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 new SimpleConsoleWriter().Write(reportTable);
 
 // Model describing report data source item.
-class Customer
+internal class Customer
 {
     public string Name { get; set; }
     public string Email { get; set; }

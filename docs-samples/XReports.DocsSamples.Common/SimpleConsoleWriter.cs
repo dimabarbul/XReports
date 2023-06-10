@@ -9,7 +9,7 @@ public class SimpleConsoleWriter
     private const int CellPaddingWidth = 2;
     private const string Separator = "|";
 
-    public void Write(IReportTable<ReportCell> reportTable)
+    public virtual void Write(IReportTable<ReportCell> reportTable)
     {
         int columnCount = 0;
         // The only way to get count of columns is to enumerate row.
@@ -20,6 +20,7 @@ public class SimpleConsoleWriter
             columnCount = this.WriteRow(headerRow);
         }
 
+        // Horizontal report can have no header.
         if (columnCount > 0)
         {
             Console.WriteLine(new string('-', columnCount * (ColumnWidth + SeparatorWidth + CellPaddingWidth) + SeparatorWidth));
@@ -31,6 +32,11 @@ public class SimpleConsoleWriter
         }
     }
 
+    protected virtual void WriteCell(ReportCell reportCell, int cellWidth)
+    {
+        Console.Write($"{{0,{cellWidth}}}", reportCell.GetValue<string>());
+    }
+
     private int WriteRow(IEnumerable<ReportCell> row)
     {
         int columnIndex = 0;
@@ -39,36 +45,19 @@ public class SimpleConsoleWriter
         {
             columnIndex++;
 
-            // spanned cell is null
-            if (reportCell == null)
-            {
-                continue;
-            }
-
-            this.WriteSeparator();
-            this.WritePadding();
+            Console.Write(Separator);
+            Console.Write(' ');
             this.WriteCell(reportCell);
-            this.WritePadding();
+            Console.Write(' ');
         }
 
-        this.WriteSeparator();
-        Console.WriteLine();
+        Console.WriteLine(Separator);
 
         return columnIndex;
     }
 
     private void WriteCell(ReportCell reportCell)
     {
-        Console.Write($"{{0,{ColumnWidth}}}", reportCell.GetValue<string>());
-    }
-
-    private void WriteSeparator()
-    {
-        Console.Write(Separator);
-    }
-
-    private void WritePadding()
-    {
-        Console.Write(' ');
+        this.WriteCell(reportCell, ColumnWidth);
     }
 }

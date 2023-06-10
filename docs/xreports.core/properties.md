@@ -2,13 +2,17 @@
 
 Apart from value and span information each report cell has properties. Properties describe some cell characteristics. It can be anything: font size, font weight, alignment etc.
 
-Properties can be used by writer when report is being written in some form.
+The purpose of properties is to separate characteristics of report cells from how these characteristics are displayed. For instance, ProtectedProperty in examples below marks cells which content should be protected. It does not imply how this protected content should be displayed (although it has "Symbol" property that can be used during display), this decision is made in writer in the examples. Another examples of properties are alignment, font color etc. The reason of having such properties is the same - displaying content, for example, left-aligned is different for different display formats: in HTML it might be adding a class or HTML "style" attribute, in console it might be achieved by specifying alignment in string format.
 
-## Create Property
+Another way of handling properties is to use [property handlers](./using-report-converter.md#property-and-property-handler) with report converter.
+
+## Cell Properties
+
+[Working example](../../docs-samples/properties/XReports.DocsSamples.Properties.CellProperties/Program.cs)
 
 Let's create some properties to see how they can be used. Imagine that we want report where some cells are emphasised by converting their text to upper case. Also we'd like to have some cells protected by hiding their text using some mask symbol.
 
-From programming stand point property is a class inherited from XReports.Models.ReportCellProperty.
+From programming stand point property is a class inherited from ReportCellProperty.
 
 ```c#
 class UpperCaseProperty : ReportCellProperty
@@ -24,94 +28,25 @@ class ProtectedProperty : ReportCellProperty
         this.Symbol = symbol;
     }
 }
+```
 
-// Writer class. Its purpose is to "write" report. This is the place where properties will come into play.
-// Writers do not have any interface. It's up to you to decide what method(s) it will contain.
-class ConsoleWriter
-{
-    // Method to write report to console.
-    public void Write(IReportTable<ReportCell> reportTable)
-    {
-        this.WriteRows(reportTable.HeaderRows);
-        Console.WriteLine(new string('-', 2 * 23 - 3));
-        this.WriteRows(reportTable.Rows);
-    }
+Assign properties to columns you want during building schema.
 
-    // Autxiliary method to write rows (header or body).
-    private void WriteRows(IEnumerable<IEnumerable<ReportCell>> rows)
-    {
-        Console.WriteLine(
-            string.Join(
-                "\n",
-                rows.Select(row =>
-                    string.Join(
-                        " | ",
-                        row
-                            .Where(c => c != null)
-                            .Select(c => string.Format($"{{0,-{c.ColumnSpan * 23 - 3}}}", this.GetCellText(c)))
-                    )
-                )
-            )
-        );
-    }
-
-    // Method to get text that should be displayed taking all properties into consideration.
-    // All properties are handled inside this method for simplicity's sake.
-    private string GetCellText(ReportCell cell)
-    {
-        string text = cell.GetValue<string>();
-
-        // HasProperty method returns true if cell has assigned property of provided type.
-        if (cell.HasProperty<UpperCaseProperty>())
-        {
-            text = text.ToUpperInvariant();
-        }
-
-        // For ProtectedProperty it's not enough to know that it's assigned as it has read-only property we need to use.
-        ProtectedProperty protectedProperty = cell.GetProperty<ProtectedProperty>();
-        if (protectedProperty != null)
-        {
-            text = new string(protectedProperty.Symbol, text.Length);
-        }
-
-        return text;
-    }
-}
-
+```c#
 class UserInfo
 {
     public string Username { get; set; }
     public string Password { get; set; }
 }
 
-VerticalReportSchemaBuilder<UserInfo> builder = new VerticalReportSchemaBuilder<UserInfo>();
+ReportSchemaBuilder<UserInfo> builder = new ReportSchemaBuilder<UserInfo>();
 
 builder.AddColumn("Username", u => u.Username)
-    // each cell in this column will have provided property
+    // each cell in this column will have UpperCaseProperty
     .AddProperties(new UpperCaseProperty());
 builder.AddColumn("Password", u => u.Password)
-    // each cell in this column will have provided property
+    // each cell in this column will have ProtectedProperty
     .AddProperties(new ProtectedProperty('*'));
-
-VerticalReportSchema<UserInfo> schema = builder.BuildSchema();
-
-UserInfo[] users = new UserInfo[]
-{
-    new UserInfo() { Username = "guest", Password = "guest" },
-    new UserInfo() { Username = "admin", Password = "p@$sw0rd" },
-};
-
-IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
-
-ConsoleWriter writer = new ConsoleWriter();
-writer.Write(reportTable);
-
-/*
-Username             | Password            
--------------------------------------------
-GUEST                | *****               
-ADMIN                | ********            
-*/
 ```
 
 There are several ways to configure columns:
@@ -135,9 +70,49 @@ builder.ForColumn(new ColumnId("Username"))
     .AddProperties(new UpperCaseProperty());
 ```
 
+Assigned properties will be available in built report table. Writer class can use them to properly display data.
+
+```c#
+// ConsoleWriter class writes report table to console, but is has no
+// knowledge about our properties, so we'll extend it.
+class MyConsoleWriter : ConsoleWriter
+{
+…
+    protected override void WriteCell(ReportCell reportCell, int cellWidth)
+    {
+        string text = reportCell.GetValue<string>();
+
+        // HasProperty method returns true if cell has assigned property of provided type.
+        if (reportCell.HasProperty<UpperCaseProperty>())
+        {
+            text = text.ToUpperInvariant();
+        }
+
+        // For ProtectedProperty it's not enough to know that it's assigned as we need to know symbol to mask the value.
+        ProtectedProperty protectedProperty = reportCell.GetProperty<ProtectedProperty>();
+        if (protectedProperty != null)
+        {
+            text = new string(protectedProperty.Symbol, text.Length);
+        }
+
+        Console.Write($"{{0,{cellWidth}}}", text);
+    }
+}
+
+/*
+EXAMPLE OUTPUT:
+
+|             Username |             Password |
+-----------------------------------------------
+|                GUEST |                ***** |
+|                ADMIN |             ******** |
+*/
+```
+
 ## Header Properties
 
 Note that in previous example header of column Username was not converted to uppercase and header of Password was not hidden. That's because properties were applied to body cells. If we need to apply property to header cell, we need to use method AddHeaderProperties:
+
 ```c#
 …
 builder.AddColumn("Username", u => u.Username)
@@ -146,10 +121,10 @@ builder.AddColumn("Username", u => u.Username)
 …
 
 /*
-USERNAME             | Password            
--------------------------------------------
-guest                | *****               
-admin                | ********            
+|             USERNAME |             Password |
+|----------------------|----------------------|
+|                guest |                ***** |
+|                admin |             ******** |
 */
 ```
 
@@ -164,17 +139,18 @@ builder.AddColumn("Password", u => u.Password)
     .AddProperties(new ProtectedProperty('*'));
 
 // Add complex header
-builder.AddComplexHeader(0, "User Info", 0, 1)
-    // property will be assigned to all complex header cells titled "User Info"
-    .AddComplexHeaderProperties("User Info", new UpperCaseProperty());
+builder.AddComplexHeader(0, "User Info", 0, 1);
+// property will be assigned to all complex header cells titled "User Info"
+builder.AddComplexHeaderProperties("User Info", new UpperCaseProperty());
 …
 
 /*
-USER INFO                                  
-Username             | Password            
--------------------------------------------
-guest                | *****               
-admin                | ********            
+|                                   USER INFO |
+|----------------------|----------------------|
+|             Username |             Password |
+|----------------------|----------------------|
+|                guest |                ***** |
+|                admin |             ******** |
 */
 ```
 
@@ -188,11 +164,13 @@ builder
     .AddComplexHeaderProperties(new UpperCaseProperty());
 
 /*
-USER INFO            | SECURITY INFO       
-Username             | Password            
--------------------------------------------
-guest                | *****               
-admin                | ********            
+|            USER INFO |        SECURITY INFO |
+|----------------------|----------------------|
+|             Username |             Password |
+|----------------------|----------------------|
+|                guest |                ***** |
+|                admin |             ******** |
+*/
 ```
 
 ## Dynamic Properties
@@ -204,9 +182,9 @@ Imagine that we want to highlight users with weak password. If password is less 
 ```c#
 …
 builder.AddColumn("Username", u => u.Username)
-    // using AddD1ynamicProperty method you can specify function returning one
+    // using AddDynamicProperty method you can specify function returning one
     // or several properties
-    .AddDynamicProperty(u =>
+    .AddDynamicProperties(u =>
     {
         if (u.Password.Length < 8)
         {
@@ -220,10 +198,10 @@ builder.AddColumn("Password", u => u.Password)
 …
 
 /*
-Username             | Password            
--------------------------------------------
-GUEST                | *****               
-admin                | ********            
+|             Username |             Password |
+|----------------------|----------------------|
+|                GUEST |                ***** |
+|                admin |             ******** |
 */
 ```
 
@@ -233,15 +211,16 @@ To assign property to all columns/rows you may use AddGlobalProperties method.
 
 ```c#
 builder.AddColumn("Username", u => u.Username);
-builder.AddColumn("Password", u => u.Password);
+builder.AddColumn("Password", u => u.Password)
+    .AddProperties(new ProtectedProperty('*'));
 // All columns/rows (including added later) will have this property(-ies) assigned.
 builder.AddGlobalProperties(new UpperCaseProperty());
 
 /*
-Username             | Password            
--------------------------------------------
-GUEST                | *****               
-ADMIN                | ********            
+|             Username |             Password |
+|----------------------|----------------------|
+|                GUEST |                ***** |
+|                ADMIN |             ******** |
 */
 ```
 
@@ -260,7 +239,30 @@ class TitleProperty : ReportTableProperty
     public string Title { get; }
 }
 
-builder.AddTableProperties(new TitleProperty("The report title"));
+class MyConsoleWriter : ConsoleWriter
+{
+    public override void Write(IReportTable<ReportCell> reportTable)
+    {
+        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
+        if (titleProperty != null)
+        {
+            Console.WriteLine($"*** {titleProperty.Title} ***");
+        }
+
+        base.Write(reportTable);
+    }
+…
+}
+
+builder.AddTableProperties(new TitleProperty("User report"));
+
+/*
+*** User report ***
+|             Username |             Password |
+|----------------------|----------------------|
+|                GUEST |                ***** |
+|                ADMIN |             ******** |
+*/
 ```
 
 Unlike cell properties, there are no [handlers](using-report-converter.md) for table properties, the only way to process table properties is code in writer class. During report conversion all table properties are simply copied.

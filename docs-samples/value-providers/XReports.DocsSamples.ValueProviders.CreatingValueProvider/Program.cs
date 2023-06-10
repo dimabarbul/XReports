@@ -24,13 +24,13 @@ IReportTable<ReportCell> reportTable = schema.BuildReportTable(customers);
 
 new SimpleConsoleWriter().Write(reportTable);
 
-class Customer
+internal class Customer
 {
     public string Name { get; set; }
     public string Email { get; set; }
 }
 
-class DayOfWeekProvider : IValueProvider<string>
+internal class DayOfWeekProvider : IValueProvider<string>
 {
     private readonly Lazy<DateTime> today = new(() => DateTime.Today);
 

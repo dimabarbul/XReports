@@ -23,7 +23,7 @@ IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
 new SimpleConsoleWriter().Write(reportTable);
 
-class Customer
+internal class Customer
 {
     public string Name { get; set; }
     public string Email { get; set; }

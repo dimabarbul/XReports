@@ -12,7 +12,7 @@ public class ConsoleWriter
 
     private readonly SpannedCells spannedCells = new();
 
-    public void Write(IReportTable<ReportCell> reportTable)
+    public virtual void Write(IReportTable<ReportCell> reportTable)
     {
         // The only way to get count of columns is to enumerate row.
         // But enumerating row recomputes all cells, so it's better to count
