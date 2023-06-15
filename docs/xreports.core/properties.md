@@ -181,14 +181,17 @@ Imagine that we want to highlight users with weak password. If password is less 
 
 ```c#
 …
+UpperCaseProperty upperCaseProperty = new UpperCaseProperty();
 builder.AddColumn("Username", u => u.Username)
-    // using AddDynamicProperty method you can specify function returning one
-    // or several properties
+    // Using AddDynamicProperties method you can specify function returning one
+    // or several properties.
+    // If returned property(-ies) is the same for all cells, it is advisable to
+    // return the same object instead of creating new inside of function.
     .AddDynamicProperties(u =>
     {
         if (u.Password.Length < 8)
         {
-            return new UpperCaseProperty();
+            return upperCaseProperty;
         }
 
         return null;
