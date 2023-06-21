@@ -60,6 +60,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "using-report-converter", "u
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.UsingReportConverter", "docs-samples\using-report-converter\XReports.DocsSamples.UsingReportConverter\XReports.DocsSamples.UsingReportConverter.csproj", "{99B65D8D-16E4-4984-AFAC-DECE024C9F2F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cell-processors", "cell-processors", "{B666A436-B251-4942-8670-BE14E5DDA17E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.CellProcessors", "docs-samples\cell-processors\XReports.DocsSamples.CellProcessors\XReports.DocsSamples.CellProcessors.csproj", "{5A2C8243-33AD-401C-8EAE-9B15D786BE8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +158,10 @@ Global
 		{99B65D8D-16E4-4984-AFAC-DECE024C9F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99B65D8D-16E4-4984-AFAC-DECE024C9F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99B65D8D-16E4-4984-AFAC-DECE024C9F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -180,5 +188,7 @@ Global
 		{9B994C81-D5D2-4A6C-8782-4B1D11801ED8} = {BDE3CBEC-A892-4B96-9313-373E6F14EEE6}
 		{2FA32ED9-D959-4922-9817-3C43B564E71B} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
 		{99B65D8D-16E4-4984-AFAC-DECE024C9F2F} = {2FA32ED9-D959-4922-9817-3C43B564E71B}
+		{B666A436-B251-4942-8670-BE14E5DDA17E} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
+		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A} = {B666A436-B251-4942-8670-BE14E5DDA17E}
 	EndGlobalSection
 EndGlobal
