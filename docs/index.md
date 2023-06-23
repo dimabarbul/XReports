@@ -20,7 +20,7 @@ Both libraries provide integration with [.NET DI](https://learn.microsoft.com/en
     3. [Properties](xreports.core/properties.md)
     4. [Using Report Converter](xreports.core/using-report-converter.md)
     5. [Cell Processors](xreports.core/cell-processors.md)
-    6. [Cells Providers](xreports.core/cells-providers.md)
+    6. [Cell Providers](xreports.core/cell-providers.md)
     7. [.NET Core Integration](xreports.core/net-core-integration.md)
 2. XReports
     1. [Cell types](xreports/cell-types.md)

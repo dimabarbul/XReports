@@ -1,5 +1,4 @@
-﻿
-using XReports.DocsSamples.Common;
+﻿using XReports.DocsSamples.Common;
 using XReports.Schema;
 using XReports.SchemaBuilders;
 using XReports.Table;
