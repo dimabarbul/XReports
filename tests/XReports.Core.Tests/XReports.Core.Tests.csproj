@@ -44,6 +44,9 @@
     <Compile Update="Converter\ReportConverterTest.Properties.cs">
       <DependentUpon>ReportConverterTest.cs</DependentUpon>
     </Compile>
+    <Compile Update="DependencyInjection\TypesCollectionTest.Classes.cs">
+      <DependentUpon>TypesCollectionTest.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -18,7 +18,7 @@ namespace XReports.DependencyInjection
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddAttributeBasedBuilder(
             this IServiceCollection services,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            ServiceLifetime lifetime = ServiceLifetime.Singleton)
         {
             return services.AddAttributeBasedBuilder(null, lifetime);
         }
@@ -33,7 +33,7 @@ namespace XReports.DependencyInjection
         public static IServiceCollection AddAttributeBasedBuilder(
             this IServiceCollection services,
             Action<TypesCollection<IAttributeHandler>> configure,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            ServiceLifetime lifetime = ServiceLifetime.Singleton)
         {
             if (configure != null)
             {

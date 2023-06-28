@@ -7,13 +7,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.DependencyInjection;
 using XReports.SchemaBuilders;
-using XReports.Tests.Assertions;
+using XReports.Tests.Common.Assertions;
 using Xunit;
 
 namespace XReports.Tests.DependencyInjection
 {
     public partial class AttributeBasedBuilderDITest
     {
+        [Fact]
+        public void AddAttributeBasedBuilderWithDefaultLifetimeShouldRegister()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddAttributeBasedBuilder();
+
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(ServiceLifetime.Singleton);
+        }
+
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
@@ -26,11 +35,22 @@ namespace XReports.Tests.DependencyInjection
             serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(lifetime);
         }
 
+        [Fact]
+        public void AddAttributeBasedBuilderWithHandlersAndDefaultLifetimeShouldRegister()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddAttributeBasedBuilder(
+                    o => o.AddFromAssembly<IMyAttributeHandler>(Assembly.GetExecutingAssembly()));
+
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(ServiceLifetime.Singleton);
+            serviceCollection.Should().ContainDescriptors<IAttributeHandler>(ServiceLifetime.Singleton, typeof(MyAttributeHandler), typeof(MyAnotherAttributeHandler));
+        }
+
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
-        public void AddAttributeBasedBuilderShouldRegisterWithHandlers(ServiceLifetime lifetime)
+        public void AddAttributeBasedBuilderWithHandlersAndLifetimeShouldRegister(ServiceLifetime lifetime)
         {
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddAttributeBasedBuilder(
@@ -39,20 +59,6 @@ namespace XReports.Tests.DependencyInjection
 
             serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(lifetime);
             serviceCollection.Should().ContainDescriptors<IAttributeHandler>(lifetime, typeof(MyAttributeHandler), typeof(MyAnotherAttributeHandler));
-        }
-
-        [Theory]
-        [InlineData(ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Singleton)]
-        public void AddAttributeBasedBuilderShouldRegisterWithHandlersAndLifetime(ServiceLifetime lifetime)
-        {
-            IServiceCollection serviceCollection = new ServiceCollection()
-                .AddAttributeBasedBuilder(
-                    o => o.AddFromAssembly<IMyAttributeHandler>(Assembly.GetExecutingAssembly()),
-                    lifetime);
-
-            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(lifetime);
         }
 
         [Fact]

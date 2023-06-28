@@ -7,13 +7,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using XReports.DependencyInjection;
 using XReports.Excel.Writers;
-using XReports.Tests.Assertions;
+using XReports.Tests.Common.Assertions;
 using Xunit;
 
 namespace XReports.Tests.DependencyInjection
 {
     public partial class EpplusWriterDITest
     {
+        [Fact]
+        public void AddEpplusWriterWithDefaultLifetimeShouldRegisterScoped()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddEpplusWriter();
+
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter, EpplusWriter>(ServiceLifetime.Scoped);
+        }
+
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
@@ -62,6 +71,15 @@ namespace XReports.Tests.DependencyInjection
                             writerLifetime));
         }
 
+        [Fact]
+        public void AddEpplusWriterWithDefaultLifetimeShouldRegisterCustomImplementation()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddEpplusWriter<CustomEpplusWriter>();
+
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(ServiceLifetime.Scoped);
+        }
+
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
@@ -85,6 +103,16 @@ namespace XReports.Tests.DependencyInjection
 
             serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(lifetime);
             serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
+        }
+
+        [Fact]
+        public void AddEpplusWriterWithDefaultLifetimeShouldRegisterCustomImplementationWithCustomInterface()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddEpplusWriter<IMyEpplusWriter, MyEpplusWriter>();
+
+            serviceCollection.Should().ContainDescriptor<IMyEpplusWriter, MyEpplusWriter>(ServiceLifetime.Scoped);
+            serviceCollection.Should().NotContainDescriptor<IEpplusWriter>();
         }
 
         [Theory]

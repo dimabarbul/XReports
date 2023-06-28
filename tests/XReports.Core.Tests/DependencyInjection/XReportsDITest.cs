@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XReports.Converter;
 using XReports.DependencyInjection;
 using XReports.Table;
+using XReports.Tests.Common.Assertions;
 using Xunit;
 
 namespace XReports.Core.Tests.DependencyInjection
@@ -15,74 +16,45 @@ namespace XReports.Core.Tests.DependencyInjection
         private const string Name = "name";
 
         [Fact]
-        public void AddReportConverterWithTransientLifetimeShouldRegister()
+        public void AddReportConverterWithDefaultLifetimeShouldRegister()
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(lifetime: ServiceLifetime.Transient)
-                .BuildServiceProvider(validateScopes: true);
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell>();
 
-            IReportConverter<HtmlCell> converter1 = serviceProvider.GetService<IReportConverter<HtmlCell>>();
-            IReportConverter<HtmlCell> converter2 = serviceProvider.GetService<IReportConverter<HtmlCell>>();
+            services.Should().ContainDescriptor<IReportConverter<HtmlCell>>(ServiceLifetime.Singleton);
+        }
 
-            converter1.Should().NotBeNull();
-            converter2.Should().NotBeNull();
-            converter1.Should().NotBe(converter2);
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void AddReportConverterWithLifetimeShouldRegister(ServiceLifetime lifetime)
+        {
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell>(lifetime: lifetime);
+
+            services.Should().ContainDescriptor<IReportConverter<HtmlCell>>(lifetime);
         }
 
         [Fact]
-        public void AddReportConverterWithSingletonLifetimeShouldRegister()
+        public void AddReportConverterWithNameAndDefaultLifetimeShouldRegister()
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(lifetime: ServiceLifetime.Singleton)
-                .BuildServiceProvider(validateScopes: true);
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell>(Name);
 
-            IReportConverter<HtmlCell> converter1 = serviceProvider.GetService<IReportConverter<HtmlCell>>();
-            IReportConverter<HtmlCell> converter2 = serviceProvider.GetService<IReportConverter<HtmlCell>>();
-
-            converter1.Should().NotBeNull();
-            converter2.Should().NotBeNull();
-            converter1.Should().Be(converter2);
+            services.Should().ContainDescriptor<IReportConverterFactory<HtmlCell>>(ServiceLifetime.Singleton);
         }
 
-        [Fact]
-        public void AddReportConverterWithScopedLifetimeShouldRegister()
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void AddReportConverterWithNameAndLifetimeShouldRegister(ServiceLifetime lifetime)
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(lifetime: ServiceLifetime.Scoped)
-                .BuildServiceProvider(validateScopes: true);
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell>(Name, lifetime: lifetime);
 
-            using (IServiceScope scope1 = serviceProvider.CreateScope())
-            using (IServiceScope scope2 = serviceProvider.CreateScope())
-            {
-                IReportConverter<HtmlCell> converter1FromScope1 =
-                    scope1.ServiceProvider.GetService<IReportConverter<HtmlCell>>();
-                IReportConverter<HtmlCell> converter2FromScope1 =
-                    scope1.ServiceProvider.GetService<IReportConverter<HtmlCell>>();
-
-                IReportConverter<HtmlCell> converter1FromScope2 =
-                    scope2.ServiceProvider.GetService<IReportConverter<HtmlCell>>();
-                IReportConverter<HtmlCell> converter2FromScope2 =
-                    scope2.ServiceProvider.GetService<IReportConverter<HtmlCell>>();
-
-                converter1FromScope1.Should().NotBeNull().And.Be(converter2FromScope1);
-                converter1FromScope2.Should().NotBeNull().And.Be(converter2FromScope2);
-                converter1FromScope1.Should().NotBe(converter1FromScope2);
-            }
-        }
-
-        [Fact]
-        public void AddReportConverterWithNameAndTransientLifetimeShouldRegister()
-        {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(Name, lifetime: ServiceLifetime.Transient)
-                .BuildServiceProvider(validateScopes: true);
-
-            IReportConverterFactory<HtmlCell> converterFactory1 = serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-            IReportConverterFactory<HtmlCell> converterFactory2 = serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-
-            converterFactory1.Should().NotBeNull();
-            converterFactory2.Should().NotBeNull();
-            converterFactory1.Should().NotBe(converterFactory2);
+            services.Should().ContainDescriptor<IReportConverterFactory<HtmlCell>>(lifetime);
         }
 
         [Fact]
@@ -93,47 +65,6 @@ namespace XReports.Core.Tests.DependencyInjection
                 .AddReportConverter<HtmlCell>("name2", lifetime: ServiceLifetime.Scoped);
 
             action.Should().Throw<ArgumentException>();
-        }
-
-        [Fact]
-        public void AddReportConverterWithNameAndSingletonLifetimeShouldRegister()
-        {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(Name, lifetime: ServiceLifetime.Singleton)
-                .BuildServiceProvider(validateScopes: true);
-
-            IReportConverterFactory<HtmlCell> converterFactory1 = serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-            IReportConverterFactory<HtmlCell> converterFactory2 = serviceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-
-            converterFactory1.Should().NotBeNull();
-            converterFactory2.Should().NotBeNull();
-            converterFactory1.Should().Be(converterFactory2);
-        }
-
-        [Fact]
-        public void AddReportConverterWithNameAndScopedLifetimeShouldRegister()
-        {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell>(Name, lifetime: ServiceLifetime.Scoped)
-                .BuildServiceProvider(validateScopes: true);
-
-            using (IServiceScope scope1 = serviceProvider.CreateScope())
-            using (IServiceScope scope2 = serviceProvider.CreateScope())
-            {
-                IReportConverterFactory<HtmlCell> converterFactory1FromScope1 =
-                    scope1.ServiceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-                IReportConverterFactory<HtmlCell> converterFactory2FromScope1 =
-                    scope1.ServiceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-
-                IReportConverterFactory<HtmlCell> converterFactory1FromScope2 =
-                    scope2.ServiceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-                IReportConverterFactory<HtmlCell> converterFactory2FromScope2 =
-                    scope2.ServiceProvider.GetService<IReportConverterFactory<HtmlCell>>();
-
-                converterFactory1FromScope1.Should().NotBeNull().And.Be(converterFactory2FromScope1);
-                converterFactory1FromScope2.Should().NotBeNull().And.Be(converterFactory2FromScope2);
-                converterFactory1FromScope1.Should().NotBe(converterFactory1FromScope2);
-            }
         }
 
         [Fact]
@@ -151,14 +82,28 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         [Fact]
-        public void AddReportConverterShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument()
+        public void AddReportConverterWithDefaultLifetimeShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument()
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>()
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>();
+
+            services.Should().ContainDescriptor<IReportConverter<HtmlCell>>(ServiceLifetime.Singleton);
+        }
+
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void AddReportConverterWithLifetimeShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument(ServiceLifetime lifetime)
+        {
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>(lifetime);
+            ServiceProvider serviceProvider = services
                 .BuildServiceProvider();
 
             IReportConverter<HtmlCell> converter = serviceProvider.GetService<IReportConverter<HtmlCell>>();
 
+            services.Should().ContainDescriptor<IReportConverter<HtmlCell>>(lifetime);
             converter.Should().NotBeNull();
             IPropertyHandler<HtmlCell>[] handlers = this.GetPropertyHandlers(converter);
             handlers.Select(h => h.GetType())
@@ -202,16 +147,30 @@ namespace XReports.Core.Tests.DependencyInjection
         }
 
         [Fact]
-        public void AddReportConverterWithNameShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument()
+        public void AddReportConverterWithNameAndDefaultLifetimeShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument()
         {
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>(Name)
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>(Name);
+
+            services.Should().ContainDescriptor<IReportConverterFactory<HtmlCell>>(ServiceLifetime.Singleton);
+        }
+
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void AddReportConverterWithNameAndLifetimeShouldRegisterWithHandlersWhenInterfaceProvidedAsGenericArgument(ServiceLifetime lifetime)
+        {
+            IServiceCollection services = new ServiceCollection()
+                .AddReportConverter<HtmlCell, IHtmlPropertyHandler>(Name, lifetime);
+            ServiceProvider serviceProvider = services
                 .BuildServiceProvider();
 
             IReportConverterFactory<HtmlCell> converterFactory =
                 serviceProvider.GetRequiredService<IReportConverterFactory<HtmlCell>>();
             IReportConverter<HtmlCell> converter = converterFactory.Get(Name);
 
+            services.Should().ContainDescriptor<IReportConverterFactory<HtmlCell>>(lifetime);
             converter.Should().NotBeNull();
             IPropertyHandler<HtmlCell>[] handlers = this.GetPropertyHandlers(converter);
             handlers.Select(h => h.GetType())

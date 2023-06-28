@@ -27,7 +27,7 @@ services.AddEpplusWriter<IExtendedExcelWriter, ExtendedExcelWriter>();
 
 All of the forms accept 2 optional arguments:
 - configuration callback to configure EpplusWriter options
-- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback
+- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback, by default it's scoped
 
 Example:
 

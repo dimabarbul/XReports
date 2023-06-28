@@ -68,6 +68,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cell-providers", "cell-prov
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.CellProviders.CustomCellProviders", "docs-samples\cell-providers\XReports.DocsSamples.CellProviders.CustomCellProviders\XReports.DocsSamples.CellProviders.CustomCellProviders.csproj", "{823D169F-164B-4732-96C6-C2DE5AF8DBB4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net-core-integration", "net-core-integration", "{73AD2A2D-82D1-4041-9975-61970D9C2F06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.NetCoreIntegration.DefaultConverter", "docs-samples\net-core-integration\XReports.DocsSamples.NetCoreIntegration.DefaultConverter\XReports.DocsSamples.NetCoreIntegration.DefaultConverter.csproj", "{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.NetCoreIntegration.NamedConverters", "docs-samples\net-core-integration\XReports.DocsSamples.NetCoreIntegration.NamedConverters\XReports.DocsSamples.NetCoreIntegration.NamedConverters.csproj", "{53652B70-6D88-4589-A7DD-8B0015928A29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,6 +176,14 @@ Global
 		{823D169F-164B-4732-96C6-C2DE5AF8DBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{823D169F-164B-4732-96C6-C2DE5AF8DBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{823D169F-164B-4732-96C6-C2DE5AF8DBB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53652B70-6D88-4589-A7DD-8B0015928A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53652B70-6D88-4589-A7DD-8B0015928A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53652B70-6D88-4589-A7DD-8B0015928A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53652B70-6D88-4589-A7DD-8B0015928A29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -200,5 +214,8 @@ Global
 		{5A2C8243-33AD-401C-8EAE-9B15D786BE8A} = {B666A436-B251-4942-8670-BE14E5DDA17E}
 		{60900232-2EB4-4EBD-8C14-19379D63946C} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
 		{823D169F-164B-4732-96C6-C2DE5AF8DBB4} = {60900232-2EB4-4EBD-8C14-19379D63946C}
+		{73AD2A2D-82D1-4041-9975-61970D9C2F06} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
+		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF} = {73AD2A2D-82D1-4041-9975-61970D9C2F06}
+		{53652B70-6D88-4589-A7DD-8B0015928A29} = {73AD2A2D-82D1-4041-9975-61970D9C2F06}
 	EndGlobalSection
 EndGlobal
