@@ -74,6 +74,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.NetCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.NetCoreIntegration.NamedConverters", "docs-samples\net-core-integration\XReports.DocsSamples.NetCoreIntegration.NamedConverters\XReports.DocsSamples.NetCoreIntegration.NamedConverters.csproj", "{53652B70-6D88-4589-A7DD-8B0015928A29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "attribute-based-builder", "attribute-based-builder", "{ACAB0518-8A5B-45FA-A16A-C1F1058C207A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes\XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes.csproj", "{694983D8-D4A3-4C7B-A18C-C019367D4F78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader\XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader.csproj", "{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.PostBuilder", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.PostBuilder\XReports.DocsSamples.AttributeBasedBuilder.PostBuilder.csproj", "{5F03BEEC-BEAF-4C04-8689-88032FBD4505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies\XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies.csproj", "{5E44767A-3FB3-4543-AD1D-F23603FD8906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder\XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder.csproj", "{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.TableProperties", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.TableProperties\XReports.DocsSamples.AttributeBasedBuilder.TableProperties.csproj", "{D4F342E3-441F-4567-9A83-834ED62B498F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,6 +198,30 @@ Global
 		{53652B70-6D88-4589-A7DD-8B0015928A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53652B70-6D88-4589-A7DD-8B0015928A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53652B70-6D88-4589-A7DD-8B0015928A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694983D8-D4A3-4C7B-A18C-C019367D4F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694983D8-D4A3-4C7B-A18C-C019367D4F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694983D8-D4A3-4C7B-A18C-C019367D4F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694983D8-D4A3-4C7B-A18C-C019367D4F78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F03BEEC-BEAF-4C04-8689-88032FBD4505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F03BEEC-BEAF-4C04-8689-88032FBD4505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F03BEEC-BEAF-4C04-8689-88032FBD4505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F03BEEC-BEAF-4C04-8689-88032FBD4505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E44767A-3FB3-4543-AD1D-F23603FD8906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E44767A-3FB3-4543-AD1D-F23603FD8906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E44767A-3FB3-4543-AD1D-F23603FD8906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E44767A-3FB3-4543-AD1D-F23603FD8906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F342E3-441F-4567-9A83-834ED62B498F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F342E3-441F-4567-9A83-834ED62B498F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F342E3-441F-4567-9A83-834ED62B498F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F342E3-441F-4567-9A83-834ED62B498F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -217,5 +255,12 @@ Global
 		{73AD2A2D-82D1-4041-9975-61970D9C2F06} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
 		{88E3AC2B-B844-4A4B-A1F0-F559E6E9A2EF} = {73AD2A2D-82D1-4041-9975-61970D9C2F06}
 		{53652B70-6D88-4589-A7DD-8B0015928A29} = {73AD2A2D-82D1-4041-9975-61970D9C2F06}
+		{ACAB0518-8A5B-45FA-A16A-C1F1058C207A} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
+		{694983D8-D4A3-4C7B-A18C-C019367D4F78} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{A0E12F51-23A4-4959-8BFA-FC15D6CB22B0} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{5F03BEEC-BEAF-4C04-8689-88032FBD4505} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{5E44767A-3FB3-4543-AD1D-F23603FD8906} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{D4F342E3-441F-4567-9A83-834ED62B498F} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
 	EndGlobalSection
 EndGlobal

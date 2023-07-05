@@ -268,3 +268,9 @@ public class ShouldBeCalledFirstPropertyHandler : PropertyHandler<SomeProperty, 
 ```
 
 Default priority for classes inherited from PropertyHandler is 0.
+
+## Property Inheritance
+
+Sometimes you might want to extend or adjust behavior of some property. To do this you can use properties inheritance. PropertyHandler class handles inherited properties, so all handlers inherited from it will process whole properties hierarchies. This allows adding more specific properties along with handlers that contain some custom logic for inherited properties.
+
+For example, let's imagine that we want to extend handling of MaxLengthProperty in such way that when converted to Html, report will have title attribute

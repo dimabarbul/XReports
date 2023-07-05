@@ -46,7 +46,7 @@ namespace XReports.Html.Writers
         /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
         protected virtual void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
         {
-            stringBuilder.Append('<').Append(tableCellTagName).Append(' ');
+            stringBuilder.Append('<').Append(tableCellTagName);
             this.WriteAttributes(stringBuilder, cell);
             stringBuilder.Append('>');
         }
@@ -124,7 +124,7 @@ namespace XReports.Html.Writers
         /// <param name="value">Attribute value.</param>
         protected virtual void WriteAttribute(StringBuilder stringBuilder, string name, string value)
         {
-            stringBuilder.Append(name).Append(@"=""").Append(HttpUtility.HtmlAttributeEncode(value)).Append(@""" ");
+            stringBuilder.Append(' ').Append(name).Append(@"=""").Append(HttpUtility.HtmlAttributeEncode(value)).Append('"');
         }
     }
 }

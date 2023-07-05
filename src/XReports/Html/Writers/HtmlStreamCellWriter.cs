@@ -49,7 +49,6 @@ namespace XReports.Html.Writers
         {
             await streamWriter.WriteAsync('<').ConfigureAwait(false);
             await streamWriter.WriteAsync(tableCellTagName).ConfigureAwait(false);
-            await streamWriter.WriteAsync(' ').ConfigureAwait(false);
             await this.WriteAttributesAsync(streamWriter, cell).ConfigureAwait(false);
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
@@ -133,10 +132,11 @@ namespace XReports.Html.Writers
         /// <returns>Task.</returns>
         protected virtual async Task WriteAttributeAsync(StreamWriter streamWriter, string name, string value)
         {
+            await streamWriter.WriteAsync(' ').ConfigureAwait(false);
             await streamWriter.WriteAsync(name).ConfigureAwait(false);
             await streamWriter.WriteAsync(@"=""").ConfigureAwait(false);
             await streamWriter.WriteAsync(HttpUtility.HtmlAttributeEncode(value)).ConfigureAwait(false);
-            await streamWriter.WriteAsync(@""" ").ConfigureAwait(false);
+            await streamWriter.WriteAsync('"').ConfigureAwait(false);
         }
     }
 }

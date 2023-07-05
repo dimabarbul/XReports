@@ -3,7 +3,7 @@ using XReports.SchemaBuilders.Attributes;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
-    public partial class ReportVariableTest
+    public partial class ReportColumnTest
     {
         private class MultiplePropertiesClass
         {

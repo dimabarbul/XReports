@@ -66,7 +66,7 @@
     <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\StandardAttributesTest.Classes.cs">
       <DependentUpon>StandardAttributesTest.cs</DependentUpon>
     </Compile>
-    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\ReportVariableTest.Classes.cs">
+    <Compile Update="SchemaBuilders\AttributeBasedBuilderTests\ReportColumnTest.Classes.cs">
       <DependentUpon>ReportVariableTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>

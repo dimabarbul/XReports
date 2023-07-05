@@ -1,46 +1,32 @@
-# AttributeBasedBuilder
+# Attribute-Based Builder
 
-AttributeBasedBuilder allows building report schema using attributes on class properties.
+Attribute-based builder allows building report schema using attributes on your model class and class properties instead of writing code to add columns and properties.
 
-## .NET Core Integration
-
-You need to call extension method AddAttributeBasedBuilder. This will register IAttributeBasedBuilder. Attribute handlers and post-builders can be registered in DI container.
+Example:
 
 ```c#
-class ReportModel
+[Alignment(Alignment.Center)]
+class User
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
+    [Alignment(Alignment.Left)]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Email")]
+    [ReportColumn(2, "Email")]
+    [Bold]
     public string Email { get; set; }
 
-    [ReportVariable(3, "Score")]
+    [ReportColumn(3, "Score")]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
 
-ServiceCollection services = new ServiceCollection();
-services.AddAttributeBasedBuilder();
-// You can pass optional configuration callback and service lifetime.
-// Example below registers attribute-based builder along with all
-// attribute handlers (implementors of IAttributeHandler interface) 
-// from executing assembly with singletons lifetime.
-// services.AddAttributeBasedBuilder(
-//     o => o.AddFromAssembly(Assembly.GetExecutingAssembly()),
-//     ServiceLifetime.Singleton);
-ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-// Get builder.
-IAttributeBasedBuilder builder = serviceProvider.GetRequiredService<IAttributeBasedBuilder>();
-// Building schema is matter of calling one method passing your model type.
-// Everything will be configured by attributes and optionally in post-builder class.
-IReportSchema<ReportModel> schema = builder.BuildSchema<ReportModel>();
+IReportSchema<User> schema = attributeBasedBuilder.BuildSchema<User>();
 ```
 
 ## Property Attributes
 
-### ReportVariableAttribute
+### ReportColumnAttribute
 
 Let's imagine that we have users report with columns: name, email, age. Following class reflects the report record.
 
@@ -53,171 +39,94 @@ class User
 }
 ```
 
-For report to have column for class property, ReportVariableAttribute should be added to it.
+For report to have column for class property, ReportColumnAttribute should be added to it.
 
 ```c#
 class User
 {
-    [ReportVariable(1, "User Name")]
+    [ReportColumn(1, "User Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Email")]
+    [ReportColumn(2, "Email")]
     public string Email { get; set; }
 
-    [ReportVariable(3, "Age")]
+    [ReportColumn(3, "Age")]
     public int Age { get; set; }
 }
 ```
 
 The attribute has 2 required arguments - column order (any number, columns will be added in ascending order of this number) and column title. Building report from this model will have 3 columns: User Name, Email and Age.
 
-Columns/rows are added with title from ReportVariable attribute. So in previous example you can work with the first column in post-builder class as:
+Columns/rows are added with title from ReportColumn attribute. So in previous example you can work with the first column in [post-builder](#post-builder) class as:
 
 ```c#
 // You can use column title
 builder.ForColumn("User Name");
+// or column 0-based index
+builder.ForColumn(0);
 // or property name as column ID
 builder.ForColumn(new ColumnId(nameof(User.Name)));
 ```
 
 ### Complex Header
 
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader/Program.cs)
+
 Complex header can be specified using ComplexHeaderAttribute.
 
 ```c#
 // Add complex header using property names.
+// The first parameter is the header row number. The lower the number, the
+// higher the header row is.
 [ComplexHeader(1, "User Info", nameof(Name), nameof(Email), true)]
 // Add complex header using columns/rows titles.
-[ComplexHeader(2, "Personal Info", "Name", "Age")]
+[ComplexHeader(2, "Personal Info", "Full Name", "Age")]
 // Add complex header using column/row order.
 // Note that numbers here are column order values - the numbers
-// used in ReportVariableAttribute, not columns/rows indexes.
+// used in ReportColumnAttribute, not columns/rows indexes.
 [ComplexHeader(2, "Contact Info", 3, 4)]
 class User
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Full Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Age")]
+    [ReportColumn(2, "Age")]
     public int Age { get; set; }
 
-    [ReportVariable(3, "Phone")]
+    [ReportColumn(3, "Phone")]
     public string Phone { get; set; }
 
-    [ReportVariable(4, "Email")]
+    [ReportColumn(4, "Email")]
     public string Email { get; set; }
 }
-```
 
-In this example report will have one complex header row (topmost) "User Info" combining all columns and second complex header row with "Personal Info" above "Name" and "Age" and "Contact Info" combining "Phone" and "Email" columns. Exported to Html report might look like following:
-
-```html
-<table>
-<thead>
-    <tr>
-        <th colSpan="4">User Info</th>
-    </tr>
-    <tr>
-        <th colSpan="2">Personal Info</th>
-        <th colSpan="2">Contact Info</th>
-    </tr>
-    <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Phone</th>
-        <th>Email</th>
-    </tr>
-</thead>
-</table>
-```
-
-### Header Row in Horizontal Report
-
-To add header row to horizontal report you can use `HeaderRowAttribute` attribute above property that should be used as a header row.
-
-```c#
-[HorizontalReport]
-class User
-{
-    [HeaderRow(1, "Name")]
-    public string Name { get; set; }
-
-    [ReportVariable(1, "Age")]
-    public int Age { get; set; }
-
-    [ReportVariable(2, "Phone")]
-    public string Phone { get; set; }
-
-    [ReportVariable(3, "Email")]
-    public string Email { get; set; }
-}
-```
-
-In this example report will have one header row and 3 rows. Exported to Html report might look like following:
-
-```html
-<table>
-<thead>
-    <tr>
-        <th>Name</th>
-        <th>John Doe</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>Age</td>
-        <td>21</td>
-    </tr>
-    <tr>
-        <td>Phone</td>
-        <td>1234567890</td>
-    </tr>
-    <tr>
-        <td>Email</td>
-        <td>johndoe@example.com</td>
-    </tr>
-</tbody>
-</table>
-```
-
-Global attributes are **not** applied to header rows, to apply attributes you need to specify them explicitly on property:
-
-```c#
-[HorizontalReport]
-[Alignment(Alignment.Center)]
-class User
-{
-    [HeaderRow(1, "Name")]
-    [Alignment(Alignment.Center, IsHeader = true)]
-    [Alignment(Alignment.Center)]
-    public string Name { get; set; }
-
-    [ReportVariable(1, "Age")]
-    public int Age { get; set; }
-
-    [ReportVariable(2, "Phone")]
-    public string Phone { get; set; }
-
-    [ReportVariable(3, "Email")]
-    public string Email { get; set; }
-}
+/*
+|                                                                                 User Info |
+|----------------------|----------------------|----------------------|----------------------|
+|                               Personal Info |                                Contact Info |
+|----------------------|----------------------|----------------------|----------------------|
+|            Full Name |                  Age |                Phone |                Email |
+|----------------------|----------------------|----------------------|----------------------|
+|             John Doe |                   21 |           1234567890 |  johndoe@example.com |
+|             Jane Doe |                   20 |           1234567891 |  janedoe@example.com |
+*/
 ```
 
 ### Built-in Attributes
 
-To add properties to report cells you can add attributes above needed class property.
+To add properties to report cells you can add attributes above class property.
 
 ```c#
 class User
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Email")]
+    [ReportColumn(2, "Email")]
     [Alignment(Alignment.Center, IsHeader = true)]
     public string Email { get; set; }
 
-    [ReportVariable(3, "Age")]
+    [ReportColumn(3, "Age")]
     [Alignment(Alignment.Center)]
     public int Age { get; set; }
 }
@@ -251,22 +160,27 @@ Built-in attributes:
   - decimal places count (required argument): decimal places to display
   - preserve trailing zeros (optional parameter, default true): flag indicating whether trailing zeros should be displayed
   - postfix text (optional parameter, default "%"): text appended after the value
-- **SameColumnFormat**. Makes EpplusWriter format whole column the same as first cell in the column. Improves performance.
+- **SameColumnFormat**. Makes [EpplusWriter](./epplus-writer.md) format whole column the same as first cell in the column. Improves performance of exporting to Excel.
 
 The attributes assign corresponding properties to row or column. To get more information about built-in properties, refer to [Properties](properties.md).
 
 ### Custom Attributes
 
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes/Program.cs)
+
 Most likely you'll have your own custom properties. You can assign them in post-builder class. But it's also possible to create attribute that will assign the property.
 
 ```c#
-class MyProperty : ReportCellProperty
+// Property that will be assigned to cells when MyAttribute is used.
+// Assigning will be done in attribute handler class.
+internal class MyProperty : ReportCellProperty
 {
 }
 
-// AttributeBase has IsHeader property allowing assigning property to header cells.
+// BasePropertyAttribute has IsHeader property allowing assigning property
+// to header cells.
 // Also it specifies attribute usage.
-class MyAttribute : AttributeBase
+internal class MyAttribute : BasePropertyAttribute
 {
 }
 
@@ -275,25 +189,20 @@ class MyAttribute : AttributeBase
 class MyAttributeHandler : AttributeHandler<MyAttribute>
 {
     // Will be called after column or row is added.
-    protected override void HandleAttribute<TSourceEntity>(ReportSchemaBuilder<TSourceEntity> builder, MyAttribute attribute)
+    protected override void HandleAttribute<TSourceItem>(
+        IReportSchemaBuilder<TSourceItem> schemaBuilder,
+        IReportColumnBuilder<TSourceItem> columnBuilder,
+        MyAttribute attribute)
     {
-        // Current builder column/row is the one having our MyAttribute.
         if (attribute.IsHeader)
         {
-            builder.AddHeaderProperties(new MyProperty());
+            columnBuilder.AddHeaderProperties(new MyProperty());
         }
-        eles
+        else
         {
-            builder.AddProperties(new MyProperty());
+            columnBuilder.AddProperties(new MyProperty());
         }
     }
-}
-
-class User
-{
-    [ReportVariable(1, "Name")]
-    [My]
-    public string Name { get; set; }
 }
 ```
 
@@ -304,7 +213,81 @@ services.AddAttributeBasedBuilder(
     o => o.Add(typeof(MyAttributeHandler)));
 ```
 
-Report created from model above will have MyProperty assigned to Name column.
+Now report will have MyProperty assigned to cells in column that has MyAttribute applied.
+
+## Horizontal Report
+
+To build horizontal report you need to add `HorizontalReportAttribute` to class. Optionally you can mark some properties with `HeaderRowAttribute` to make them appear in table header and not in body.
+
+```c#
+[HorizontalReport]
+class User
+{
+    [HeaderRow]
+    [ReportColumn(1, "Name")]
+    public string Name { get; set; }
+
+    [ReportColumn(1, "Age")]
+    public int Age { get; set; }
+
+    [ReportColumn(2, "Phone")]
+    public string Phone { get; set; }
+
+    [ReportColumn(3, "Email")]
+    public string Email { get; set; }
+}
+```
+
+In this example report will have one header row and 3 rows. Exported to Html report might look like following:
+
+```html
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>John Doe</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>Age</td>
+        <td>21</td>
+    </tr>
+    <tr>
+        <td>Phone</td>
+        <td>1234567890</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>johndoe@example.com</td>
+    </tr>
+</tbody>
+</table>
+```
+
+[Global attributes](#global-attributes) are **not** applied to header rows, to apply attributes you need to specify them explicitly on property:
+
+```c#
+[HorizontalReport]
+[Alignment(Alignment.Center)]
+class User
+{
+    [HeaderRow]
+    [ReportColumn(1, "Name")]
+    [Alignment(Alignment.Center, IsHeader = true)]
+    [Alignment(Alignment.Center)]
+    public string Name { get; set; }
+
+    [ReportColumn(1, "Age")]
+    public int Age { get; set; }
+
+    [ReportColumn(2, "Phone")]
+    public string Phone { get; set; }
+
+    [ReportColumn(3, "Email")]
+    public string Email { get; set; }
+}
+```
 
 ## Class attributes
 
@@ -326,47 +309,51 @@ class HorizontalReportModel
 
 ### Post-Builder
 
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilder/Program.cs)
+
 Sometimes using property attributes is not enough. For example, you cannot add dynamic properties using attributes. To add extra logic when building report you can provide post-builder class.
 
 ```c#
 [HorizontalReport(PostBuilder = typeof(PostBuilder))]
 class ReportModel
 {
-    [HeaderRow(1, "Name")]
+    [HeaderRow]
+    [ReportColumn(1, "Name")]
     public string Name { get; set; }
 
-    [ReportVariable(1, "Email")]
+    [ReportColumn(1, "Email")]
     public string Email { get; set; }
 
-    [ReportVariable(2, "Score")]
+    [ReportColumn(2, "Score")]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 
     // Post-builder class does NOT have to be nested class.
-    // If the class needs dependencies, they can be registered in DI container.
-    private class PostBuilder : IHorizontalReportPostBuilder<ReportModel>
+    private class PostBuilder : IReportSchemaPostBuilder<ReportModel>
     {
         // This method will be called after all columns/rows are added to schema builder.
-        public void Build(IHorizontalReportSchemaBuilder<ReportModel> builder)
+        public void Build(IReportSchemaBuilder<ReportModel> builder, BuildOptions options)
         {
-            // add any custom actions here
-            builder.AddHeaderRow(string.Empty, (ReportModel r) => r.Name)
-                .AddProperties(new AlignmentProperty(Alignment.Center));
+            BoldProperty boldProperty = new BoldProperty();
+            builder.ForColumn(new ColumnId(nameof(Score)))
+                .AddDynamicProperties(m => m.Score > 9 ? boldProperty : null);
         }
     }
 }
 ```
 
-For vertical report post-builder class should implement IVerticalReportPostBuilder interface.
+**Important note:** in post-builder class to refer to columns/rows by index you need to use sequential 0-based index, and not numbers from ReportColumnAttribute. For example, in the example above to refer to "Email" column you need to use `builder.ForColumn(0)`.
 
-**Important note:** in post-builder class to refer to columns/rows by index you need to use sequential 0-based index, and not numbers from ReportVariableAttribute. For example, in the example above to refer to "Email" column you need to use `builder.ForColumn(0)`.
+Post-builder accepts instance of BuildOptions object which allows you to change type of report and count of header rows in horizontal report.
 
-### Constructor Dependencies
+### Post-Builder Constructor Dependencies
+
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies/Program.cs)
 
 Sometimes you will need to get external dependencies to be provided to post-builder class. In this case you need to register dependency in DI container and accept dependencies in constructor of post-builder class.
 
 ```c#
-// Service our post-builder class depends on.
+// Service that our post-builder class depends on.internal
 class LotteryService
 {
     public string GetWinner()
@@ -376,12 +363,12 @@ class LotteryService
 }
 
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
-class UserModel
+internal class UserModel
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
     public string Name { get; set; }
 
-    private class PostBuilder : IVerticalReportPostBuilder<UserModel>
+    private class PostBuilder : IReportSchemaPostBuilder<UserModel>
     {
         private readonly LotteryService lotteryService;
 
@@ -391,29 +378,19 @@ class UserModel
             this.lotteryService = lotteryService;
         }
 
-        public void Build(IVerticalReportSchemaBuilder<UserModel> builder)
+        public void Build(IReportSchemaBuilder<UserModel> builder, BuildOptions options)
         {
             // Use injected service.
             string winner = this.lotteryService.GetWinner();
+            BoldProperty boldProperty = new BoldProperty();
             builder.ForColumn(nameof(Name))
-                .AddDynamicProperty((UserModel m) => m.Name == winner ? new BoldProperty() : null);
+                .AddDynamicProperties((UserModel m) => m.Name == winner ? boldProperty : null);
         }
     }
 }
 
-ServiceCollection services = new ServiceCollection();
-services.AddAttributeBasedBuilder()
-    // Register service class in DI container so it can be injected.
-    .AddScoped<LotteryService>();
-ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-IAttributeBasedBuilder builder = serviceProvider.GetRequiredService<IAttributeBasedBuilder>();
-
-UserModel[] data =
-{
-    new UserModel() { Name = "John" },
-    new UserModel() { Name = "Jane" },
-};
+// Register service class in DI container so it can be injected.
+services.AddScoped<LotteryService>();
 
 // Depending on random number John or Jane will get BoldProperty assigned.
 builder.BuildSchema<UserModel>().BuildReportTable(data);
@@ -421,7 +398,9 @@ builder.BuildSchema<UserModel>().BuildReportTable(data);
 
 ### Parameterized Post-Builder
 
-Sometimes it might make sense to generate slightly different report based on some input information that is known during runtime. For example, You might want to display additional column to admin users, or some properties should be applied based on request.
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder/Program.cs)
+
+Sometimes it might make sense to generate slightly different report based on some input information that is known during runtime. For example, you might want to display additional column to admin users, or some properties should be applied based on request.
 
 To solve this post-builder class may accept parameter to `Build` method.
 
@@ -431,21 +410,25 @@ Let's imagine that user can enter score and we want to highlight scores that are
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
 class UserScoreModel
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Score")]
+    [ReportColumn(2, "Score")]
     public decimal Score { get; set; }
 
-    // Need to implement IVerticalReportPostBuilder<TModel, TParameter> interface
+    // Need to implement IReportSchemaPostBuilder<TModel, TParameter> interface
     // where TModel is your model type and TParameter is type of parameter
     // that will be passed during building of report schema.
-    private class PostBuilder : IVerticalReportPostBuilder<UserScoreModel, decimal>
+    private class PostBuilder : IReportSchemaPostBuilder<UserScoreModel, decimal>
     {
-        public void Build(IVerticalReportSchemaBuilder<UserScoreModel> builder, decimal minScore)
+        public void Build(
+            IReportSchemaBuilder<UserScoreModel> builder,
+            decimal minScore,
+            BuildOptions options)
         {
+            BoldProperty boldProperty = new BoldProperty();
             builder.ForColumn("Score")
-                .AddDynamicProperty((UserScoreModel m) => m.Score > minScore ? new BoldProperty() : null);
+                .AddDynamicProperties((UserScoreModel m) => m.Score > minScore ? boldProperty : null);
         }
     }
 }
@@ -462,8 +445,13 @@ UserScoreModel[] data =
     new UserScoreModel() { Name = "Jane", Score = 100 },
 };
 
-// As we do not provide any arguments, post-builder Build method won't be called.
-builder.BuildSchema<UserScoreModel>().BuildReportTable(data);
+// Building report without providing build parameter will throw an exception
+// as most likely this indicates an issue. If you want to be able to build
+// report with or without parameter, make post-builder class implement both
+// IReportSchemaPostBuilder<TModel,TParameter> and IReportSchemaPostBuilder<TModel>
+// interfaces.
+// The following line will throw exception in our example.
+//builder.BuildSchema<UserScoreModel>().BuildReportTable(data);
 
 // Both rows will have BoldProperty assigned to Score cells as both scores
 // are greater than 80.
@@ -473,7 +461,7 @@ builder.BuildSchema<UserScoreModel, decimal>(80).BuildReportTable(data);
 builder.BuildSchema<UserScoreModel, decimal>(90).BuildReportTable(data);
 ```
 
-### Global Properties
+### Global Attributes
 
 Often you may want all columns/rows in report to have the same attribute, for example, center alignment. To do so you may add the attribute to class.
 
@@ -481,13 +469,13 @@ Often you may want all columns/rows in report to have the same attribute, for ex
 [Alignment(Alignment.Center)]
 class ReportModel
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Email")]
+    [ReportColumn(2, "Email")]
     public string Email { get; set; }
 
-    [ReportVariable(3, "Score")]
+    [ReportColumn(3, "Score")]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
@@ -496,24 +484,26 @@ class ReportModel
 
 class ReportModel
 {
-    [ReportVariable(1, "Name")]
+    [ReportColumn(1, "Name")]
     [Alignment(Alignment.Center)]
     public string Name { get; set; }
 
-    [ReportVariable(2, "Email")]
+    [ReportColumn(2, "Email")]
     [Alignment(Alignment.Center)]
     public string Email { get; set; }
 
-    [ReportVariable(3, "Score")]
+    [ReportColumn(3, "Score")]
     [DecimalPrecision(2)]
     [Alignment(Alignment.Center)]
     public decimal Score { get; set; }
 }
 ```
 
-**Important note:** any columns/rows added in post-builder **will not** have the attribute applied.
+**Important note:** any columns added in post-builder **will not** have the attribute applied.
 
 ## Table Properties
+
+[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.TableProperties/Program.cs)
 
 You may add table properties using attributes.
 
@@ -551,10 +541,10 @@ class TitlePropertyAttributeHandler : AttributeHandler<TitlePropertyAttribute>
 [TitleProperty("User Report")]
 class User
 {
-    [ReportVariable(1, "First Name")]
+    [ReportColumn(1, "First Name")]
     public string FirstName { get; set; }
     
-    [ReportVariable(2, "Last Name")]
+    [ReportColumn(2, "Last Name")]
     public string LastName { get; set; }
 }
 
@@ -564,3 +554,18 @@ class User
 ```
 
 Report built by this model will contain TitleProperty with Title equal to "User Report". You can use it in your writer class.
+
+## .NET Core Integration
+
+You need to call extension method AddAttributeBasedBuilder. This will register IAttributeBasedBuilder as singleton by default. Attribute handlers and post-builders can be registered in DI container, but they don't have to, even if they have dependencies that need to be resolved from service provider.
+
+```c#
+// You can pass configuration callback and service lifetime.
+// Example below registers attribute-based builder in DI container with
+// singleton lifetime, this builder will use all attribute handlers
+// (implementors of IAttributeHandler interface) from
+// executing assembly.
+services.AddAttributeBasedBuilder(
+    o => o.AddFromAssembly(Assembly.GetExecutingAssembly()),
+    ServiceLifetime.Singleton);
+```

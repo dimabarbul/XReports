@@ -18,9 +18,9 @@ namespace XReports.Tests.DependencyInjection
         public void AddAttributeBasedBuilderWithDefaultLifetimeShouldRegister()
         {
             IServiceCollection serviceCollection = new ServiceCollection()
-                .AddAttributeBasedBuilder();
+                .AddAttributeBasedBuilder(null);
 
-            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(ServiceLifetime.Singleton);
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder>(ServiceLifetime.Singleton);
         }
 
         [Theory]
@@ -32,7 +32,7 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddAttributeBasedBuilder(null, lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(lifetime);
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder>(lifetime);
         }
 
         [Fact]
@@ -42,8 +42,8 @@ namespace XReports.Tests.DependencyInjection
                 .AddAttributeBasedBuilder(
                     o => o.AddFromAssembly<IMyAttributeHandler>(Assembly.GetExecutingAssembly()));
 
-            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(ServiceLifetime.Singleton);
-            serviceCollection.Should().ContainDescriptors<IAttributeHandler>(ServiceLifetime.Singleton, typeof(MyAttributeHandler), typeof(MyAnotherAttributeHandler));
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder>(ServiceLifetime.Singleton);
+            serviceCollection.Should().NotContainDescriptor<IAttributeHandler>();
         }
 
         [Theory]
@@ -57,8 +57,8 @@ namespace XReports.Tests.DependencyInjection
                     o => o.AddFromAssembly<IMyAttributeHandler>(Assembly.GetExecutingAssembly()),
                     lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder, AttributeBasedBuilder>(lifetime);
-            serviceCollection.Should().ContainDescriptors<IAttributeHandler>(lifetime, typeof(MyAttributeHandler), typeof(MyAnotherAttributeHandler));
+            serviceCollection.Should().ContainDescriptor<IAttributeBasedBuilder>(lifetime);
+            serviceCollection.Should().NotContainDescriptor<IAttributeHandler>();
         }
 
         [Fact]
