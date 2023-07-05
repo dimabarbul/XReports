@@ -1,12 +1,5 @@
 # Properties
 
-In examples below variable `cellsProviderBuilder` is a variable of type `IReportSchemaCellsProviderBuilder<TSourceEntity>`, where TSourceEntity is a type of model of the report. This variable is a result of adding column/row to report. For example:
-
-```c#
-IVerticalReportSchemaBuilder<string> builder = new VerticalReportSchemaBuilder<string>();
-IReportSchemaCellsProviderBuilder<string> cellsProviderBuilder = reportBuilder.AddColumn("Value");
-```
-
 ## AlignmentProperty
 
 Marks cell to be center-, left- or right-aligned.
@@ -27,7 +20,7 @@ Example:
 cellsProviderBuilder.AddProperties(new BoldProperty());
 ```
 
-In Html it will be converted to `strong` tag, for example, `<strong>Name</strong>`.
+In Html it will be converted to `style="font-weight: bold"` attribute.
 
 ## ColorProperty
 
@@ -86,7 +79,7 @@ cellsProviderBuilder
         "HH:mm:ss AM/PM"));
 ```
 
-ExcelDateTimeFormatProperty is a subclass of DateTimeFormatProperty, so handlers for DateTimeFormatProperty will also handle ExcelDateTimeFormatProperty. The trick here is that there is handler for ExcelDateTimeFormatProperty which has lower priority (so, executed earlier) than Excel handler for DateTimeFormatProperty.
+ExcelDateTimeFormatProperty is a subclass of DateTimeFormatProperty, so handlers for DateTimeFormatProperty will also handle ExcelDateTimeFormatProperty (and will use the first specified format string). The trick here is that there is handler for ExcelDateTimeFormatProperty which has lower priority (so, executed earlier) than Excel handler for DateTimeFormatProperty.
 
 ## DecimalPrecisionProperty
 
@@ -99,7 +92,7 @@ cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2));
 
 // 1.2 → "1.2"
 // 1.2345 → "1.23"
-cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2, false));
+cellsProviderBuilder.AddProperties(new DecimalPrecisionProperty(2, preserveTrailingZeros: false));
 ```
 
 ## MaxLengthProperty
@@ -116,7 +109,7 @@ cellsProviderBuilder.AddProperties(new MaxLengthProperty(10));
 cellsProviderBuilder.AddProperties(new MaxLengthProperty(10, "..."));
 ```
 
-The property limits number of 16-bit characters, so it won't work correctly for strings containing multi-character symbols.
+The property limits number of 16-bit characters (using [String.Length property](https://learn.microsoft.com/en-us/dotnet/api/system.string.length)), so it won't work correctly for strings containing multi-character symbols.
 
 ## PercentFormatProperty
 
@@ -147,4 +140,4 @@ If format contains percent sign ("%"), then Excel will contain original value an
 
 ## SameColumnFormatProperty
 
-Makes EpplusWriter format whole column the same as first cell in the column. Improves performance of export to Excel.
+Makes EpplusWriter format whole column the same way as first cell in the column. Improves performance of export to Excel.
