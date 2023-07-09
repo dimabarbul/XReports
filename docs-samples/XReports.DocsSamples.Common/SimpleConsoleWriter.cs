@@ -2,6 +2,20 @@
 
 namespace XReports.DocsSamples.Common;
 
+/// <summary>
+/// Writer of generic report to console.
+/// </summary>
+/// <remarks>
+/// The class intentionally does not provide rich functionality and is
+/// oversimplified to show basics of working with the report.
+/// The code has following limitations:
+/// <list type="bullet">
+/// <item><description>output is not configurable</description></item>
+/// <item><description>all columns have the same width, specified as constant in the class</description></item>
+/// <item><description>if content is wider, it will not be truncated and will result in misaligned table</description></item>
+/// <item><description>column/row spanning is not supported (see <see cref="ConsoleWriter"/> for this feature)</description></item>
+/// </list>
+/// </remarks>
 public class SimpleConsoleWriter
 {
     private const int ColumnWidth = 20;
@@ -12,6 +26,7 @@ public class SimpleConsoleWriter
     public virtual void Write(IReportTable<ReportCell> reportTable)
     {
         int columnCount = 0;
+
         // The only way to get count of columns is to enumerate row.
         // But enumerating row recomputes all cells, so it's better to count
         // cells during processing any row.

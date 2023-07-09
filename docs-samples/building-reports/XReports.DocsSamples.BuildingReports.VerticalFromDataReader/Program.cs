@@ -38,6 +38,5 @@ IDataReader dataReader = await command.ExecuteReaderAsync(CommandBehavior.CloseC
 // AsEnumerable is an extension method that allows iterating over IDataReader.
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataReader.AsEnumerable());
 
-// SimpleConsoleWriter is custom class that writes report table data into console.
 new SimpleConsoleWriter().Write(reportTable);
 

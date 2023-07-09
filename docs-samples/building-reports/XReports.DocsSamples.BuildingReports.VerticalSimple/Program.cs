@@ -25,7 +25,7 @@ IEnumerable<Customer> dataSource = new Customer[]
 // Report table contains header and body of the report.
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
-// SimpleConsoleWriter is custom class that writes report table data into console.
+// SimpleConsoleWriter is an example class that writes report table data into console.
 new SimpleConsoleWriter().Write(reportTable);
 
 // Model describing report data source item.
