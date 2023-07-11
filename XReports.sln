@@ -88,6 +88,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.Attrib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.TableProperties", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.TableProperties\XReports.DocsSamples.AttributeBasedBuilder.TableProperties.csproj", "{D4F342E3-441F-4567-9A83-834ED62B498F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "html-string-writer", "html-string-writer", "{E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter", "docs-samples\html-string-writer\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter.csproj", "{44F66176-6C37-43D1-9630-BFDCEFF55813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter", "docs-samples\html-string-writer\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter.csproj", "{030AAF84-7ABB-4E94-9EE5-207D39E17472}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -222,6 +228,14 @@ Global
 		{D4F342E3-441F-4567-9A83-834ED62B498F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4F342E3-441F-4567-9A83-834ED62B498F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4F342E3-441F-4567-9A83-834ED62B498F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44F66176-6C37-43D1-9630-BFDCEFF55813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44F66176-6C37-43D1-9630-BFDCEFF55813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44F66176-6C37-43D1-9630-BFDCEFF55813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44F66176-6C37-43D1-9630-BFDCEFF55813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -262,5 +276,8 @@ Global
 		{5E44767A-3FB3-4543-AD1D-F23603FD8906} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
 		{4B50B9E3-95FA-4FC7-9795-6D90334C0BE2} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
 		{D4F342E3-441F-4567-9A83-834ED62B498F} = {ACAB0518-8A5B-45FA-A16A-C1F1058C207A}
+		{E22A42F6-7AC3-45C3-860D-F3F7CCC1C602} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
+		{44F66176-6C37-43D1-9630-BFDCEFF55813} = {E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}
+		{030AAF84-7ABB-4E94-9EE5-207D39E17472} = {E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}
 	EndGlobalSection
 EndGlobal

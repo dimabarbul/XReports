@@ -50,7 +50,7 @@ PrintReport(reportTable);
 void PrintReport(IReportTable<ReportCell> reportTable)
 {
     IReportTable<HtmlReportCell> htmlReport = converter.Convert(reportTable);
-    string html = writer.WriteToString(htmlReport);
+    string html = writer.Write(htmlReport);
     Console.WriteLine(html);
 }
 

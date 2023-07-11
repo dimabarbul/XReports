@@ -21,7 +21,7 @@ namespace XReports.Html.Writers
         }
 
         /// <inheritdoc />
-        public string WriteToString(IReportTable<HtmlReportCell> reportTable)
+        public string Write(IReportTable<HtmlReportCell> reportTable)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -37,10 +37,10 @@ namespace XReports.Html.Writers
         /// <param name="reportTable">Report to write.</param>
         protected virtual void WriteReport(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
-            this.BeginTable(stringBuilder);
+            this.BeginTable(stringBuilder, reportTable);
             this.WriteHeader(stringBuilder, reportTable);
             this.WriteBody(stringBuilder, reportTable);
-            this.EndTable(stringBuilder);
+            this.EndTable(stringBuilder, reportTable);
         }
 
         /// <summary>
@@ -154,10 +154,11 @@ namespace XReports.Html.Writers
         }
 
         /// <summary>
-        ///Writes opening tag for HTML table.
+        /// Writes opening tag for HTML table.
         /// </summary>
         /// <param name="stringBuilder">String builder to write to.</param>
-        protected virtual void BeginTable(StringBuilder stringBuilder)
+        /// <param name="reportTable">Report to write.</param>
+        protected virtual void BeginTable(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
             stringBuilder.Append("<table>");
         }
@@ -166,7 +167,8 @@ namespace XReports.Html.Writers
         /// Writes closing tag for HTML table.
         /// </summary>
         /// <param name="stringBuilder">String builder to write to.</param>
-        protected virtual void EndTable(StringBuilder stringBuilder)
+        /// <param name="reportTable">Report to write.</param>
+        protected virtual void EndTable(StringBuilder stringBuilder, IReportTable<HtmlReportCell> reportTable)
         {
             stringBuilder.Append("</table>");
         }

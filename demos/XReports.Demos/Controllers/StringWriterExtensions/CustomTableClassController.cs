@@ -25,8 +25,8 @@ public class CustomTableClassController : Controller
 
         IndexViewModel vm = new()
         {
-            RegularTableHtml = htmlStringWriter.WriteToString(htmlReport),
-            TableHtml = bootstrapHtmlStringWriter.WriteToString(htmlReport),
+            RegularTableHtml = htmlStringWriter.Write(htmlReport),
+            TableHtml = bootstrapHtmlStringWriter.Write(htmlReport),
         };
         return this.View(vm);
     }

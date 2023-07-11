@@ -32,7 +32,7 @@ UserModel[] data =
 // Depending on random number John or Jane will get BoldProperty assigned.
 IReportTable<ReportCell> reportTable = builder.BuildSchema<UserModel>().BuildReportTable(data);
 IReportTable<HtmlReportCell> htmlReport = converter.Convert(reportTable);
-string html = writer.WriteToString(htmlReport);
+string html = writer.Write(htmlReport);
 Console.WriteLine(html);
 
 // Service that our post-builder class depends on.internal

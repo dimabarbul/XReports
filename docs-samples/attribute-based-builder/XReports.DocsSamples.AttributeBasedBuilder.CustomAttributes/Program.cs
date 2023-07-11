@@ -30,7 +30,7 @@ IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
 IReportTable<HtmlReportCell> htmlReport = converter.Convert(reportTable);
 
 IHtmlStringWriter writer = new HtmlStringWriter(new HtmlStringCellWriter());
-string html = writer.WriteToString(htmlReport);
+string html = writer.Write(htmlReport);
 
 Console.WriteLine(html);
 
