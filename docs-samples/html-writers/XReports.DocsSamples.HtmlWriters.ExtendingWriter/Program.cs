@@ -21,10 +21,17 @@ IReportSchema<User> schema = builder.BuildVerticalSchema();
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(data);
 IReportTable<HtmlReportCell> htmlReport = converter.Convert(reportTable);
 
-IHtmlStringWriter writer = new MyHtmlWriter(new HtmlStringCellWriter());
-string html = writer.Write(htmlReport);
+IHtmlStringWriter stringWriter = new MyHtmlStringWriter(new HtmlStringCellWriter());
+string html = stringWriter.Write(htmlReport);
 
+Console.WriteLine("Using string writer:");
 Console.WriteLine(html);
+Console.WriteLine();
+
+IHtmlStreamWriter streamWriter = new MyHtmlStreamWriter(new HtmlStreamCellWriter());
+Console.WriteLine("Using stream writer:");
+await using Stream standardOutput = Console.OpenStandardOutput();
+await streamWriter.WriteAsync(htmlReport, standardOutput);
 
 internal class User
 {
@@ -42,9 +49,9 @@ internal class TitleProperty : ReportTableProperty
     public string Title { get; }
 }
 
-internal class MyHtmlWriter : HtmlStringWriter
+internal class MyHtmlStringWriter : HtmlStringWriter
 {
-    public MyHtmlWriter(IHtmlStringCellWriter htmlStringCellWriter)
+    public MyHtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
         : base(htmlStringCellWriter)
     {
     }
@@ -60,6 +67,27 @@ internal class MyHtmlWriter : HtmlStringWriter
                 .Append("<caption>")
                 .Append(titleProperty.Title)
                 .Append("</caption>");
+        }
+    }
+}
+
+internal class MyHtmlStreamWriter : HtmlStreamWriter
+{
+    public MyHtmlStreamWriter(IHtmlStreamCellWriter htmlStringCellWriter)
+        : base(htmlStringCellWriter)
+    {
+    }
+
+    protected override async Task BeginTableAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
+    {
+        await base.BeginTableAsync(streamWriter, reportTable);
+
+        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
+        if (titleProperty != null)
+        {
+            await streamWriter.WriteAsync("<caption>");
+            await streamWriter.WriteAsync(titleProperty.Title);
+            await streamWriter.WriteAsync("</caption>");
         }
     }
 }

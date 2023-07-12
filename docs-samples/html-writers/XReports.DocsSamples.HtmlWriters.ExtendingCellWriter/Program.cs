@@ -28,10 +28,17 @@ IReportSchema<User> schema = builder.BuildVerticalSchema();
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(data);
 IReportTable<HtmlReportCell> htmlReport = converter.Convert(reportTable);
 
-IHtmlStringWriter writer = new HtmlStringWriter(new MyCellWriter());
-string html = writer.Write(htmlReport);
+IHtmlStringWriter stringWriter = new HtmlStringWriter(new MyHtmlStringCellWriter());
+string html = stringWriter.Write(htmlReport);
 
+Console.WriteLine("Using string writer:");
 Console.WriteLine(html);
+Console.WriteLine();
+
+IHtmlStreamWriter streamWriter = new HtmlStreamWriter(new MyHtmlStreamCellWriter());
+await using Stream standardOutput = Console.OpenStandardOutput();
+Console.WriteLine("Using stream writer:");
+await streamWriter.WriteAsync(htmlReport, standardOutput);
 
 internal class User
 {
@@ -49,7 +56,7 @@ internal class TitleProperty : ReportTableProperty
     public string Title { get; }
 }
 
-internal class MyCellWriter : HtmlStringCellWriter
+internal class MyHtmlStringCellWriter : HtmlStringCellWriter
 {
     protected override void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
     {
@@ -67,5 +74,24 @@ internal class MyCellWriter : HtmlStringCellWriter
             .Append("</div></")
             .Append(tableCellTagName)
             .Append('>');
+    }
+}
+
+internal class MyHtmlStreamCellWriter : HtmlStreamCellWriter
+{
+    protected override async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+    {
+        await streamWriter.WriteAsync('<');
+        await streamWriter.WriteAsync(tableCellTagName);
+        await streamWriter.WriteAsync("><div");
+        await this.WriteAttributesAsync(streamWriter, cell);
+        await streamWriter.WriteAsync('>');
+    }
+
+    protected override async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
+    {
+        await streamWriter.WriteAsync("</div></");
+        await streamWriter.WriteAsync(tableCellTagName);
+        await streamWriter.WriteAsync('>');
     }
 }

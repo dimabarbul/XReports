@@ -26,5 +26,5 @@ Both libraries provide integration with [.NET DI](https://learn.microsoft.com/en
     1. [Cell types](xreports/cell-types.md)
     2. [Properties](xreports/properties.md)
     3. [AttributeBasedBuilder](xreports/attribute-based-builder.md)
-    4. [HtmlStringWriter](xreports/html-string-writer.md)
+    4. [Html Writers](xreports/html-writers.md)
     5. [EpplusWriter](xreports/epplus-writer.md)

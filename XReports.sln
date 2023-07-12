@@ -88,11 +88,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.Attrib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.AttributeBasedBuilder.TableProperties", "docs-samples\attribute-based-builder\XReports.DocsSamples.AttributeBasedBuilder.TableProperties\XReports.DocsSamples.AttributeBasedBuilder.TableProperties.csproj", "{D4F342E3-441F-4567-9A83-834ED62B498F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "html-string-writer", "html-string-writer", "{E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "html-writers", "html-writers", "{E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter", "docs-samples\html-string-writer\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter.csproj", "{44F66176-6C37-43D1-9630-BFDCEFF55813}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlWriters.ExtendingWriter", "docs-samples\html-writers\XReports.DocsSamples.HtmlWriters.ExtendingWriter\XReports.DocsSamples.HtmlWriters.ExtendingWriter.csproj", "{44F66176-6C37-43D1-9630-BFDCEFF55813}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter", "docs-samples\html-string-writer\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter\XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter.csproj", "{030AAF84-7ABB-4E94-9EE5-207D39E17472}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlWriters.ExtendingCellWriter", "docs-samples\html-writers\XReports.DocsSamples.HtmlWriters.ExtendingCellWriter\XReports.DocsSamples.HtmlWriters.ExtendingCellWriter.csproj", "{030AAF84-7ABB-4E94-9EE5-207D39E17472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

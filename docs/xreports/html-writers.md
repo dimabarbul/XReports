@@ -1,12 +1,12 @@
-# HtmlStringWriter
+# Html Writers
 
-HtmlStringWriter class provides ability to write Html report to string using System.Text.StringBuilder. It is thread-safe.
+The library provides 2 writers for Html reports: HtmlStringWriter and HtmlStreamWriter. HtmlStringWriter class provides ability to write Html report to string using System.Text.StringBuilder. HtmlStreamWriter allows writing report to stream. Both classes are thread-safe.
 
-Internally HtmlStringWriter class uses instance of IHtmlStringCellWriter to write cells which allows changing the way cell is written easily.
+Internally both writers have similar structure, so examples below are valid for them. Both of them use cell writers (IHtmlStringCellWriter and IHtmlStreamCellWriter) that allows changing the way cells are written easily.
 
 ## .NET Core Integration
 
-You need to call extension method AddHtmlStringWriter. There are 3 forms of this method.
+You need to call extension method AddHtmlStringWriter/AddHtmlStreamWriter. There are 3 forms of the methods.
 
 ```c#
 // Registers HtmlStringWriter as implementation of IHtmlStringWriter and
@@ -16,7 +16,7 @@ services.AddHtmlStringWriter();
 class MyWriter : HtmlStringWriter {}
 // Registers MyWriter class as implementation of IHtmlStringWriter and
 // HtmlStringCellWriter as implementation of IHtmlStringCellWriter.
-services.AddHtmlStringWriter<MyExcelWriter>();
+services.AddHtmlStringWriter<MyWriter>();
 
 class MyWriter : HtmlStringWriter {}
 class MyCellWriter : HtmlStringCellWriter {}
@@ -25,15 +25,22 @@ class MyCellWriter : HtmlStringCellWriter {}
 services.AddHtmlStringWriter<MyWriter, MyCellWriter>();
 // Or if you need just your custom cell writer.
 services.AddHtmlStringWriter<HtmlStringWriter, MyCellWriter>();
+
+// Similarly you can register stream writer.
+services.AddHtmlStreamWriter();
+services.AddHtmlStreamWriter<MyStreamWriter>();
+services.AddHtmlStreamWriter<MyStreamWriter, MyStreamCellWriter>();
+services.AddHtmlStreamWriter<HtmlStreamWriter, MyStreamCellWriter>();
+
 ```
 
 All of the forms accept optional service lifetime, by default it's singleton.
 
 ## Extending
 
-### Extending HtmlStringWriter
+### Extending writer
 
-[Working example](../../docs-samples/html-string-writer/XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringWriter/Program.cs)
+[Working example](../../docs-samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingWriter/Program.cs)
 
 HtmlStringWriter class provides a number of virtual methods that can be overridden to customize result.
 
@@ -50,9 +57,9 @@ class TitleProperty : ReportTableProperty
     public string Title { get; }
 }
 
-class MyHtmlWriter : HtmlStringWriter
+class MyHtmlStringWriter : HtmlStringWriter
 {
-    public MyHtmlWriter(IHtmlStringCellWriter htmlStringCellWriter)
+    public MyHtmlStringWriter(IHtmlStringCellWriter htmlStringCellWriter)
         : base(htmlStringCellWriter)
     {
     }
@@ -72,6 +79,27 @@ class MyHtmlWriter : HtmlStringWriter
     }
 }
 
+class MyHtmlStreamWriter : HtmlStreamWriter
+{
+    public MyHtmlStreamWriter(IHtmlStreamCellWriter htmlStringCellWriter)
+        : base(htmlStringCellWriter)
+    {
+    }
+
+    protected override async Task BeginTableAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
+    {
+        await base.BeginTableAsync(streamWriter, reportTable);
+
+        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
+        if (titleProperty != null)
+        {
+            await streamWriter.WriteAsync("<caption>");
+            await streamWriter.WriteAsync(titleProperty.Title);
+            await streamWriter.WriteAsync("</caption>");
+        }
+    }
+}
+
 builder.AddTableProperties(new TitleProperty("Users"));
 
 // If you use DI, register MyHtmlWriter as implementation of IHtmlStringWriter.
@@ -82,12 +110,12 @@ IHtmlStringWriter writer = new MyHtmlWriter(new HtmlStringCellWriter());
 
 ### Extending HtmlStringCellWriter
 
-[Working example](../../docs-samples/html-string-writer/XReports.DocsSamples.HtmlStringWriter.ExtendingHtmlStringCellWriter/Program.cs)
+[Working example](../../docs-samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingCellWriter/Program.cs)
 
 Another extension point is IHtmlStringCellWriter. Writer uses cell writer to write cells one by one. Provided out-of-the-box implementation of IHtmlStringCellWriter - HtmlStringCellWriter - writes `td` (for body cells) or `th` (for header cells) tag with all attributes and content right inside it. If you need to, for example, wrap cell content in `div` and apply all attributes to it, extend HtmlStringCellWriter and override corresponding methods.
 
 ```c#
-class MyCellWriter : HtmlStringCellWriter
+class MyHtmlStringCellWriter : HtmlStringCellWriter
 {
     protected override void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
     {
@@ -108,8 +136,27 @@ class MyCellWriter : HtmlStringCellWriter
     }
 }
 
-// If you use DI, register MyCellWriter as implementation of IHtmlStringCellWriter.
-services.AddHtmlStringWriter<HtmlStringWriter, MyCellWriter>();
+class MyHtmlStreamCellWriter : HtmlStreamCellWriter
+{
+    protected override async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+    {
+        await streamWriter.WriteAsync('<');
+        await streamWriter.WriteAsync(tableCellTagName);
+        await streamWriter.WriteAsync("><div");
+        await this.WriteAttributesAsync(streamWriter, cell);
+        await streamWriter.WriteAsync('>');
+    }
+
+    protected override async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
+    {
+        await streamWriter.WriteAsync("</div></");
+        await streamWriter.WriteAsync(tableCellTagName);
+        await streamWriter.WriteAsync('>');
+    }
+}
+
+// If you use DI, register MyHtmlStringCellWriter as implementation of IHtmlStringCellWriter.
+services.AddHtmlStringWriter<HtmlStringWriter, MyHtmlStringCellWriter>();
 // If you don't use DI, just create instance.
-IHtmlStringWriter writer = new HtmlStringWriter(new MyCellWriter());
+IHtmlStringWriter writer = new HtmlStringWriter(new MyHtmlStringCellWriter());
 ```

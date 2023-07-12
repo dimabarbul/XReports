@@ -12,7 +12,7 @@ namespace XReports.Html.Writers
     public class HtmlStreamWriter : IHtmlStreamWriter
     {
         private const int StreamWriterBufferSize = 4096;
-        private static readonly Encoding StreamWriterEncoding = Encoding.UTF8;
+        private static readonly Encoding StreamWriterEncoding = new UTF8Encoding(false);
 
         private readonly IHtmlStreamCellWriter htmlStreamCellWriter;
 
@@ -48,10 +48,10 @@ namespace XReports.Html.Writers
         /// <returns>Task.</returns>
         protected virtual async Task WriteReportAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
         {
-            await this.BeginTableAsync(streamWriter).ConfigureAwait(false);
+            await this.BeginTableAsync(streamWriter, reportTable).ConfigureAwait(false);
             await this.WriteHeaderAsync(streamWriter, reportTable).ConfigureAwait(false);
             await this.WriteBodyAsync(streamWriter, reportTable).ConfigureAwait(false);
-            await this.EndTableAsync(streamWriter).ConfigureAwait(false);
+            await this.EndTableAsync(streamWriter, reportTable).ConfigureAwait(false);
 
             await streamWriter.FlushAsync().ConfigureAwait(false);
         }
@@ -177,11 +177,12 @@ namespace XReports.Html.Writers
         }
 
         /// <summary>
-        ///Writes opening tag for HTML table.
+        /// Writes opening tag for HTML table.
         /// </summary>
         /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="reportTable">Report to write.</param>
         /// <returns>Task.</returns>
-        protected virtual Task BeginTableAsync(StreamWriter streamWriter)
+        protected virtual Task BeginTableAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
         {
             return streamWriter.WriteAsync("<table>");
         }
@@ -190,8 +191,9 @@ namespace XReports.Html.Writers
         /// Writes closing tag for HTML table.
         /// </summary>
         /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <param name="reportTable">Report to write.</param>
         /// <returns>Task.</returns>
-        protected virtual Task EndTableAsync(StreamWriter streamWriter)
+        protected virtual Task EndTableAsync(StreamWriter streamWriter, IReportTable<HtmlReportCell> reportTable)
         {
             return streamWriter.WriteAsync("</table>");
         }
