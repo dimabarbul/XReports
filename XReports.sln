@@ -94,6 +94,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlWr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.HtmlWriters.ExtendingCellWriter", "docs-samples\html-writers\XReports.DocsSamples.HtmlWriters.ExtendingCellWriter\XReports.DocsSamples.HtmlWriters.ExtendingCellWriter.csproj", "{030AAF84-7ABB-4E94-9EE5-207D39E17472}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "epplus-writer", "epplus-writer", "{29DED643-9C55-4B36-A031-AEF7D4FBA069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter", "docs-samples\epplus-writer\XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter\XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter.csproj", "{58C1D6B8-077D-45E3-A156-3D276C52ADFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature", "docs-samples\epplus-writer\XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature\XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature.csproj", "{B5542BB1-B168-4A76-AC54-CA2C26323199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature", "docs-samples\epplus-writer\XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature\XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature.csproj", "{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -236,6 +244,18 @@ Global
 		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{030AAF84-7ABB-4E94-9EE5-207D39E17472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C1D6B8-077D-45E3-A156-3D276C52ADFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C1D6B8-077D-45E3-A156-3D276C52ADFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C1D6B8-077D-45E3-A156-3D276C52ADFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C1D6B8-077D-45E3-A156-3D276C52ADFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5542BB1-B168-4A76-AC54-CA2C26323199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5542BB1-B168-4A76-AC54-CA2C26323199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5542BB1-B168-4A76-AC54-CA2C26323199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5542BB1-B168-4A76-AC54-CA2C26323199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -279,5 +299,9 @@ Global
 		{E22A42F6-7AC3-45C3-860D-F3F7CCC1C602} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
 		{44F66176-6C37-43D1-9630-BFDCEFF55813} = {E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}
 		{030AAF84-7ABB-4E94-9EE5-207D39E17472} = {E22A42F6-7AC3-45C3-860D-F3F7CCC1C602}
+		{29DED643-9C55-4B36-A031-AEF7D4FBA069} = {1AE6B679-F900-4535-AAE4-B86D7B9652E3}
+		{58C1D6B8-077D-45E3-A156-3D276C52ADFC} = {29DED643-9C55-4B36-A031-AEF7D4FBA069}
+		{B5542BB1-B168-4A76-AC54-CA2C26323199} = {29DED643-9C55-4B36-A031-AEF7D4FBA069}
+		{6DC72D8E-B2A5-4DC1-A4F9-2FD4E753E40E} = {29DED643-9C55-4B36-A031-AEF7D4FBA069}
 	EndGlobalSection
 EndGlobal
