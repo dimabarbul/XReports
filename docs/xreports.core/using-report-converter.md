@@ -4,7 +4,7 @@ Working with generic report cells is totally fine, but it makes you keep logic r
 
 This is the main benefit of using converter - unless cell model is changed, you don't need to change your writer class(es) if you want to add more properties.
 
-[Working example](../../docs-samples/using-report-converter/XReports.DocsSamples.UsingReportConverter/Program.cs)
+[Working example](samples/using-report-converter/XReports.DocsSamples.UsingReportConverter/Program.cs)
 
 ## Custom Model
 

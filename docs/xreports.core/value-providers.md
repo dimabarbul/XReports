@@ -4,7 +4,7 @@ Value providers are classes that provide values that do not require report data.
 
 ## Usage Example
 
-[Working example](../../docs-samples/value-providers/XReports.DocsSamples.ValueProviders.UsageExample/Program.cs)
+[Working example](samples/value-providers/XReports.DocsSamples.ValueProviders.UsageExample/Program.cs)
 
 ```c#
 class Customer
@@ -57,7 +57,7 @@ builder.AddColumn("#", new SequentialNumberValueProvider(100));
 
 ## Creating Value Provider
 
-[Working example](../../docs-samples/value-providers/XReports.DocsSamples.ValueProviders.CreatingValueProvider/Program.cs)
+[Working example](samples/value-providers/XReports.DocsSamples.ValueProviders.CreatingValueProvider/Program.cs)
 
 ```c#
 class Customer

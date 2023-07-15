@@ -65,7 +65,7 @@ more on this later
 
 Let's dive into building report by looking at code.
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalSimple/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalSimple/Program.cs)
 
 ```c#
 // Model describing report data source item.
@@ -139,7 +139,7 @@ Writer class used in this example iterates over header and body row by row and w
 
 Special case of data source is System.Data.IDataReader. In this case columns callbacks will get IDataReader as argument.
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalFromDataReader/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalFromDataReader/Program.cs)
 
 ```c#
 
@@ -189,7 +189,7 @@ new SimpleConsoleWriter().Write(reportTable);
 
 Sometimes report should have columns headers grouped. For example, report should group columns related to customer personal information.
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalComplexHeader/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalComplexHeader/Program.cs)
 
 ```c#
 class Customer
@@ -246,7 +246,7 @@ new ConsoleWriter().Write(reportTable);
 
 ### Simple Example
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalSimple/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalSimple/Program.cs)
 
 ```c#
 // Model describing report data source item.
@@ -289,7 +289,7 @@ new SimpleConsoleWriter().Write(reportTable);
 
 Often header is required in horizontal report. Here is how to do this.
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalHeaderRow/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalHeaderRow/Program.cs)
 
 ```c#
 class Customer
@@ -329,7 +329,7 @@ new SimpleConsoleWriter().Write(reportTable);
 
 ### Complex Header
 
-[Working example](../../docs-samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalComplexHeader/Program.cs)
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalComplexHeader/Program.cs)
 
 ```c#
 class Customer

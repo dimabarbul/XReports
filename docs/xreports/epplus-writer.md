@@ -48,7 +48,7 @@ There are 2 public methods to export report:
 
 ## Extending EpplusWriter
 
-[Working example](../../docs-samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter/Program.cs)
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter/Program.cs)
 
 EpplusWriter class contains number of virtual methods you can override.
 
@@ -105,7 +105,7 @@ If you want to use more Excel features to apply your cell properties, you have 2
 
 ### Extending EpplusWriter for New Feature
 
-[Working example](../../docs-samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature/Program.cs)
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature/Program.cs)
 
 ```c#
 // Property marking cells that should be indented.
@@ -133,7 +133,7 @@ class MyEpplusWriter : EpplusWriter
 
 ### Creating Formatter for New Feature
 
-[Working example](../../docs-samples/epplus-writer/XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature/Program.cs)
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature/Program.cs)
 
 ```c#
 // Property marking cells that should be indented.

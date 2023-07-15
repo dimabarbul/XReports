@@ -8,7 +8,7 @@ Another way of handling properties is to use [property handlers](./using-report-
 
 ## Cell Properties
 
-[Working example](../../docs-samples/properties/XReports.DocsSamples.Properties.CellProperties/Program.cs)
+[Working example](samples/properties/XReports.DocsSamples.Properties.CellProperties/Program.cs)
 
 Let's create some properties to see how they can be used. Imagine that we want report where some cells are emphasised by converting their text to upper case. Also we'd like to have some cells protected by hiding their text using some mask symbol.
 

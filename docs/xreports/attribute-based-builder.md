@@ -70,7 +70,7 @@ builder.ForColumn(new ColumnId(nameof(User.Name)));
 
 ### Complex Header
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ComplexHeader/Program.cs)
 
 Complex header can be specified using ComplexHeaderAttribute.
 
@@ -166,7 +166,7 @@ The attributes assign corresponding properties to row or column. To get more inf
 
 ### Custom Attributes
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.CustomAttributes/Program.cs)
 
 Most likely you'll have your own custom properties. You can assign them in post-builder class. But it's also possible to create attribute that will assign the property.
 
@@ -309,7 +309,7 @@ class HorizontalReportModel
 
 ### Post-Builder
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilder/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilder/Program.cs)
 
 Sometimes using property attributes is not enough. For example, you cannot add dynamic properties using attributes. To add extra logic when building report you can provide post-builder class.
 
@@ -348,7 +348,7 @@ Post-builder accepts instance of BuildOptions object which allows you to change 
 
 ### Post-Builder Constructor Dependencies
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.PostBuilderConstructorDependencies/Program.cs)
 
 Sometimes you will need to get external dependencies to be provided to post-builder class. In this case you need to register dependency in DI container and accept dependencies in constructor of post-builder class.
 
@@ -398,7 +398,7 @@ builder.BuildSchema<UserModel>().BuildReportTable(data);
 
 ### Parameterized Post-Builder
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.ParameterizedPostBuilder/Program.cs)
 
 Sometimes it might make sense to generate slightly different report based on some input information that is known during runtime. For example, you might want to display additional column to admin users, or some properties should be applied based on request.
 
@@ -503,7 +503,7 @@ class ReportModel
 
 ## Table Properties
 
-[Working example](../../docs-samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.TableProperties/Program.cs)
+[Working example](samples/attribute-based-builder/XReports.DocsSamples.AttributeBasedBuilder.TableProperties/Program.cs)
 
 You may add table properties using attributes.
 

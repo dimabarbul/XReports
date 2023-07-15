@@ -40,7 +40,7 @@ All of the forms accept optional service lifetime, by default it's singleton.
 
 ### Extending writer
 
-[Working example](../../docs-samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingWriter/Program.cs)
+[Working example](samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingWriter/Program.cs)
 
 HtmlStringWriter class provides a number of virtual methods that can be overridden to customize result.
 
@@ -110,7 +110,7 @@ IHtmlStringWriter writer = new MyHtmlWriter(new HtmlStringCellWriter());
 
 ### Extending HtmlStringCellWriter
 
-[Working example](../../docs-samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingCellWriter/Program.cs)
+[Working example](samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingCellWriter/Program.cs)
 
 Another extension point is IHtmlStringCellWriter. Writer uses cell writer to write cells one by one. Provided out-of-the-box implementation of IHtmlStringCellWriter - HtmlStringCellWriter - writes `td` (for body cells) or `th` (for header cells) tag with all attributes and content right inside it. If you need to, for example, wrap cell content in `div` and apply all attributes to it, extend HtmlStringCellWriter and override corresponding methods.
 

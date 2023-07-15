@@ -4,7 +4,7 @@ Cell processors allow you to perform any actions on cells [during conversion](./
 
 Let's imagine that we want to highlight even and odd rows differently. Let's align them differently so that they are easy to distinguish visually.
 
-[Working example](../../docs-samples/cell-processors/XReports.DocsSamples.CellProcessors/Program.cs)
+[Working example](samples/cell-processors/XReports.DocsSamples.CellProcessors/Program.cs)
 
 ## Preparation
 

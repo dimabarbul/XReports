@@ -53,7 +53,7 @@ builder.AddColumn("#", new ValueProviderReportCellProvider<Customer, int>(new Se
 
 Let's imagine that we have column in report that shows record status: active/inactive/deleted. We might have many different reports with this column. In order to not duplicate logic for displaying and formatting this column we will create our custom cell provider and use it in different reports.
 
-[Working example](../../docs-samples/cell-providers/XReports.DocsSamples.CellProviders.CustomCellProviders/Program.cs)
+[Working example](samples/cell-providers/XReports.DocsSamples.CellProviders.CustomCellProviders/Program.cs)
 
 ```c#
 // Should implement IReportCellProvider interface.

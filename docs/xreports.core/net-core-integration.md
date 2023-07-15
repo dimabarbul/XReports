@@ -6,7 +6,7 @@ The examples below use HtmlReportCell (which provides CssClasses and Styles clas
 
 ## Default Converter
 
-[Working example](../../docs-samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.DefaultConverter)
+[Working example](samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.DefaultConverter)
 
 You'll need to register converter for each report cell type. In our example we have one class - HtmlReportCell, so need to register one report converter.
 
@@ -40,7 +40,7 @@ Example output:
 
 Sometimes you might want to have several converters for the same report cell type, for example, one for displaying report on website, another - for sending report in email. To achieve this you can register named converters.
 
-[Working example](../../docs-samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.NamedConverters)
+[Working example](samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.NamedConverters)
 
 ```c#
 // Name "bootstrap" will be used when we need to get this particular converter.
