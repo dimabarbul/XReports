@@ -1,242 +1,57 @@
 # .NET Core Integration
 
-XReports.Core library provides extension method to register report converter.
+XReports.Core library provides extension methods to register report converter.
 
-To see it in action let's create custom cell class, custom property and writer.
-
-```c#
-class HtmlReportCell : BaseReportCell
-{
-    public List<string> CssClasses { get; set; } = new List<string>();
-    public List<string> Styles { get; set; } = new List<string>();
-
-    public override void Clear()
-    {
-        base.Clear();
-
-        this.CssClasses.Clear();
-        this.Styles.Clear();
-    }
-
-    public override BaseReportCell Clone()
-    {
-        HtmlReportCell reportCell = (HtmlReportCell)base.Clone();
-
-        reportCell.CssClasses = new List<string>(this.CssClasses);
-        reportCell.Styles = new List<string>(this.Styles);
-
-        return reportCell;
-    }
-}
-
-class BoldProperty : ReportCellProperty
-{
-}
-
-// Useful if we have Bootstrap 4 installed.
-class BoldPropertyBootstrapHandler : PropertyHandler<BoldProperty, HtmlReportCell>
-{
-    protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
-    {
-        cell.CssClasses.Add("font-weight-bold");
-    }
-}
-
-// Might be used to register handlers implementing it.
-interface IHtmlReportCellHandler : IPropertyHandler<HtmlReportCell>
-{
-}
-
-// Useful when we don't have classes support, e.g., in email.
-class BoldPropertyStandardHandler : PropertyHandler<BoldProperty, HtmlReportCell>, IHtmlReportCellHandler
-{
-    protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
-    {
-        cell.Styles.Add("font-weight: bold");
-    }
-}
-
-class HtmlWriter
-{
-    public void Write(IReportTable<HtmlReportCell> reportTable)
-    {
-        Console.WriteLine("<table><thead>");
-        this.WriteRows(reportTable.HeaderRows, "th");
-        Console.WriteLine("</thead><tbody>");
-        this.WriteRows(reportTable.Rows, "td");
-        Console.WriteLine("</tbody></table>");
-    }
-
-    private void WriteRows(IEnumerable<IEnumerable<HtmlReportCell>> rows, string htmlTag)
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach (IEnumerable<HtmlReportCell> row in rows)
-        {
-            sb.Clear();
-            sb.Append("<tr>");
-
-            foreach (HtmlReportCell cell in row)
-            {
-                sb.Append($"<{htmlTag}")
-                    .Append(cell.CssClasses.Any() ? $" class=\"{string.Join(" ", cell.CssClasses)}\"" : string.Empty)
-                    .Append(cell.Styles.Any() ? $" style=\"{string.Join("; ", cell.Styles)}\"" : string.Empty)
-                    .Append($">{cell.GetValue<string>()}</{htmlTag}>");
-            }
-
-            sb.Append("</tr>");
-
-            Console.WriteLine(sb);
-        }
-    }
-}
-
-// Shared code. Further examples will add code below this.
-VerticalReportSchemaBuilder<int> builder = new VerticalReportSchemaBuilder<int>();
-// Each cell with odd number will have BoldProperty assigned.
-builder.AddColumn("X", i => i)
-    .AddDynamicProperty(i => i % 2 == 1 ? new BoldProperty() : null);
-
-VerticalReportSchema<int> schema = builder.BuildSchema();
-
-IReportTable<ReportCell> reportTable = schema.BuildReportTable(Enumerable.Range(1, 7));
-```
+The examples below use HtmlReportCell (which provides CssClasses and Styles class properties) as a report cell class and 2 properties: BoldProperty and ItalicProperty.
 
 ## Default Converter
 
-As report converter is a generic class, you need to register converter for each report cell type. In our example we have one class - HtmlReportCell, so need to register one report converter.
+[Working example](samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.DefaultConverter)
 
-You can register default converter and any class depending on IReportConverter with the type will get it.
+You'll need to register converter for each report cell type. In our example we have one class - HtmlReportCell, so need to register one report converter.
 
-```c#
-ServiceCollection services = new ServiceCollection();
-// Registers converter without any handler. This is not very useful, but it works.
-services.AddReportConverter<HtmlReportCell>();
-ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-// As no handler was registered, we will get Html table without any styles.
-IReportConverter<HtmlReportCell> converter = serviceProvider.GetRequiredService<IReportConverter<HtmlReportCell>>();
-
-IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(reportTable);
-HtmlWriter writer = new HtmlWriter();
-writer.Write(htmlReportTable);
-```
-
-```html
-<table><thead>
-<tr><th>X</th></tr>
-</thead><tbody>
-<tr><td>1</td></tr>
-<tr><td>2</td></tr>
-<tr><td>3</td></tr>
-<tr><td>4</td></tr>
-<tr><td>5</td></tr>
-<tr><td>6</td></tr>
-<tr><td>7</td></tr>
-</tbody></table>
-```
-
-While registering converter you can pass types of handlers to use.
+You can register report converter, optionally along with its lifetime (singleton by default) and handlers that it should use. See [registration parameters](#registration-parameters) for more examples.
 
 ```c#
-ServiceCollection services = new ServiceCollection();
-// Pass type of BoldPropertyBootstrapHandler.
+// Use all handlers from executing assembly.
 services.AddReportConverter<HtmlReportCell>(o =>
 {
-    o.Add(typeof(BoldPropertyBootstrapHandler));
+    o.AddFromAssembly(Assembly.GetExecutingAssembly());
 });
-ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-IReportConverter<HtmlReportCell> converter = serviceProvider.GetRequiredService<IReportConverter<HtmlReportCell>>();
-
-IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(reportTable);
-HtmlWriter writer = new HtmlWriter();
-writer.Write(htmlReportTable);
 ```
 
-```html
-<table><thead>
-<tr><th>X</th></tr>
-</thead><tbody>
-<tr><td class="font-weight-bold">1</td></tr>
-<tr><td>2</td></tr>
-<tr><td class="font-weight-bold">3</td></tr>
-<tr><td>4</td></tr>
-<tr><td class="font-weight-bold">5</td></tr>
-<tr><td>6</td></tr>
-<tr><td class="font-weight-bold">7</td></tr>
-</tbody></table>
-```
-
-Most likely you'll have more than one handler, so registering them like this might be awkward. You can use interface or base class and pass it while registering converter.
-
-```c#
-ServiceCollection services = new ServiceCollection();
-// Second type is marker interface, so converter will use all handlers
-// implementing this interface.
-services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>();
-// Also you can do this using configure callback:
-// services.AddReportConverter<HtmlReportCell>(o =>
-// {
-//     o.AddByBaseType<IHtmlReportCellHandler>();
-// });
-ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-IReportConverter<HtmlReportCell> converter = serviceProvider.GetRequiredService<IReportConverter<HtmlReportCell>>();
-
-IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(reportTable);
-HtmlWriter writer = new HtmlWriter();
-writer.Write(htmlReportTable);
-```
+Example output:
 
 ```html
 <table><thead>
 <tr><th>X</th></tr>
 </thead><tbody>
 <tr><td style="font-weight: bold">1</td></tr>
-<tr><td>2</td></tr>
+<tr><td style="font-style: italic">2</td></tr>
 <tr><td style="font-weight: bold">3</td></tr>
-<tr><td>4</td></tr>
+<tr><td style="font-style: italic">4</td></tr>
 <tr><td style="font-weight: bold">5</td></tr>
-<tr><td>6</td></tr>
+<tr><td style="font-style: italic">6</td></tr>
 <tr><td style="font-weight: bold">7</td></tr>
 </tbody></table>
 ```
 
-This 2 methods can be combined.
-
-```c#
-// This is example code, it uses classes and interfaces not provided in this doc.
-services.AddReportConverter<HtmlReportCell>(o =>
-{
-    o.Add(typeof(MyHandler))
-        .AddByBaseType<IMyHandler>();
-});
-```
-
-You can add handlers from specific assembly:
-
-```c#
-// This is example code, it uses classes and interfaces not provided in this doc.
-services.AddReportConverter<HtmlReportCell>(o =>
-{
-    o.AddFromAssembly<IMyHandler>(Assembly.GetExecutingAssembly());
-});
-```
-
 ## Named Converters
 
-Sometimes you might want to have several converters, for example, one for displaying report on website, another - for sending report in email. To achieve this you can register named converters.
+Sometimes you might want to have several converters for the same report cell type, for example, one for displaying report on website, another - for sending report in email. To achieve this you can register named converters.
+
+[Working example](samples/net-core-integration/XReports.DocsSamples.NetCoreIntegration.NamedConverters)
 
 ```c#
-ServiceCollection services = new ServiceCollection();
 // Name "bootstrap" will be used when we need to get this particular converter.
+// Register converter specifying handlers types.
 services.AddReportConverter<HtmlReportCell>(
     "bootstrap",
     o =>
     {
-        o.Add(typeof(BoldPropertyBootstrapHandler));
+        o.Add(typeof(BootstrapBoldPropertyHandler), typeof(BootstrapItalicPropertyHandler));
     });
-// You can pass interface as well.
+// Or using marker interface.
 services.AddReportConverter<HtmlReportCell, IHtmlReportCellHandler>("email");
 ServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -263,11 +78,11 @@ Bootstrap
 <tr><th>X</th></tr>
 </thead><tbody>
 <tr><td class="font-weight-bold">1</td></tr>
-<tr><td>2</td></tr>
+<tr><td class="font-italic">2</td></tr>
 <tr><td class="font-weight-bold">3</td></tr>
-<tr><td>4</td></tr>
+<tr><td class="font-italic">4</td></tr>
 <tr><td class="font-weight-bold">5</td></tr>
-<tr><td>6</td></tr>
+<tr><td class="font-italic">6</td></tr>
 <tr><td class="font-weight-bold">7</td></tr>
 </tbody></table>
 
@@ -276,11 +91,11 @@ Email
 <tr><th>X</th></tr>
 </thead><tbody>
 <tr><td style="font-weight: bold">1</td></tr>
-<tr><td>2</td></tr>
+<tr><td style="font-style: italic">2</td></tr>
 <tr><td style="font-weight: bold">3</td></tr>
-<tr><td>4</td></tr>
+<tr><td style="font-style: italic">4</td></tr>
 <tr><td style="font-weight: bold">5</td></tr>
-<tr><td>6</td></tr>
+<tr><td style="font-style: italic">6</td></tr>
 <tr><td style="font-weight: bold">7</td></tr>
 </tbody></table>
 ```
@@ -289,11 +104,36 @@ Email
 
 If handler has dependency, the dependency should be registered in service collection. Handler itself does not have to be registered.
 
-## Custom Lifetime
+## Registration Parameters
 
-By default converter and converter factory are registered with scoped service lifetime. It can be changed using `lifetime` argument when adding converter.
+During report converter registration you can configure what handlers it should use. There is a number of options you ca specify the handlers types:
 
 ```c#
-ServiceCollection services = new ServiceCollection();
-services.AddReportConverter<HtmlReportCell>(lifetime: ServiceLifetime.Singleton);
+services.AddReportConverter<HtmlReportCell>(o =>
+{
+    o
+        // explicitly specify types
+        .Add(typeof(Handler1), typeof(Handler2))
+        // specify base type (class or interface)
+        // it will add all non-abstract classes implementing IBaseHandler from all loaded assemblies
+        .AddByBaseType<IBaseHandler>()
+        // add all non-abstract classes implementing IPropertyHandler<HtmlReportCell>
+        // from currently executing assembly
+        .AddFromAssembly(Assembly.GetExecutingAssembly())
+        // add all non-abstract classes implementing IBaseHandler
+        // from currently executing assembly
+        .AddFromAssembly<IBaseHandler>(Assembly.GetExecutingAssembly())
+        // exclude not needed handler
+        .Remove<NotNeededHandler>()
+        // exclude multiple not needed handlers
+        .Remove(typeof(NotNeededHandler1), typeof(NotNeededHandler2));
+});
+```
+
+## Custom Lifetime
+
+By default converter and converter factory are registered with singleton service lifetime. It can be changed using `lifetime` argument when adding converter.
+
+```c#
+services.AddReportConverter<HtmlReportCell>(lifetime: ServiceLifetime.Transient);
 ```

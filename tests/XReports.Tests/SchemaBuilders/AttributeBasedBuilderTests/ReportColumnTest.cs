@@ -10,7 +10,7 @@ using Xunit;
 
 namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 {
-    public partial class ReportVariableTest
+    public partial class ReportColumnTest
     {
         [Fact]
         public void BuildSchemaShouldAddPropertiesInCorrectOrder()

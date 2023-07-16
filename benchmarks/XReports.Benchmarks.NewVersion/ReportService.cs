@@ -124,7 +124,7 @@ public class ReportService : IReportService, IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromEntities();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return Task.FromResult(this.htmlStringWriter.WriteToString(htmlReportTable));
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
     public async Task VerticalFromEntitiesHtmlToFileAsync(string fileName)
@@ -211,7 +211,7 @@ public class ReportService : IReportService, IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromDataReader();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return Task.FromResult(this.htmlStringWriter.WriteToString(htmlReportTable));
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
     public async Task VerticalFromDataReaderHtmlToFileAsync(string fileName)
@@ -298,7 +298,7 @@ public class ReportService : IReportService, IDisposable
         IReportTable<ReportCell> reportTable = this.BuildHorizontalReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return Task.FromResult(this.htmlStringWriter.WriteToString(htmlReportTable));
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
     public async Task HorizontalHtmlToFileAsync(string fileName)

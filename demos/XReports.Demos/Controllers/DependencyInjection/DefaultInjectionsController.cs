@@ -60,7 +60,7 @@ public class DefaultInjectionsController : Controller
         IReportTable<ReportCell> reportTable = this.attributeBasedBuilder.BuildSchema<Entity>()
             .BuildReportTable(this.GetData());
         IReportTable<HtmlReportCell> htmlReportTable = this.htmlConverter.Convert(reportTable);
-        string html = this.htmlWriter.WriteToString(htmlReportTable);
+        string html = this.htmlWriter.Write(htmlReportTable);
 
         return html;
     }

@@ -98,7 +98,7 @@ public class BasicHorizontalReportController : Controller
 
     private string WriteHtmlReportToString(IReportTable<HtmlReportCell> htmlReportTable)
     {
-        return new HtmlStringWriter(new HtmlStringCellWriter()).WriteToString(htmlReportTable);
+        return new HtmlStringWriter(new HtmlStringCellWriter()).Write(htmlReportTable);
     }
 
     private Stream WriteExcelReportToStream(IReportTable<ExcelReportCell> reportTable)

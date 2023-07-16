@@ -302,7 +302,8 @@ namespace XReports.Excel.Writers
         }
 
         /// <summary>
-        /// Executes post-creation actions.
+        /// Executes post-creation actions. The method is executed after the
+        /// report has been fully written.
         /// </summary>
         /// <param name="worksheet">Excel worksheet to write to.</param>
         /// <param name="headerAddress">Excel address of report header.</param>

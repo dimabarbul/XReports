@@ -5,7 +5,7 @@ using FluentAssertions;
 using FluentAssertions.Collections;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
     public class ServiceCollectionAssertions : GenericCollectionAssertions<ServiceDescriptor>
     {
@@ -15,6 +15,16 @@ namespace XReports.Tests.Assertions
         }
 
         protected override string Identifier => "service collection";
+
+        public AndConstraint<ServiceCollectionAssertions> ContainDescriptor<TService>(ServiceLifetime lifetime)
+        {
+            ServiceDescriptor serviceDescriptor = this.Subject.FirstOrDefault(sd => sd.ServiceType == typeof(TService));
+            serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TService));
+
+            serviceDescriptor.Lifetime.Should().Be(lifetime);
+
+            return new AndConstraint<ServiceCollectionAssertions>(this);
+        }
 
         public AndConstraint<ServiceCollectionAssertions> ContainDescriptor<TService, TImplementation>(ServiceLifetime lifetime)
             where TImplementation : TService

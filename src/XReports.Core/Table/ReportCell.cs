@@ -176,9 +176,9 @@ namespace XReports.Table
         }
 
         /// <summary>
-        /// Makes a clone of the cell. Any collections should be different, but objects these collections contain may be the same. For example, properties collection in clone will be different, but the properties in it may refer to the same properties as in original cell.
+        /// Makes a deep clone of the cell. Any collections should be different, but objects these collections contain may be the same. For example, properties collection in clone will be different, but the properties in it may refer to the same properties as in original cell.
         /// </summary>
-        /// <returns>Cell clone.</returns>
+        /// <returns>Deep cell clone.</returns>
         public virtual ReportCell Clone()
         {
             ReportCell reportCell = (ReportCell)this.MemberwiseClone();

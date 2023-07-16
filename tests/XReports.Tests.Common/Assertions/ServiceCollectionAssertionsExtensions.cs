@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace XReports.Tests.Assertions
+namespace XReports.Tests.Common.Assertions
 {
     public static class ServiceCollectionAssertionsExtensions
     {

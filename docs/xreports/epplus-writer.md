@@ -27,7 +27,7 @@ services.AddEpplusWriter<IExtendedExcelWriter, ExtendedExcelWriter>();
 
 All of the forms accept 2 optional arguments:
 - configuration callback to configure EpplusWriter options
-- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback
+- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback, by default it's scoped
 
 Example:
 
@@ -42,10 +42,13 @@ services.AddEpplusWriter(
 ## Public Methods
 
 There are 2 public methods to export report:
+
 - **WriteToFile**: saves report as XLSX file
-- **WriteToStream**: creates in-memory stream, saves report to it, rewinds and returns it
+- **WriteToStream**: saves report to new in-memory stream or the one provided
 
 ## Extending EpplusWriter
+
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriter/Program.cs)
 
 EpplusWriter class contains number of virtual methods you can override.
 
@@ -56,15 +59,37 @@ General Flow:
         - WriteHeader
             - WriteHeaderCell
                 - WriteCell
+                    - FormatCell
             - FormatHeader
         - WriteBody
-            - WriteCell
+            - WriteCell (for all rows for all columns)
                 - FormatCell (if cell does not have SameColumnFormatProperty)
             - ApplyColumnFormat
                 - FormatCell (for columns that has SameColumnFormatProperty)
         - PostCreate
 
 All methods in above list lower WriteReportToWorksheet can be overridden.
+
+The writer has some configuration properties that can be overridden in inherited class:
+
+- WorksheetName - "Data" by default
+- StartColumn - 1 by default
+- StartRow - 1 by default
+
+For example, by default report does not have border around the table. To add it, EpplusWriter can be extended.
+
+```c#
+class MyEpplusWriter : EpplusWriter
+{
+    protected override void PostCreate(ExcelWorksheet worksheet, ExcelAddress headerAddress, ExcelAddress bodyAddress)
+    {
+        base.PostCreate(worksheet, headerAddress, bodyAddress);
+
+        worksheet.Cells[headerAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+        worksheet.Cells[bodyAddress.Address].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+    }
+}
+```
 
 ## Using Extra Excel Features
 
@@ -78,13 +103,15 @@ If you want to use more Excel features to apply your cell properties, you have 2
 - extend EpplusWriter to handle custom properties
 - create formatter class
 
-### Extend EpplusWriter
+### Extending EpplusWriter for New Feature
+
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.ExtendingEpplusWriterForNewFeature/Program.cs)
 
 ```c#
 // Property marking cells that should be indented.
 class IndentationProperty : ReportCellProperty { }
 
-class MyExcelWriter : EpplusWriter
+class MyEpplusWriter : EpplusWriter
 {
     // Override method to handle custom property.
     protected override void FormatCell(ExcelRange worksheetCell, ExcelReportCell cell)
@@ -98,23 +125,34 @@ class MyExcelWriter : EpplusWriter
         {
             // Indent cell content.
             worksheetCell.Style.Indent = 1;
+            worksheetCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
         }
     }
 }
 ```
 
-### Create Formatter
+### Creating Formatter for New Feature
+
+[Working example](samples/epplus-writer/XReports.DocsSamples.EpplusWriter.CreatingFormatterForNewFeature/Program.cs)
 
 ```c#
 // Property marking cells that should be indented.
 class IndentationProperty : ReportCellProperty { }
 
-// The class will be automatically picked up and passed to EpplusWriter.
 private class ExcelIndentationPropertyFormatter : EpplusFormatter<IndentationProperty>
 {
     protected override void Format(ExcelRange worksheetCell, ExcelReportCell cell, IndentationProperty property)
     {
         worksheetCell.Style.Indent = 1;
+        worksheetCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
     }
 }
+
+// If you use DI, add ExcelIndentationPropertyFormatter during EpplusWriter registration.
+services.AddEpplusWriter(o => o.Add(typeof(ExcelIndentationPropertyFormatter)));
+// If you don't use DI, just create instance.
+IEpplusWriter writer = new EpplusWriter(new[]
+{
+    new ExcelIndentationPropertyFormatter(),
+});
 ```

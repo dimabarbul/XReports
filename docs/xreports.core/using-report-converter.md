@@ -1,38 +1,54 @@
 # Using Report Converter
 
-Working with generic report cells is totally fine, but it makes you keep logic related to properties processing in writer class. At some point you might have more than one writer and you'll need to share the logic somehow.
+Working with generic report cells is totally fine, but it makes you keep logic related to properties processing in writer class. This violates single responsibility principle, which makes supporting writer classes harder. Also at some point you might have more than one writer and you'll need to share the logic somehow.
 
-This is the main benefit of using converter - you don't need to change your writer class(es) if you want to add more properties.
+This is the main benefit of using converter - unless cell model is changed, you don't need to change your writer class(es) if you want to add more properties.
+
+[Working example](samples/using-report-converter/XReports.DocsSamples.UsingReportConverter/Program.cs)
 
 ## Custom Model
 
-The first step is to create custom model. It should be inherited from BaseReportCell and may contain any extra properties you like.
+The first step is to create custom report cell model. It should be inherited from ReportCell and may contain any extra properties you like.
+
+This step is optional, but highly recommended. You can convert report from ReportCell to ReportCell, but if later you decide that you need more type-specific properties in your cells, you'll have hard time to update your code.
  
- Let's imagine that we want to display Html report with some cells being formatted as Html and some containing only text.
+Let's imagine that we want to work with Html report. In this case our model might look like following:
 
 ```c#
-class HtmlCell : BaseReportCell
+class HtmlCell : ReportCell
 {
-    // True if we don't want to escape cell content.
-    public bool IsHtml { get; set; }
-    
-    // Clear resets cell to its initial state.
+    // Contains styles to be applied to the cell.
+    public List<string> Styles { get; private set; } = new List<string>();
+
+    // Resets cell to its initial state.
     public override void Clear()
     {
         base.Clear();
 
-        this.IsHtml = false;
+        this.Styles.Clear();
+    }
+
+    // Makes the cell clone. Base method makes a shallow copy, so all complex properties
+    // should be handled here.
+    public override ReportCell Clone()
+    {
+        HtmlCell reportCell = (HtmlCell)base.Clone();
+
+        reportCell.Styles = new List<string>(this.Styles);
+
+        return reportCell;
     }
 }
 ```
 
 ## Writer
 
-IsHtml property will be used by writer class, but pay attention that writer class will no longer have knowledge on how IsHtml is set.
+Styles class property will be used by writer class, but pay attention that writer class will no longer have to process cell properties, but only class properties that are already updated according to cell properties assigned to the cell.
 
 ```c#
 class HtmlWriter
 {
+    // The method used to write report to console. Note that it accepts IReportTable<HtmlCell>.
     public void Write(IReportTable<HtmlCell> reportTable)
     {
         Console.WriteLine("<table><thead>");
@@ -52,9 +68,13 @@ class HtmlWriter
 
             foreach (HtmlCell cell in row)
             {
-                string cellContent = cell.GetValue<string>();
-                string htmlContent = cell.IsHtml ? cellContent : HttpUtility.HtmlEncode(cellContent);
-                sb.Append($"<{htmlTag}>{htmlContent}</{htmlTag}>");
+                // Spanned cells are null.
+                if (cell == null)
+                {
+                    continue;
+                }
+
+                this.WriteCell(sb, htmlTag, cell);
             }
 
             sb.Append("</tr>");
@@ -62,10 +82,56 @@ class HtmlWriter
             Console.WriteLine(sb);
         }
     }
+
+    private void WriteCell(StringBuilder sb, string htmlTag, HtmlCell cell)
+    {
+        sb.Append($"<{htmlTag}");
+
+        // Column and row span is inherited by cell from base class.
+        this.AppendSpanInfo(sb, cell);
+
+        // Handle our custom Styles class property.
+        this.AppendStyles(sb, cell);
+
+        string cellContent = cell.GetValue<string>();
+        sb.Append($">{cellContent}</{htmlTag}>");
+    }
+
+    private void AppendSpanInfo(StringBuilder sb, HtmlCell cell)
+    {
+        if (cell.ColumnSpan != 1)
+        {
+            sb.Append($" colSpan=\"{cell.ColumnSpan}\"");
+        }
+
+        if (cell.RowSpan != 1)
+        {
+            sb.Append($" rowSpan=\"{cell.RowSpan}\"");
+        }
+    }
+
+    private void AppendStyles(StringBuilder sb, HtmlCell cell)
+    {
+        if (cell.Styles.Count == 0)
+        {
+            return;
+        }
+
+        sb.Append(" style=\"");
+
+        foreach (string style in cell.Styles)
+        {
+            sb
+                .Append(HttpUtility.HtmlAttributeEncode(style))
+                .Append(';');
+        }
+
+        sb.Append('"');
+    }
 }
 ```
 
-Now we can create report and display it with all cells escaped.
+Now we can create report and display it in HTML format.
 
 ## Converter
 
@@ -78,18 +144,19 @@ class UserInfo
     public string Email { get; set; }
 }
 
-VerticalReportSchemaBuilder<UserInfo> builder = new VerticalReportSchemaBuilder<UserInfo>();
+ReportSchemaBuilder<UserInfo> builder = new ReportSchemaBuilder<UserInfo>();
 
 builder.AddColumn("Username", (UserInfo u) => u.Username);
 builder.AddColumn("Email", (UserInfo u) => u.Email);
 
-VerticalReportSchema<UserInfo> schema = builder.BuildSchema();
+builder.AddComplexHeader(0, "User Info", 0, 1);
+
+IReportSchema<UserInfo> schema = builder.BuildVerticalSchema();
 
 UserInfo[] users = new UserInfo[]
 {
     new UserInfo() { Username = "guest", Email = "guest@example.com" },
     new UserInfo() { Username = "admin", Email = "admin@gmail.com" },
-    new UserInfo() { Username = "evil <script>alert(1)</script>", Email = "evil@inter.net" },
 };
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
@@ -101,30 +168,26 @@ HtmlWriter writer = new HtmlWriter();
 writer.Write(htmlReportTable);
 ```
 
-Notice line
-```c#
-IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>();
-```
 We've created converter instance to make report cells of type HtmlCell. For each ReportCell it produces instance of our class (HtmlCell) and copies span and value information.
 
-So far so good, report is printed and username of evil user is escaped.
+So far so good, report is printed and complex header spans 2 columns.
 
 ```html
 <table><thead>
+<tr><th colSpan="2">User Info</th></tr>
 <tr><th>Username</th><th>Email</th></tr>
 </thead><tbody>
 <tr><td>guest</td><td>guest@example.com</td></tr>
 <tr><td>admin</td><td>admin@gmail.com</td></tr>
-<tr><td>evil &lt;script&gt;alert(1)&lt;/script&gt;</td><td>evil@inter.net</td></tr>
 </tbody></table>
 ```
 
 ## Property and Property Handler
 
-Now let's try to display email cells as mailto links. To do this we'll need property to mark cells that need to have such behavior.
+Now let's highlight username column in bold so report viewers will be able to easily find it. To do this we'll need cell property to mark cells that need to have such behavior.
 
 ```c#
-class EmailLinkProperty : ReportCellProperty
+class BoldProperty : ReportCellProperty
 {
 }
 ```
@@ -135,18 +198,11 @@ As you can see this class does not have any code to update cell. It is used only
 // PropertyHandler class can be used if you want to handle only properties of one type.
 // The handler will be called for inherited properties as well.
 // Otherwise you may implement IPropertyHandler<TReportCell> interface and process all properties.
-class EmailLinkPropertyHandler : PropertyHandler<EmailLinkProperty, HtmlCell>
+class BoldPropertyHandler : PropertyHandler<BoldProperty, HtmlCell>
 {
-    protected override void HandleProperty(EmailLinkProperty property, HtmlCell cell)
+    protected override void HandleProperty(BoldProperty property, HtmlCell cell)
     {
-        // set IsHtml to true in order to not escape it in writer
-        cell.IsHtml = true;
-
-        // read cell content as string
-        string email = cell.GetValue<string>();
-
-        // update cell content to Html link
-        cell.SetValue($"<a href=\"mailto:{email}\">{email}</a>");
+        cell.Styles.Add("font-weight: bold");
     }
 }
 ```
@@ -155,12 +211,9 @@ In order to use this handler class during conversion it should be passed to conv
 
 ```c#
 …
-// Replace line
-// IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>();
-// with following:
 IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(new[]
 {
-    new EmailLinkPropertyHandler()
+    new BoldPropertyHandler(),
 });
 …
 ```
@@ -170,64 +223,33 @@ If you have many handlers, it might be awkward to add them one by one. You may u
 ```c#
 IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(
     new TypesCollection<IPropertyHandler<HtmlCell>>()
-        .AddFromAssembly(typeof(EmailLinkPropertyHandler).Assembly)
+        .AddFromAssembly(typeof(BoldProperty).Assembly)
         .Remove<UnnecessaryHandler>()
         .Select(t => (IPropertyHandler<HtmlCell>)Activator.CreateInstance(t)));
 ```
 
-So now we can assign the property to email column.
+Now we can assign the property to username column.
 
 ```c#
 …
-// Replace line 
-// builder.AddColumn("Email", (UserInfo u) => u.Email);
-// with following:
-builder.AddColumn("Email", (UserInfo u) => u.Email)
-    .AddProperties(new EmailLinkProperty());
+builder.AddColumn("Username", (UserInfo u) => u.Username)
+    .AddProperties(new BoldProperty());
 …
-```
-
-The final code is:
-
-```c#
-VerticalReportSchemaBuilder<UserInfo> builder = new VerticalReportSchemaBuilder<UserInfo>();
-
-builder.AddColumn("Username", (UserInfo u) => u.Username);
-builder.AddColumn("Email", (UserInfo u) => u.Email)
-    .AddProperties(new EmailLinkProperty());
-
-VerticalReportSchema<UserInfo> schema = builder.BuildSchema();
-
-UserInfo[] users = new UserInfo[]
-{
-    new UserInfo() { Username = "guest", Email = "guest@example.com" },
-    new UserInfo() { Username = "admin", Email = "admin@gmail.com" },
-    new UserInfo() { Username = "evil <script>alert(1)</script>", Email = "evil@inter.net" },
-};
-
-IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
-
-IReportConverter<HtmlCell> converter = new ReportConverter<HtmlCell>(new[]
-{
-    new EmailLinkPropertyHandler()
-});
-IReportTable<HtmlCell> htmlReportTable = converter.Convert(reportTable);
-
-HtmlWriter writer = new HtmlWriter();
-writer.Write(htmlReportTable);
 ```
 
 And we get our report.
 
 ```html
 <table><thead>
+<tr><th colSpan="2">User Info</th></tr>
 <tr><th>Username</th><th>Email</th></tr>
 </thead><tbody>
-<tr><td>guest</td><td><a href="mailto:guest@example.com">guest@example.com</a></td></tr>
-<tr><td>admin</td><td><a href="mailto:admin@gmail.com">admin@gmail.com</a></td></tr>
-<tr><td>evil &lt;script&gt;alert(1)&lt;/script&gt;</td><td><a href="mailto:evil@inter.net">evil@inter.net</a></td></tr>
+<tr><td style="font-weight: bold;">guest</td><td>guest@example.com</td></tr>
+<tr><td style="font-weight: bold;">admin</td><td>admin@gmail.com</td></tr>
 </tbody></table>
 ```
+
+As you can see, we adjusted report without modifying writer class. If in future we want to add more properties that can be applied using HTML style, we'll be able to do so by creating properties and property handlers classes. Surely, if HtmlCell class changes, it should be reflected in writer class as well, but such changes are expected to happen much less regularly than adding properties.
 
 ## Property Handler Priority
 
@@ -244,3 +266,11 @@ public class ShouldBeCalledFirstPropertyHandler : PropertyHandler<SomeProperty, 
     }
 }
 ```
+
+Default priority for classes inherited from PropertyHandler is 0.
+
+## Property Inheritance
+
+Sometimes you might want to extend or adjust behavior of some property. To do this you can use properties inheritance. PropertyHandler class handles inherited properties, so all handlers inherited from it will process whole properties hierarchies. This allows adding more specific properties along with handlers that contain some custom logic for inherited properties.
+
+For example, let's imagine that we want to extend handling of MaxLengthProperty in such way that when converted to Html, report will have title attribute

@@ -1,101 +1,193 @@
 # Cell Processors
 
-Cell processors allow you to perform any actions on cells. In most cases it is enough to use properties and dynamic properties, but in some rare cases you may want to process cell before conversion.
+Cell processors allow you to perform any actions on cells [during conversion](./using-report-converter.md). In most cases it is enough to use properties and dynamic properties, but in some rare cases you may want to use cell processors.
 
-Let's imagine that we want to display list of customers and their count of orders. We'd like to highlight names of customers who purchased less than 10 orders. Also we'd like to highlight name in different way when customer has more than 100 orders.
+Let's imagine that we want to highlight even and odd rows differently. Let's align them differently so that they are easy to distinguish visually.
 
-Sure, we can do this with dynamic property, but logic might be complex. So, you might want to move the logic to separate class.
+[Working example](samples/cell-processors/XReports.DocsSamples.CellProcessors/Program.cs)
+
+## Preparation
+
+Before we create our processor, let's prepare other stuff.
+
+### Custom Cell Model
+
+Cells will need to know alignment assigned to them. To do so we'll create our custom cell model and add alignment there:
+
+```c#
+// Custom cell model contains additional information we need.
+class ConsoleCell : ReportCell
+{
+    // Flag indicating whether content should be left-aligned (if true)
+    // or right-aligned (if false), or default behaviour of writer class (if null).
+    public bool? IsLeftAligned { get; set; }
+
+    // Resets cell to its initial state.
+    public override void Clear()
+    {
+        base.Clear();
+
+        this.IsLeftAligned = null;
+    }
+}
+```
+
+### Writer
+
+In order to handle cell color we'll need our writer class. In this example we'll use ConsoleWriter class as a base:
+
+```c#
+// Custom writer class adds support for our custom model.
+class CustomConsoleWriter : ConsoleWriter
+{
+    protected override void WriteCell(ReportCell reportCell, int cellWidth)
+    {
+        // Apply custom logic only to our cell model.
+        if (reportCell is not ConsoleCell { IsLeftAligned: not null } consoleCell)
+        {
+            base.WriteCell(reportCell, cellWidth);
+
+            return;
+        }
+
+        string cellContent = consoleCell.GetValue<string>();
+        if (consoleCell.IsLeftAligned.Value)
+        {
+            Console.Write($"{{0,-{cellWidth}}}", cellContent);
+        }
+        else
+        {
+            Console.Write($"{{0,{cellWidth}}}", cellContent);
+        }
+    }
+}
+```
 
 ## Cell Processor
 
-Cell processor should implement IReportCellProcessor interface.
+Cell processor should implement IReportCellProcessor interface. The processor will be called sequentially for each row for each cell.
 
 ```c#
-// Data model.
-class CustomerInfo
+// Processor knows only about cell to process and current data source item.
+// We will treat changing data source item as move to next row.
+// This logic will work only for vertical report as for horizontal report
+// data source item corresponds to column, not row.
+class StripedProcessor : IReportCellProcessor<UserInfo>
 {
-    public string Name { get; set; }
-    public int OrdersCount { get; set; }
-}
+    // Properties to assign. It makes sense to reuse same properties instead
+    // creating new ones for each cell.
+    private static readonly AlignmentProperty OddProperty = new AlignmentProperty(false);
+    private static readonly AlignmentProperty EvenProperty = new AlignmentProperty(true);
 
-// Property used to mark cells to highlight.
-class HighlightProperty : ReportCellProperty
-{
-    // Symbol to mark highlighted cell with.
-    public char Symbol { get; }
+    // At the beginning we are at row 0, it's even.
+    private AlignmentProperty currentProperty = EvenProperty;
+    private UserInfo lastUserInfo;
 
-    public HighlightProperty(char symbol)
+    public void Process(ReportCell cell, UserInfo item)
     {
-        this.Symbol = symbol;
-    }
-}
-
-// Implements logic to highlight cell.
-class HighlightPropertyHandler : PropertyHandler<HighlightProperty, ReportCell>
-{
-    protected override void HandleProperty(HighlightProperty property, ReportCell cell)
-    {
-        string value = cell.GetValue<string>();
-        cell.SetValue($"{value} ({property.Symbol})");
-    }
-}
-
-// Processor will be called after all properties are assigned to the cell.
-class HighlightByOrderCountProcessor : IReportCellProcessor<CustomerInfo>
-{
-    public void Process(ReportCell cell, CustomerInfo entity)
-    {
-        if (entity.OrdersCount < 10)
+        // If data source item has changed, we started a new row.
+        if (item != this.lastUserInfo)
         {
-            cell.AddProperty(new HighlightProperty('-'));
+            this.currentProperty = this.currentProperty == OddProperty ?
+                EvenProperty :
+                OddProperty;
+            this.lastUserInfo = item;
         }
-        else if (entity.OrdersCount > 100)
-        {
-            cell.AddProperty(new HighlightProperty('+'));
-        }
+
+        cell.AddProperty(this.currentProperty);
     }
 }
 
-VerticalReportSchemaBuilder<CustomerInfo> builder = new VerticalReportSchemaBuilder<CustomerInfo>();
-
-builder.AddColumn("Name", (CustomerInfo c) => c.Name)
-    // processor will be called for each cell in the column
-    .AddProcessors(new HighlightByOrderCountProcessor());
-builder.AddColumn("Orders #", (CustomerInfo c) => c.OrdersCount);
-
-VerticalReportSchema<CustomerInfo> schema = builder.BuildSchema();
-
-CustomerInfo[] customers = new CustomerInfo[]
+// Cell property to mark cells alignment.
+class AlignmentProperty : ReportCellProperty
 {
-    new CustomerInfo() { Name = "John", OrdersCount = 5},
-    new CustomerInfo() { Name = "Jane", OrdersCount = 50},
-    new CustomerInfo() { Name = "David", OrdersCount = 120},
+    public AlignmentProperty(bool isLeftAligned)
+    {
+        this.IsLeftAligned = isLeftAligned;
+    }
+
+    public bool IsLeftAligned { get; }
+}
+
+// Handler that updates model based on assigned AlignmentProperty.
+class AlignmentPropertyHandler : PropertyHandler<AlignmentProperty, ConsoleCell>
+{
+    protected override void HandleProperty(AlignmentProperty property, ConsoleCell cell)
+    {
+        cell.IsLeftAligned = property.IsLeftAligned;
+    }
+}
+```
+
+Notice one thing: processor works with ReportCell class, not our custom. This is done on purpose. Processors are executed on cells before conversion, at this point we have only cells of base model. The processors single responsibility is to mark cells with properties. How particular property is applied to particular cell model is responsibility of property handlers which will be called after processors on cells of custom model.
+
+Processors have access to all properties assigned using AddProperties and AddGlobalProperties (even those added after call to AddProcessors), and to properties added using AddDynamicProperties before call to AddProcessors.
+
+```c#
+// In this case processor will see CustomProperty add by AddDynamicProperties.
+builder.AddColumn("Username", (UserInfo u) => u.Username)
+    .AddDynamicProperties(_ => new CustomProperty())
+    .AddProcessors(processor);
+
+// In this case it won't see CustomProperty.
+builder.AddColumn("Username", (UserInfo u) => u.Username)
+    .AddProcessors(processor)
+    .AddDynamicProperties(_ => new CustomProperty());
+```
+
+The reason behind this is that AddDynamicProperties, in fact, adds processor of type DynamicPropertiesCellProcessor, and processors are executed in the order they were added.
+
+## Generate Report
+
+```c#
+// Data source class.
+class UserInfo
+{
+    public string Username { get; set; }
+    public string Email { get; set; }
+}
+
+UserInfo[] users = new UserInfo[]
+{
+    new UserInfo() { Username = "guest", Email = "guest@example.com" },
+    new UserInfo() { Username = "admin", Email = "admin@gmail.com" },
+    new UserInfo() { Username = "user1", Email = "user1@example.com" },
+    new UserInfo() { Username = "user2", Email = "user2@example.com" },
 };
 
-IReportTable<ReportCell> reportTable = schema.BuildReportTable(customers);
+ReportSchemaBuilder<UserInfo> builder = new ReportSchemaBuilder<UserInfo>();
 
-// Convert report. This will run property handlers.
-IReportConverter<ReportCell> converter = new ReportConverter<ReportCell>(new[]
+// The processor will be called for each row for each cell.
+// It will assign corresponding property to cells in even or odd rows.
+StripedProcessor processor = new StripedProcessor();
+
+// Assign the processor to all columns we want to be processed.
+builder.AddColumn("Username", (UserInfo u) => u.Username)
+    .AddProcessors(processor);
+builder.AddColumn("Email", (UserInfo u) => u.Email)
+    .AddProcessors(processor);
+
+IReportSchema<UserInfo> schema = builder.BuildVerticalSchema();
+
+IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
+
+// Processor will just assign properties, handler will update cell model accordingly.
+IReportConverter<ConsoleCell> converter = new ReportConverter<ConsoleCell>(new[]
 {
-    new HighlightPropertyHandler(),
+    new AlignmentPropertyHandler(),
 });
-IReportTable<ReportCell> convertedReportTable = converter.Convert(reportTable);
+IReportTable<ConsoleCell> consoleReportTable = converter.Convert(reportTable);
 
-// Write report to console.
-Console.WriteLine(string.Join("\n", convertedReportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 2 * 23 - 3));
-Console.WriteLine(string.Join("\n", convertedReportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+CustomConsoleWriter writer = new CustomConsoleWriter();
+writer.Write(consoleReportTable);
 
 /*
-Name                 | Orders #            
--------------------------------------------
-John (-)             | 5                   
-Jane                 | 50                  
-David (+)            | 120                 
+|             Username |                Email |
+|----------------------|----------------------|
+|                guest |    guest@example.com |
+| admin                | admin@gmail.com      |
+|                user1 |    user1@example.com |
+| user2                | user2@example.com    |
 */
 ```
 

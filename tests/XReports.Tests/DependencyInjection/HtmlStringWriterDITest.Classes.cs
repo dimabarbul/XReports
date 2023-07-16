@@ -10,7 +10,7 @@ namespace XReports.Tests.DependencyInjection
     {
         private class CustomHtmlStringWriter : IHtmlStringWriter
         {
-            public string WriteToString(IReportTable<HtmlReportCell> reportTable)
+            public string Write(IReportTable<HtmlReportCell> reportTable)
             {
                 throw new NotImplementedException();
             }

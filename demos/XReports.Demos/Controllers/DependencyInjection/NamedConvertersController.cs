@@ -61,7 +61,7 @@ public class NamedConvertersController : Controller
             .BuildReportTable(this.GetData());
         IReportTable<HtmlReportCell> htmlReportTable = this.htmlConverterFactory.Get("no-handlers")
             .Convert(reportTable);
-        string html = this.htmlWriter.WriteToString(htmlReportTable);
+        string html = this.htmlWriter.Write(htmlReportTable);
 
         return html;
     }

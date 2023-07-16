@@ -1,8 +1,10 @@
 # Value Providers
 
-In general, value providers are classes that provide data for report cells. There is an interface for value providers that supply values not dependent on report data: IValueProvider. Example of such provider is SequentialNumberValueProvider - it generates sequential numbers.
+Value providers are classes that provide values that do not require report data. There is an interface for value providers that supply such values: IValueProvider. Example of such provider is SequentialNumberValueProvider - it generates sequential numbers.
 
 ## Usage Example
+
+[Working example](samples/value-providers/XReports.DocsSamples.ValueProviders.UsageExample/Program.cs)
 
 ```c#
 class Customer
@@ -11,37 +13,30 @@ class Customer
     public string Email { get; set; }
 }
 
-VerticalReportSchemaBuilder<Customer> builder = new VerticalReportSchemaBuilder<Customer>();
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 
-// AddColumn method can accept instance of IValueProvider.
+// AddColumn can accept instance of IValueProvider.
 builder.AddColumn("#", new SequentialNumberValueProvider());
 builder.AddColumn("Name", (Customer c) => c.Name);
 builder.AddColumn("Email", (Customer c) => c.Email);
 
-VerticalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildVerticalSchema();
 
 Customer[] customers = new Customer[]
 {
-    new Customer() {Name = "John Doe", Email = "john@example.com" },
-    new Customer() {Name = "Jane Doe", Email = "jane@example.com" },
+    new Customer() { Name = "John Doe", Email = "john@example.com" },
+    new Customer() { Name = "Jane Doe", Email = "jane@example.com" },
 };
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(customers);
 
-// Print.
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 3 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-#                    | Name                 | Email               
-------------------------------------------------------------------
-1                    | John Doe             | john@example.com    
-2                    | Jane Doe             | jane@example.com    
+|                    # |                 Name |                Email |
+----------------------------------------------------------------------
+|                    1 |             John Doe |     john@example.com |
+|                    2 |             Jane Doe |     jane@example.com |
 */
 ```
 
@@ -53,14 +48,16 @@ builder.AddColumn("#", new SequentialNumberValueProvider(100));
 …
 
 /*
-#                    | Name                 | Email               
-------------------------------------------------------------------
-100                  | John Doe             | john@example.com    
-101                  | Jane Doe             | jane@example.com    
+|                    # |                 Name |                Email |
+----------------------------------------------------------------------
+|                  100 |             John Doe |     john@example.com |
+|                  101 |             Jane Doe |     jane@example.com |
 */
 ```
 
 ## Creating Value Provider
+
+[Working example](samples/value-providers/XReports.DocsSamples.ValueProviders.CreatingValueProvider/Program.cs)
 
 ```c#
 class Customer
@@ -69,44 +66,39 @@ class Customer
     public string Email { get; set; }
 }
 
-class NowValueProvider : IValueProvider<DateTime>
+class DayOfWeekProvider : IValueProvider<string>
 {
-    public DateTime GetValue()
+    private readonly Lazy<DateTime> today = new(() => DateTime.Today);
+
+    public string GetValue()
     {
-        return DateTime.Now;
+        return this.today.Value.ToString("dddd", CultureInfo.InvariantCulture);
     }
 }
 
-VerticalReportSchemaBuilder<Customer> builder = new VerticalReportSchemaBuilder<Customer>();
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 
 // Use our value provider
-builder.AddColumn("Generated At", new NowValueProvider());
+builder.AddColumn("Generated On", new DayOfWeekProvider());
 builder.AddColumn("Name", (Customer c) => c.Name);
 builder.AddColumn("Email", (Customer c) => c.Email);
 
-VerticalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildVerticalSchema();
 
 Customer[] customers = new Customer[]
 {
-    new Customer() {Name = "John Doe", Email = "john@example.com" },
-    new Customer() {Name = "Jane Doe", Email = "jane@example.com" },
+    new Customer() { Name = "John Doe", Email = "john@example.com" },
+    new Customer() { Name = "Jane Doe", Email = "jane@example.com" },
 };
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(customers);
 
-// Print.
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 3 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-Generated At         | Name                 | Email               
-------------------------------------------------------------------
-1/6/2021 11:18:21 AM | John Doe             | john@example.com    
-1/6/2021 11:18:21 AM | Jane Doe             | jane@example.com    
+|         Generated On |                 Name |                Email |
+----------------------------------------------------------------------
+|            Wednesday |             John Doe |     john@example.com |
+|            Wednesday |             Jane Doe |     jane@example.com |
 */
 ```

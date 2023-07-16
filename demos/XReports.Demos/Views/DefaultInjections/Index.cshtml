@@ -61,7 +61,7 @@
         IReportTable&lt;ReportCell&gt; reportTable = this.attributeBasedBuilder.BuildSchema&lt;Entity&gt;()
             .BuildReportTable(this.GetData());
         IReportTable&lt;HtmlReportCell&gt; htmlReportTable = this.htmlConverter.Convert(reportTable);
-        string html = this.htmlWriter.WriteToString(htmlReportTable);
+        string html = this.htmlWriter.Write(htmlReportTable);
 
         return html;
     }

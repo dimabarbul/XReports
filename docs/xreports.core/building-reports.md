@@ -2,17 +2,54 @@
 
 ## Report Flow
 
-(using report schema builder) → Report Schema → (using data) → Generic Report Table → (converter) → Typed Report Table → (writer) → Output
+Full cycle looks like this:
 
-Converting of generic report table to typed one is optional. It's possible to work with it. Examples given here do not use conversion.
+```mermaid
+sequenceDiagram
+
+participant A as Application
+participant SB as Schema Builder
+participant S as Schema
+participant C as Converter
+participant W as Writer
+
+A ->> SB: buildSchema()
+SB -->> A: schema
+A ->> S: buildTable(data)
+S -->> A: table
+A ->> C: convertTable(table)
+C -->> A: typedTable
+A ->> W: write(typedTable)
+W -->> A: result
+```
+
+Converting generic report table to typed table is optional. It's possible to work with it. Examples given here do not use conversion.
+
+Here is the diagram without converting report:
+
+```mermaid
+sequenceDiagram
+
+participant A as Application
+participant SB as Schema Builder
+participant S as Schema
+participant W as Writer
+
+A ->> SB: buildSchema()
+SB -->> A: schema
+A ->> S: buildTable(data)
+S -->> A: table
+A ->> W: write(table)
+W -->> A: result
+```
 
 ## Building Report Schema
 
 Report schema is object containing information what columns/rows report has, what properties they have, what additional actions are to be taken. It's quite complex object, so it's more convenient to use schema builders - classes providing handy way to build report schema.
 
-There are 2 schema builders: VerticalReportSchemaBuilder and HorizontalReportSchemaBuilder. Vertical report is report having fixed number of columns and dynamic number of rows. Horizontal report, on the other hand, has fixed number of rows and dynamic number of columns.
+There are 2 types of reports: vertical and horizontal. Vertical report is report having fixed number of columns and dynamic number of rows. Horizontal report, on the other hand, has fixed number of rows and dynamic number of columns.
 
-Both builders are generic classes. It means that you need to specify type of source. There is special IDataReader source type which will be discussed later.
+XReports.Core provides ReportSchemaBuilder class to build schema. It is a generic class with type argument that specifies type of data source item.
 
 ## Vertical Report
 
@@ -28,6 +65,8 @@ more on this later
 
 Let's dive into building report by looking at code.
 
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalSimple/Program.cs)
+
 ```c#
 // Model describing report data source item.
 class Customer
@@ -37,8 +76,8 @@ class Customer
     public int Age { get; set; }
 }
 
-// Can use dynamic if you don't know type of data.
-VerticalReportSchemaBuilder<Customer> builder = new VerticalReportSchemaBuilder<Customer>();
+// You can use dynamic if you don't know type of data.
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 
 // Specify columns.
 builder.AddColumn("Name", (Customer x) => x.Name);
@@ -46,33 +85,27 @@ builder.AddColumn("Email", (Customer x) => x.Email);
 builder.AddColumn("Age", (Customer x) => x.Age);
 
 // Build schema.
-VerticalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildVerticalSchema();
 
 // Data source is IEnumerable which allows iterating over large
 // collection without having to load it into memory.
 IEnumerable<Customer> dataSource = new Customer[]
 {
-    new Customer { Name = "John Doe", Email = "john@example.com", Age = 23 },
-    new Customer { Name = "Jane Doe", Email = "jane@example.com", Age = 22 },
+    new Customer { Name = "John Doe", Email = "john@example.com", Age = 23, },
+    new Customer { Name = "Jane Doe", Email = "jane@example.com", Age = 22, },
 };
 
 // Report table contains header and body of the report.
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
-// Report can have more than one header row. More on this under section "Complex Header".
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 3 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+// SimpleConsoleWriter is an example class that writes report table data into console.
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-Name                 | Email                | Age                 
-------------------------------------------------------------------
-John Doe             | john@example.com     | 23                  
-Jane Doe             | jane@example.com     | 22                  
+|                 Name |                Email |                  Age |
+----------------------------------------------------------------------
+|             John Doe |     john@example.com |                   23 |
+|             Jane Doe |     jane@example.com |                   22 |
 */
 ```
 
@@ -100,32 +133,32 @@ builder.InsertColumn(0, new ColumnId("Name"), "Name", (Customer x) => x.Name);
 builder.InsertColumnBefore(new ColumnId("Age"), "Name", (Customer x) => x.Name);
 ```
 
+Writer class used in this example iterates over header and body row by row and writes cells into console. You can check the code [here](../../docs-samples/XReports.DocsSamples.Common/SimpleConsoleWriter.cs).
+
 ### IDataReader
 
 Special case of data source is System.Data.IDataReader. In this case columns callbacks will get IDataReader as argument.
 
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalFromDataReader/Program.cs)
+
 ```c#
-class Customer
-{
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public int Age { get; set; }
-}
 
 await using SqliteConnection connection = new SqliteConnection("Data Source=:memory:");
 
 await connection.OpenAsync();
 
 // Setup database
-await connection.ExecuteAsync("CREATE TABLE Customers(Name text, Email text, Age integer)");
-await connection.ExecuteAsync(
+await using SqliteCommand command = connection.CreateCommand();
+command.CommandText = "CREATE TABLE Customers(Name text, Email text, Age integer)";
+await command.ExecuteNonQueryAsync();
+command.CommandText =
     @"INSERT INTO Customers(Name, Email, Age) VALUES
         ('John Doe', 'john@example.com', 23),
-        ('Jane Doe', 'jane@example.com', 22)"
-);
+        ('Jane Doe', 'jane@example.com', 22)";
+await command.ExecuteNonQueryAsync();
 
 // Type of data source is IDataReader.
-VerticalReportSchemaBuilder<IDataReader> builder = new VerticalReportSchemaBuilder<IDataReader>();
+ReportSchemaBuilder<IDataReader> builder = new ReportSchemaBuilder<IDataReader>();
 
 // Callbacks accept IDataReader.
 builder.AddColumn("Name", (IDataReader x) => x.GetString(0));
@@ -133,32 +166,30 @@ builder.AddColumn("Email", (IDataReader x) => x.GetString(1));
 builder.AddColumn("Age", (IDataReader x) => x.GetInt32(2));
 
 // Build schema.
-VerticalReportSchema<IDataReader> schema = builder.BuildSchema();
+IReportSchema<IDataReader> schema = builder.BuildVerticalSchema();
 
 // Get IDataReader.
-IDataReader dataReader = await connection.ExecuteReaderAsync("SELECT Name, Email, Age FROM Customers", CommandBehavior.CloseConnection);
-IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataReader);
+command.CommandText = "SELECT Name, Email, Age FROM Customers";
+IDataReader dataReader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
 
-// Print report.
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 3 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+// AsEnumerable is an extension method that allows iterating over IDataReader.
+IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataReader.AsEnumerable());
+
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-Name                 | Email                | Age                 
-------------------------------------------------------------------
-John Doe             | john@example.com     | 23                  
-Jane Doe             | jane@example.com     | 22                  
+|                 Name |                Email |                  Age |
+----------------------------------------------------------------------
+|             John Doe |     john@example.com |                   23 |
+|             Jane Doe |     jane@example.com |                   22 |
 */
 ```
 
 ### Complex Header
 
 Sometimes report should have columns headers grouped. For example, report should group columns related to customer personal information.
+
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.VerticalComplexHeader/Program.cs)
 
 ```c#
 class Customer
@@ -170,7 +201,7 @@ class Customer
 	public decimal Salary { get; set; }
 }
 
-VerticalReportSchemaBuilder<Customer> builder = new VerticalReportSchemaBuilder<Customer>();
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 builder.AddColumn("Name", (Customer x) => x.Name);
 builder.AddColumn("Email", (Customer x) => x.Email);
 builder.AddColumn("Age", (Customer x) => x.Age);
@@ -187,7 +218,7 @@ builder.AddComplexHeader(1, "Personal Information", "Name", "Age");
 builder.AddComplexHeader(1, "Job Info", new ColumnId("Job"), new ColumnId("Salary"));
 
 // Build schema.
-VerticalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildVerticalSchema();
 
 IEnumerable<Customer> dataSource = new Customer[]
 {
@@ -197,29 +228,25 @@ IEnumerable<Customer> dataSource = new Customer[]
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row
-		.Where(c => c != null) // spanned cell is null (!), we don't want to print them, so just skip
-		.Select(c => string.Format($"{{0,-{23*c.ColumnSpan - 3}}}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 5 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+new ConsoleWriter().Write(reportTable);
 
 /*
-Customer Information                                                                                            
-Personal Information                                               | Job Info                                   
-Name                 | Email                | Age                  | Job                  | Salary ($)          
-----------------------------------------------------------------------------------------------------------------
-John Doe             | john@example.com     | 23                   | Manager              | 1500                
-David Doe            | david@example.com    | 22                   | Director             | 2000                
+|                                                                                             Customer Information |
+|----------------------|----------------------|----------------------|----------------------|----------------------|
+|                                               Personal Information |                                    Job Info |
+|----------------------|----------------------|----------------------|----------------------|----------------------|
+|                 Name |                Email |                  Age |                  Job |           Salary ($) |
+|----------------------|----------------------|----------------------|----------------------|----------------------|
+|             John Doe |     john@example.com |                   23 |              Manager |                 1500 |
+|            David Doe |    david@example.com |                   22 |             Director |                 2000 |
 */
 ```
 
 ## Horizontal Report
 
 ### Simple Example
+
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalSimple/Program.cs)
 
 ```c#
 // Model describing report data source item.
@@ -230,15 +257,16 @@ class Customer
     public int Age { get; set; }
 }
 
-HorizontalReportSchemaBuilder<Customer> builder = new HorizontalReportSchemaBuilder<Customer>();
 
-// Specify rows.
-builder.AddRow("Name", (Customer x) => x.Name);
-builder.AddRow("Email", (Customer x) => x.Email);
-builder.AddRow("Age", (Customer x) => x.Age);
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
+
+// Specify columns. They will become rows during building schema.
+builder.AddColumn("Name", (Customer x) => x.Name);
+builder.AddColumn("Email", (Customer x) => x.Email);
+builder.AddColumn("Age", (Customer x) => x.Age);
 
 // Build schema.
-HorizontalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildHorizontalSchema(0);
 
 IEnumerable<Customer> dataSource = new Customer[]
 {
@@ -248,21 +276,20 @@ IEnumerable<Customer> dataSource = new Customer[]
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
-// Horizontal table does not have header row.
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-Name                 | John Doe             | Jane Doe            
-Email                | john@example.com     | jane@example.com    
-Age                  | 23                   | 22                  
+|                 Name |             John Doe |             Jane Doe |
+|                Email |     john@example.com |     jane@example.com |
+|                  Age |                   23 |                   22 |
 */
 ```
 
 ### Header Row
 
 Often header is required in horizontal report. Here is how to do this.
+
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalHeaderRow/Program.cs)
 
 ```c#
 class Customer
@@ -272,17 +299,15 @@ class Customer
     public int Age { get; set; }
 }
 
-HorizontalReportSchemaBuilder<Customer> builder = new HorizontalReportSchemaBuilder<Customer>();
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 
-// Add header row. There might be several header rows if needed.
-builder.AddHeaderRow(string.Empty, (Customer x) => x.Name.ToUpperInvariant());
+// Specify columns. They will become rows during building schema.
+builder.AddColumn(string.Empty, (Customer x) => x.Name.ToUpperInvariant());
+builder.AddColumn("Email", (Customer x) => x.Email);
+builder.AddColumn("Age", (Customer x) => x.Age);
 
-// Add body rows.
-builder.AddRow("Email", (Customer x) => x.Email);
-builder.AddRow("Age", (Customer x) => x.Age);
-
-// Build schema.
-HorizontalReportSchema<Customer> schema = builder.BuildSchema();
+// Build horizontal schema. The first column should become header row.
+IReportSchema<Customer> schema = builder.BuildHorizontalSchema(1);
 
 IEnumerable<Customer> dataSource = new Customer[]
 {
@@ -292,23 +317,19 @@ IEnumerable<Customer> dataSource = new Customer[]
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
 
-Console.WriteLine(string.Join("\n", reportTable.HeaderRows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
-Console.WriteLine(new string('-', 3 * 23 - 3));
-Console.WriteLine(string.Join("\n", reportTable.Rows.Select(row =>
-    string.Join(" | ", row.Select(c => string.Format("{0,-20}", c.GetValue<string>())))
-)));
+new SimpleConsoleWriter().Write(reportTable);
 
 /*
-                     | JOHN DOE             | JANE DOE            
-------------------------------------------------------------------
-Email                | john@example.com     | jane@example.com    
-Age                  | 23                   | 22                  
+|                      |             JOHN DOE |             JANE DOE |
+----------------------------------------------------------------------
+|                Email |     john@example.com |     jane@example.com |
+|                  Age |                   23 |                   22 |
 */
 ```
 
 ### Complex Header
+
+[Working example](samples/building-reports/XReports.DocsSamples.BuildingReports.HorizontalComplexHeader/Program.cs)
 
 ```c#
 class Customer
@@ -319,19 +340,19 @@ class Customer
     public int Age { get; set; }
 }
 
-HorizontalReportSchemaBuilder<Customer> builder = new HorizontalReportSchemaBuilder<Customer>();
+ReportSchemaBuilder<Customer> builder = new ReportSchemaBuilder<Customer>();
 
-// Specify rows.
-builder.AddRow("Name", (Customer x) => x.Name);
-builder.AddRow("Phone", (Customer x) => x.Phone);
-builder.AddRow("Email", (Customer x) => x.Email);
-builder.AddRow("Age", (Customer x) => x.Age);
+// Specify columns. They will become rows during building schema.
+builder.AddColumn("Name", (Customer x) => x.Name);
+builder.AddColumn("Phone", (Customer x) => x.Phone);
+builder.AddColumn("Email", (Customer x) => x.Email);
+builder.AddColumn("Age", (Customer x) => x.Age);
 
 // Add complex header. For horizontal report header cells are at left.
 builder.AddComplexHeader(0, "Contact Info", "Phone", "Email");
 
 // Build schema.
-HorizontalReportSchema<Customer> schema = builder.BuildSchema();
+IReportSchema<Customer> schema = builder.BuildHorizontalSchema(0);
 
 IEnumerable<Customer> dataSource = new Customer[]
 {
@@ -340,42 +361,13 @@ IEnumerable<Customer> dataSource = new Customer[]
 };
 
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(dataSource);
-		
-// Print. Need to consider spanned cells.
-List<string> cellsTexts = new List<string>();
-foreach (IEnumerable<ReportCell> row in reportTable.Rows)
-{
-    int columnSpan = 1;
-    cellsTexts.Clear();
-    foreach (ReportCell cell in row)
-    {
-        // spanned cell
-        if (cell == null)
-        {
-            if (columnSpan > 1)
-            {
-                columnSpan--;
-            }
-            else
-            {
-                cellsTexts.Add(string.Format("{0,-20}", string.Empty));
-            }
-        }
-        else
-        {
-            cellsTexts.Add(string.Format($"{{0,-{cell.ColumnSpan * 23 - 3}}}", cell.GetValue<string>()));
 
-            columnSpan = cell.ColumnSpan;
-        }
-    }
-
-    Console.WriteLine(string.Join(" | ", cellsTexts));
-}
+new ConsoleWriter().Write(reportTable);
 
 /*
-Name                                        | John Doe             | Jane Doe            
-Contact Info         | Phone                | 1111111111           | 2222222222          
-                     | Email                | john@example.com     | jane@example.com    
-Age                                         | 23                   | 22                  
+|                                        Name |             John Doe |             Jane Doe |
+|         Contact Info |                Phone |           1111111111 |           2222222222 |
+|                      |                Email |     john@example.com |     jane@example.com |
+|                                         Age |                   23 |                   22 |
 */
 ```

@@ -14,7 +14,7 @@ namespace XReports.DependencyInjection
         /// <param name="services">Service collection to register classes in.</param>
         /// <param name="lifetime">Service lifetime of <see cref="IHtmlStringWriter"/>.</param>
         /// <returns>Service collection.</returns>
-        public static IServiceCollection AddHtmlStringWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddHtmlStringWriter(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
         {
             return services.AddHtmlStringWriter<HtmlStringWriter>(lifetime);
         }
@@ -26,7 +26,7 @@ namespace XReports.DependencyInjection
         /// <param name="lifetime">Service lifetime of <see cref="IHtmlStringWriter"/>.</param>
         /// <typeparam name="THtmlStringWriter">Type of custom implementation of <see cref="IHtmlStringWriter"/>.</typeparam>
         /// <returns>Service collection.</returns>
-        public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where THtmlStringWriter : IHtmlStringWriter
         {
             return services.AddHtmlStringWriter<THtmlStringWriter, HtmlStringCellWriter>(lifetime);
@@ -41,7 +41,7 @@ namespace XReports.DependencyInjection
         /// <typeparam name="THtmlStringCellWriter">Type of custom implementation of <see cref="IHtmlStringCellWriter"/>.</typeparam>
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddHtmlStringWriter<THtmlStringWriter, THtmlStringCellWriter>(
-            this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where THtmlStringWriter : IHtmlStringWriter
             where THtmlStringCellWriter : IHtmlStringCellWriter
         {

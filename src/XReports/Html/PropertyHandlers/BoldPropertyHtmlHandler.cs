@@ -11,9 +11,7 @@ namespace XReports.Html.PropertyHandlers
         /// <inheritdoc />
         protected override void HandleProperty(BoldProperty property, HtmlReportCell cell)
         {
-            string value = cell.GetValue<string>();
-            cell.SetValue($"<strong>{value}</strong>");
-            cell.IsHtml = true;
+            cell.Styles.Add("font-weight", "bold");
         }
     }
 }

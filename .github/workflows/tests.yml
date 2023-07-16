@@ -23,6 +23,23 @@ jobs:
       run: dotnet build -c Release --no-restore
     - name: Test
       run: dotnet test -c Release --no-build --verbosity normal
+    - name: Run docs samples
+      shell: pwsh
+      run: |
+        $files = Get-ChildItem -Path docs -Recurse -Filter *.csproj -Exclude XReports.DocsSamples.Common.csproj
+        foreach ($file in $files)
+        {
+          Write-Host "*** Running $($file.Name)" -ForegroundColor Green
+          $output = & dotnet run -c Release --no-build --project $file.FullName
+          Write-Host $output
+          Write-Host
+
+          if ($LASTEXITCODE -ne 0)
+          {
+            exit 1;
+          }
+        }
+
 
   run-tests-on-windows:
     runs-on: windows-latest
@@ -36,6 +53,22 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c Release --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test -c Release --no-build --verbosity normal
+    - name: Run docs samples
+      shell: pwsh
+      run: |
+        $files = Get-ChildItem -Path docs -Recurse -Filter *.csproj -Exclude XReports.DocsSamples.Common.csproj
+        foreach ($file in $files)
+        {
+          Write-Host "*** Running $($file.Name)" -ForegroundColor Green
+          $output = & dotnet run -c Release --no-build --project $file.FullName
+          Write-Host $output
+          Write-Host
+
+          if ($LASTEXITCODE -ne 0)
+          {
+            exit 1;
+          }
+        }
