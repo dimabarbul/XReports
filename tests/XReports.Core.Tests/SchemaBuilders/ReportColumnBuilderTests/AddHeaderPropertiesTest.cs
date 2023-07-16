@@ -20,7 +20,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty2());
 
-            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<string>>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
                 "Value", new CustomHeaderProperty1(), new CustomHeaderProperty2()));
@@ -34,7 +34,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddHeaderProperties(new CustomHeaderProperty1(), new CustomHeaderProperty1());
 
-            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<string>>());
             ReportCell headerCell = provider.CreateHeaderCell();
             headerCell.Should().Equal(ReportCellHelper.CreateReportCell(
                 "Value", new CustomHeaderProperty1(), new CustomHeaderProperty1()));

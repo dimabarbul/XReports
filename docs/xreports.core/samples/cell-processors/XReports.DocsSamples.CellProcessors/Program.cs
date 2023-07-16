@@ -14,15 +14,13 @@ UserInfo[] users = new UserInfo[]
 
 ReportSchemaBuilder<UserInfo> builder = new ReportSchemaBuilder<UserInfo>();
 
+builder.AddColumn("Username", (UserInfo u) => u.Username);
+builder.AddColumn("Email", (UserInfo u) => u.Email);
+
 // The processor will be called for each row for each cell.
 // It will assign corresponding property to cells in even or odd rows.
-StripedProcessor processor = new StripedProcessor();
-
-// Assign the processor to all columns we want to be processed.
-builder.AddColumn("Username", (UserInfo u) => u.Username)
-    .AddProcessors(processor);
-builder.AddColumn("Email", (UserInfo u) => u.Email)
-    .AddProcessors(processor);
+// As we want to highlight whole row, we assign the processor to all columns.
+builder.AddGlobalProcessors(new StripedProcessor());
 
 IReportSchema<UserInfo> schema = builder.BuildVerticalSchema();
 

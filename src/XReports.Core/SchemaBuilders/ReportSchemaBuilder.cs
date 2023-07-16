@@ -18,12 +18,13 @@ namespace XReports.SchemaBuilders
         private readonly Dictionary<string, List<ReportCellProperty>> complexHeadersProperties = new Dictionary<string, List<ReportCellProperty>>();
         private readonly List<ReportCellProperty> commonComplexHeadersProperties = new List<ReportCellProperty>();
         private readonly List<ReportCellProperty> globalProperties = new List<ReportCellProperty>();
+        private readonly List<IReportCellProcessor<TSourceItem>> globalProcessors = new List<IReportCellProcessor<TSourceItem>>();
         private readonly List<ReportTableProperty> tableProperties = new List<ReportTableProperty>();
 
         /// <inheritdoc />
         public IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties)
         {
-            this.ValidateAllPropertiesNotNull(properties);
+            this.ValidateAllItemsNotNull(properties);
 
             this.globalProperties.AddRange(properties);
 
@@ -31,9 +32,19 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
+        public IReportSchemaBuilder<TSourceItem> AddGlobalProcessors(params IReportCellProcessor<TSourceItem>[] processors)
+        {
+            this.ValidateAllItemsNotNull(processors);
+
+            this.globalProcessors.AddRange(processors);
+
+            return this;
+        }
+
+        /// <inheritdoc />
         public IReportSchemaBuilder<TSourceItem> AddTableProperties(params ReportTableProperty[] properties)
         {
-            this.ValidateAllPropertiesNotNull(properties);
+            this.ValidateAllItemsNotNull(properties);
 
             this.tableProperties.AddRange(properties);
 
@@ -119,7 +130,7 @@ namespace XReports.SchemaBuilders
         /// <inheritdoc />
         public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params ReportCellProperty[] properties)
         {
-            this.ValidateAllPropertiesNotNull(properties);
+            this.ValidateAllItemsNotNull(properties);
 
             this.commonComplexHeadersProperties.AddRange(properties);
 
@@ -211,7 +222,7 @@ namespace XReports.SchemaBuilders
 
             return new VerticalReportSchema<TSourceItem>(
                 this.cellProviders
-                    .Select(c => c.Provider.Build(this.globalProperties))
+                    .Select(c => c.Provider.Build(this.globalProperties, this.globalProcessors))
                     .ToArray(),
                 this.tableProperties.ToArray(),
                 this.BuildComplexHeader(this.cellProviders, transpose: false),
@@ -238,11 +249,11 @@ namespace XReports.SchemaBuilders
             return new HorizontalReportSchema<TSourceItem>(
                 this.cellProviders
                     .Take(headerRowsCount)
-                    .Select(c => c.Provider.Build(Array.Empty<ReportCellProperty>()))
+                    .Select(c => c.Provider.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<TSourceItem>>()))
                     .ToArray(),
                 this.cellProviders
                     .Skip(headerRowsCount)
-                    .Select(c => c.Provider.Build(this.globalProperties))
+                    .Select(c => c.Provider.Build(this.globalProperties, this.globalProcessors))
                     .ToArray(),
                 this.tableProperties.ToArray(),
                 this.BuildComplexHeader(this.cellProviders.Skip(headerRowsCount).ToArray(), transpose: true),
@@ -278,11 +289,11 @@ namespace XReports.SchemaBuilders
             return transpose ? complexHeader.Transpose() : complexHeader;
         }
 
-        private void ValidateAllPropertiesNotNull<TProperty>(TProperty[] properties)
+        private void ValidateAllItemsNotNull<TItem>(IEnumerable<TItem> items)
         {
-            if (properties.Any(p => p == null))
+            if (items.Any(p => p == null))
             {
-                throw new ArgumentException("All properties should not be null", nameof(properties));
+                throw new ArgumentException("All items should not be null", nameof(items));
             }
         }
 

@@ -20,7 +20,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddHeaderProcessors(processor1, processor2);
 
-            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
             provider.CreateHeaderCell();
 
             processor1.CallsCount.Should().Be(1);
