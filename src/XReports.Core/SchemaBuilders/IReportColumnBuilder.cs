@@ -42,7 +42,10 @@ namespace XReports.SchemaBuilders
         /// Builds report column based on data provided earlier.
         /// </summary>
         /// <param name="globalProperties">Report global properties, will be merged with properties of the report column cells. Are not applied to header cell.</param>
+        /// <param name="globalProcessors">Report global processors, will be merged with processors of the report column cells. Are not applied to header cell.</param>
         /// <returns>The report column builder.</returns>
-        IReportColumn<TSourceItem> Build(IReadOnlyList<ReportCellProperty> globalProperties);
+        IReportColumn<TSourceItem> Build(
+            IReadOnlyList<ReportCellProperty> globalProperties,
+            IReadOnlyList<IReportCellProcessor<TSourceItem>> globalProcessors);
     }
 }

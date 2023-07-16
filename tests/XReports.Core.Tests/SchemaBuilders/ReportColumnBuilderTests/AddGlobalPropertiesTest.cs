@@ -19,7 +19,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() });
+                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
+                Array.Empty<IReportCellProcessor<int>>());
 
             ReportCellProperty[] expectedProperties =
             {
@@ -38,7 +39,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddProperties(new CustomProperty1() { Value = true });
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() });
+                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
+                Array.Empty<IReportCellProcessor<int>>());
 
             ReportCellProperty[] expectedProperties =
             {
@@ -56,7 +58,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty1() });
+                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty1() },
+                Array.Empty<IReportCellProcessor<int>>());
 
             ReportCellProperty[] expectedProperties =
             {
@@ -73,7 +76,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             Action action = () => builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2(), null });
+                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2(), null },
+                Array.Empty<IReportCellProcessor<int>>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }

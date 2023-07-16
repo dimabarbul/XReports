@@ -17,6 +17,14 @@ namespace XReports.SchemaBuilders
         IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties);
 
         /// <summary>
+        /// Adds report global processors. They will be applied to all column to
+        /// body cells only.
+        /// </summary>
+        /// <param name="processors">Processors to add.</param>
+        /// <returns>The report schema builder.</returns>
+        IReportSchemaBuilder<TSourceItem> AddGlobalProcessors(params IReportCellProcessor<TSourceItem>[] processors);
+
+        /// <summary>
         /// Adds report table properties.
         /// </summary>
         /// <param name="properties">Table properties to add.</param>

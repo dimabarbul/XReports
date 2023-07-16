@@ -71,16 +71,19 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportColumn<TSourceItem> Build(IReadOnlyList<ReportCellProperty> globalProperties)
+        public IReportColumn<TSourceItem> Build(
+            IReadOnlyList<ReportCellProperty> globalProperties,
+            IReadOnlyList<IReportCellProcessor<TSourceItem>> globalProcessors)
         {
             this.ValidateAllItemsNotNull(globalProperties);
+            this.ValidateAllItemsNotNull(globalProcessors);
 
             return new ReportColumn<TSourceItem>(
                 this.title,
                 this.provider,
                 this.MergeGlobalProperties(globalProperties),
                 this.headerProperties.ToArray(),
-                this.cellProcessors.ToArray(),
+                this.MergeGlobalProcessors(globalProcessors),
                 this.headerProcessors.ToArray());
         }
 
@@ -92,6 +95,20 @@ namespace XReports.SchemaBuilders
                 if (!result.Any(p => p.GetType() == globalProperties[i].GetType()))
                 {
                     result.Add(globalProperties[i]);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private IReportCellProcessor<TSourceItem>[] MergeGlobalProcessors(IReadOnlyList<IReportCellProcessor<TSourceItem>> globalProcessors)
+        {
+            List<IReportCellProcessor<TSourceItem>> result = new List<IReportCellProcessor<TSourceItem>>(this.cellProcessors);
+            for (int i = 0; i < globalProcessors.Count; i++)
+            {
+                if (!result.Any(p => p.GetType() == globalProcessors[i].GetType()))
+                {
+                    result.Add(globalProcessors[i]);
                 }
             }
 
