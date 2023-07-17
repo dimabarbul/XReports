@@ -106,6 +106,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.ValueP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.ValueProviders.UsageExample", "docs\xreports.core\samples\value-providers\XReports.DocsSamples.ValueProviders.UsageExample\XReports.DocsSamples.ValueProviders.UsageExample.csproj", "{436C59CC-F375-461B-8D5A-0FCAFD94ACE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XReports.DocsSamples.UsingReportConverter.PropertyInheritance", "docs\xreports.core\samples\using-report-converter\XReports.DocsSamples.UsingReportConverter.PropertyInheritance\XReports.DocsSamples.UsingReportConverter.PropertyInheritance.csproj", "{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -260,6 +262,10 @@ Global
 		{436C59CC-F375-461B-8D5A-0FCAFD94ACE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{436C59CC-F375-461B-8D5A-0FCAFD94ACE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{436C59CC-F375-461B-8D5A-0FCAFD94ACE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{45EFC336-0978-4C5C-91B6-22541C463736} = {F9E94722-061B-4A10-896F-880442F76D1F}
@@ -309,5 +315,6 @@ Global
 		{AA9B208A-193B-46BF-B614-E2084D5E97E4} = {624C710C-2820-49B9-83EC-5A981F82DA2C}
 		{4D88D18A-83C8-4DCB-9A13-C1B000B8D1DD} = {29325550-99A6-4929-B035-D9727C3528AE}
 		{436C59CC-F375-461B-8D5A-0FCAFD94ACE7} = {29325550-99A6-4929-B035-D9727C3528AE}
+		{6CEDA81E-C2C0-4B10-92AF-667F6EF6DAAC} = {624C710C-2820-49B9-83EC-5A981F82DA2C}
 	EndGlobalSection
 EndGlobal

@@ -11,7 +11,7 @@ namespace XReports.Excel.PropertyHandlers
         private readonly DateTimeFormatPropertyExcelHandler standardHandler = new DateTimeFormatPropertyExcelHandler();
 
         /// <inheritdoc />
-        public override int Priority => -1;
+        public override int Priority => this.standardHandler.Priority - 1;
 
         /// <inheritdoc />
         protected override void HandleProperty(ExcelDateTimeFormatProperty property, ExcelReportCell cell)
