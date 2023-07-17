@@ -271,6 +271,114 @@ Default priority for classes inherited from PropertyHandler is 0.
 
 ## Property Inheritance
 
+[Working example](samples/using-report-converter/XReports.DocsSamples.UsingReportConverter.PropertyInheritance/Program.cs)
+
 Sometimes you might want to extend or adjust behavior of some property. To do this you can use properties inheritance. PropertyHandler class handles inherited properties, so all handlers inherited from it will process whole properties hierarchies. This allows adding more specific properties along with handlers that contain some custom logic for inherited properties.
 
-For example, let's imagine that we want to extend handling of MaxLengthProperty in such way that when converted to Html, report will have title attribute
+In this example we will use classes provided by XReports library to keep example simpler. XReport is not mandatory for property inheritance to work.
+
+We'll use following functionality from XReports:
+
+- HtmlReportCell - report cell type for Html reports, have Html classes, styles and custom attributes
+- HtmlStringWriter, HtmlStringCellWriter - classes that write Html report to string
+- MaxLengthProperty - property to limit text in cells to specified length
+- MaxLengthPropertyHtmlHandler - property handler class that processes MaxLengthProperty when converting report to Html
+
+MaxLengthPropertyHtmlHandler truncates text in cell so that resulting text and postfix text ("…" by default) is not longer than specified number of characters.
+
+Let's imagine that we want to extend handling of MaxLengthProperty in such way that sometimes (depending on user preferences) report will have title attribute containing full text. To do so we need to create new property (inherited from MaxLengthProperty) and new handler for the new property with priority lower than priority of existing handler for MaxLengthProperty to be executed earlier.
+
+```c#
+class MyMaxLengthProperty : MaxLengthProperty
+{
+    public MyMaxLengthProperty(bool showFullText, int maxLength)
+        : base(maxLength)
+    {
+        this.ShowFullText = showFullText;
+    }
+
+    public bool ShowFullText { get; }
+}
+```
+
+There are 2 options how to implement handler.
+
+The first option is to inherit from MaxLengthPropertyHtmlHandler. In this case the handler will handle both - MaxLengthProperty and MyMaxLengthProperty - properties. The drawback of this approach is that the handler should process whole MaxLengthProperty hierarchy, i.e., if you have more properties inherited from MaxLengthProperty, all of them will have to be processed in this handler. This is so because MaxLengthPropertyHtmlHandler marks property as processed in non-virtual method (inherited from PropertyHandler<>), so it cannot be overriden.
+
+```c#
+class AllMaxLengthPropertiesHtmlHandler : MaxLengthPropertyHtmlHandler
+{
+    public override int Priority => base.Priority - 1;
+
+    protected override void HandleProperty(MaxLengthProperty property, HtmlReportCell cell)
+    {
+        switch (property)
+        {
+            case MyMaxLengthProperty myMaxLengthProperty:
+                this.HandleProperty(myMaxLengthProperty, cell);
+                break;
+            default:
+                base.HandleProperty(property, cell);
+                break;
+        }
+    }
+
+    private void HandleProperty(MyMaxLengthProperty property, HtmlReportCell cell)
+    {
+        // If user does not want to see full text, we fallback to default
+        // inherited behavior.
+        if (!property.ShowFullText)
+        {
+            base.HandleProperty(property, cell);
+
+            return;
+        }
+
+        // In order not to duplicate logic of determining if text is too long,
+        // we save text before handler and after. If it's different, it's been
+        // truncated.
+        string fullText = cell.GetValue<string>();
+
+        base.HandleProperty(property, cell);
+
+        if (fullText != cell.GetValue<string>())
+        {
+            cell.Attributes["title"] = fullText;
+        }
+    }
+}
+```
+
+Another option is to create separate handler and use MaxLengthPropertyHtmlHandler with composition. The downside is that handler doing original job (`this.originalHandler` in the example below) is hard-coded. So if later you decide to use another handler instead of MaxLengthPropertyHtmlHandler, you'll need to change code of MyMaxLengthPropertyHtmlHandler. Alternative way would be to accept the handler in constructor as, for example, PropertyHandler<MaxLengthProperty, HtmlReportCell>.
+
+```c#
+class MyMaxLengthPropertyHtmlHandler : PropertyHandler<MyMaxLengthProperty, HtmlReportCell>
+{
+    private readonly MaxLengthPropertyHtmlHandler originalHandler = new MaxLengthPropertyHtmlHandler();
+
+    public override int Priority => this.originalHandler.Priority - 1;
+
+    protected override void HandleProperty(MyMaxLengthProperty property, HtmlReportCell cell)
+    {
+        // If user does not want to see full text, we fallback to default behavior.
+        if (!property.ShowFullText)
+        {
+            this.originalHandler.Handle(property, cell);
+
+            return;
+        }
+
+        // In order not to duplicate logic of determining if text is too long,
+        // we save text before handler and after. If it's different, it's been
+        // truncated.
+        string fullText = cell.GetValue<string>();
+
+        this.originalHandler.Handle(property, cell);
+
+        if (fullText != cell.GetValue<string>())
+        {
+            cell.Attributes["title"] = fullText;
+        }
+    }
+}
+```
