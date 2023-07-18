@@ -11,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForVerticalReport, int>
@@ -31,7 +31,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForHorizontalReport, int>
@@ -142,7 +142,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForVerticalReportWithDependency, int>
@@ -167,7 +167,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForHorizontalReportWithDependency, int>
@@ -192,7 +192,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithNewHeaderRowInPostBuilder, int>
@@ -211,7 +211,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithChangedTypeInPostBuilder, bool>

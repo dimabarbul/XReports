@@ -23,7 +23,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForVerticalReport>
@@ -48,7 +48,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<ForHorizontalReport>
@@ -75,7 +75,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             [My]
             public string Name { get; set; }
 
@@ -103,7 +103,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             [My]
             public string Name { get; set; }
 
@@ -185,7 +185,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalWithDisposablePostBuilder>, IDisposable
@@ -215,7 +215,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithDisposablePostBuilder>, IDisposable

@@ -36,11 +36,11 @@ Console.WriteLine(html);
 
 internal class User
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     [My]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2)]
     public string Email { get; set; }
 }
 

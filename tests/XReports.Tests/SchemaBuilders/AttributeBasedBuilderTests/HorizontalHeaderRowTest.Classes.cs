@@ -12,10 +12,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Id { get; set; }
 
             [HeaderRow]
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
-            [ReportColumn(1, "Age")]
+            [ReportColumn(1)]
             public int Age { get; set; }
         }
 
@@ -30,7 +30,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string LastName { get; set; }
 
-            [ReportColumn(1, "Age")]
+            [ReportColumn(1)]
             public int Age { get; set; }
         }
 
@@ -42,10 +42,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Id { get; set; }
 
             [HeaderRow]
-            [ReportColumn(3, "Name")]
+            [ReportColumn(3)]
             public string Name { get; set; }
 
-            [ReportColumn(1, "Age")]
+            [ReportColumn(1)]
             public int Age { get; set; }
         }
 
@@ -57,10 +57,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Id { get; set; }
 
             [HeaderRow]
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
 
-            [ReportColumn(1, "Age")]
+            [ReportColumn(1)]
             public int Age { get; set; }
         }
 
@@ -71,10 +71,10 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             public int Id { get; set; }
 
             [HeaderRow]
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
-            [ReportColumn(1, "Age")]
+            [ReportColumn(1)]
             public int Age { get; set; }
         }
     }

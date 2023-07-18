@@ -8,15 +8,15 @@ Example:
 [Alignment(Alignment.Center)]
 class User
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     [Alignment(Alignment.Left)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2, "E-mail")]
     [Bold]
     public string Email { get; set; }
 
-    [ReportColumn(3, "Score")]
+    [ReportColumn(3)]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
@@ -47,15 +47,15 @@ class User
     [ReportColumn(1, "User Name")]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2)]
     public string Email { get; set; }
 
-    [ReportColumn(3, "Age")]
+    [ReportColumn(3)]
     public int Age { get; set; }
 }
 ```
 
-The attribute has 2 required arguments - column order (any number, columns will be added in ascending order of this number) and column title. Building report from this model will have 3 columns: User Name, Email and Age.
+The attribute has 2 arguments - column order (any number, columns will be added in ascending order of this number) and column title (optional, if omitted or null, property name will be used). Building report from this model will have 3 columns: User Name, Email and Age.
 
 Columns/rows are added with title from ReportColumn attribute. So in previous example you can work with the first column in [post-builder](#post-builder) class as:
 
@@ -90,13 +90,13 @@ class User
     [ReportColumn(1, "Full Name")]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Age")]
+    [ReportColumn(2)]
     public int Age { get; set; }
 
-    [ReportColumn(3, "Phone")]
+    [ReportColumn(3)]
     public string Phone { get; set; }
 
-    [ReportColumn(4, "Email")]
+    [ReportColumn(4)]
     public string Email { get; set; }
 }
 
@@ -119,14 +119,14 @@ To add properties to report cells you can add attributes above class property.
 ```c#
 class User
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2)]
     [Alignment(Alignment.Center, IsHeader = true)]
     public string Email { get; set; }
 
-    [ReportColumn(3, "Age")]
+    [ReportColumn(3)]
     [Alignment(Alignment.Center)]
     public int Age { get; set; }
 }
@@ -224,16 +224,16 @@ To build horizontal report you need to add `HorizontalReportAttribute` to class.
 class User
 {
     [HeaderRow]
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(1, "Age")]
+    [ReportColumn(1)]
     public int Age { get; set; }
 
-    [ReportColumn(2, "Phone")]
+    [ReportColumn(2)]
     public string Phone { get; set; }
 
-    [ReportColumn(3, "Email")]
+    [ReportColumn(3)]
     public string Email { get; set; }
 }
 ```
@@ -273,18 +273,18 @@ In this example report will have one header row and 3 rows. Exported to Html rep
 class User
 {
     [HeaderRow]
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     [Alignment(Alignment.Center, IsHeader = true)]
     [Alignment(Alignment.Center)]
     public string Name { get; set; }
 
-    [ReportColumn(1, "Age")]
+    [ReportColumn(1)]
     public int Age { get; set; }
 
-    [ReportColumn(2, "Phone")]
+    [ReportColumn(2)]
     public string Phone { get; set; }
 
-    [ReportColumn(3, "Email")]
+    [ReportColumn(3)]
     public string Email { get; set; }
 }
 ```
@@ -318,13 +318,13 @@ Sometimes using property attributes is not enough. For example, you cannot add d
 class ReportModel
 {
     [HeaderRow]
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(1, "Email")]
+    [ReportColumn(1)]
     public string Email { get; set; }
 
-    [ReportColumn(2, "Score")]
+    [ReportColumn(2)]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 
@@ -365,7 +365,7 @@ class LotteryService
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
 internal class UserModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
     private class PostBuilder : IReportSchemaPostBuilder<UserModel>
@@ -410,10 +410,10 @@ Let's imagine that user can enter score and we want to highlight scores that are
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
 class UserScoreModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Score")]
+    [ReportColumn(2)]
     public decimal Score { get; set; }
 
     // Need to implement IReportSchemaPostBuilder<TModel, TParameter> interface
@@ -469,13 +469,13 @@ Often you may want all columns/rows in report to have the same attribute, for ex
 [Alignment(Alignment.Center)]
 class ReportModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2)]
     public string Email { get; set; }
 
-    [ReportColumn(3, "Score")]
+    [ReportColumn(3)]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 }
@@ -484,15 +484,15 @@ class ReportModel
 
 class ReportModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     [Alignment(Alignment.Center)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Email")]
+    [ReportColumn(2)]
     [Alignment(Alignment.Center)]
     public string Email { get; set; }
 
-    [ReportColumn(3, "Score")]
+    [ReportColumn(3)]
     [DecimalPrecision(2)]
     [Alignment(Alignment.Center)]
     public decimal Score { get; set; }

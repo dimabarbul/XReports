@@ -11,7 +11,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Custom]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
 
@@ -23,7 +23,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Custom]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
 
@@ -35,7 +35,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
 
@@ -48,7 +48,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
 
@@ -60,7 +60,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Bold]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
 
@@ -72,7 +72,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Bold(IsHeader = true)]
             public int Id { get; set; }
 
-            [ReportColumn(1, "Name")]
+            [ReportColumn(1)]
             public string Name { get; set; }
         }
     }

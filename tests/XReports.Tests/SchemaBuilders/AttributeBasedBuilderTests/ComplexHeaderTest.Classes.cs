@@ -15,7 +15,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -28,7 +28,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -41,7 +41,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -55,7 +55,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -69,7 +69,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -83,7 +83,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -96,7 +96,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(5, "Age")]
+            [ReportColumn(5)]
             public int Age { get; set; }
         }
 
@@ -110,7 +110,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(5, "Age")]
+            [ReportColumn(5)]
             public int Age { get; set; }
         }
 
@@ -128,13 +128,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
 
             [ReportColumn(4, "Job Title")]
             public string JobTitle { get; set; }
 
-            [ReportColumn(5, "Salary")]
+            [ReportColumn(5)]
             public decimal Salary { get; set; }
 
             [ReportColumn(6, "Employee # in Department")]
@@ -156,13 +156,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
 
             [ReportColumn(4, "Job Title")]
             public string JobTitle { get; set; }
 
-            [ReportColumn(5, "Salary")]
+            [ReportColumn(5)]
             public decimal Salary { get; set; }
 
             [ReportColumn(6, "Employee # in Department")]
@@ -176,7 +176,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<VerticalByIndexesWithColumnFromPostBuilder>
@@ -195,7 +195,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<HorizontalByIndexesWithColumnFromPostBuilder>
@@ -214,7 +214,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<VerticalByTitlesWithColumnFromPostBuilder>
@@ -233,7 +233,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<HorizontalByTitlesWithColumnFromPostBuilder>
@@ -252,7 +252,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<VerticalByPropertyNamesWithColumnFromPostBuilder>
@@ -271,7 +271,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Age")]
+            [ReportColumn(2)]
             public string Age { get; set; }
 
             private class PostBuilder : IReportSchemaPostBuilder<HorizontalByPropertyNamesWithColumnFromPostBuilder>
@@ -292,7 +292,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -305,7 +305,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(5, "Age")]
+            [ReportColumn(5)]
             public int Age { get; set; }
         }
 
@@ -319,7 +319,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(2, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(3, "Age")]
+            [ReportColumn(3)]
             public int Age { get; set; }
         }
 
@@ -333,7 +333,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(3, "Name")]
             public string FullName { get; set; }
 
-            [ReportColumn(5, "Age")]
+            [ReportColumn(5)]
             public int Age { get; set; }
         }
     }

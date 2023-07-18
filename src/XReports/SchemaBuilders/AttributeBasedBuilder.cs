@@ -150,7 +150,7 @@ namespace XReports.SchemaBuilders
         {
             IReportCellProvider<TEntity> cellProvider = this.CreateCellProvider<TEntity>(propertyAttribute.Property);
 
-            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(propertyAttribute.Attribute.Title, cellProvider);
+            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(propertyAttribute.Attribute.Title ?? propertyAttribute.Property.Name, cellProvider);
 
             this.ApplyAttributes(builder, columnBuilder, propertyAttribute.Property, Array.Empty<Attribute>());
         }
@@ -231,7 +231,7 @@ namespace XReports.SchemaBuilders
         {
             IReportCellProvider<TEntity> cellProvider = this.CreateCellProvider<TEntity>(property);
 
-            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title, cellProvider);
+            IReportColumnBuilder<TEntity> columnBuilder = builder.AddColumn(new ColumnId(property.Name), attribute.Title ?? property.Name, cellProvider);
 
             this.ApplyAttributes(builder, columnBuilder, property, globalAttributes);
         }

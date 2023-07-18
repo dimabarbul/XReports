@@ -88,7 +88,7 @@ public class DefaultInjectionsController : Controller
         [ReportColumn(1, "Full name")]
         public string Name { get; set; }
 
-        [ReportColumn(2, "Score")]
+        [ReportColumn(2)]
         [DecimalPrecision(1)]
         public decimal Score { get; set; }
     }

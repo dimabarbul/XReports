@@ -57,10 +57,10 @@ void PrintReport(IReportTable<ReportCell> reportTable)
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
 internal class UserScoreModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Score")]
+    [ReportColumn(2)]
     public decimal Score { get; set; }
 
     // Need to implement IReportSchemaPostBuilder<TModel, TParameter> interface

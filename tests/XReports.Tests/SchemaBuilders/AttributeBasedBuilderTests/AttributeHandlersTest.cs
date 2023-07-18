@@ -63,14 +63,14 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
 
         private class WithCustomAttribute
         {
-            [ReportColumn(1, "Title")]
+            [ReportColumn(1)]
             [Custom]
             public string Title { get; set; }
         }
 
         private class WithoutCustomAttribute
         {
-            [ReportColumn(1, "Title")]
+            [ReportColumn(1)]
             public string Title { get; set; }
         }
 
@@ -81,7 +81,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [Bold]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Title")]
+            [ReportColumn(2)]
             [Alignment(Alignment.Left)]
             public string Title { get; set; }
         }
