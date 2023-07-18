@@ -47,7 +47,7 @@ internal class LotteryService
 [VerticalReport(PostBuilder = typeof(PostBuilder))]
 internal class UserModel
 {
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
     private class PostBuilder : IReportSchemaPostBuilder<UserModel>

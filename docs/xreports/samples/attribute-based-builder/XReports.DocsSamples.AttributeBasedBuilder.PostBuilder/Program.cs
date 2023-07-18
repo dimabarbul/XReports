@@ -40,13 +40,13 @@ Console.WriteLine(html);
 internal class ReportModel
 {
     [HeaderRow]
-    [ReportColumn(1, "Name")]
+    [ReportColumn(1)]
     public string Name { get; set; }
 
-    [ReportColumn(1, "Email")]
+    [ReportColumn(1)]
     public string Email { get; set; }
 
-    [ReportColumn(2, "Score")]
+    [ReportColumn(2)]
     [DecimalPrecision(2)]
     public decimal Score { get; set; }
 

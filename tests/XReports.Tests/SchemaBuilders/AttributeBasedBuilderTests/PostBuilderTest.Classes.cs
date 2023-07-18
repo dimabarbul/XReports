@@ -14,7 +14,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<Vertical>
@@ -34,7 +34,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<Horizontal>
@@ -56,7 +56,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             [My]
             public string Name { get; set; }
 
@@ -79,7 +79,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [My]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             [My]
             public string Name { get; set; }
 
@@ -158,7 +158,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalWithDisposablePostBuilder>, IDisposable
@@ -183,7 +183,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithDisposablePostBuilder>, IDisposable
@@ -208,7 +208,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalWithAsyncDisposablePostBuilder>, IAsyncDisposable
@@ -231,7 +231,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithAsyncDisposablePostBuilder>, IAsyncDisposable
@@ -254,7 +254,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalWithDisposableAndAsyncDisposablePostBuilder>, IAsyncDisposable, IDisposable
@@ -288,7 +288,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithDisposableAndAsyncDisposablePostBuilder>, IAsyncDisposable, IDisposable
@@ -332,7 +332,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalWithDisposablePostBuilderWithDependency>, IDisposable
@@ -362,7 +362,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithDisposablePostBuilderWithDependency>, IDisposable
@@ -392,7 +392,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<VerticalForColumnByPropertyName>
@@ -411,7 +411,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalForRowByPropertyName>
@@ -430,7 +430,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithNewHeaderRowInPostBuilder>
@@ -450,7 +450,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Name")]
+            [ReportColumn(2)]
             public string Name { get; set; }
 
             public class PostBuilder : IReportSchemaPostBuilder<HorizontalWithChangedTypeInPostBuilder>

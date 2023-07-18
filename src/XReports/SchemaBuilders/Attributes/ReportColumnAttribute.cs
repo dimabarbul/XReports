@@ -12,12 +12,11 @@ namespace XReports.SchemaBuilders.Attributes
         /// Initializes a new instance of the <see cref="ReportColumnAttribute"/> class.
         /// </summary>
         /// <param name="order">Report column order.</param>
-        /// <param name="title">Report column title.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="title"/> is null.</exception>
-        public ReportColumnAttribute(int order, string title)
+        /// <param name="title">Report column title. If null, property name will be used.</param>
+        public ReportColumnAttribute(int order, string title = null)
         {
             this.Order = order;
-            this.Title = title ?? throw new ArgumentNullException(nameof(title));
+            this.Title = title;
         }
 
         /// <summary>

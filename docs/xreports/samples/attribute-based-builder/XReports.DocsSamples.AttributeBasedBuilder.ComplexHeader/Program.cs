@@ -43,12 +43,12 @@ internal class User
     [ReportColumn(1, "Full Name")]
     public string Name { get; set; }
 
-    [ReportColumn(2, "Age")]
+    [ReportColumn(2)]
     public int Age { get; set; }
 
-    [ReportColumn(3, "Phone")]
+    [ReportColumn(3)]
     public string Phone { get; set; }
 
-    [ReportColumn(4, "Email")]
+    [ReportColumn(4)]
     public string Email { get; set; }
 }

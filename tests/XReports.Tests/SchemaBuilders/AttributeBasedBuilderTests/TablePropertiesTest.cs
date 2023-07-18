@@ -63,13 +63,13 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             [ReportColumn(1, "ID")]
             public int Id { get; set; }
 
-            [ReportColumn(2, "Title")]
+            [ReportColumn(2)]
             public string Title { get; set; }
         }
 
         private class WithoutCustomTableAttribute
         {
-            [ReportColumn(1, "Title")]
+            [ReportColumn(1)]
             public string Title { get; set; }
         }
 
