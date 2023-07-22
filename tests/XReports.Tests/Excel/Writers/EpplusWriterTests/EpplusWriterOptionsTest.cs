@@ -21,11 +21,12 @@ namespace XReports.Tests.Excel.Writers.EpplusWriterTests
 
             Stream stream = writer.WriteToStream(excelReport);
 
+            stream.Length.Should().BeGreaterThan(0);
             ExcelPackage excelPackage = new ExcelPackage();
             excelPackage.Load(stream);
             ExcelWorkbook workbook = excelPackage.Workbook;
             workbook.Worksheets.Should().HaveCount(1);
-            ExcelWorksheet worksheet = workbook.Worksheets[0];
+            ExcelWorksheet worksheet = workbook.Worksheets.First();
             worksheet.Name.Should().Be("Data");
             worksheet.Cells[1, 1, 3, 2]
                 .Select(c => c.Value?.ToString())
@@ -54,11 +55,12 @@ namespace XReports.Tests.Excel.Writers.EpplusWriterTests
 
             Stream stream = writer.WriteToStream(excelReport);
 
+            stream.Length.Should().BeGreaterThan(0);
             ExcelPackage excelPackage = new ExcelPackage();
             excelPackage.Load(stream);
             ExcelWorkbook workbook = excelPackage.Workbook;
             workbook.Worksheets.Should().HaveCount(1);
-            ExcelWorksheet worksheet = workbook.Worksheets[0];
+            ExcelWorksheet worksheet = workbook.Worksheets.First();
             worksheet.Name.Should().Be("Test");
             worksheet.Cells[2, 2, 4, 3]
                 .Select(c => c.Value?.ToString())

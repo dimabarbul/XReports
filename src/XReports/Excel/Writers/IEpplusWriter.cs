@@ -17,10 +17,10 @@ namespace XReports.Excel.Writers
         void WriteToFile(IReportTable<ExcelReportCell> table, string fileName);
 
         /// <summary>
-        /// Writes Excel report to stream.
+        /// Writes Excel report to memory stream.
         /// </summary>
         /// <param name="table">Excel report table.</param>
-        /// <returns>Stream with Excel report content.</returns>
+        /// <returns>Memory stream with Excel report content.</returns>
         Stream WriteToStream(IReportTable<ExcelReportCell> table);
 
         /// <summary>

@@ -19,11 +19,11 @@ namespace XReports.Tests.Excel.Writers.EpplusWriterTests
             IReportTable<ExcelReportCell> excelReport = Helper.CreateExcelReport();
             IEpplusWriter writer = new EpplusWriter();
 
-            ExcelAddress excelAddress = writer.WriteToWorksheet(excelReport, excelPackage.Workbook.Worksheets[0], 2, 4);
+            ExcelAddress excelAddress = writer.WriteToWorksheet(excelReport, excelPackage.Workbook.Worksheets.First(), 2, 4);
 
             excelAddress.Address.Should().Be("D2:E4");
             excelPackage.Workbook.Worksheets.Should().HaveCount(1);
-            excelPackage.Workbook.Worksheets[0].Cells[2, 4, 4, 5]
+            excelPackage.Workbook.Worksheets.First().Cells[2, 4, 4, 5]
                 .Select(c => c.Value?.ToString())
                 .Should()
                 .Equal(Helper.GetFlattenedReportValues());

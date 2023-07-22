@@ -20,10 +20,11 @@ namespace XReports.Tests.Excel.Writers.EpplusWriterTests
             Stream stream = writer.WriteToStream(excelReport);
 
             stream.Position.Should().Be(0);
+            stream.Length.Should().BeGreaterThan(0);
             ExcelPackage excelPackage = new ExcelPackage();
             excelPackage.Load(stream);
             excelPackage.Workbook.Worksheets.Should().HaveCount(1);
-            excelPackage.Workbook.Worksheets[0].Cells[1, 1, 3, 2]
+            excelPackage.Workbook.Worksheets.First().Cells[1, 1, 3, 2]
                 .Select(c => c.Value?.ToString())
                 .Should()
                 .Equal(Helper.GetFlattenedReportValues());
@@ -40,12 +41,13 @@ namespace XReports.Tests.Excel.Writers.EpplusWriterTests
 
             writer.WriteToStream(excelReport, stream);
 
+            stream.Length.Should().BeGreaterThan(0);
             stream.Position.Should().Be(stream.Length);
             stream.Seek(initialData.Length, SeekOrigin.Begin);
             ExcelPackage excelPackage = new ExcelPackage();
             excelPackage.Load(stream);
             excelPackage.Workbook.Worksheets.Should().HaveCount(1);
-            excelPackage.Workbook.Worksheets[0].Cells[1, 1, 3, 2]
+            excelPackage.Workbook.Worksheets.First().Cells[1, 1, 3, 2]
                 .Select(c => c.Value?.ToString())
                 .Should()
                 .Equal(Helper.GetFlattenedReportValues());
