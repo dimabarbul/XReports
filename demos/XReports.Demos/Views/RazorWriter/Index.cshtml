@@ -1,0 +1,73 @@
+@model XReports.Demos.Models.Shared.ReportViewModel
+
+@{
+    ViewBag.Title = "Razor Writer";
+    Layout = "_DemoPageLayout";
+}
+
+@section Description
+{
+    <p>This example writer shows how to use Razor syntax for rendering report.</p>
+}
+
+@section ReportTable
+{
+@Html.Raw(Model.ReportTableHtml)
+}
+
+@section Code
+{
+    public class RazorWriter
+    {
+        private readonly ICompositeViewEngine viewEngine;
+        private readonly ITempDataProvider tempDataProvider;
+        private readonly IServiceProvider serviceProvider;
+
+        public RazorWriter(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+            this.viewEngine = this.serviceProvider.GetRequiredService&lt;ICompositeViewEngine&gt;();
+            this.tempDataProvider = this.serviceProvider.GetRequiredService&lt;ITempDataProvider&gt;();
+        }
+
+        public Task&lt;string&gt; WriteAsync(IReportTable&lt;HtmlReportCell&gt; report, string viewName)
+        {
+            return this.RenderSimpleViewToStringAsync(viewName, report);
+        }
+
+        private async Task&lt;string&gt; RenderSimpleViewToStringAsync&lt;TModel&gt;(string viewName, TModel model)
+        {
+            ViewEngineResult viewResult = this.viewEngine.GetView(
+                executingFilePath: null,
+                viewPath: viewName,
+                isMainPage: true);
+            if (!viewResult.Success)
+            {
+                throw new ArgumentException($"Could not find view: {viewName}", nameof(viewName));
+            }
+
+            await using StringWriter writer = new();
+            ViewDataDictionary&lt;TModel&gt; viewDictionary = new(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+            {
+                Model = model,
+            };
+            ViewContext viewContext = new(
+                new ActionContext(
+                    new DefaultHttpContext()
+                    {
+                        RequestServices = this.serviceProvider,
+                    },
+                    new RouteData(),
+                    new ActionDescriptor()),
+                viewResult.View,
+                viewDictionary,
+                new TempDataDictionary(new DefaultHttpContext(), this.tempDataProvider),
+                writer,
+                new HtmlHelperOptions()
+            );
+            await viewResult.View.RenderAsync(viewContext);
+
+            return writer.ToString();
+        }
+    }
+}

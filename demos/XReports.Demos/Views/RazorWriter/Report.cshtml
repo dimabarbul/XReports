@@ -1,0 +1,68 @@
+@using XReports.Html
+@using Microsoft.AspNetCore.Html
+@using System.Text
+@using System.Net
+
+@model XReports.Table.IReportTable<XReports.Html.HtmlReportCell>
+
+@{
+    Layout = null;
+}
+
+@functions
+{
+    public static HtmlString WriteAttributes(HtmlReportCell cell)
+    {
+        StringBuilder sb = new();
+        if (cell.CssClasses.Count > 0)
+        {
+            sb
+                .Append(" class=\"")
+                .AppendJoin(' ', cell.CssClasses)
+                .Append('"');
+        }
+
+        if (cell.Styles.Count > 0)
+        {
+            sb
+                .Append(" style=\"")
+                .AppendJoin(';', cell.Styles.Select(s => $"{s.Key}:{s.Value}"))
+                .Append('"');
+        }
+
+        if (cell.Attributes.Count > 0)
+        {
+            sb
+                .AppendJoin(
+                    ' ',
+                    cell.Attributes.Select(a => $"{a.Key}=\"{WebUtility.HtmlEncode(a.Value)}\""));
+        }
+
+        return new HtmlString(sb.ToString());
+    }
+}
+
+<table class="table table-striped table-sm">
+    <thead>
+    @foreach (IEnumerable<HtmlReportCell> row in Model.HeaderRows)
+    {
+        <tr>
+            @foreach (HtmlReportCell cell in row)
+            {
+                <th @WriteAttributes(cell)>@(cell.IsHtml ? Html.Raw(cell.GetValue<string>()) : cell.GetValue<string>())</th>
+            }
+        </tr>
+    }
+    </thead>
+    <tbody>
+    @foreach (IEnumerable<HtmlReportCell> row in Model.Rows)
+    {
+        <tr>
+            @foreach (HtmlReportCell cell in row)
+            {
+                <td @WriteAttributes(cell)>@(cell.IsHtml ? Html.Raw(cell.GetValue<string>()) : cell.GetValue<string>())</td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>
