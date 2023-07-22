@@ -557,7 +557,7 @@ Report built by this model will contain TitleProperty with Title equal to "User 
 
 ## .NET Core Integration
 
-You need to call extension method AddAttributeBasedBuilder. This will register IAttributeBasedBuilder as singleton by default. Attribute handlers and post-builders can be registered in DI container, but they don't have to, even if they have dependencies that need to be resolved from service provider.
+You need to call extension method AddAttributeBasedBuilder. This will register IAttributeBasedBuilder as singleton by default. Attribute handlers and post-builders can be registered in DI container, but they don't have to. If there are constructor dependencies in attribute handlers or post-builders, they will be resolved from service provider.
 
 ```c#
 // You can pass configuration callback and service lifetime.

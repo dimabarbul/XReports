@@ -1,0 +1,28 @@
+@{
+    ViewBag.Title = "Custom EpplusWriter Options";
+    Layout = "_DemoPageLayout";
+}
+
+<a asp-action="Download">Download</a>
+
+@section Description
+{
+    <p>By default EpplusWriter writes report to worksheet named "Data" starting at cell A1. This can be changed by using configuring EpplusWriterOptions.</p>
+    <p>Click Download link to see result.</p>
+}
+
+@section ReportTable
+{
+}
+
+@section Code
+{
+    EpplusWriter writer = new(
+        Options.Create(new EpplusWriterOptions()
+        {
+            WorksheetName = "Scores",
+            StartColumn = 2,
+            StartRow = 2,
+        }),
+        Array.Empty&lt;IEpplusFormatter&gt;());
+}
