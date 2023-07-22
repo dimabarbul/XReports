@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using XReports.ReportCellProperties;
@@ -17,12 +18,13 @@ namespace XReports.Excel.Writers
     {
         private readonly Dictionary<int, ExcelReportCell> columnFormatCells = new Dictionary<int, ExcelReportCell>();
         private readonly IEpplusFormatter[] formatters;
+        private readonly EpplusWriterOptions options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EpplusWriter"/> class. The writer will use no formatters.
         /// </summary>
         public EpplusWriter()
-            : this(Enumerable.Empty<IEpplusFormatter>())
+            : this(null, Enumerable.Empty<IEpplusFormatter>())
         {
         }
 
@@ -31,24 +33,20 @@ namespace XReports.Excel.Writers
         /// </summary>
         /// <param name="formatters">Formatters to use.</param>
         public EpplusWriter(IEnumerable<IEpplusFormatter> formatters)
+            : this(null, formatters)
         {
-            this.formatters = formatters.ToArray();
         }
 
         /// <summary>
-        /// Gets or sets name of Excel worksheet to create and write to.
+        /// Initializes a new instance of the <see cref="EpplusWriter"/> class.
         /// </summary>
-        protected string WorksheetName { get; set; } = "Data";
-
-        /// <summary>
-        /// Gets or sets 1-based row number to start writing report at.
-        /// </summary>
-        protected int StartRow { get; set; } = 1;
-
-        /// <summary>
-        /// Gets or sets 1-based column number to start writing report at.
-        /// </summary>
-        protected int StartColumn { get; set; } = 1;
+        /// <param name="options">Options to use.</param>
+        /// <param name="formatters">Formatters to use.</param>
+        public EpplusWriter(IOptions<EpplusWriterOptions> options, IEnumerable<IEpplusFormatter> formatters)
+        {
+            this.formatters = formatters.ToArray();
+            this.options = options?.Value ?? new EpplusWriterOptions();
+        }
 
         /// <inheritdoc />
         public void WriteToFile(IReportTable<ExcelReportCell> table, string fileName)
@@ -82,6 +80,29 @@ namespace XReports.Excel.Writers
 
                 excelPackage.Save();
             }
+        }
+
+        /// <inheritdoc />
+        public ExcelAddress WriteToWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
+        {
+            this.columnFormatCells.Clear();
+
+            ExcelAddress headerAddress = this.WriteHeader(worksheet, table, row, column);
+            ExcelAddress bodyAddress = this.WriteBody(
+                worksheet, table, headerAddress == null ? row : (headerAddress.End.Row + 1), column);
+
+            this.PostCreate(worksheet, headerAddress, bodyAddress);
+
+            if (headerAddress == null && bodyAddress == null)
+            {
+                return null;
+            }
+
+            return new ExcelAddress(
+                (headerAddress ?? bodyAddress).Start.Row,
+                (headerAddress ?? bodyAddress).Start.Column,
+                (bodyAddress ?? headerAddress).End.Row,
+                (bodyAddress ?? headerAddress).End.Column);
         }
 
         /// <summary>
@@ -315,34 +336,6 @@ namespace XReports.Excel.Writers
         {
         }
 
-        /// <summary>
-        /// Writes report to Excel worksheet.
-        /// </summary>
-        /// <param name="table">Report table to write.</param>
-        /// <param name="worksheet">Excel worksheet to write to.</param>
-        /// <param name="row">1-based row number to start writing at.</param>
-        /// <param name="column">1-based column number to start writing at.</param>
-        /// <returns>Excel address of report.</returns>
-        protected ExcelAddress WriteReportToWorksheet(IReportTable<ExcelReportCell> table, ExcelWorksheet worksheet, int row, int column)
-        {
-            ExcelAddress headerAddress = this.WriteHeader(worksheet, table, row, column);
-            ExcelAddress bodyAddress = this.WriteBody(
-                worksheet, table, headerAddress == null ? row : (headerAddress.End.Row + 1), column);
-
-            this.PostCreate(worksheet, headerAddress, bodyAddress);
-
-            if (headerAddress == null && bodyAddress == null)
-            {
-                return null;
-            }
-
-            return new ExcelAddress(
-                (headerAddress ?? bodyAddress).Start.Row,
-                (headerAddress ?? bodyAddress).Start.Column,
-                (bodyAddress ?? headerAddress).End.Row,
-                (bodyAddress ?? headerAddress).End.Column);
-        }
-
         private static ExcelHorizontalAlignment GetAlignment(Alignment alignment)
         {
             switch (alignment)
@@ -360,10 +353,9 @@ namespace XReports.Excel.Writers
 
         private void WriteReport(IReportTable<ExcelReportCell> table, ExcelPackage excelPackage)
         {
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(this.WorksheetName);
-            this.columnFormatCells.Clear();
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(this.options.WorksheetName);
 
-            this.WriteReportToWorksheet(table, worksheet, this.StartRow, this.StartColumn);
+            this.WriteToWorksheet(table, worksheet, this.options.StartRow, this.options.StartColumn);
         }
     }
 }

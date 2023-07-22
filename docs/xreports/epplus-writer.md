@@ -16,35 +16,32 @@ class MyExcelWriter : EpplusWriter {}
 // Registers derived class of EpplusWriter as implementation of IEpplusWriter.
 // It may be useful if you want to extend/override EpplusWriter methods.
 services.AddEpplusWriter<MyExcelWriter>();
-
-interface IExtendedExcelWriter : IEpplusWriter {}
-class ExtendedExcelWriter : EpplusWriter, IExtendedExcelWriter {}
-// Registers derived class of EpplusWriter as implementation of IEpplusWriter
-// and your interface inherited from IEpplusWriter.
-// It may be useful if you want to add method(s) to EpplusWriter.
-services.AddEpplusWriter<IExtendedExcelWriter, ExtendedExcelWriter>();
 ```
 
-All of the forms accept 2 optional arguments:
+All of the forms accept 3 optional arguments:
 - configuration callback to configure EpplusWriter options
-- service lifetime - it applies to EpplusWriter class and all formatters provided in configuration callback, by default it's scoped
+- configuration callback to configure EpplusWriter formatters
+- service lifetime - it applies to EpplusWriter class, by default it's scoped
 
 Example:
 
 ```c#
-// Registers EpplusWriter along with all formatters (implementors of
-// IEpplusFormatter interface) from executing assembly as singletons.
+// Registers EpplusWriter as singletons. Formatters are not registered in DI
+// container.
 services.AddEpplusWriter(
     o => o.AddFromAssembly(Assembly.GetExecutingAssembly()),
     ServiceLifetime.Singleton);
 ```
 
+Formatters are not registered in DI container. If they are registered, they are resolved from the container. Also even if the formatter is not registered, but it has constructor dependencies which are registered, they will be resolved from the container.
+
 ## Public Methods
 
-There are 2 public methods to export report:
+There are following public methods to export report:
 
 - **WriteToFile**: saves report as XLSX file
 - **WriteToStream**: saves report to new in-memory stream or the one provided
+- **WriteToWorksheet**: writes report to existing worksheet starting at specified position
 
 ## Extending EpplusWriter
 
@@ -55,7 +52,7 @@ EpplusWriter class contains number of virtual methods you can override.
 General Flow:
 
 - WriteToFile/WriteToStream
-    - WriteReportToWorksheet (row=1, column=1)
+    - WriteToWorksheet (row=1, column=1)
         - WriteHeader
             - WriteHeaderCell
                 - WriteCell
@@ -68,9 +65,9 @@ General Flow:
                 - FormatCell (for columns that has SameColumnFormatProperty)
         - PostCreate
 
-All methods in above list lower WriteReportToWorksheet can be overridden.
+All methods in above list lower WriteToWorksheet can be overridden.
 
-The writer has some configuration properties that can be overridden in inherited class:
+The writer has some configuration properties that can be changed using EpplusWriter options:
 
 - WorksheetName - "Data" by default
 - StartColumn - 1 by default

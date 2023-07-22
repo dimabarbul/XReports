@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using XReports.DependencyInjection;
 using XReports.Excel.Writers;
 using XReports.Tests.Common.Assertions;
@@ -20,7 +18,7 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter();
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, EpplusWriter>(ServiceLifetime.Scoped);
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(ServiceLifetime.Scoped);
         }
 
         [Theory]
@@ -32,43 +30,19 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter(lifetime: lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, EpplusWriter>(lifetime);
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(lifetime);
         }
 
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
-        public void AddEpplusWriterWithLifetimeAndFormattersShouldRegisterFormattersAsWithTheLifetime(ServiceLifetime lifetime)
+        public void AddEpplusWriterWithLifetimeAndFormattersShouldNotRegisterFormatters(ServiceLifetime lifetime)
         {
             IServiceCollection serviceCollection = new ServiceCollection()
-                .AddEpplusWriter(o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), lifetime);
+                .AddEpplusWriter(configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), lifetime: lifetime);
 
-            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
-        }
-
-        [Theory]
-        [InlineData(ServiceLifetime.Scoped, ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Singleton, ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Transient, ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Singleton, ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Transient, ServiceLifetime.Singleton)]
-        [InlineData(ServiceLifetime.Scoped, ServiceLifetime.Singleton)]
-        public void AddEpplusWriterWithLifetimeShouldNotReregisterFormatterIfItHasBeenRegisteredBefore(ServiceLifetime writerLifetime, ServiceLifetime formatterLifetime)
-        {
-            IServiceCollection serviceCollection = new ServiceCollection()
-                .Add(new ServiceDescriptor(typeof(IEpplusFormatter), typeof(Formatter), formatterLifetime))
-                .AddEpplusWriter(o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), writerLifetime);
-
-            IEnumerable<ServiceDescriptor> formatterDescriptors = serviceCollection
-                .Where(sd => sd.ServiceType == typeof(IEpplusFormatter));
-
-            formatterDescriptors.Should()
-                .OnlyContain(sd =>
-                    sd.Lifetime == (
-                        sd.ImplementationType == typeof(Formatter) ?
-                            formatterLifetime :
-                            writerLifetime));
+            serviceCollection.Should().NotContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
 
         [Fact]
@@ -77,7 +51,7 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter<CustomEpplusWriter>();
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(ServiceLifetime.Scoped);
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(ServiceLifetime.Scoped);
         }
 
         [Theory]
@@ -89,56 +63,20 @@ namespace XReports.Tests.DependencyInjection
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter<CustomEpplusWriter>(lifetime: lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(lifetime);
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(lifetime);
         }
 
         [Theory]
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
-        public void AddEpplusWriterShouldRegisterCustomImplementationAndFormatters(ServiceLifetime lifetime)
+        public void AddEpplusWriterShouldRegisterCustomImplementationAndNotFormatters(ServiceLifetime lifetime)
         {
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddEpplusWriter<CustomEpplusWriter>(configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), lifetime: lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, CustomEpplusWriter>(lifetime);
-            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
-        }
-
-        [Fact]
-        public void AddEpplusWriterWithDefaultLifetimeShouldRegisterCustomImplementationWithCustomInterface()
-        {
-            IServiceCollection serviceCollection = new ServiceCollection()
-                .AddEpplusWriter<IMyEpplusWriter, MyEpplusWriter>();
-
-            serviceCollection.Should().ContainDescriptor<IMyEpplusWriter, MyEpplusWriter>(ServiceLifetime.Scoped);
-            serviceCollection.Should().NotContainDescriptor<IEpplusWriter>();
-        }
-
-        [Theory]
-        [InlineData(ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Singleton)]
-        public void AddEpplusWriterShouldRegisterCustomImplementationWithCustomInterface(ServiceLifetime lifetime)
-        {
-            IServiceCollection serviceCollection = new ServiceCollection()
-                .AddEpplusWriter<IMyEpplusWriter, MyEpplusWriter>(lifetime: lifetime);
-
-            serviceCollection.Should().ContainDescriptor<IMyEpplusWriter, MyEpplusWriter>(lifetime);
-            serviceCollection.Should().NotContainDescriptor<IEpplusWriter>();
-        }
-
-        [Theory]
-        [InlineData(ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Singleton)]
-        public void AddEpplusWriterShouldRegisterCustomImplementationWithCustomInterfaceAndFormatters(ServiceLifetime lifetime)
-        {
-            IServiceCollection serviceCollection = new ServiceCollection()
-                .AddEpplusWriter<IMyEpplusWriter, MyEpplusWriter>(o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), lifetime);
-
-            serviceCollection.Should().ContainDescriptor<IMyEpplusWriter, MyEpplusWriter>(lifetime);
-            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(lifetime);
+            serviceCollection.Should().NotContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
         }
 
         [Fact]
@@ -158,14 +96,34 @@ namespace XReports.Tests.DependencyInjection
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
-        public void AddEpplusWriterShouldRegisterCustomImplementationWithDependencyAndFormatters(ServiceLifetime lifetime)
+        public void AddEpplusWriterShouldRegisterCustomImplementationWithDependencyAndNotFormatters(ServiceLifetime lifetime)
         {
             IServiceCollection serviceCollection = new ServiceCollection()
                 .AddSingleton<Dependency>()
                 .AddEpplusWriter<EpplusWriterWithDependency>(configure: o => o.AddFromAssembly(Assembly.GetExecutingAssembly()), lifetime: lifetime);
 
-            serviceCollection.Should().ContainDescriptor<IEpplusWriter, EpplusWriterWithDependency>(lifetime);
-            serviceCollection.Should().ContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(lifetime);
+            serviceCollection.Should().NotContainDescriptors<IEpplusFormatter>(lifetime, typeof(Formatter), typeof(BoldFormatter));
+        }
+
+        [Fact]
+        public void AddEpplusWriterWithCustomOptionsShouldRegisterOptions()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddEpplusWriter(o => o.WorksheetName = "Test");
+
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(ServiceLifetime.Scoped);
+            serviceCollection.Should().ContainDescriptor<IConfigureOptions<EpplusWriterOptions>>(ServiceLifetime.Singleton);
+        }
+
+        [Fact]
+        public void AddEpplusWriterWithCustomImplementationTypeAndCustomOptionsShouldRegisterOptions()
+        {
+            IServiceCollection serviceCollection = new ServiceCollection()
+                .AddEpplusWriter<CustomEpplusWriter>(o => o.WorksheetName = "Test");
+
+            serviceCollection.Should().ContainDescriptor<IEpplusWriter>(ServiceLifetime.Scoped);
+            serviceCollection.Should().ContainDescriptor<IConfigureOptions<EpplusWriterOptions>>(ServiceLifetime.Singleton);
         }
     }
 }

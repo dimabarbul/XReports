@@ -13,18 +13,6 @@ namespace XReports.Tests.DependencyInjection
             }
         }
 
-        private interface IMyEpplusWriter : IEpplusWriter
-        {
-        }
-
-        private class MyEpplusWriter : EpplusWriter, IMyEpplusWriter
-        {
-            public MyEpplusWriter(IEnumerable<IEpplusFormatter> formatters)
-                : base(formatters)
-            {
-            }
-        }
-
         private class Dependency
         {
         }

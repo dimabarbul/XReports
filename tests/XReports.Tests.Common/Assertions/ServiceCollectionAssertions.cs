@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Collections;
+using FluentAssertions.Execution;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace XReports.Tests.Common.Assertions
@@ -19,7 +20,9 @@ namespace XReports.Tests.Common.Assertions
         public AndConstraint<ServiceCollectionAssertions> ContainDescriptor<TService>(ServiceLifetime lifetime)
         {
             ServiceDescriptor serviceDescriptor = this.Subject.FirstOrDefault(sd => sd.ServiceType == typeof(TService));
-            serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TService));
+            Execute.Assertion
+                .ForCondition(serviceDescriptor != null)
+                .FailWith("{context:services} should contain service descriptor for service type {0}, but it was not found", typeof(TService));
 
             serviceDescriptor.Lifetime.Should().Be(lifetime);
 
@@ -30,7 +33,9 @@ namespace XReports.Tests.Common.Assertions
             where TImplementation : TService
         {
             ServiceDescriptor serviceDescriptor = this.Subject.FirstOrDefault(sd => sd.ServiceType == typeof(TService));
-            serviceDescriptor.Should().NotBeNull("{context} should contain service descriptor for service type {0}", typeof(TService));
+            Execute.Assertion
+                .ForCondition(serviceDescriptor != null)
+                .FailWith("{context:services} should not contain service descriptor for service type {0}, but it was found", typeof(TService));
 
             serviceDescriptor.Lifetime.Should().Be(lifetime);
             serviceDescriptor.ImplementationType.Should().Be<TImplementation>();
@@ -38,15 +43,15 @@ namespace XReports.Tests.Common.Assertions
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }
 
-        public AndConstraint<ServiceCollectionAssertions> ContainDescriptors<TService>(ServiceLifetime lifetime, params Type[] implementationTypes)
+        public AndConstraint<ServiceCollectionAssertions> NotContainDescriptors<TService>(ServiceLifetime lifetime, params Type[] implementationTypes)
         {
             ServiceDescriptor[] descriptors = this.Subject
                 .Where(sd => sd.ServiceType == typeof(TService))
                 .ToArray();
 
-            descriptors.Should().OnlyContain(d => d.Lifetime == lifetime);
-            descriptors.Select(h => h.ImplementationType)
-                .Should().BeEquivalentTo(implementationTypes);
+            descriptors.Should().NotContain(d =>
+                d.Lifetime == lifetime &&
+                implementationTypes.Contains(d.ImplementationType));
 
             return new AndConstraint<ServiceCollectionAssertions>(this);
         }
