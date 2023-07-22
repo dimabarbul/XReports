@@ -7,6 +7,8 @@ using XReports.Converter;
 using XReports.Demos.Models.Shared;
 using XReports.Demos.XReports;
 using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.ReportCellProperties;
 using XReports.SchemaBuilders;
 using XReports.Table;
 
@@ -35,7 +37,8 @@ public class RazorWriterController : Controller
     private IReportTable<ReportCell> BuildReport()
     {
         ReportSchemaBuilder<Entity> reportBuilder = new();
-        reportBuilder.AddColumn("Name", e => e.Name);
+        reportBuilder.AddColumn("Name", e => e.Name)
+            .AddProperties(new BoldProperty());
         reportBuilder.AddColumn("Score", e => e.Score);
 
         IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.GetData());
@@ -44,7 +47,10 @@ public class RazorWriterController : Controller
 
     private IReportTable<HtmlReportCell> ConvertToHtml(IReportTable<ReportCell> reportTable)
     {
-        ReportConverter<HtmlReportCell> htmlConverter = new(Array.Empty<IPropertyHandler<HtmlReportCell>>());
+        ReportConverter<HtmlReportCell> htmlConverter = new(new[]
+        {
+            new BoldPropertyHtmlHandler(),
+        });
 
         return htmlConverter.Convert(reportTable);
     }
