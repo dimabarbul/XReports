@@ -1,4 +1,4 @@
-using XReports.Table;
+using XReports.Models;
 
 namespace XReports.Benchmarks.XReportsProperties;
 
