@@ -6,7 +6,8 @@ using XReports.Benchmarks;
 
 Job job = Job.Default
     .WithStrategy(RunStrategy.Monitoring)
-    .WithIterationCount(1)
+    .WithWarmupCount(2)
+    .WithIterationCount(4)
     .AsDefault();
 IConfig config = DefaultConfig.Instance.AddJob(job);
-BenchmarkRunner.Run<ReportServiceBenchmarks>(config, args);
+BenchmarkRunner.Run<Benchmarks>(config, args);

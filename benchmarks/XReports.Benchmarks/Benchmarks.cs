@@ -4,10 +4,11 @@ using XReports.Benchmarks.Models;
 
 namespace XReports.Benchmarks;
 
-[GcServer]
 [MemoryDiagnoser]
-public class ReportServiceBenchmarks : IDisposable
+public class Benchmarks : IDisposable
 {
+    private const string DefaultRowCounts = "10000,100000";
+
     private IReadOnlyList<Person> data;
     private DataTable table;
     private ReportService reportService;
@@ -18,7 +19,7 @@ public class ReportServiceBenchmarks : IDisposable
 
     public static IEnumerable<int> GetRowCounts()
     {
-        string sizes = Environment.GetEnvironmentVariable("RowCounts") ?? "10000";
+        string sizes = Environment.GetEnvironmentVariable("RowCounts") ?? DefaultRowCounts;
 
         return sizes
             .Split(',', StringSplitOptions.RemoveEmptyEntries)
