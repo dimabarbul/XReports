@@ -28,7 +28,7 @@ public class ReportServiceBenchmarks : IDisposable
     [GlobalSetup]
     public void GlobalSetup()
     {
-        this.data = DataProvider.GetData(this.RowCount).ToArray();
+        this.data = DataProvider.GetData(this.RowCount);
         this.table = DataProvider.CreateDataTable(this.data);
 
         this.reportService = new ReportService(this.data, this.table);
