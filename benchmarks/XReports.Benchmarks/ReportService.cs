@@ -3,26 +3,31 @@ using XReports.Benchmarks.Models;
 using XReports.Benchmarks.ReportStructure;
 using XReports.Benchmarks.ReportStructure.Models;
 using XReports.Benchmarks.Utils;
-using XReports.Benchmarks.XReportsProperties;
-using XReports.Interfaces;
-using XReports.Models;
-using XReports.PropertyHandlers.Excel;
-using XReports.PropertyHandlers.Html;
-using XReports.ReportCellsProviders;
+using XReports.Converter;
+using XReports.DataReader;
+using XReports.DependencyInjection;
+using XReports.Excel;
+using XReports.Excel.PropertyHandlers;
+using XReports.Excel.Writers;
+using XReports.Html;
+using XReports.Html.PropertyHandlers;
+using XReports.Html.Writers;
+using XReports.Schema;
 using XReports.SchemaBuilders;
-using XReports.Writers;
-using StringWriter = XReports.Writers.StringWriter;
+using XReports.SchemaBuilders.ReportCellProviders;
+using XReports.Table;
 
 namespace XReports.Benchmarks;
 
-public class ReportService : IDisposable
+public sealed class ReportService : IDisposable
 {
     private readonly IEnumerable<Person> data;
     private readonly DataTable dataTable;
     private readonly IReportConverter<HtmlReportCell> htmlConverter;
     private readonly IEpplusWriter excelWriter;
     private readonly IReportConverter<ExcelReportCell> excelConverter;
-    private readonly IStringWriter stringWriter;
+    private readonly IHtmlStringWriter htmlStringWriter;
+    private readonly IHtmlStreamWriter htmlStreamWriter;
 
     private IDataReader dataReader;
     private bool disposed;
@@ -32,30 +37,17 @@ public class ReportService : IDisposable
         this.data = data;
         this.dataTable = dataTable;
 
+        this.htmlStreamWriter = new HtmlStreamWriter(new HtmlStreamCellWriter());
         this.excelWriter = new EpplusWriter();
-        this.stringWriter = new StringWriter(new StringCellWriter());
-        this.htmlConverter = new ReportConverter<HtmlReportCell>(new IPropertyHandler<HtmlReportCell>[]
-        {
-            new AlignmentPropertyHtmlHandler(),
-            new BoldPropertyHtmlHandler(),
-            new ColorPropertyHtmlHandler(),
-            new DecimalPrecisionPropertyHtmlHandler(),
-            new MaxLengthPropertyHtmlHandler(),
-            new PercentFormatPropertyHtmlHandler(),
-            new DateTimeFormatPropertyHtmlHandler(),
-            new CustomFormatPropertyHtmlHandler(),
-        });
-        this.excelConverter = new ReportConverter<ExcelReportCell>(new IPropertyHandler<ExcelReportCell>[]
-        {
-            new AlignmentPropertyExcelHandler(),
-            new BoldPropertyExcelHandler(),
-            new ColorPropertyExcelHandler(),
-            new DecimalPrecisionPropertyExcelHandler(),
-            new MaxLengthPropertyExcelHandler(),
-            new PercentFormatPropertyExcelHandler(),
-            new DateTimeFormatPropertyExcelHandler(),
-            new CustomFormatPropertyExcelHandler(),
-        });
+        this.htmlStringWriter = new HtmlStringWriter(new HtmlStringCellWriter());
+        this.htmlConverter = new ReportConverter<HtmlReportCell>(
+            new TypesCollection<IPropertyHandler<HtmlReportCell>>()
+                .AddFromAssembly(typeof(AlignmentPropertyHtmlHandler).Assembly)
+                .Select(t => (IPropertyHandler<HtmlReportCell>)Activator.CreateInstance(t)));
+        this.excelConverter = new ReportConverter<ExcelReportCell>(
+            new TypesCollection<IPropertyHandler<ExcelReportCell>>()
+                .AddFromAssembly(typeof(AlignmentPropertyExcelHandler).Assembly)
+                .Select(t => (IPropertyHandler<ExcelReportCell>)Activator.CreateInstance(t)));
     }
 
     public Task VerticalFromEntitiesHtmlEnumAsync()
@@ -115,15 +107,16 @@ public class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromEntities();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return this.stringWriter.WriteToStringAsync(htmlReportTable);
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
-    public Task VerticalFromEntitiesHtmlToFileAsync(string fileName)
+    public async Task VerticalFromEntitiesHtmlToFileAsync(string fileName)
     {
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromEntities();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        await using Stream fileStream = File.Create(fileName);
 
-        return this.stringWriter.WriteToFileAsync(htmlReportTable, fileName);
+        await this.htmlStreamWriter.WriteAsync(htmlReportTable, fileStream);
     }
 
     public Task<Stream> VerticalFromEntitiesExcelToStreamAsync()
@@ -201,15 +194,16 @@ public class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromDataReader();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return this.stringWriter.WriteToStringAsync(htmlReportTable);
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
-    public Task VerticalFromDataReaderHtmlToFileAsync(string fileName)
+    public async Task VerticalFromDataReaderHtmlToFileAsync(string fileName)
     {
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromDataReader();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        await using Stream fileStream = File.Create(fileName);
 
-        return this.stringWriter.WriteToFileAsync(htmlReportTable, fileName);
+        await this.htmlStreamWriter.WriteAsync(htmlReportTable, fileStream);
     }
 
     public Task<Stream> VerticalFromDataReaderExcelToStreamAsync()
@@ -287,85 +281,84 @@ public class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildHorizontalReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        return this.stringWriter.WriteToStringAsync(htmlReportTable);
+        return Task.FromResult(this.htmlStringWriter.Write(htmlReportTable));
     }
 
-    public Task HorizontalHtmlToFileAsync(string fileName)
+    public async Task HorizontalHtmlToFileAsync(string fileName)
     {
         IReportTable<ReportCell> reportTable = this.BuildHorizontalReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
+        await using Stream fileStream = File.Create(fileName);
 
-        return this.stringWriter.WriteToFileAsync(htmlReportTable, fileName);
+        await this.htmlStreamWriter.WriteAsync(htmlReportTable, fileStream);
     }
 
     private IReportTable<ReportCell> BuildVerticalReportFromEntities()
     {
-        VerticalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
+
         foreach (ReportCellsSource<Person> source in ReportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> column = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> column = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddColumn(column).AddProperties(source.Properties);
+            reportBuilder.AddColumn(source.Title, column).AddProperties(source.Properties);
         }
 
         reportBuilder.AddGlobalProperties(ReportStructureProvider.GetGlobalProperties());
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.data);
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildVerticalReportFromDataReader()
     {
-        VerticalReportSchemaBuilder<IDataReader> reportBuilder = new();
+        ReportSchemaBuilder<IDataReader> reportBuilder = new();
 
         foreach (ReportCellsSource<IDataReader> source in ReportStructureProvider.GetDataReaderCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<IDataReader> column = (IReportCellsProvider<IDataReader>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<IDataReader> column = (IReportCellProvider<IDataReader>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(IDataReader), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddColumn(column).AddProperties(source.Properties);
+            reportBuilder.AddColumn(source.Title, column).AddProperties(source.Properties);
         }
 
         reportBuilder.AddGlobalProperties(ReportStructureProvider.GetGlobalProperties());
 
         this.dataReader = new DataTableReader(this.dataTable);
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.dataReader);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildVerticalSchema().BuildReportTable(this.dataReader.AsEnumerable());
 
         return reportTable;
     }
 
     private IReportTable<ReportCell> BuildHorizontalReport()
     {
-        HorizontalReportSchemaBuilder<Person> reportBuilder = new();
+        ReportSchemaBuilder<Person> reportBuilder = new();
 
         foreach (ReportCellsSource<Person> source in ReportStructureProvider.GetEntitiesCellsSources())
         {
             Type valueType = source.ValueType;
-            IReportCellsProvider<Person> row = (IReportCellsProvider<Person>)Activator.CreateInstance(
-                typeof(ComputedValueReportCellsProvider<,>)
+            IReportCellProvider<Person> row = (IReportCellProvider<Person>)Activator.CreateInstance(
+                typeof(ComputedValueReportCellProvider<,>)
                     .MakeGenericType(typeof(Person), valueType),
-                source.Title,
                 TypeUtils.InvokeGenericMethod(source, nameof(source.ConvertValueSelector), valueType)
             );
 
-            reportBuilder.AddRow(row).AddProperties(source.Properties);
+            reportBuilder.AddColumn(source.Title, row).AddProperties(source.Properties);
         }
 
         reportBuilder.AddGlobalProperties(ReportStructureProvider.GetGlobalProperties());
 
-        IReportTable<ReportCell> reportTable = reportBuilder.BuildSchema().BuildReportTable(this.data);
+        IReportTable<ReportCell> reportTable = reportBuilder.BuildHorizontalSchema(0).BuildReportTable(this.data);
 
         return reportTable;
     }
@@ -382,22 +375,13 @@ public class ReportService : IDisposable
 
     public void Dispose()
     {
-        this.Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
         if (this.disposed)
         {
             return;
         }
 
-        if (disposing)
-        {
-            this.dataTable?.Dispose();
-            this.dataReader?.Dispose();
-        }
+        this.dataTable?.Dispose();
+        this.dataReader?.Dispose();
 
         this.disposed = true;
     }

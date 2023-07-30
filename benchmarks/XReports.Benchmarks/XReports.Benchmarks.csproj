@@ -7,13 +7,12 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
-<!--  <ItemGroup>-->
-<!--    <ProjectReference Include="..\..\src\XReports\XReports.csproj" />-->
-<!--  </ItemGroup>-->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\XReports\XReports.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.6" />
-    <PackageReference Include="XReports" Version="0.1.6" />
   </ItemGroup>
 
   <ItemGroup>

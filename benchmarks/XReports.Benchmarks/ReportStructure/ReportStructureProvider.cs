@@ -3,9 +3,8 @@ using System.Drawing;
 using XReports.Benchmarks.Models;
 using XReports.Benchmarks.ReportStructure.Models;
 using XReports.Benchmarks.XReportsProperties;
-using XReports.Enums;
-using XReports.Models;
-using XReports.Properties;
+using XReports.ReportCellProperties;
+using XReports.Table;
 
 namespace XReports.Benchmarks.ReportStructure;
 
