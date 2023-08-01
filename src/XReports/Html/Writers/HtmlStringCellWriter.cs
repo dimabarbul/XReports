@@ -14,51 +14,61 @@ namespace XReports.Html.Writers
         /// <inheritdoc />
         public void WriteHeaderCell(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            this.WriteCell(stringBuilder, cell, "th");
+            this.BeginWrappingHeaderElement(stringBuilder, cell);
+            this.WriteContent(stringBuilder, cell);
+            this.EndWrappingHeaderElement(stringBuilder);
         }
 
         /// <inheritdoc />
         public void WriteBodyCell(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            this.WriteCell(stringBuilder, cell, "td");
-        }
-
-        /// <summary>
-        /// Writes HTML report cell to string builder.
-        /// </summary>
-        /// <param name="stringBuilder">String builder to write to.</param>
-        /// <param name="cell">HTML report cell to write.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
-        protected virtual void WriteCell(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
-        {
-            this.BeginWrappingElement(stringBuilder, cell, tableCellTagName);
-
+            this.BeginWrappingElement(stringBuilder, cell);
             this.WriteContent(stringBuilder, cell);
-
-            this.EndWrappingElement(stringBuilder, tableCellTagName);
+            this.EndWrappingElement(stringBuilder);
         }
 
         /// <summary>
-        /// Writes beginning of HTML wrap around cell. By default it is HTML tag for table cell ("td" or "th") with report cell attributes, classes etc.
+        /// Writes beginning of HTML wrap around header cell - "th" HTML tag
+        /// with report cell attributes, classes etc.
         /// </summary>
         /// <param name="stringBuilder">String builder to write to.</param>
         /// <param name="cell">HTML report cell to write.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
-        protected virtual void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
+        protected virtual void BeginWrappingHeaderElement(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            stringBuilder.Append('<').Append(tableCellTagName);
+            stringBuilder.Append("<th");
             this.WriteAttributes(stringBuilder, cell);
             stringBuilder.Append('>');
         }
 
         /// <summary>
-        /// Writes ending of HTML wrap around cell. By default it is closing HTML tag for table cell ("td" or "th").
+        /// Writes beginning of HTML wrap around body cell - "td" HTML tag
+        /// with report cell attributes, classes etc.
         /// </summary>
         /// <param name="stringBuilder">String builder to write to.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
-        protected virtual void EndWrappingElement(StringBuilder stringBuilder, string tableCellTagName)
+        /// <param name="cell">HTML report cell to write.</param>
+        protected virtual void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell)
         {
-            stringBuilder.Append("</").Append(tableCellTagName).Append('>');
+            stringBuilder.Append("<td");
+            this.WriteAttributes(stringBuilder, cell);
+            stringBuilder.Append('>');
+        }
+
+        /// <summary>
+        /// Writes ending of HTML wrap around header cell - closing "th" HTML tag.
+        /// </summary>
+        /// <param name="stringBuilder">String builder to write to.</param>
+        protected virtual void EndWrappingHeaderElement(StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("</th>");
+        }
+
+        /// <summary>
+        /// Writes ending of HTML wrap around body cell - closing "td" HTML tag.
+        /// </summary>
+        /// <param name="stringBuilder">String builder to write to.</param>
+        protected virtual void EndWrappingElement(StringBuilder stringBuilder)
+        {
+            stringBuilder.Append("</td>");
         }
 
         /// <summary>
