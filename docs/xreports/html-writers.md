@@ -38,7 +38,7 @@ All of the forms accept optional service lifetime, by default it's singleton.
 
 ## Extending
 
-### Extending writer
+### Extending Writer
 
 [Working example](samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingWriter/Program.cs)
 
@@ -108,7 +108,7 @@ services.AddHtmlStringWriter<MyHtmlWriter>();
 IHtmlStringWriter writer = new MyHtmlWriter(new HtmlStringCellWriter());
 ```
 
-### Extending HtmlStringCellWriter
+### Extending Cell Writer
 
 [Working example](samples/html-writers/XReports.DocsSamples.HtmlWriters.ExtendingCellWriter/Program.cs)
 
@@ -116,42 +116,55 @@ Another extension point is IHtmlStringCellWriter. Writer uses cell writer to wri
 
 ```c#
 class MyHtmlStringCellWriter : HtmlStringCellWriter
-{
-    protected override void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell, string tableCellTagName)
+{    protected override void BeginWrappingHeaderElement(StringBuilder stringBuilder, HtmlReportCell cell)
     {
-        stringBuilder
-            .Append('<')
-            .Append(tableCellTagName)
-            .Append("><div");
+        stringBuilder.Append("<th><div");
         this.WriteAttributes(stringBuilder, cell);
         stringBuilder.Append('>');
     }
 
-    protected override void EndWrappingElement(StringBuilder stringBuilder, string tableCellTagName)
+    protected override void EndWrappingHeaderElement(StringBuilder stringBuilder)
     {
-        stringBuilder
-            .Append("</div></")
-            .Append(tableCellTagName)
-            .Append('>');
+        stringBuilder.Append("</div></th>");
+    }
+
+    protected override void BeginWrappingElement(StringBuilder stringBuilder, HtmlReportCell cell)
+    {
+        stringBuilder.Append("<td><div");
+        this.WriteAttributes(stringBuilder, cell);
+        stringBuilder.Append('>');
+    }
+
+    protected override void EndWrappingElement(StringBuilder stringBuilder)
+    {
+        stringBuilder.Append("</div></td>");
     }
 }
 
 class MyHtmlStreamCellWriter : HtmlStreamCellWriter
 {
-    protected override async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+    protected override async Task BeginWrappingHeaderElementAsync(StreamWriter streamWriter, HtmlReportCell cell)
     {
-        await streamWriter.WriteAsync('<');
-        await streamWriter.WriteAsync(tableCellTagName);
-        await streamWriter.WriteAsync("><div");
-        await this.WriteAttributesAsync(streamWriter, cell);
-        await streamWriter.WriteAsync('>');
+        await streamWriter.WriteAsync("<th><div").ConfigureAwait(false);
+        await this.WriteAttributesAsync(streamWriter, cell).ConfigureAwait(false);
+        await streamWriter.WriteAsync('>').ConfigureAwait(false);
     }
 
-    protected override async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
+    protected override Task EndWrappingHeaderElementAsync(StreamWriter streamWriter)
     {
-        await streamWriter.WriteAsync("</div></");
-        await streamWriter.WriteAsync(tableCellTagName);
-        await streamWriter.WriteAsync('>');
+        return streamWriter.WriteAsync("</div></th>");
+    }
+
+    protected override async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell)
+    {
+        await streamWriter.WriteAsync("<td><div").ConfigureAwait(false);
+        await this.WriteAttributesAsync(streamWriter, cell).ConfigureAwait(false);
+        await streamWriter.WriteAsync('>').ConfigureAwait(false);
+    }
+
+    protected override Task EndWrappingElementAsync(StreamWriter streamWriter)
+    {
+        return streamWriter.WriteAsync("</div></td>");
     }
 }
 
@@ -160,3 +173,8 @@ services.AddHtmlStringWriter<HtmlStringWriter, MyHtmlStringCellWriter>();
 // If you don't use DI, just create instance.
 IHtmlStringWriter writer = new HtmlStringWriter(new MyHtmlStringCellWriter());
 ```
+
+
+## Custom StreamWriter
+
+HtmlStreamWriter provides 2 public methods: one that accepts Stream, another one - StreamWriter. Former method internally creates StreamWriter that writes text in encoding UTF-8 without BOM with buffer of 4096 bytes. Sometimes increasing buffer size might improve performance drastically, to do this you can you latter method.

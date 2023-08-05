@@ -13,57 +13,67 @@ namespace XReports.Html.Writers
     public class HtmlStreamCellWriter : IHtmlStreamCellWriter
     {
         /// <inheritdoc />
-        public Task WriteHeaderCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        public async Task WriteHeaderCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
-            return this.WriteCellAsync(streamWriter, cell, "th");
+            await this.BeginWrappingHeaderElementAsync(streamWriter, cell).ConfigureAwait(false);
+            await this.WriteContentAsync(streamWriter, cell).ConfigureAwait(false);
+            await this.EndWrappingHeaderElementAsync(streamWriter).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public Task WriteBodyCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
+        public async Task WriteBodyCellAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
-            return this.WriteCellAsync(streamWriter, cell, "td");
-        }
-
-        /// <summary>
-        /// Writes HTML report cell ding stream writer.
-        /// </summary>
-        /// <param name="streamWriter">Stream writer to write with.</param>
-        /// <param name="cell">HTML report cell to write.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
-        /// <returns>Task.</returns>
-        protected virtual async Task WriteCellAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
-        {
-            await this.BeginWrappingElementAsync(streamWriter, cell, tableCellTagName).ConfigureAwait(false);
+            await this.BeginWrappingElementAsync(streamWriter, cell).ConfigureAwait(false);
             await this.WriteContentAsync(streamWriter, cell).ConfigureAwait(false);
-            await this.EndWrappingElementAsync(streamWriter, tableCellTagName).ConfigureAwait(false);
+            await this.EndWrappingElementAsync(streamWriter).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Writes beginning of HTML wrap around cell. By default it is HTML tag for table cell ("td" or "th") with report cell attributes, classes etc.
+        /// Writes beginning of HTML wrap around header cell - "th" HTML tag
+        /// with report cell attributes, classes etc.
         /// </summary>
         /// <param name="streamWriter">Stream writer to write with.</param>
         /// <param name="cell">HTML report cell to write.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
         /// <returns>Task.</returns>
-        protected virtual async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell, string tableCellTagName)
+        protected virtual async Task BeginWrappingHeaderElementAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
-            await streamWriter.WriteAsync('<').ConfigureAwait(false);
-            await streamWriter.WriteAsync(tableCellTagName).ConfigureAwait(false);
+            await streamWriter.WriteAsync("<th").ConfigureAwait(false);
             await this.WriteAttributesAsync(streamWriter, cell).ConfigureAwait(false);
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Writes ending of HTML wrap around cell. By default it is closing HTML tag for table cell ("td" or "th").
+        /// Writes beginning of HTML wrap around body cell - "td" HTML tag
+        /// with report cell attributes, classes etc.
         /// </summary>
         /// <param name="streamWriter">Stream writer to write with.</param>
-        /// <param name="tableCellTagName">Name of HTML tag to wrap cell into, e.g., "td" or "th".</param>
+        /// <param name="cell">HTML report cell to write.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task EndWrappingElementAsync(StreamWriter streamWriter, string tableCellTagName)
+        protected virtual async Task BeginWrappingElementAsync(StreamWriter streamWriter, HtmlReportCell cell)
         {
-            await streamWriter.WriteAsync("</").ConfigureAwait(false);
-            await streamWriter.WriteAsync(tableCellTagName).ConfigureAwait(false);
+            await streamWriter.WriteAsync("<td").ConfigureAwait(false);
+            await this.WriteAttributesAsync(streamWriter, cell).ConfigureAwait(false);
             await streamWriter.WriteAsync('>').ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Writes ending of HTML wrap around header cell - closing "th" HTML tag.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task EndWrappingHeaderElementAsync(StreamWriter streamWriter)
+        {
+            return streamWriter.WriteAsync("</th>");
+        }
+
+        /// <summary>
+        /// Writes ending of HTML wrap around body cell - closing "td" HTML tag.
+        /// </summary>
+        /// <param name="streamWriter">Stream writer to write with.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task EndWrappingElementAsync(StreamWriter streamWriter)
+        {
+            return streamWriter.WriteAsync("</td>");
         }
 
         /// <summary>
