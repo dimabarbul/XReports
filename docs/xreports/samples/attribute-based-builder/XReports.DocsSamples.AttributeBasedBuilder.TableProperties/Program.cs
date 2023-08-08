@@ -20,7 +20,7 @@ IReportSchema<User> schema = builder.BuildSchema<User>();
 IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
 new MyConsoleWriter().Write(reportTable);
 
-internal class TitleProperty : ReportTableProperty
+internal class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {
@@ -67,8 +67,7 @@ internal class MyConsoleWriter : ConsoleWriter
 {
     public override void Write(IReportTable<ReportCell> reportTable)
     {
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             Console.WriteLine($"*** {titleProperty.Title} ***");
         }

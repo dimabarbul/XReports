@@ -17,7 +17,7 @@ namespace XReports.Core.Tests.DependencyInjection
         {
             public int Priority => 0;
 
-            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            public bool Handle(IReportCellProperty property, HtmlCell cell)
             {
                 return false;
             }
@@ -27,7 +27,7 @@ namespace XReports.Core.Tests.DependencyInjection
         {
             public int Priority => 0;
 
-            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            public bool Handle(IReportCellProperty property, HtmlCell cell)
             {
                 return false;
             }
@@ -45,7 +45,7 @@ namespace XReports.Core.Tests.DependencyInjection
             {
             }
 
-            public bool Handle(ReportCellProperty property, HtmlCell cell)
+            public bool Handle(IReportCellProperty property, HtmlCell cell)
             {
                 throw new System.NotImplementedException();
             }

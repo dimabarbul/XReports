@@ -99,7 +99,7 @@ class StripedProcessor : IReportCellProcessor<UserInfo>
 }
 
 // Cell property to mark cells alignment.
-class AlignmentProperty : ReportCellProperty
+class AlignmentProperty : IReportCellProperty
 {
     public AlignmentProperty(bool isLeftAligned)
     {

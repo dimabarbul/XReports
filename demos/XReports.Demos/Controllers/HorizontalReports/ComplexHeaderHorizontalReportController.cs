@@ -41,7 +41,7 @@ public class ComplexHeaderHorizontalReportController : Controller
 
     private IReportTable<ReportCell> BuildReport()
     {
-        ReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
+        IReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
         BoldProperty bold = new();
 
         ReportSchemaBuilder<Entity> reportBuilder = new();

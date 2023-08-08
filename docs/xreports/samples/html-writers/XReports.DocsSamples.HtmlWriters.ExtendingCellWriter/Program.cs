@@ -46,7 +46,7 @@ internal class User
     public string Email { get; set; }
 }
 
-internal class TitleProperty : ReportTableProperty
+internal class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {

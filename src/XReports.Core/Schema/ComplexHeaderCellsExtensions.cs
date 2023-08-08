@@ -54,8 +54,8 @@ namespace XReports.Schema
         public static ReportCell[][] CreateCells<TSourceItem>(
             this ComplexHeaderCell[,] complexHeader,
             IReadOnlyList<IReportColumn<TSourceItem>> columns,
-            IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
-            IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties,
+            IReadOnlyDictionary<string, IReportCellProperty[]> complexHeaderProperties,
+            IReadOnlyList<IReportCellProperty> commonComplexHeaderProperties,
             bool isTransposed)
         {
             int height = complexHeader.GetLength(0);
@@ -96,8 +96,8 @@ namespace XReports.Schema
         }
 
         private static ReportCell CreateComplexHeaderCell(
-            IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties,
-            IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
+            IReadOnlyList<IReportCellProperty> commonComplexHeaderProperties,
+            IReadOnlyDictionary<string, IReportCellProperty[]> complexHeaderProperties,
             ComplexHeaderCell headerCell)
         {
             ReportCell cell = new ReportCell();
@@ -105,14 +105,14 @@ namespace XReports.Schema
             cell.ColumnSpan = headerCell.ColumnSpan;
             cell.RowSpan = headerCell.RowSpan;
 
-            foreach (ReportCellProperty property in commonComplexHeaderProperties)
+            foreach (IReportCellProperty property in commonComplexHeaderProperties)
             {
                 cell.AddProperty(property);
             }
 
             if (complexHeaderProperties.ContainsKey(headerCell.Content))
             {
-                foreach (ReportCellProperty property in complexHeaderProperties[headerCell.Content])
+                foreach (IReportCellProperty property in complexHeaderProperties[headerCell.Content])
                 {
                     cell.AddProperty(property);
                 }

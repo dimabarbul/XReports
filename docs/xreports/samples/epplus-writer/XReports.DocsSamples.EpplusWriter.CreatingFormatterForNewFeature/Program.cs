@@ -39,7 +39,7 @@ internal class User
 }
 
 // Property marking cells that should be indented.
-internal class IndentationProperty : ReportCellProperty { }
+internal class IndentationProperty : IReportCellProperty { }
 
 internal class ExcelIndentationPropertyFormatter : EpplusFormatter<IndentationProperty>
 {

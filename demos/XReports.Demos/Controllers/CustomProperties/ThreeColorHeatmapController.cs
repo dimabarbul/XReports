@@ -94,7 +94,7 @@ public class ThreeColorHeatmapController : Controller
         public decimal Score { get; set; }
     }
 
-    private class ThreeColorHeatmapProperty : ReportCellProperty
+    private class ThreeColorHeatmapProperty : IReportCellProperty
     {
         private readonly decimal minimumValue;
         private readonly Color minimumColor;

@@ -15,7 +15,7 @@ namespace XReports.SchemaBuilders.AttributeHandlers
             IReportColumnBuilder<TSourceItem> columnBuilder,
             CustomPropertyAttribute attribute)
         {
-            ReportCellProperty property = (ReportCellProperty)Activator.CreateInstance(attribute.PropertyType);
+            IReportCellProperty property = (IReportCellProperty)Activator.CreateInstance(attribute.PropertyType);
 
             if (attribute.IsHeader)
             {

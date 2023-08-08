@@ -43,11 +43,11 @@ IReportConverter<HtmlReportCell> emailConverter = converterFactory.Get("email");
 Console.WriteLine("Email");
 new HtmlWriter().Write(emailConverter.Convert(reportTable));
 
-internal class BoldProperty : ReportCellProperty
+internal class BoldProperty : IReportCellProperty
 {
 }
 
-internal class ItalicProperty : ReportCellProperty
+internal class ItalicProperty : IReportCellProperty
 {
 }
 

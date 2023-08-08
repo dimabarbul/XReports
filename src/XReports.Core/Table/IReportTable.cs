@@ -13,7 +13,7 @@ namespace XReports.Table
         /// <summary>
         /// Gets table properties.
         /// </summary>
-        IEnumerable<ReportTableProperty> Properties { get; }
+        IEnumerable<IReportTableProperty> Properties { get; }
 
         /// <summary>
         /// Gets header rows of the report.
@@ -31,7 +31,7 @@ namespace XReports.Table
         /// <typeparam name="TProperty">Type of property to check for.</typeparam>
         /// <returns>True if the table has property of type <typeparamref name="TProperty"/>, false otherwise.</returns>
         bool HasProperty<TProperty>()
-            where TProperty : ReportTableProperty;
+            where TProperty : IReportTableProperty;
 
         /// <summary>
         /// Checks if the table has property of specified type. Derived types are ignored.
@@ -41,11 +41,12 @@ namespace XReports.Table
         bool HasProperty(Type propertyType);
 
         /// <summary>
-        /// Returns first table property of type <typeparamref name="TProperty"/> or null if there is no such property. Derived types are ignored.
+        /// Tries to get the first table property of type <typeparamref name="TProperty"/>. Derived types are ignored. Returns flag indicating whether the property was found.
         /// </summary>
         /// <typeparam name="TProperty">Type of property to get.</typeparam>
-        /// <returns>First table property of type <typeparamref name="TProperty"/> or null.</returns>
-        TProperty GetProperty<TProperty>()
-            where TProperty : ReportTableProperty;
+        /// <param name="property">The first property of type <typeparamref name="TProperty"/> or default value for the <typeparamref name="TProperty"/> if the property was not found.</param>
+        /// <returns>True if property was found, false otherwise.</returns>
+        bool TryGetProperty<TProperty>(out TProperty property)
+            where TProperty : IReportTableProperty;
     }
 }

@@ -30,7 +30,7 @@ IReportTable<HtmlReportCell> htmlReportTable = converter.Convert(reportTable);
 HtmlWriter writer = new HtmlWriter();
 writer.Write(htmlReportTable);
 
-internal class BoldProperty : ReportCellProperty
+internal class BoldProperty : IReportCellProperty
 {
 }
 
@@ -42,7 +42,7 @@ internal class BoldPropertyHandler : PropertyHandler<BoldProperty, HtmlReportCel
     }
 }
 
-internal class ItalicProperty : ReportCellProperty
+internal class ItalicProperty : IReportCellProperty
 {
 }
 

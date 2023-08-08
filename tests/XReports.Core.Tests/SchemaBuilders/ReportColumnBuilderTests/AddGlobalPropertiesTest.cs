@@ -19,10 +19,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
+                new IReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
                 Array.Empty<IReportCellProcessor<int>>());
 
-            ReportCellProperty[] expectedProperties =
+            IReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -39,10 +39,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddProperties(new CustomProperty1() { Value = true });
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
+                new IReportCellProperty[] { new CustomProperty1(), new CustomProperty2() },
                 Array.Empty<IReportCellProcessor<int>>());
 
-            ReportCellProperty[] expectedProperties =
+            IReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1() { Value = true },
                 new CustomProperty2(),
@@ -58,10 +58,10 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             IReportColumn<int> provider = builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty1() },
+                new IReportCellProperty[] { new CustomProperty1(), new CustomProperty1() },
                 Array.Empty<IReportCellProcessor<int>>());
 
-            ReportCellProperty[] expectedProperties =
+            IReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1(),
             };
@@ -76,18 +76,18 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             Action action = () => builder.Build(
-                new ReportCellProperty[] { new CustomProperty1(), new CustomProperty2(), null },
+                new IReportCellProperty[] { new CustomProperty1(), new CustomProperty2(), null },
                 Array.Empty<IReportCellProcessor<int>>());
 
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
             public bool Value { get; set; }
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

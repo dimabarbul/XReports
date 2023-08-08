@@ -15,14 +15,14 @@ namespace XReports.SchemaBuilders
         /// </summary>
         /// <param name="properties">Properties to add.</param>
         /// <returns>The report column builder.</returns>
-        IReportColumnBuilder<TSourceItem> AddProperties(params ReportCellProperty[] properties);
+        IReportColumnBuilder<TSourceItem> AddProperties(params IReportCellProperty[] properties);
 
         /// <summary>
         /// Adds properties to header cell of the report column.
         /// </summary>
         /// <param name="properties">Properties to add.</param>
         /// <returns>The report column builder.</returns>
-        IReportColumnBuilder<TSourceItem> AddHeaderProperties(params ReportCellProperty[] properties);
+        IReportColumnBuilder<TSourceItem> AddHeaderProperties(params IReportCellProperty[] properties);
 
         /// <summary>
         /// Adds processors to all cells of the report column.
@@ -45,7 +45,7 @@ namespace XReports.SchemaBuilders
         /// <param name="globalProcessors">Report global processors, will be merged with processors of the report column cells. Are not applied to header cell.</param>
         /// <returns>The report column builder.</returns>
         IReportColumn<TSourceItem> Build(
-            IReadOnlyList<ReportCellProperty> globalProperties,
+            IReadOnlyList<IReportCellProperty> globalProperties,
             IReadOnlyList<IReportCellProcessor<TSourceItem>> globalProcessors);
     }
 }

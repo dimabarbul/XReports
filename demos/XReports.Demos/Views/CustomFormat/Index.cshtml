@@ -20,7 +20,7 @@
 @section Code
 {
     // Property is used to mark cells.
-    class CustomFormatProperty : ReportCellProperty { }
+    class CustomFormatProperty : IReportCellProperty { }
 
     // The property handler processes cells during conversion to Html having custom property added.
     class CustomFormatPropertyHtmlHandler : PropertyHandler&lt;CustomFormatProperty, HtmlReportCell&gt;

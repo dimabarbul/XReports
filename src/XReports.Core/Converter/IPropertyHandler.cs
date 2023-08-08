@@ -21,6 +21,6 @@ namespace XReports.Converter
         /// <param name="property">Property to handle.</param>
         /// <param name="cell">Cell with the property.</param>
         /// <returns>True if the property is handled and requires no further processing, false otherwise.</returns>
-        bool Handle(ReportCellProperty property, TResultReportCell cell);
+        bool Handle(IReportCellProperty property, TResultReportCell cell);
     }
 }

@@ -19,7 +19,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
             builder.AddProcessors(processor1, processor2);
-            IReportColumn<string> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<string>>());
+            IReportColumn<string> provider = builder.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<string>>());
 
             provider.CreateCell("Test");
             provider.CreateCell("Test2");

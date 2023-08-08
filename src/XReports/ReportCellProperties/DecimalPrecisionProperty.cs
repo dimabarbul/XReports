@@ -6,7 +6,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells which value is numeric and should be displayed with fixed precision.
     /// </summary>
-    public class DecimalPrecisionProperty : ReportCellProperty
+    public class DecimalPrecisionProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DecimalPrecisionProperty"/> class.

@@ -8,18 +8,18 @@ namespace XReports.Schema
     {
         private readonly IReadOnlyList<IReportColumn<TSourceItem>> headerRows;
         private readonly IReadOnlyList<IReportColumn<TSourceItem>> columns;
-        private readonly IReadOnlyList<ReportTableProperty> tableProperties;
+        private readonly IReadOnlyList<IReportTableProperty> tableProperties;
         private readonly ComplexHeaderCell[,] complexHeader;
-        private readonly IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties;
-        private readonly IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties;
+        private readonly IReadOnlyDictionary<string, IReportCellProperty[]> complexHeaderProperties;
+        private readonly IReadOnlyList<IReportCellProperty> commonComplexHeaderProperties;
 
         public HorizontalReportSchema(
             IReadOnlyList<IReportColumn<TSourceItem>> headerRows,
             IReadOnlyList<IReportColumn<TSourceItem>> columns,
-            IReadOnlyList<ReportTableProperty> tableProperties,
+            IReadOnlyList<IReportTableProperty> tableProperties,
             ComplexHeaderCell[,] complexHeader,
-            IReadOnlyDictionary<string, ReportCellProperty[]> complexHeaderProperties,
-            IReadOnlyList<ReportCellProperty> commonComplexHeaderProperties)
+            IReadOnlyDictionary<string, IReportCellProperty[]> complexHeaderProperties,
+            IReadOnlyList<IReportCellProperty> commonComplexHeaderProperties)
         {
             this.headerRows = headerRows;
             this.columns = columns;

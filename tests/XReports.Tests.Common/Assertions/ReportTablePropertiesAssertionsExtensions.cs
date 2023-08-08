@@ -5,7 +5,7 @@ namespace XReports.Tests.Common.Assertions
 {
     public static class ReportTablePropertiesAssertionsExtensions
     {
-        public static ReportTablePropertiesAssertions Should(this IEnumerable<ReportTableProperty> properties)
+        public static ReportTablePropertiesAssertions Should(this IEnumerable<IReportTableProperty> properties)
         {
             return new ReportTablePropertiesAssertions(properties);
         }

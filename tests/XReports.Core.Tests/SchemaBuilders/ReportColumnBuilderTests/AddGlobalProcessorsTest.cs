@@ -20,7 +20,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor2 processor2 = new CustomProcessor2();
             IReportColumn<int> provider = builder.Build(
-                Array.Empty<ReportCellProperty>(),
+                Array.Empty<IReportCellProperty>(),
                 new IReportCellProcessor<int>[] { processor1, processor2 });
 
             provider.CreateHeaderCell();
@@ -41,7 +41,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             CustomProcessor2 processor2 = new CustomProcessor2();
             builder.AddProcessors(addedPreviously);
             IReportColumn<int> provider = builder.Build(
-                Array.Empty<ReportCellProperty>(),
+                Array.Empty<IReportCellProperty>(),
                 new IReportCellProcessor<int>[] { processor1, processor2 });
 
             provider.CreateHeaderCell();
@@ -61,7 +61,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             CustomProcessor1 processor1 = new CustomProcessor1();
             CustomProcessor1 anotherProcessor1 = new CustomProcessor1();
             IReportColumn<int> provider = builder.Build(
-                Array.Empty<ReportCellProperty>(),
+                Array.Empty<IReportCellProperty>(),
                 new IReportCellProcessor<int>[] { processor1, anotherProcessor1 });
 
             provider.CreateHeaderCell();
@@ -78,7 +78,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
                 "Value", new ComputedValueReportCellProvider<int, int>(x => x));
 
             Action action = () => builder.Build(
-                Array.Empty<ReportCellProperty>(),
+                Array.Empty<IReportCellProperty>(),
                 new IReportCellProcessor<int>[] { new CustomProcessor1(), new CustomProcessor2(), null });
 
             action.Should().ThrowExactly<ArgumentException>();

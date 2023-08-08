@@ -61,11 +61,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             });
         }
 
-        private class CustomHeaderProperty1 : ReportCellProperty
+        private class CustomHeaderProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomHeaderProperty2 : ReportCellProperty
+        private class CustomHeaderProperty2 : IReportCellProperty
         {
         }
     }

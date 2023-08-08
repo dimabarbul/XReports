@@ -112,9 +112,9 @@ public static class ReportStructureProvider
         yield return new TypedReportCellsSource<IDataReader, string>("Type", e => e.GetString(35));
     }
 
-    public static ReportCellProperty[] GetGlobalProperties()
+    public static IReportCellProperty[] GetGlobalProperties()
     {
-        return new ReportCellProperty[]
+        return new IReportCellProperty[]
         {
             new SameColumnFormatProperty(),
         };

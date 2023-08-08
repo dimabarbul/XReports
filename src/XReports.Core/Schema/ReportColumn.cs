@@ -6,8 +6,8 @@ namespace XReports.Schema
     {
         private readonly string title;
         private readonly IReportCellProvider<TSourceEntity> provider;
-        private readonly ReportCellProperty[] cellProperties;
-        private readonly ReportCellProperty[] headerProperties;
+        private readonly IReportCellProperty[] cellProperties;
+        private readonly IReportCellProperty[] headerProperties;
         private readonly IReportCellProcessor<TSourceEntity>[] cellProcessors;
         private readonly IHeaderReportCellProcessor[] headerProcessors;
 
@@ -16,8 +16,8 @@ namespace XReports.Schema
         public ReportColumn(
             string title,
             IReportCellProvider<TSourceEntity> provider,
-            ReportCellProperty[] cellProperties,
-            ReportCellProperty[] headerProperties,
+            IReportCellProperty[] cellProperties,
+            IReportCellProperty[] headerProperties,
             IReportCellProcessor<TSourceEntity>[] cellProcessors,
             IHeaderReportCellProcessor[] headerProcessors)
         {

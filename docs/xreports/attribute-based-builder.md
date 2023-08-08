@@ -173,7 +173,7 @@ Most likely you'll have your own custom properties. You can assign them in post-
 ```c#
 // Property that will be assigned to cells when MyAttribute is used.
 // Assigning will be done in attribute handler class.
-internal class MyProperty : ReportCellProperty
+internal class MyProperty : IReportCellProperty
 {
 }
 
@@ -508,7 +508,7 @@ class ReportModel
 You may add table properties using attributes.
 
 ```c#
-class TitleProperty : ReportTableProperty
+class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {

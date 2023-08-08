@@ -43,7 +43,7 @@ public class BasicHorizontalReportController : Controller
 
     private IReportTable<ReportCell> BuildReport()
     {
-        ReportCellProperty centerAlignment = new AlignmentProperty(Alignment.Center);
+        AlignmentProperty centerAlignment = new(Alignment.Center);
         BoldProperty bold = new();
         IndentationProperty indentation = new();
 
@@ -137,7 +137,7 @@ public class BasicHorizontalReportController : Controller
         public string Email { get; set; }
     }
 
-    private class IndentationProperty : ReportCellProperty
+    private class IndentationProperty : IReportCellProperty
     {
         public IndentationProperty(int indentLevel = 1)
         {

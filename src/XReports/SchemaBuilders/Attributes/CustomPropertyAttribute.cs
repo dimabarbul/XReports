@@ -12,12 +12,12 @@ namespace XReports.SchemaBuilders.Attributes
         /// Initializes a new instance of the <see cref="CustomPropertyAttribute"/> class.
         /// </summary>
         /// <param name="propertyType">Type of property to assign. Should have accessible parameterless constructor.</param>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="propertyType"/> is not derived from <see cref="ReportCellProperty"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="propertyType"/> is not derived from <see cref="IReportCellProperty"/>.</exception>
         public CustomPropertyAttribute(Type propertyType)
         {
-            if (!typeof(ReportCellProperty).IsAssignableFrom(propertyType))
+            if (!typeof(IReportCellProperty).IsAssignableFrom(propertyType))
             {
-                throw new ArgumentException($"Type {propertyType} should derive from {typeof(ReportCellProperty)}");
+                throw new ArgumentException($"Type {propertyType} should implement {typeof(IReportCellProperty)}");
             }
 
             this.PropertyType = propertyType;

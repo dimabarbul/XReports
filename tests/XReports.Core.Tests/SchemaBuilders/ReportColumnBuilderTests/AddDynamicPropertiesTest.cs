@@ -17,9 +17,9 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>(
                 "Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            builder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+            builder.AddDynamicProperties(x => x > 0 ? (IReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
-            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
             ReportCell headerCell = provider.CreateHeaderCell();
             ReportCell zeroCell = provider.CreateCell(0).Clone();
             ReportCell oneCell = provider.CreateCell(1).Clone();
@@ -34,24 +34,24 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
         {
             ReportColumnBuilder<int> builder = new ReportColumnBuilder<int>("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            builder.AddDynamicProperties(_ => new ReportCellProperty[]
+            builder.AddDynamicProperties(_ => new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
                 null,
             });
 
-            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
+            IReportColumn<int> provider = builder.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
             ReportCell cell = provider.CreateCell(0);
 
             cell.Should().Equal(ReportCellHelper.CreateReportCell(0, new CustomProperty1(), new CustomProperty2()));
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

@@ -46,7 +46,7 @@ internal class User
 
 // Property that will be assigned to cells when MyAttribute is used.
 // Assigning will be done in attribute handler class.
-internal class MyProperty : ReportCellProperty
+internal class MyProperty : IReportCellProperty
 {
 }
 

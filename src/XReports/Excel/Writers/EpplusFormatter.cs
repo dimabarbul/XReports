@@ -8,13 +8,12 @@ namespace XReports.Excel.Writers
     /// </summary>
     /// <typeparam name="TProperty">Type of property to handle.</typeparam>
     public abstract class EpplusFormatter<TProperty> : IEpplusFormatter
-        where TProperty : ReportCellProperty
+        where TProperty : IReportCellProperty
     {
         /// <inheritdoc />
         public void Format(ExcelRange excelRange, ExcelReportCell cell)
         {
-            TProperty property = cell.GetProperty<TProperty>();
-            if (property == null)
+            if (!cell.TryGetProperty(out TProperty property))
             {
                 return;
             }
