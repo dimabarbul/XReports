@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <PackageVersion>0.1.7</PackageVersion>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageReleaseNotes>The first stable version.</PackageReleaseNotes>
+    <PackageTags>Reporting Reports Html Xlsx</PackageTags>
     <Title>XReports</Title>
     <Authors>Dmitriy Barbul</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

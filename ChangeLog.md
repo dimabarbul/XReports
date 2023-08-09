@@ -1,55 +1,27 @@
 # Change Log
 
-## NEXT
+## 1.0.0
 
-Released on: *YYYY-MM-DD*
+This is the first stable version. It brings many backward incompatible changes. Here are some highlights:
 
-**Added:**
-- Benchmarks for new version (for current project code) and old version (the version specified in `csproj` file as dependency)
-- `HtmlStreamWriterDI.AddHtmlStreamWriter` and `HtmlStreamWriterDI.AddHtmlStreamCellWriter` to register Html stream writer in DI
-- `IHtmlStreamWriter`/`IHtmlStreamCellWriter` and `HtmlStreamWriter`/`HtmlStreamCellWriter`
-- New method `BaseReportCell.Clear` resets report cell to initial state, it should be overriden in derived classes
-
-**Changed:**
+- performance and memory consumption is improved (refer to [benchmark result](#performance-and-memory-consumption-benchmarks))
 - XReports and XReports.Core libraries are now targeting netstandard2.0 and netstandard2.1
-- Improved performance and memory consumption
-- Aligned versions of XReports.Core and XReports libraries
-- DI refactored
-- Report cells are now cached and reused, so reference to cell should not be persisted anywhere; if copy of cell is needed, one can use `BaseReportCell.Clone` method to create shallow copy
-- Properties now are processed by the first property handler that marks them processed, i.e., the property is not processed after it's been marked as processed
-- Replaced `BaseReportCell.Value` setter with `BaseReportCell.SetValue<TValue>` method, getter – with `BaseReportCell.GetUnderlyingValue` method
-- `IPropertyHandler.Handle` method is now `bool`: it should return `true` if the property has been processed, `false` otherwise
-- All attributes are sealed now
-- Renamed classes and interfaces:
-  - AttributeBase ⇒ BasePropertyAttribute
-  - IStringWriter ⇒ IHtmlStringWriter
-    - WriteToStringAsync ⇒ WriteToString
-    - removed method `WriteToFileAsync`, `IHtmlStreamWriter` should be used instead
-  - IStringCellWriter ⇒ IHtmlStringCellWriter:
-    - methods now accept `StringBuilder` instead of returning `string`
-  - StringWriter ⇒ HtmlStringWriter
-  - StringCellWriter ⇒ HtmlStringCellWriter
-  - StringWriterDI ⇒ HtmlStringWriterDI:
-    - AddStringWriter ⇒ AddHtmlStringWriter
-    - AddStringCellWriter ⇒ AddHtmlStringCellWriter
-  - IEpplusWriter:
-    - added method `WriteToStream` that accepts existing stream
-  - `IReportCellsProvider.CellSelector` property is replaced with `IReportCellsProvider.GetCell` method
+- one schema builder that allows building vertical and horizontal reports
+- cells are reused by converter and cell providers in order not to create many small objects (which improves both - performance and memory consumption)  
+in order for this to work report cell now contains 2 important methods which must be overridden when needed: Clone (clone all collections here) and Reset (for updating the cell to its initial state, clear all collections here)  
+- namespaces are revised, now they reflect functionality  
+for example, XReports.SchemaBuilders namespace contains all classes that relate to building report schema and not just classes that do the building itself
+- registering classes in DI container is revised
+- much more tests are added to ensure good code quality and stability
+- documentation is completed
 
-**Fixed:**
-- Global properties are available to cell processors
+### Performance and Memory Consumption Benchmarks
 
-**Removed:**
-- `ReportCellProperty.Processed` property
-- `ReportSchema<>.CreateVertical` and `ReportSchema<>.CreateHorizontal` methods, constructors of `VerticalReportSchema<>` and `HorizontalReportSchema<>` should be used instead
-
-**Performance and Memory Consumption Benchmarks**
-
-Benchmarks were run on report with 36 columns. Source code can be found [here](benchmarks/XReports.Benchmarks). Benchmarks for XReport 0.1.6 were run on commit "Update benchmarks for XReport=0.1.6" (hash f95256cdad5c30a5419a839504d21cadab2eaf48). Benchmark results are provided to highlight improvements brought by version NEXT comparing to version 0.1.6. Thanks to [l3r0r0](https://github.com/l3r0r0) for help with the benchmarks.
+Benchmarks use report with 36 columns. Source code can be found [here](benchmarks/XReports.Benchmarks). Benchmarks for XReports 0.1.6 were run on commit "Update benchmarks for XReport=0.1.6" (hash f95256cdad5c30a5419a839504d21cadab2eaf48). Benchmark results are provided to highlight improvements brought by version 1.0.0 comparing to version 0.1.6. Thanks to [l3r0r0](https://github.com/l3r0r0) for help with the benchmarks.
 
 ```diff
 -Version 0.1.6
-+Version NEXT
++Version 1.0.0
 
 BenchmarkDotNet v0.13.6, Gentoo Linux
 Intel Core i3-3217U CPU 1.80GHz (Ivy Bridge), 1 CPU, 4 logical and 2 physical cores
