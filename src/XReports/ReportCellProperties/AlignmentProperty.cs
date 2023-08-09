@@ -7,7 +7,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells with content aligned in certain way.
     /// </summary>
-    public class AlignmentProperty : ReportCellProperty
+    public class AlignmentProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AlignmentProperty" /> class.

@@ -4,7 +4,7 @@ namespace XReports.Benchmarks.ReportStructure.Models;
 
 public abstract class ReportCellsSource<TSourceEntity>
 {
-    protected ReportCellsSource(string title, params ReportCellProperty[] properties)
+    protected ReportCellsSource(string title, params IReportCellProperty[] properties)
     {
         this.Title = title;
         this.Properties = properties;
@@ -12,7 +12,7 @@ public abstract class ReportCellsSource<TSourceEntity>
 
     public string Title { get; }
 
-    public ReportCellProperty[] Properties { get; }
+    public IReportCellProperty[] Properties { get; }
 
     public abstract Type ValueType { get; }
     public abstract Func<TSourceEntity, TValue> ConvertValueSelector<TValue>();

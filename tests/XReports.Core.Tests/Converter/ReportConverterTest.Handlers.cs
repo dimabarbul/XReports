@@ -9,7 +9,7 @@ namespace XReports.Core.Tests.Converter
         {
             private readonly bool markPropertyProcessed;
 
-            public delegate void HandleDelegate(MyHandler handler, ReportCellProperty property);
+            public delegate void HandleDelegate(MyHandler handler, IReportCellProperty property);
 
             public event HandleDelegate OnHandle;
 
@@ -30,7 +30,7 @@ namespace XReports.Core.Tests.Converter
             public int Priority { get; }
             public string Name { get; }
 
-            public bool Handle(ReportCellProperty property, NewReportCell cell)
+            public bool Handle(IReportCellProperty property, NewReportCell cell)
             {
                 this.OnHandle?.Invoke(this, property);
 

@@ -47,7 +47,7 @@ HtmlStringWriter class provides a number of virtual methods that can be overridd
 For example, by default report has no title. To implement report title functionality we can create TitleProperty (refer to [table properties](../xreports.core/properties.md#table-properties) for more information) that will hold report title, and extend writer to take TitleProperty into consideration.
 
 ```c#
-class TitleProperty : ReportTableProperty
+class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {
@@ -68,8 +68,7 @@ class MyHtmlStringWriter : HtmlStringWriter
     {
         base.BeginTable(stringBuilder, reportTable);
 
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             stringBuilder
                 .Append("<caption>")
@@ -90,8 +89,7 @@ class MyHtmlStreamWriter : HtmlStreamWriter
     {
         await base.BeginTableAsync(streamWriter, reportTable);
 
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             await streamWriter.WriteAsync("<caption>");
             await streamWriter.WriteAsync(titleProperty.Title);

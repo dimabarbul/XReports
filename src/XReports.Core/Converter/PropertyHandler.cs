@@ -8,14 +8,14 @@ namespace XReports.Converter
     /// <typeparam name="TProperty">Type of property to handle (including derived types).</typeparam>
     /// <typeparam name="TReportCell">Type of cell to handle.</typeparam>
     public abstract class PropertyHandler<TProperty, TReportCell> : IPropertyHandler<TReportCell>
-        where TProperty : ReportCellProperty
+        where TProperty : IReportCellProperty
         where TReportCell : ReportCell
     {
         /// <inheritdoc />
         public virtual int Priority => 0;
 
         /// <inheritdoc />
-        public bool Handle(ReportCellProperty property, TReportCell cell)
+        public bool Handle(IReportCellProperty property, TReportCell cell)
         {
             if (property is TProperty typedProperty)
             {

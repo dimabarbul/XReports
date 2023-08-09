@@ -22,7 +22,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 "Test2",
             });
 
-            ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
+            IReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -56,7 +56,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 "Test2",
             });
 
-            ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
+            IReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
             table.Rows.Should().Equal(new[]
             {
                 new[]
@@ -68,11 +68,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             });
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

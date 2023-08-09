@@ -11,7 +11,7 @@ namespace XReports.Table
     public class ReportCell
     {
         private object value;
-        private List<ReportCellProperty> properties = new List<ReportCellProperty>();
+        private List<IReportCellProperty> properties = new List<IReportCellProperty>();
 
         /// <summary>
         /// Gets or sets how many columns the cell spans.
@@ -31,7 +31,7 @@ namespace XReports.Table
         /// <summary>
         /// Gets cell properties.
         /// </summary>
-        public IReadOnlyList<ReportCellProperty> Properties => this.properties;
+        public IReadOnlyList<IReportCellProperty> Properties => this.properties;
 
         /// <summary>
         /// Copies value from another cell along with value type.
@@ -103,7 +103,7 @@ namespace XReports.Table
         /// <typeparam name="TProperty">Type of property to check for.</typeparam>
         /// <returns>True if cell has property of type <typeparamref name="TProperty"/>, false otherwise.</returns>
         public bool HasProperty<TProperty>()
-            where TProperty : ReportCellProperty
+            where TProperty : IReportCellProperty
         {
             return this.HasProperty(typeof(TProperty));
         }
@@ -127,29 +127,32 @@ namespace XReports.Table
         }
 
         /// <summary>
-        /// Returns first property of type <typeparamref name="TProperty"/> or null if there is no such property. Derived types are ignored.
+        /// Tries to get the first property of type <typeparamref name="TProperty"/>. Derived types are ignored. Returns flag indicating whether the property was found.
         /// </summary>
         /// <typeparam name="TProperty">Type of property to get.</typeparam>
-        /// <returns>First property of type <typeparamref name="TProperty"/> or null.</returns>
-        public TProperty GetProperty<TProperty>()
-            where TProperty : ReportCellProperty
+        /// <param name="property">The first property of type <typeparamref name="TProperty"/> or default value for the <typeparamref name="TProperty"/> if the property was not found.</param>
+        /// <returns>True if property was found, false otherwise.</returns>
+        public bool TryGetProperty<TProperty>(out TProperty property)
+            where TProperty : IReportCellProperty
         {
+            property = default;
             for (int i = 0; i < this.Properties.Count; i++)
             {
                 if (this.Properties[i].GetType() == typeof(TProperty))
                 {
-                    return (TProperty)this.Properties[i];
+                    property = (TProperty)this.Properties[i];
+                    return true;
                 }
             }
 
-            return null;
+            return false;
         }
 
         /// <summary>
         /// Adds cell property.
         /// </summary>
         /// <param name="property">Property to add.</param>
-        public void AddProperty(ReportCellProperty property)
+        public void AddProperty(IReportCellProperty property)
         {
             this.properties.Add(property);
         }
@@ -158,7 +161,7 @@ namespace XReports.Table
         /// Adds cell properties.
         /// </summary>
         /// <param name="properties">Properties to add.</param>
-        public void AddProperties(IEnumerable<ReportCellProperty> properties)
+        public void AddProperties(IEnumerable<IReportCellProperty> properties)
         {
             this.properties.AddRange(properties);
         }
@@ -182,7 +185,7 @@ namespace XReports.Table
         public virtual ReportCell Clone()
         {
             ReportCell reportCell = (ReportCell)this.MemberwiseClone();
-            reportCell.properties = new List<ReportCellProperty>(this.properties);
+            reportCell.properties = new List<IReportCellProperty>(this.properties);
 
             return reportCell;
         }

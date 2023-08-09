@@ -12,14 +12,14 @@ namespace XReports.SchemaBuilders.ReportCellProcessors
     /// <typeparam name="TSourceItem">Type of data source item.</typeparam>
     public class DynamicPropertiesCellProcessor<TSourceItem> : IReportCellProcessor<TSourceItem>
     {
-        private readonly Func<TSourceItem, ReportCellProperty> propertySelector;
-        private readonly Func<TSourceItem, IEnumerable<ReportCellProperty>> propertiesSelector;
+        private readonly Func<TSourceItem, IReportCellProperty> propertySelector;
+        private readonly Func<TSourceItem, IEnumerable<IReportCellProperty>> propertiesSelector;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicPropertiesCellProcessor{TSourceItem}"/> class.
         /// </summary>
         /// <param name="propertySelector">Function that returns single property to add or null if nothing should be added.</param>
-        public DynamicPropertiesCellProcessor(Func<TSourceItem, ReportCellProperty> propertySelector)
+        public DynamicPropertiesCellProcessor(Func<TSourceItem, IReportCellProperty> propertySelector)
         {
             this.propertySelector = propertySelector;
             this.propertiesSelector = null;
@@ -29,7 +29,7 @@ namespace XReports.SchemaBuilders.ReportCellProcessors
         /// Initializes a new instance of the <see cref="DynamicPropertiesCellProcessor{TSourceItem}"/> class.
         /// </summary>
         /// <param name="propertiesSelector">Function that returns properties to add. Properties equal to null are ignored.</param>
-        public DynamicPropertiesCellProcessor(Func<TSourceItem, IEnumerable<ReportCellProperty>> propertiesSelector)
+        public DynamicPropertiesCellProcessor(Func<TSourceItem, IEnumerable<IReportCellProperty>> propertiesSelector)
         {
             this.propertySelector = null;
             this.propertiesSelector = propertiesSelector;
@@ -40,7 +40,7 @@ namespace XReports.SchemaBuilders.ReportCellProcessors
         {
             if (this.propertySelector != null)
             {
-                ReportCellProperty property = this.propertySelector(item);
+                IReportCellProperty property = this.propertySelector(item);
                 if (property != null)
                 {
                     cell.AddProperty(property);

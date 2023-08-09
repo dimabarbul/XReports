@@ -39,7 +39,7 @@ internal class User
     public string Email { get; set; }
 }
 
-internal class TitleProperty : ReportTableProperty
+internal class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {
@@ -60,8 +60,7 @@ internal class MyHtmlStringWriter : HtmlStringWriter
     {
         base.BeginTable(stringBuilder, reportTable);
 
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             stringBuilder
                 .Append("<caption>")
@@ -82,8 +81,7 @@ internal class MyHtmlStreamWriter : HtmlStreamWriter
     {
         await base.BeginTableAsync(streamWriter, reportTable);
 
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             await streamWriter.WriteAsync("<caption>");
             await streamWriter.WriteAsync(titleProperty.Title);

@@ -54,7 +54,7 @@ namespace XReports.Tests.SchemaBuilders.AttributeBasedBuilderTests
             }
         }
 
-        private class MyProperty : ReportCellProperty
+        private class MyProperty : IReportCellProperty
         {
         }
     }

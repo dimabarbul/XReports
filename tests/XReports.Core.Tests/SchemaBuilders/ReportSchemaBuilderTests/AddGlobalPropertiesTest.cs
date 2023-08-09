@@ -33,7 +33,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                     ReportCellHelper.CreateReportCell("As string"),
                 },
             });
-            ReportCellProperty[] expectedProperties =
+            IReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -67,7 +67,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 1,
                 2,
             });
-            ReportCellProperty[] expectedProperties =
+            IReportCellProperty[] expectedProperties =
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -89,11 +89,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             });
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

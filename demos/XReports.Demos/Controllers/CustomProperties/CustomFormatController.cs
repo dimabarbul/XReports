@@ -95,7 +95,7 @@ public class CustomFormatController : Controller
         public decimal Score { get; set; }
     }
 
-    private class CustomFormatProperty : ReportCellProperty
+    private class CustomFormatProperty : IReportCellProperty
     {
     }
 

@@ -13,7 +13,7 @@ namespace XReports.SchemaBuilders.AttributeHandlers
         /// <inheritdoc />
         public void Handle<TSourceItem>(IReportSchemaBuilder<TSourceItem> schemaBuilder, IReportColumnBuilder<TSourceItem> columnBuilder, Attribute attribute)
         {
-            ReportCellProperty property = GetCellProperty(attribute);
+            IReportCellProperty property = GetCellProperty(attribute);
             if (property == null)
             {
                 return;
@@ -30,9 +30,9 @@ namespace XReports.SchemaBuilders.AttributeHandlers
             }
         }
 
-        private static ReportCellProperty GetCellProperty(Attribute attribute)
+        private static IReportCellProperty GetCellProperty(Attribute attribute)
         {
-            ReportCellProperty property = null;
+            IReportCellProperty property = null;
 
             switch (attribute)
             {

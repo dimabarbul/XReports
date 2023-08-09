@@ -22,7 +22,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty2());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
-            ReportCellProperty[] expectedProperties = new ReportCellProperty[]
+            IReportCellProperty[] expectedProperties = new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -60,7 +60,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty2());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(Enumerable.Empty<int>());
-            ReportCellProperty[] expectedProperties = new ReportCellProperty[]
+            IReportCellProperty[] expectedProperties = new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -98,7 +98,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             schemaBuilder.AddComplexHeaderProperties(new CustomProperty1(), new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
-            ReportCellProperty[] expectedProperties = new ReportCellProperty[]
+            IReportCellProperty[] expectedProperties = new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty1(),
@@ -141,7 +141,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
 
             schemaBuilder.AddComplexHeaderProperties("TheGroup", new CustomProperty1(), new CustomProperty2());
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(Enumerable.Empty<int>());
-            ReportCellProperty[] expectedProperties = new ReportCellProperty[]
+            IReportCellProperty[] expectedProperties = new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -235,11 +235,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             return schemaBuilder;
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

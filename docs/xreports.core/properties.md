@@ -12,22 +12,14 @@ Another way of handling properties is to use [property handlers](./using-report-
 
 Let's create some properties to see how they can be used. Imagine that we want report where some cells are emphasised by converting their text to upper case. Also we'd like to have some cells protected by hiding their text using some mask symbol.
 
-From programming stand point property is a class inherited from ReportCellProperty.
+From programming stand point property is a class, record or struct implementing IReportCellProperty.
 
 ```c#
-class UpperCaseProperty : ReportCellProperty
+class UpperCaseProperty : IReportCellProperty
 {
 }
 
-class ProtectedProperty : ReportCellProperty
-{
-    public char Symbol { get; }
-
-    public ProtectedProperty(char symbol)
-    {
-        this.Symbol = symbol;
-    }
-}
+record ProtectedProperty(char Symbol) : IReportCellProperty;
 ```
 
 Assign properties to columns you want during building schema.
@@ -89,8 +81,7 @@ class MyConsoleWriter : ConsoleWriter
         }
 
         // For ProtectedProperty it's not enough to know that it's assigned as we need to know symbol to mask the value.
-        ProtectedProperty protectedProperty = reportCell.GetProperty<ProtectedProperty>();
-        if (protectedProperty != null)
+        if (reportCell.TryGetProperty(out ProtectedProperty protectedProperty))
         {
             text = new string(protectedProperty.Symbol, text.Length);
         }
@@ -100,10 +91,8 @@ class MyConsoleWriter : ConsoleWriter
 }
 
 /*
-EXAMPLE OUTPUT:
-
 |             Username |             Password |
------------------------------------------------
+|----------------------|----------------------|
 |                GUEST |                ***** |
 |                ADMIN |             ******** |
 */
@@ -229,10 +218,12 @@ builder.AddGlobalProperties(new UpperCaseProperty());
 
 ## Table Properties
 
+[Working example](samples/properties/XReports.DocsSamples.Properties.CellProperties/Program.cs)
+
 Sometimes you may need to add properties to table itself, for example, it may be report title or author information.
 
 ```c#
-class TitleProperty : ReportTableProperty
+class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {
@@ -246,8 +237,7 @@ class MyConsoleWriter : ConsoleWriter
 {
     public override void Write(IReportTable<ReportCell> reportTable)
     {
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             Console.WriteLine($"*** {titleProperty.Title} ***");
         }

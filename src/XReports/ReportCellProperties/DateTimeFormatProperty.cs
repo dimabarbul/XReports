@@ -6,7 +6,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells with DateTime value that should be displayed using certain format.
     /// </summary>
-    public class DateTimeFormatProperty : ReportCellProperty
+    public class DateTimeFormatProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTimeFormatProperty"/> class.

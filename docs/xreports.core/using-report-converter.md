@@ -187,7 +187,7 @@ So far so good, report is printed and complex header spans 2 columns.
 Now let's highlight username column in bold so report viewers will be able to easily find it. To do this we'll need cell property to mark cells that need to have such behavior.
 
 ```c#
-class BoldProperty : ReportCellProperty
+class BoldProperty : IReportCellProperty
 {
 }
 ```

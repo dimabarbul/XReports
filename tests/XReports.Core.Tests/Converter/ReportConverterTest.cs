@@ -299,7 +299,7 @@ namespace XReports.Core.Tests.Converter
         [Fact]
         public void ConvertShouldCallHandlersForEachPropertyForEachCellForVertical()
         {
-            List<ReportCellProperty> breadcrumbs = new List<ReportCellProperty>();
+            List<IReportCellProperty> breadcrumbs = new List<IReportCellProperty>();
             MyHandler myHandler = new MyHandler(0, false, (handler, property) => breadcrumbs.Add(property));
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
@@ -314,13 +314,13 @@ namespace XReports.Core.Tests.Converter
 
             breadcrumbs.Should().BeEquivalentTo(
                 Enumerable.Range(0, dataCount)
-                    .SelectMany(_ => new ReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
+                    .SelectMany(_ => new IReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
         }
 
         [Fact]
         public void ConvertShouldCallHandlersForEachPropertyForEachCellForHorizontal()
         {
-            List<ReportCellProperty> breadcrumbs = new List<ReportCellProperty>();
+            List<IReportCellProperty> breadcrumbs = new List<IReportCellProperty>();
             MyHandler myHandler = new MyHandler(0, false, (handler, property) => breadcrumbs.Add(property));
             ReportConverter<NewReportCell> reportConverter = new ReportConverter<NewReportCell>(
                 new[] { myHandler });
@@ -335,7 +335,7 @@ namespace XReports.Core.Tests.Converter
 
             breadcrumbs.Should().BeEquivalentTo(
                 Enumerable.Range(0, dataCount)
-                    .SelectMany(_ => new ReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
+                    .SelectMany(_ => new IReportCellProperty[] { new MyProperty(), new MyAnotherProperty() }));
         }
 
         [Fact]

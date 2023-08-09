@@ -19,7 +19,7 @@ namespace XReports.SchemaBuilders
         /// <returns>The report column builder.</returns>
         public static IReportColumnBuilder<TSourceItem> AddDynamicProperties<TSourceItem>(
             this IReportColumnBuilder<TSourceItem> builder,
-            Func<TSourceItem, ReportCellProperty> propertySelector)
+            Func<TSourceItem, IReportCellProperty> propertySelector)
         {
             builder.AddProcessors(new DynamicPropertiesCellProcessor<TSourceItem>(propertySelector));
 
@@ -35,7 +35,7 @@ namespace XReports.SchemaBuilders
         /// <returns>The report column builder.</returns>
         public static IReportColumnBuilder<TSourceItem> AddDynamicProperties<TSourceItem>(
             this IReportColumnBuilder<TSourceItem> builder,
-            Func<TSourceItem, IEnumerable<ReportCellProperty>> propertiesSelector)
+            Func<TSourceItem, IEnumerable<IReportCellProperty>> propertiesSelector)
         {
             builder.AddProcessors(new DynamicPropertiesCellProcessor<TSourceItem>(propertiesSelector));
 

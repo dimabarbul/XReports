@@ -106,7 +106,7 @@ public class ThreeColorHeatmapConditionalController : Controller
         public decimal Score { get; set; }
     }
 
-    private class ThreeColorHeatmapProperty : ReportCellProperty
+    private class ThreeColorHeatmapProperty : IReportCellProperty
     {
         public ThreeColorHeatmapProperty(decimal minimumValue, Color minimumColor, decimal middleValue, Color middleColor, decimal maximumValue, Color maximumColor)
         {

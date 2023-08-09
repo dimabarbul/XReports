@@ -17,7 +17,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             IReportColumnBuilder<int> columnBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            columnBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+            columnBuilder.AddDynamicProperties(x => x > 0 ? (IReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildVerticalSchema().BuildReportTable(new[] { 0, 1 });
             table.HeaderRows.Should().Equal(new[]
@@ -47,7 +47,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             IReportColumnBuilder<int> columnBuilder =
                 schemaBuilder.AddColumn("Column", new ComputedValueReportCellProvider<int, int>(x => x));
 
-            columnBuilder.AddDynamicProperties(x => x > 0 ? (ReportCellProperty)new CustomProperty2() : new CustomProperty1());
+            columnBuilder.AddDynamicProperties(x => x > 0 ? (IReportCellProperty)new CustomProperty2() : new CustomProperty1());
 
             IReportTable<ReportCell> table = schemaBuilder.BuildHorizontalSchema(0).BuildReportTable(new[] { 0, 1 });
             table.Rows.Should().Equal(new[]
@@ -61,11 +61,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             });
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

@@ -26,19 +26,11 @@ IReportTable<ReportCell> reportTable = schema.BuildReportTable(users);
 MyConsoleWriter writer = new MyConsoleWriter();
 writer.Write(reportTable);
 
-internal class UpperCaseProperty : ReportCellProperty
+internal class UpperCaseProperty : IReportCellProperty
 {
 }
 
-internal class ProtectedProperty : ReportCellProperty
-{
-    public char Symbol { get; }
-
-    public ProtectedProperty(char symbol)
-    {
-        this.Symbol = symbol;
-    }
-}
+internal record ProtectedProperty(char Symbol) : IReportCellProperty;
 
 // ConsoleWriter class writes report table to console, but is has no
 // knowledge about our properties, so we'll extend it.
@@ -46,8 +38,7 @@ internal class MyConsoleWriter : ConsoleWriter
 {
     public override void Write(IReportTable<ReportCell> reportTable)
     {
-        TitleProperty titleProperty = reportTable.GetProperty<TitleProperty>();
-        if (titleProperty != null)
+        if (reportTable.TryGetProperty(out TitleProperty titleProperty))
         {
             Console.WriteLine($"*** {titleProperty.Title} ***");
         }
@@ -65,9 +56,8 @@ internal class MyConsoleWriter : ConsoleWriter
             text = text.ToUpperInvariant();
         }
 
-        // For ProtectedProperty it's not enough to know that it's assigned as it has read-only property we need to use.
-        ProtectedProperty protectedProperty = reportCell.GetProperty<ProtectedProperty>();
-        if (protectedProperty != null)
+        // For ProtectedProperty it's not enough to know that it's assigned as we need to know symbol to mask the value.
+        if (reportCell.TryGetProperty(out ProtectedProperty protectedProperty))
         {
             text = new string(protectedProperty.Symbol, text.Length);
         }
@@ -82,7 +72,7 @@ internal class UserInfo
     public string Password { get; set; }
 }
 
-internal class TitleProperty : ReportTableProperty
+internal class TitleProperty : IReportTableProperty
 {
     public TitleProperty(string title)
     {

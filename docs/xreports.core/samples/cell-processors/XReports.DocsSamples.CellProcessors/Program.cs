@@ -85,7 +85,7 @@ internal class CustomConsoleWriter : ConsoleWriter
 }
 
 // Cell property to mark cells alignment.
-internal class AlignmentProperty : ReportCellProperty
+internal class AlignmentProperty : IReportCellProperty
 {
     public AlignmentProperty(bool isLeftAligned)
     {

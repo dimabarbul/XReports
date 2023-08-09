@@ -4,11 +4,11 @@ namespace XReports.Core.Tests.Converter
 {
     public partial class ReportConverterTest
     {
-        private class MyProperty : ReportCellProperty
+        private class MyProperty : IReportCellProperty
         {
         }
 
-        private class MyAnotherProperty : ReportCellProperty
+        private class MyAnotherProperty : IReportCellProperty
         {
         }
     }

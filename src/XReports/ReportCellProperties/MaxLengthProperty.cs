@@ -6,7 +6,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells which value should have maximum length.
     /// </summary>
-    public class MaxLengthProperty : ReportCellProperty
+    public class MaxLengthProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxLengthProperty"/> class.

@@ -106,7 +106,7 @@ If you want to use more Excel features to apply your cell properties, you have 2
 
 ```c#
 // Property marking cells that should be indented.
-class IndentationProperty : ReportCellProperty { }
+class IndentationProperty : IReportCellProperty { }
 
 class MyEpplusWriter : EpplusWriter
 {
@@ -117,8 +117,7 @@ class MyEpplusWriter : EpplusWriter
 
         // As we don't have handler of this property during conversion to Excel report
         // the property will remain in cell.
-        IndentationProperty indentationProperty = cell.GetProperty<IndentationProperty>();
-        if (indentationProperty != null)
+        if (cell.HasProperty<IndentationProperty>())
         {
             // Indent cell content.
             worksheetCell.Style.Indent = 1;
@@ -134,7 +133,7 @@ class MyEpplusWriter : EpplusWriter
 
 ```c#
 // Property marking cells that should be indented.
-class IndentationProperty : ReportCellProperty { }
+class IndentationProperty : IReportCellProperty { }
 
 private class ExcelIndentationPropertyFormatter : EpplusFormatter<IndentationProperty>
 {

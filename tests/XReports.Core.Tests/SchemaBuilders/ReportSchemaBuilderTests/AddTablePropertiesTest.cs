@@ -24,7 +24,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 "Test",
             });
 
-            ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
+            IReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -56,7 +56,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 "Test",
             });
 
-            ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
+            IReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
             table.Rows.Should().Equal(new[]
             {
                 new[]
@@ -82,7 +82,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
                 "Test",
             });
 
-            ReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
+            IReportTableProperty[] expectedProperties = { tableProperty1, tableProperty2 };
             table.HeaderRows.Should().Equal(new[]
             {
                 new[]
@@ -111,11 +111,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private class CustomTableProperty1 : ReportTableProperty
+        private class CustomTableProperty1 : IReportTableProperty
         {
         }
 
-        private class CustomTableProperty2 : ReportTableProperty
+        private class CustomTableProperty2 : IReportTableProperty
         {
         }
     }

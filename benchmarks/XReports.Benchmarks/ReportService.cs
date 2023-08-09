@@ -55,7 +55,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromEntities();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        foreach (ReportTableProperty _ in htmlReportTable.Properties)
+        foreach (IReportTableProperty _ in htmlReportTable.Properties)
         {
         }
 
@@ -81,7 +81,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromEntities();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
-        foreach (ReportTableProperty _ in excelReportTable.Properties)
+        foreach (IReportTableProperty _ in excelReportTable.Properties)
         {
         }
 
@@ -142,7 +142,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromDataReader();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        foreach (ReportTableProperty _ in htmlReportTable.Properties)
+        foreach (IReportTableProperty _ in htmlReportTable.Properties)
         {
         }
 
@@ -168,7 +168,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildVerticalReportFromDataReader();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
-        foreach (ReportTableProperty _ in excelReportTable.Properties)
+        foreach (IReportTableProperty _ in excelReportTable.Properties)
         {
         }
 
@@ -229,7 +229,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildHorizontalReport();
         IReportTable<HtmlReportCell> htmlReportTable = this.ConvertToHtml(reportTable);
 
-        foreach (ReportTableProperty _ in htmlReportTable.Properties)
+        foreach (IReportTableProperty _ in htmlReportTable.Properties)
         {
         }
 
@@ -255,7 +255,7 @@ public sealed class ReportService : IDisposable
         IReportTable<ReportCell> reportTable = this.BuildHorizontalReport();
         IReportTable<ExcelReportCell> excelReportTable = this.ConvertToExcel(reportTable);
 
-        foreach (ReportTableProperty _ in excelReportTable.Properties)
+        foreach (IReportTableProperty _ in excelReportTable.Properties)
         {
         }
 

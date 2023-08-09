@@ -197,7 +197,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             return schemaBuilder;
         }
 
-        private class CustomProperty : ReportCellProperty
+        private class CustomProperty : IReportCellProperty
         {
         }
     }

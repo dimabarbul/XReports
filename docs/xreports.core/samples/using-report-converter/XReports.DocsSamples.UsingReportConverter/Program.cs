@@ -147,7 +147,7 @@ internal class HtmlWriter
     }
 }
 
-internal class BoldProperty : ReportCellProperty
+internal class BoldProperty : IReportCellProperty
 {
 }
 

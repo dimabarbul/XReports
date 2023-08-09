@@ -20,8 +20,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty2());
 
-            ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
-            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
+            IReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty2() };
+            IReportColumn<int> provider = builder.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
             provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
             provider.CreateCell(1).Should().Equal(ReportCellHelper.CreateReportCell(1, expectedProperties));
         }
@@ -34,8 +34,8 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
 
             builder.AddProperties(new CustomProperty1(), new CustomProperty1());
 
-            IReportColumn<int> provider = builder.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
-            ReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty1() };
+            IReportColumn<int> provider = builder.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<int>>());
+            IReportCellProperty[] expectedProperties = { new CustomProperty1(), new CustomProperty1() };
             provider.CreateCell(0).Should().Equal(ReportCellHelper.CreateReportCell(0, expectedProperties));
         }
 
@@ -50,11 +50,11 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportColumnBuilderTests
             action.Should().ThrowExactly<ArgumentException>();
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
     }

@@ -4,7 +4,7 @@ namespace XReports.Benchmarks.ReportStructure.Models;
 
 public class TypedReportCellsSource<TSourceEntity, TValue> : ReportCellsSource<TSourceEntity>
 {
-    public TypedReportCellsSource(string title, Func<TSourceEntity, TValue> valueSelector, params ReportCellProperty[] properties)
+    public TypedReportCellsSource(string title, Func<TSourceEntity, TValue> valueSelector, params IReportCellProperty[] properties)
         : base(title, properties)
     {
         this.ValueSelector = valueSelector;

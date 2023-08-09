@@ -6,7 +6,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells which content should be highlighted using color.
     /// </summary>
-    public class ColorProperty : ReportCellProperty
+    public class ColorProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorProperty" /> class.

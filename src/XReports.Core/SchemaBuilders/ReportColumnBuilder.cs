@@ -14,8 +14,8 @@ namespace XReports.SchemaBuilders
     {
         private readonly string title;
         private readonly IReportCellProvider<TSourceItem> provider;
-        private readonly List<ReportCellProperty> cellProperties = new List<ReportCellProperty>();
-        private readonly List<ReportCellProperty> headerProperties = new List<ReportCellProperty>();
+        private readonly List<IReportCellProperty> cellProperties = new List<IReportCellProperty>();
+        private readonly List<IReportCellProperty> headerProperties = new List<IReportCellProperty>();
         private readonly List<IReportCellProcessor<TSourceItem>> cellProcessors = new List<IReportCellProcessor<TSourceItem>>();
         private readonly List<IHeaderReportCellProcessor> headerProcessors = new List<IHeaderReportCellProcessor>();
 
@@ -31,7 +31,7 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportColumnBuilder<TSourceItem> AddProperties(params ReportCellProperty[] properties)
+        public IReportColumnBuilder<TSourceItem> AddProperties(params IReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -41,7 +41,7 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportColumnBuilder<TSourceItem> AddHeaderProperties(params ReportCellProperty[] properties)
+        public IReportColumnBuilder<TSourceItem> AddHeaderProperties(params IReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -72,7 +72,7 @@ namespace XReports.SchemaBuilders
 
         /// <inheritdoc />
         public IReportColumn<TSourceItem> Build(
-            IReadOnlyList<ReportCellProperty> globalProperties,
+            IReadOnlyList<IReportCellProperty> globalProperties,
             IReadOnlyList<IReportCellProcessor<TSourceItem>> globalProcessors)
         {
             this.ValidateAllItemsNotNull(globalProperties);
@@ -87,9 +87,9 @@ namespace XReports.SchemaBuilders
                 this.headerProcessors.ToArray());
         }
 
-        private ReportCellProperty[] MergeGlobalProperties(IReadOnlyList<ReportCellProperty> globalProperties)
+        private IReportCellProperty[] MergeGlobalProperties(IReadOnlyList<IReportCellProperty> globalProperties)
         {
-            List<ReportCellProperty> result = new List<ReportCellProperty>(this.cellProperties);
+            List<IReportCellProperty> result = new List<IReportCellProperty>(this.cellProperties);
             for (int i = 0; i < globalProperties.Count; i++)
             {
                 if (!result.Any(p => p.GetType() == globalProperties[i].GetType()))

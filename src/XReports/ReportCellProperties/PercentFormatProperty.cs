@@ -6,7 +6,7 @@ namespace XReports.ReportCellProperties
     /// <summary>
     /// Property to mark cells which contain numeric value and it should be displayed as percent. Usually this means that, for example, value 0.1 will be displayed as "10%" or alike.
     /// </summary>
-    public class PercentFormatProperty : ReportCellProperty
+    public class PercentFormatProperty : IReportCellProperty
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PercentFormatProperty"/> class.

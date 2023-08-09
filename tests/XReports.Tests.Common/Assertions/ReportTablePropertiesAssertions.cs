@@ -7,16 +7,16 @@ using XReports.Tests.Common.Helpers;
 
 namespace XReports.Tests.Common.Assertions
 {
-    public class ReportTablePropertiesAssertions : GenericCollectionAssertions<ReportTableProperty>
+    public class ReportTablePropertiesAssertions : GenericCollectionAssertions<IReportTableProperty>
     {
-        public ReportTablePropertiesAssertions(IEnumerable<ReportTableProperty> actualValue)
+        public ReportTablePropertiesAssertions(IEnumerable<IReportTableProperty> actualValue)
             : base(actualValue)
         {
         }
 
         protected override string Identifier => "report table properties";
 
-        public AndConstraint<ReportTablePropertiesAssertions> BeEquivalentTo(IEnumerable<ReportTableProperty> expected)
+        public AndConstraint<ReportTablePropertiesAssertions> BeEquivalentTo(IEnumerable<IReportTableProperty> expected)
         {
             Execute.Assertion
                 .ForCondition(ReportCellHelper.AreObjectCollectionsShallowlyEquivalent(this.Subject, expected))

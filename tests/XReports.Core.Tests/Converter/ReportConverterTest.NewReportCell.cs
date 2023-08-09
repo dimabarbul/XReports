@@ -10,7 +10,7 @@ namespace XReports.Core.Tests.Converter
             int columnSpan = 1,
             int rowSpan = 1,
             IEnumerable<string> data = null,
-            params ReportCellProperty[] properties)
+            params IReportCellProperty[] properties)
         {
             NewReportCell cell = new NewReportCell();
             cell.SetValue(value);

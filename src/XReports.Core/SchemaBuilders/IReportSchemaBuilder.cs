@@ -14,7 +14,7 @@ namespace XReports.SchemaBuilders
         /// </summary>
         /// <param name="properties">Properties to add.</param>
         /// <returns>The report schema builder.</returns>
-        IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params IReportCellProperty[] properties);
 
         /// <summary>
         /// Adds report global processors. They will be applied to all column to
@@ -29,7 +29,7 @@ namespace XReports.SchemaBuilders
         /// </summary>
         /// <param name="properties">Table properties to add.</param>
         /// <returns>The report schema builder.</returns>
-        IReportSchemaBuilder<TSourceItem> AddTableProperties(params ReportTableProperty[] properties);
+        IReportSchemaBuilder<TSourceItem> AddTableProperties(params IReportTableProperty[] properties);
 
         /// <summary>
         /// Adds complex header group. <seealso cref="IComplexHeaderBuilder.AddGroup(int,string,int,System.Nullable{int})"/>
@@ -107,14 +107,14 @@ namespace XReports.SchemaBuilders
         /// <param name="properties">Properties to add.</param>
         /// <returns>The report schema builder.</returns>
         IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(
-            string content, params ReportCellProperty[] properties);
+            string content, params IReportCellProperty[] properties);
 
         /// <summary>
         /// Adds properties to all complex header cells. Properties are only added to cells generated from complex groups, not from report column headers.
         /// </summary>
         /// <param name="properties">Properties to add.</param>
         /// <returns>The report schema builder.</returns>
-        IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params ReportCellProperty[] properties);
+        IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params IReportCellProperty[] properties);
 
         /// <summary>
         /// Adds column to the end of the report.

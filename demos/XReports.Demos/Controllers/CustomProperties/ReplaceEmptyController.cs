@@ -100,7 +100,7 @@ public class ReplaceEmptyController : Controller
         public int? Score { get; set; }
     }
 
-    private class ReplaceEmptyProperty : ReportCellProperty
+    private class ReplaceEmptyProperty : IReportCellProperty
     {
         public ReplaceEmptyProperty(string text)
         {

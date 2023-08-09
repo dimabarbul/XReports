@@ -66,7 +66,7 @@ namespace XReports.Converter
             return this.resultCell;
         }
 
-        private void ProcessProperties(IReadOnlyList<ReportCellProperty> cellProperties)
+        private void ProcessProperties(IReadOnlyList<IReportCellProperty> cellProperties)
         {
             for (int i = 0; i < cellProperties.Count; i++)
             {

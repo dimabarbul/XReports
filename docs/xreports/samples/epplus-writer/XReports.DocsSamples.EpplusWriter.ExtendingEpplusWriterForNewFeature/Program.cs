@@ -36,7 +36,7 @@ internal class User
 }
 
 // Property marking cells that should be indented.
-internal class IndentationProperty : ReportCellProperty { }
+internal class IndentationProperty : IReportCellProperty { }
 
 internal class MyEpplusWriter : EpplusWriter
 {
@@ -47,8 +47,7 @@ internal class MyEpplusWriter : EpplusWriter
 
         // As we don't have handler of this property during conversion to Excel report
         // the property will remain in cell.
-        IndentationProperty indentationProperty = cell.GetProperty<IndentationProperty>();
-        if (indentationProperty != null)
+        if (cell.HasProperty<IndentationProperty>())
         {
             // Indent cell content.
             worksheetCell.Style.Indent = 1;

@@ -15,14 +15,14 @@ namespace XReports.SchemaBuilders
     {
         private readonly List<IdentifiableCellProvider> cellProviders = new List<IdentifiableCellProvider>();
         private readonly IComplexHeaderBuilder complexHeaderBuilder = new ComplexHeaderBuilder();
-        private readonly Dictionary<string, List<ReportCellProperty>> complexHeadersProperties = new Dictionary<string, List<ReportCellProperty>>();
-        private readonly List<ReportCellProperty> commonComplexHeadersProperties = new List<ReportCellProperty>();
-        private readonly List<ReportCellProperty> globalProperties = new List<ReportCellProperty>();
+        private readonly Dictionary<string, List<IReportCellProperty>> complexHeadersProperties = new Dictionary<string, List<IReportCellProperty>>();
+        private readonly List<IReportCellProperty> commonComplexHeadersProperties = new List<IReportCellProperty>();
+        private readonly List<IReportCellProperty> globalProperties = new List<IReportCellProperty>();
         private readonly List<IReportCellProcessor<TSourceItem>> globalProcessors = new List<IReportCellProcessor<TSourceItem>>();
-        private readonly List<ReportTableProperty> tableProperties = new List<ReportTableProperty>();
+        private readonly List<IReportTableProperty> tableProperties = new List<IReportTableProperty>();
 
         /// <inheritdoc />
-        public IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceItem> AddGlobalProperties(params IReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -42,7 +42,7 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportSchemaBuilder<TSourceItem> AddTableProperties(params ReportTableProperty[] properties)
+        public IReportSchemaBuilder<TSourceItem> AddTableProperties(params IReportTableProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -113,11 +113,11 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(string content, params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(string content, params IReportCellProperty[] properties)
         {
             if (!this.complexHeadersProperties.ContainsKey(content))
             {
-                this.complexHeadersProperties.Add(content, new List<ReportCellProperty>(properties));
+                this.complexHeadersProperties.Add(content, new List<IReportCellProperty>(properties));
             }
             else
             {
@@ -128,7 +128,7 @@ namespace XReports.SchemaBuilders
         }
 
         /// <inheritdoc />
-        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params ReportCellProperty[] properties)
+        public IReportSchemaBuilder<TSourceItem> AddComplexHeaderProperties(params IReportCellProperty[] properties)
         {
             this.ValidateAllItemsNotNull(properties);
 
@@ -249,7 +249,7 @@ namespace XReports.SchemaBuilders
             return new HorizontalReportSchema<TSourceItem>(
                 this.cellProviders
                     .Take(headerRowsCount)
-                    .Select(c => c.Provider.Build(Array.Empty<ReportCellProperty>(), Array.Empty<IReportCellProcessor<TSourceItem>>()))
+                    .Select(c => c.Provider.Build(Array.Empty<IReportCellProperty>(), Array.Empty<IReportCellProcessor<TSourceItem>>()))
                     .ToArray(),
                 this.cellProviders
                     .Skip(headerRowsCount)

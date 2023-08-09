@@ -13,7 +13,7 @@ namespace XReports.Tests.Common.Helpers
             TValue value,
             int rowSpan = 1,
             int columnSpan = 1,
-            params ReportCellProperty[] properties)
+            params IReportCellProperty[] properties)
         {
             ReportCell cell = new ReportCell();
             cell.SetValue(value);
@@ -27,7 +27,7 @@ namespace XReports.Tests.Common.Helpers
 
         public static ReportCell CreateReportCell<TValue>(
             TValue value,
-            params ReportCellProperty[] properties)
+            params IReportCellProperty[] properties)
         {
             return CreateReportCell(value, 1, 1, properties);
         }

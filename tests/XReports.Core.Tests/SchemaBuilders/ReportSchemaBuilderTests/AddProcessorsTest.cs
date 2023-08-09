@@ -68,7 +68,7 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
             });
             table.Enumerate();
 
-            processor.Properties.Should().BeEquivalentTo(new ReportCellProperty[]
+            processor.Properties.Should().BeEquivalentTo(new IReportCellProperty[]
             {
                 new CustomProperty1(),
                 new CustomProperty2(),
@@ -93,21 +93,21 @@ namespace XReports.Core.Tests.SchemaBuilders.ReportSchemaBuilderTests
         {
         }
 
-        private class CustomProperty1 : ReportCellProperty
+        private class CustomProperty1 : IReportCellProperty
         {
         }
 
-        private class CustomProperty2 : ReportCellProperty
+        private class CustomProperty2 : IReportCellProperty
         {
         }
 
         private class PropertyCheckProcessor : IReportCellProcessor<string>
         {
-            public IReadOnlyList<ReportCellProperty> Properties { get; set; }
+            public IReadOnlyList<IReportCellProperty> Properties { get; set; }
 
             public void Process(ReportCell cell, string item)
             {
-                this.Properties = new List<ReportCellProperty>(cell.Properties);
+                this.Properties = new List<IReportCellProperty>(cell.Properties);
             }
         }
     }
